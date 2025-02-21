@@ -1,0 +1,24 @@
+{
+  "name": "summ_solver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Impirs/Summ_solver.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Impirs/Summ_solver/issues"
+  },
+  "homepage": "https://github.com/Impirs/Summ_solver#readme",
+  "devDependencies": {
+    "electron": "^34.2.0"
+  }
+}
