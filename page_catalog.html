@@ -6,8 +6,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="menu">
-        <h1>Список игр"</h1>
+    <div class="container">
+        <section class="semi_header">
+            <button class="nav_btn" onclick="goBack()">
+                <div class="nav_btn_icon" id="back"></div>
+            </button>
+            <h1>Список игр</h1>
+            <button class="nav_btn" onclick="goSettings()">
+                <div class="nav_btn_icon" id="settings"></div>
+            </button>
+        </section>
+        <section class="catalog">
+            <div class="game_cell">
+                <img src="" alt="">
+                <span>Состав числа</span>
+            </div>
+        </section>
     </div>
     <script src="renderer.js"></script>
 </body>

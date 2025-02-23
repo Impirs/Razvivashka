@@ -8,7 +8,7 @@ function createWindow() {
       nodeIntegration: true
     }
   });
-  //win.setMenuBarVisibility(false);
+  win.setMenuBarVisibility(false);
 
   win.loadFile('index.html');
 }

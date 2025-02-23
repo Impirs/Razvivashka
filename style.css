@@ -1,33 +1,159 @@
+@font-face {
+    font-family: 'Rubik Spray Paint';
+    src: url('assets/Roboto/static/Roboto-Bold.ttf') format('truetype');
+}
+
 body {
     background: linear-gradient(320deg, #eb92be, #ffef79, #63c9b4);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    position: relative;
-    margin: 0px;
+    margin: 0;
+    font-family: 'Rubik Spray Paint', sans-serif;
 }
 
 .container {
-    backdrop-filter: blur(50px);
-    -webkit-backdrop-filter: blur(50px);
-    background: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.01);
+    background-color: rgba(240,255,255,0.60);
+    border: 1px solid #eb92be;
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.01);
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
     color: #232323;
-    backdrop-filter: blur(100px);
-    -webkit-backdrop-filter: blur(100px);
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.20);
-    flex-basis: 400px;
+    width: 400px;
     height: 540px;
     padding: 30px 45px;
+    display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    gap: 40px;
+}
+
+.header {
+    text-align: center;
+}
+
+.semi_header {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
 }
 
 h1 {
-    font-size: 35px;
+    font-size: 45px;
+    color: #eb92be;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
+img {
+    width: 25%;
+    display: block;
+    margin: 0 auto;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav_btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: azure;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #eb92be;
+    padding: 0px;
+    margin-top: 26px;
+}
+
+.nav_btn:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+    color: #63c9b4
+}
+
+.nav_btn_icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(320deg, #eb92be, #ffef79, #63c9b4);
+}
+
+.text_btn {
+    width: 256px;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    background-color:azure;
+    border: 2px solid #eb92be;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.text_btn:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+}
+.text_btn:hover .btn_text {
+    color: #63c9b4;
+}
+
+.btn_icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(320deg, #eb92be, #ffef79, #63c9b4);
+    margin-right: 10px;
+}
+
+.btn_text {
+    font-size: 25px;
+    color: #eb92be;
+    flex: 1;
+    text-align: center;
+}
+
+
+#play {
+    -webkit-mask: url('assets/icons8-play-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-play-64.png') no-repeat center;
+    mask-size: contain;
+}
+
+#achieve {
+    -webkit-mask: url('assets/icons8-achievements-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-achievements-64.png') no-repeat center;
+    mask-size: contain;
+}
+
+#settings {
+    -webkit-mask: url('assets/icons8-settings-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-settings-64.png') no-repeat center;
+    mask-size: contain;
+}
+
+#back {
+    -webkit-mask: url('assets/icons8-back-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-back-64.png') no-repeat center;
+    mask-size: contain;
+}
+
+#home {
+    -webkit-mask: url('assets/icons8-home-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-home-64.png') no-repeat center;
+    mask-size: contain;
+}

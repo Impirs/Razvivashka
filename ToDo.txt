@@ -1,0 +1,11 @@
+-> more css files
+-> another two types of containers -> need id or more classes
+-> one more type of buttons
+-> game cell prototype
+
+
+GAME
+-> timer
+-> preview image
+
+-> achievements

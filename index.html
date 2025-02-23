@@ -7,21 +7,25 @@
 </head>
 <body>
     <div class="container">
-        <h1>Женькины игры!</h1>
-        <button id="games_btn" onclick="goCatalog()">Играть</button>
-        <button id="achive_btn" onclick="goAchievements()">Достижения</button>
-        <button id="settings_btn" onclick="goSettings()">Настройки</button>
+        <section class="header">
+            <h1>Женькины игры</h1>
+            <img src="assets/welcome.png" alt="welcome">
+        </section>
+        <section class="menu">
+            <button class="text_btn" onclick="goCatalog()">
+                <div class="btn_icon" id="play"></div>
+                <span class="btn_text">Играть</span>
+            </button>
+            <button class="text_btn" onclick="goAchievements()">
+                <div class="btn_icon" id="achieve"></div>
+                <span class="btn_text">Достижения</span>
+            </button>
+            <button class="text_btn" onclick="goSettings()">
+                <div class="btn_icon" id="settings"></div>
+                <span class="btn_text">Настройки</span>
+            </button>
+        </section>
     </div>
-    <script>
-        function goCatalog() {
-            window.location.href = 'page_catalog.html';
-        }
-        function goAchievements() {
-            window.location.href = 'page_achievements.html';
-        }
-        function goSettings() {
-            window.location.href = 'page_settings.html';
-        }
-    </script>
+    <script src="renderer.js"></script>
 </body>
 </html>
