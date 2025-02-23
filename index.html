@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Electron App</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Игры</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to My Electron App</h1>
-  <button id="clickButton">Click Me</button>
-  <script src="renderer.js"></script>
+    <div class="container">
+        <h1>Женькины игры!</h1>
+        <button id="games_btn" onclick="goCatalog()">Играть</button>
+        <button id="achive_btn" onclick="goAchievements()">Достижения</button>
+        <button id="settings_btn" onclick="goSettings()">Настройки</button>
+    </div>
+    <script>
+        function goCatalog() {
+            window.location.href = 'page_catalog.html';
+        }
+        function goAchievements() {
+            window.location.href = 'page_achievements.html';
+        }
+        function goSettings() {
+            window.location.href = 'page_settings.html';
+        }
+    </script>
 </body>
 </html>
