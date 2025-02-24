@@ -1,6 +1,16 @@
 @font-face {
-    font-family: 'Rubik Spray Paint';
+    font-family: 'Roboto Bold';
     src: url('assets/Roboto/static/Roboto-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto Regular';
+    src: url('assets/Roboto/static/Roboto-Black.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Stick';
+    src: url('assets/Stick-Regular.ttf') format('truetype');
 }
 
 body {
@@ -10,17 +20,17 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-family: 'Rubik Spray Paint', sans-serif;
+    font-family: 'Roboto Bold';
 }
 
 .container {
-    background-color: rgba(240,255,255,0.60);
+    background-color: rgba(240,255,255,0.8);
     border: 1px solid #eb92be;
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
     color: #232323;
     width: 400px;
-    height: 540px;
+    height: 600px;
     padding: 30px 45px;
     display: flex;
     flex-direction: column;
@@ -33,13 +43,6 @@ body {
     text-align: center;
 }
 
-.semi_header {
-    text-align: center;
-    display: flex;
-    flex-direction: row;
-    gap: 32px;
-}
-
 h1 {
     font-size: 45px;
     color: #eb92be;
@@ -47,7 +50,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-img {
+img[alt="welcome"] {
     width: 25%;
     display: block;
     margin: 0 auto;

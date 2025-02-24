@@ -8,14 +8,26 @@ function goSettings() {
     window.location.href = 'page_settings.html';
 }
 
-function goBack() {
-    window.location.href = 'index.html'
-}
-
 function goHome() {
     window.location.href = 'index.html'
 }
 
-document.getElementById('play_bnt').addEventListener('click', () => {
-  alert("Start to Play!")
-});
+if (document.getElementById('exit_btn')) {
+    document.getElementById('exit_btn').addEventListener('click', () => {
+        window.electronAPI.quitApp();
+    });
+}
+if (document.getElementById('digit_solver')){
+    document.getElementById('digit_solver').addEventListener('click', () => {
+        window.location.href = 'game_digit_solver.html'
+    })
+}
+if (document.getElementById('sum_solver')){
+    document.getElementById('sum_solver').addEventListener('click', () => {
+        window.location.href = 'game_sum_solver.html'
+    })
+}
+
+//document.getElementById('play_bnt').addEventListener('click', () => {
+//  alert("Start to Play!")
+//});

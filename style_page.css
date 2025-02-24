@@ -1,0 +1,71 @@
+.large_container {
+    background-color: rgba(240,255,255,0.8);
+    border: 1px solid #eb92be;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    color: #232323;
+    width: 1510px;
+    height: 840px;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+}
+
+.semi_header {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+.catalog {
+    border-collapse: collapse;
+}
+
+.catalog tr {
+    height: 300px;
+    width: 1500px;
+}
+
+.catalog td {
+    width: 500px;
+    height: 300px;
+    border: none;
+}
+
+.game_cell {
+    width: 460px;
+    height: 260px;
+    margin: 0 20px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #eb92be;
+    border-radius: 16px;
+    background-color: azure;
+    box-shadow: 0 4px 20px rgba(35, 35, 35, 0.1);
+}
+
+.game_cell:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+    color: #63c9b4
+}
+.game_cell:hover span {
+    color: #63c9b4;
+}
+
+.game_cell img {
+    width: 50%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.game_cell span {
+    font-size: 26px;
+    color: #eb92be;
+}

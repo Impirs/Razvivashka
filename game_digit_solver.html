@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Игры</title>
+    <link rel="stylesheet" href="style_base.css">
+    <link rel="stylesheet" href="style_page.css">
+    <link rel="stylesheet" href="game_digit.css">
+</head>
+<body>
+    <div class="large_container">
+        <section class="semi_header">
+            <button class="nav_btn" onclick="goBack()">
+                <div class="nav_btn_icon" id="back"></div>
+            </button>
+            <h1>Состав числа</h1>
+            <button class="nav_btn" onclick="goSettings()">
+                <div class="nav_btn_icon" id="settings"></div>
+            </button>
+        </section>  
+        <section class="game_section">
+            <section class="game_menu">
+                <button class="game_ctrl_btn" id="start">
+                    <span>Начать</span>
+                </button>
+            </section>
+            <section class="game_desk">
+                <h1>Очисти поле</h1>
+                <button class="game_ctrl_btn_small" id="info_btn">
+
+                </button>
+                <button class="game_ctrl_btn_small" id="reload_btn">
+
+                </button>
+                <p>Ошибки: <span id="mistakes">0</span>/3</p>
+                <p>Время: <span id="timer">0</span> сек</p>
+                <div class="grid" id="game_board"></div>
+            </section>
+            <section class="score_section">
+
+            </section>
+        </section>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = 'page_catalog.html'
+        }
+    </script>
+    <script src="renderer.js"></script>
+    <script src="game_digit.js"></script>
+
+</body>
+</html>
