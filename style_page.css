@@ -69,3 +69,10 @@
     font-size: 26px;
     color: #eb92be;
 }
+
+.game_section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}

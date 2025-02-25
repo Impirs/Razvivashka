@@ -1,6 +1,30 @@
+.game_menu { 
+    margin: 20px; 
+}
+
+.game_menu div { 
+    margin-bottom: 10px; 
+}
+
+.game_menu span {
+    display: inline-block; 
+    padding: 10px; 
+    margin: 5px;
+    border: 1px solid #000; 
+    cursor: pointer;
+}
+
+.game_menu .selected { 
+    background: lightblue; 
+}
+
+.disabled { 
+    opacity: 0.5; 
+    pointer-events: none; 
+}
+
 .grid { 
     display: grid; 
-    grid-template-columns: repeat(9, 50px); 
     gap: 0px; 
     margin: 20px auto; 
     width: max-content; 
@@ -15,6 +39,10 @@
     font-size: 20px; 
     border: 1px solid #000; 
     cursor: pointer;
+}
+
+.enable {
+    background: lightyellow;
 }
 
 .empty {
