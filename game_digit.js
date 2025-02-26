@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
             numbers: { 1:8, 2:8, 3:8, 4:8, 5:16, 6:8, 7:8, 8:8, 9:8 } 
         }
     };
-    let gameState = false; 
+
+    let gameState = false;
+    let pause = false
     let board = [];
     let selectedCells = [];
     let mistakes = 0;
@@ -35,12 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let boardSize = 9;
     const digitSetup = document.getElementById("digit_setup");
     let sumTarget = 8;
-    const startButton = document.getElementById("start_btn");
     const gameBoard = document.getElementById("game_board");
-    const mistakesCounter = document.getElementById("mistakes");
+    const WINmodul = document.getElementById("winModul");
+    const LOSEmodul = document.getElementById("loseModul");
+    
     const timerDisplay = document.getElementById("timer");
-    const reloadButton = document.getElementById("reload_btn");
+
+    const mistakesCounter = document.getElementById("mistakes");
+
+    const startButton = document.getElementById("start_btn");
     const infoButton = document.getElementById("info_btn");
+    const reloadButton = document.getElementById("reload_btn");
+    const pauseButton = document.getElementById("pause_btn")
     
     function setupGameMenu() {
         const digitButtons = document.querySelectorAll("#digit_setup span");
@@ -57,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const selectedValue = parseInt(target.dataset.value, 10);
             if (isNaN(selectedValue)) return;
     
-            console.log("Выбрана сумма:", selectedValue);
+            // console.log("Выбрана сумма:", selectedValue);
     
             clearSelected(digitButtons);
             target.classList.add("selected");
@@ -87,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let boardElement = document.querySelector(`#board_setup [data-value="${boardSize}"]`);
             if (boardElement) boardElement.classList.add("selected");
         
-            console.log("Размер доски:", boardSize);
+            // console.log("Размер доски:", boardSize);
         }
     
         function isBoardSizeAllowed(sum, size) {
@@ -103,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const boardValue = parseInt(target.dataset.value, 10);
             if (isNaN(boardValue)) return;
     
-            console.log("Выбран размер доски:", boardValue); // Проверка
+            // console.log("Выбран размер доски:", boardValue);
     
             clearSelected(boardButtons);
             target.classList.add("selected");
@@ -115,6 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
         boardButtons.forEach(button => button.addEventListener("click", handleBoardSelection));
 
         startButton.addEventListener("click", startGame)
+        reloadButton.addEventListener("click", handleReloadClick)
+        infoButton.addEventListener("click", handleInfoClick)
+        pauseButton.addEventListener("click", handlePauseClick)
     }
 
     function startGame() {
@@ -124,16 +135,69 @@ document.addEventListener("DOMContentLoaded", () => {
         digitSetup.classList.add("disabled");
         boardSetup.classList.add("disabled");
         startButton.classList.add("disabled");
-        
+        WINmodul.style.display = "none";
+        LOSEmodul.style.display = "none";
+
         board = generateBoard();
         renderBoard();
         updateGridSize();
-        mistakes = 0;
+        clearInterval(timer);
         time = 0;
+        timerDisplay.textContent = time;
+        mistakes = 0;
+        mistakesCounter.textContent = mistakes;
         timer = setInterval(() => {
             time++;
             timerDisplay.textContent = time;
         }, 1000);
+    }
+
+    function handleReloadClick() {
+        if (!gameState) return;
+        startGame();
+    }
+
+    function handlePauseClick() {
+        if (!gameState) return;
+        pause = ! pause;
+        const icon = document.getElementById("pause");
+        if (pause) {
+            clearInterval(timer);
+            //pauseButton.style.backgroundColor = "rgba(240, 255, 255, 0.60)";
+            //pauseButton.style.border = "2px solid #63c9b4";
+            //pauseButton.style.color = "#63c9b4";
+            //icon.style.background = "#63c9b4";
+
+            icon.style.webkitMaskImage = "url('assets/icons8-play-64.png')";
+            icon.style.maskImage = "url('assets/icons8-play-64.png')";
+            icon.style.webkitMaskRepeat = "no-repeat";
+            icon.style.maskRepeat = "no-repeat";
+            icon.style.webkitMaskPosition = "center";
+            icon.style.maskPosition = "center";
+            
+            document.querySelector(".game_board").classList.add("paused");
+        } else {
+            //pauseButton.style.backgroundColor = "azure";
+            //pauseButton.style.border = "2px solid #eb92be";
+            //pauseButton.style.color = "#eb92be";
+            //icon.style.background = `#eb92be`;
+
+            icon.style.webkitMaskImage = "url('assets/icons8-pause-64.png')";
+            icon.style.maskImage = "url('assets/icons8-pause-64.png')";
+            icon.style.webkitMaskRepeat = "no-repeat";
+            icon.style.maskRepeat = "no-repeat";
+            icon.style.webkitMaskPosition = "center";
+            icon.style.maskPosition = "center";
+
+            timer = setInterval(() => {
+                time++;
+                timerDisplay.textContent = time
+            }, 1000)
+        }
+    }
+
+    function handleInfoClick() {
+        
     }
 
     function generateBoard() {
@@ -198,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleCellClick(event) {
         let cell = event.target;
         if (cell.classList.contains("empty") || selectedCells.length >= 2) return;
+        if (gameBoard.classList.contains("paused") || pause) return;
 
         let row = Number(cell.dataset.row);
         let col = Number(cell.dataset.col);
@@ -216,8 +281,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function isNextToEmpty(row, col) {
         const directions = [
-            [-1, 0], [1, 0], [0, -1], [0, 1],  // Вверх, вниз, влево, вправо
-            [-1, -1], [-1, 1], [1, -1], [1, 1] // Диагонали
+            [-1, 0], [1, 0], [0, -1], [0, 1], 
+            [-1, -1], [-1, 1], [1, -1], [1, 1]
         ];
 
         return directions.some(([dx, dy]) => {
@@ -255,7 +320,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 second.element.classList.remove("wrong", "selected");
             }, 500);
         }
-
         selectedCells = [];
     }
 
@@ -267,16 +331,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function endGame(win) {
         clearInterval(timer);
+        win ? showWinCongrads(time) : showLose();
+        /*
         setTimeout(() => {
             alert(win ? "Победа!\n Затраченное время: " + time + " сек." : 
                 "Игра окончена.\n Вы допустили 3 ошибки.");
             //location.reload();
         }, 500);
+        */
         gameState = false;
 
         digitSetup.classList.remove("disabled");
         boardSetup.classList.remove("disabled");
         startButton.classList.remove("disabled");
+    }
+
+    function showWinCongrads(time) {
+        const winTime = document.getElementById("win_time");
+        WINmodul.style.display = "flex";
+        winTime.textContent = time;
+    }
+
+    function showLose() {
+        LOSEmodul.style.display = "flex";
     }
 
     setupGameMenu();

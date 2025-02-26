@@ -9,3 +9,5 @@ GAME
 -> preview image
 
 -> achievements
+
+-> pause correctieves
