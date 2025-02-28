@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         time = 0;
         timerDisplay.textContent = time;
         mistakes = 0;
-        mistakesCounter.textContent = mistakes;
+        updateMistakes(mistakes);
         timer = setInterval(() => {
             time++;
             timerDisplay.textContent = time;
@@ -154,45 +154,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function handleReloadClick() {
         if (!gameState) return;
+        if (pause) handlePauseClick(); clearInterval(timer);
         startGame();
     }
 
     function handlePauseClick() {
         if (!gameState) return;
-        pause = ! pause;
-        const icon = document.getElementById("pause");
+    
+        pause = !pause; 
+        const p_icon = document.getElementById("pause");
+        const c_icon = document.getElementById("continue")
         if (pause) {
             clearInterval(timer);
-            //pauseButton.style.backgroundColor = "rgba(240, 255, 255, 0.60)";
-            //pauseButton.style.border = "2px solid #63c9b4";
-            //pauseButton.style.color = "#63c9b4";
-            //icon.style.background = "#63c9b4";
-
-            icon.style.webkitMaskImage = "url('assets/icons8-play-64.png')";
-            icon.style.maskImage = "url('assets/icons8-play-64.png')";
-            icon.style.webkitMaskRepeat = "no-repeat";
-            icon.style.maskRepeat = "no-repeat";
-            icon.style.webkitMaskPosition = "center";
-            icon.style.maskPosition = "center";
-            
+            p_icon.style.display = "none";
+            c_icon.style.display = "flex";
             document.querySelector(".game_board").classList.add("paused");
         } else {
-            //pauseButton.style.backgroundColor = "azure";
-            //pauseButton.style.border = "2px solid #eb92be";
-            //pauseButton.style.color = "#eb92be";
-            //icon.style.background = `#eb92be`;
-
-            icon.style.webkitMaskImage = "url('assets/icons8-pause-64.png')";
-            icon.style.maskImage = "url('assets/icons8-pause-64.png')";
-            icon.style.webkitMaskRepeat = "no-repeat";
-            icon.style.maskRepeat = "no-repeat";
-            icon.style.webkitMaskPosition = "center";
-            icon.style.maskPosition = "center";
-
+            p_icon.style.display = "flex";
+            c_icon.style.display = "none";
             timer = setInterval(() => {
                 time++;
-                timerDisplay.textContent = time
-            }, 1000)
+                timerDisplay.textContent = time;
+            }, 1000);
         }
     }
 
@@ -307,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 500);
         } else {
             mistakes++;
-            mistakesCounter.textContent = mistakes;
+            updateMistakes(mistakes);
             first.element.classList.add("wrong");
             second.element.classList.add("wrong");
 
@@ -323,6 +306,17 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedCells = [];
     }
 
+    function updateMistakes(counter) {
+        const mistakes = document.querySelectorAll(".mistake");
+    
+        mistakes.forEach(mistake => mistake.classList.remove("cross"));
+    
+        for (let i = 0; i < counter && i < mistakes.length; i++) {
+            mistakes[i].classList.add("cross");
+        }
+    }
+    
+
     function checkWin() {
         if (board.flat().every(cell => cell === null)) {
             endGame(true);
@@ -332,13 +326,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function endGame(win) {
         clearInterval(timer);
         win ? showWinCongrads(time) : showLose();
-        /*
-        setTimeout(() => {
-            alert(win ? "Победа!\n Затраченное время: " + time + " сек." : 
-                "Игра окончена.\n Вы допустили 3 ошибки.");
-            //location.reload();
-        }, 500);
-        */
         gameState = false;
 
         digitSetup.classList.remove("disabled");

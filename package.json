@@ -5,7 +5,38 @@
   "main": "app.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pack": "electron-builder --dir",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.yourname.myapp",
+    "productName": "MyApp",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "files": [
+      "app.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "style_base.css",
+      "style_page.css",
+      "style_result_module.css",
+
+      "page_catalog.html",
+      "page_achievements.html",
+      "page_settings.html",
+
+      "game_digit_solver.html",
+      "game_digit.js",
+      "game_digit.css",
+
+      "game_sum_solver.html",
+      "game_sum.js",
+      "assets/**/*"
+    ],
+    "asar": true
   },
   "repository": {
     "type": "git",
@@ -19,6 +50,7 @@
   },
   "homepage": "https://github.com/Impirs/Summ_solver#readme",
   "devDependencies": {
-    "electron": "^34.2.0"
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
   }
 }

@@ -26,7 +26,7 @@
                     </button>
                 </section>
                 <section class="game_menu">
-                    <img src="assets/digit_icon.png" alt="digit_icon">
+                    <img src="assets/game_digit/digit_icon.png" alt="digit_icon">
                     <h2>Найти составы числа:</h2>
                     <div class="digit_setup" id="digit_setup">
                         <span data-value="6">6</span>
@@ -47,8 +47,14 @@
             </section>
             <section class="game_desk">
                 <section class="game_ctrl">
-                    <p>Ошибки: <span id="mistakes">0</span>/3</p>
-                    <p>Время: <span id="timer">0</span> сек</p>
+                    <div class="mistakes_counter" id="mistakes">
+                        <div class="mistake"></div>
+                        <div class="mistake"></div>
+                        <div class="mistake"></div>
+                    </div>
+                    <div class="timer_container">
+                        <p><span id="timer">0</span> сек.</p>
+                    </div>
                 </section>
                 
                 <div class="grid" id="game_board"></div>
@@ -73,6 +79,7 @@
                 <section class="game_ctrl_btns">
                     <button class="game_ctrl_btn_small" id="pause_btn">
                         <div class="game_ctrl_btn_icon" id="pause"></div>
+                        <div class="game_ctrl_btn_icon" id="continue"></div>
                     </button>
                     <button class="game_ctrl_btn_small" id="reload_btn">
                         <div class="game_ctrl_btn_icon" id="reload"></div>

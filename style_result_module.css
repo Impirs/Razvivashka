@@ -5,10 +5,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.75);
     justify-content: center;
     align-items: center;
-    border-radius: 10px; 
+    border-radius: 15px; 
 }
 
 .modul-content {
@@ -20,6 +20,20 @@
     animation: scaleUp 0.3s ease-in-out;
 }
 
+.modul-content img {
+    width: 200px;
+    margin: 0px;
+}
+.modul-content h2 {
+    font-size: 26px;
+    color: rgba(255, 215, 0, 0.7);
+    margin: 10px 0;
+}
+.modul-content p {
+    color: #4b4b4b;
+    margin: 2px 0;
+}
+
 @keyframes scaleUp {
     from {
         transform: scale(0.7);
@@ -29,9 +43,4 @@
         transform: scale(1);
         opacity: 1;
     }
-}
-
-.modul-content img {
-    width: 200px;
-    margin-bottom: 10px;
 }
