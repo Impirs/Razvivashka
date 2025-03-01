@@ -5,7 +5,7 @@
     <title>Игры</title>
     <link rel="stylesheet" href="style_base.css">
     <link rel="stylesheet" href="game_digit.css">
-    <link rel="stylesheet" href="style_result_module.css">
+    <link rel="stylesheet" href="style_overlap_module.css">
 </head>
 <body>
     <div class="game_container">
@@ -73,6 +73,35 @@
                         <p>Попробуй еще раз!</p>
                         <p>У тебя обязательно получится!</p>
                     </div>
+                </div>
+                <div id="infoModul" class="modul">
+                    <div class="info-content">
+                        <h2>1.</h2>
+                        <div class="info_image">
+                            <img src="assets/game_digit/settings_static.png" alt="settings_static" class="static">
+                            <img src="assets/game_digit/settings.gif" alt="settings_info" class="gif">
+                        </div>
+                        <p>Выбери число и размер игрового поля.</p>
+                    </div>
+                    <div class="info-content">
+                        <h2>2.</h2>
+                        <div class="info_image">
+                            <img src="assets/game_digit/game_process_static.png" alt="gameplay_static" class="static">
+                            <img src="assets/game_digit/game_process.gif" alt="gameplay_info" class="gif">
+                        </div>
+                        <p>Найди все возможные составы числа.</p>
+                    </div>
+                    <div class="info-content">
+                        <h2>3.</h2>
+                        <div class="info_image">
+                            <img src="assets/game_digit/mistakes_static.png" alt="mistakes_static" class="static">
+                            <img src="assets/game_digit/mistakes.gif" alt="mistakes_info" class="gif">
+                        </div>
+                        <p>Следи за временем и количеством допустимых ошибок.</p>
+                    </div>
+                    <button class="info_ctrl_btn" id="close_info">
+                        Закрыть
+                    </button>
                 </div>
             </section>
             <section class="side_sector">

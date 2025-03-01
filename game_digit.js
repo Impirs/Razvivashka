@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    let gameState = false;
+    let gameState = false
+    let infoState = false
     let pause = false
     let board = [];
     let selectedCells = [];
@@ -49,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const infoButton = document.getElementById("info_btn");
     const reloadButton = document.getElementById("reload_btn");
     const pauseButton = document.getElementById("pause_btn")
+    document.getElementById("close_info").addEventListener("click", closeInfo);
     
     function setupGameMenu() {
         const digitButtons = document.querySelectorAll("#digit_setup span");
@@ -180,7 +182,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleInfoClick() {
-        
+        if (!infoState) {
+            infoState = true;
+            document.getElementById("infoModul").style.display = "flex";
+        } else {
+            closeInfo();
+        }
+    }
+
+    function closeInfo() {
+        infoState = false;
+        document.getElementById("infoModul").style.display = "none";
     }
 
     function generateBoard() {
