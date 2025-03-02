@@ -75,22 +75,24 @@
                     </div>
                 </div>
                 <div id="infoModul" class="modul">
-                    <div class="info-content">
-                        <h2>1.</h2>
-                        <div class="info_image">
-                            <img src="assets/game_digit/settings_static.png" alt="settings_static" class="static">
-                            <img src="assets/game_digit/settings.gif" alt="settings_info" class="gif">
+                    <section class="info-section">
+                        <div class="info-content">
+                            <h2>1.</h2>
+                            <div class="info_image">
+                                <img src="assets/game_digit/settings_static.png" alt="settings_static" class="static">
+                                <img src="assets/game_digit/settings.gif" alt="settings_info" class="gif">
+                            </div>
+                            <p>Выбери число и размер игрового поля.</p>
                         </div>
-                        <p>Выбери число и размер игрового поля.</p>
-                    </div>
-                    <div class="info-content">
-                        <h2>2.</h2>
-                        <div class="info_image">
-                            <img src="assets/game_digit/game_process_static.png" alt="gameplay_static" class="static">
-                            <img src="assets/game_digit/game_process.gif" alt="gameplay_info" class="gif">
+                        <div class="info-content">
+                            <h2>2.</h2>
+                            <div class="info_image">
+                                <img src="assets/game_digit/game_process_static.png" alt="gameplay_static" class="static">
+                                <img src="assets/game_digit/game_process.gif" alt="gameplay_info" class="gif">
+                            </div>
+                            <p>Найди все возможные составы числа.</p>
                         </div>
-                        <p>Найди все возможные составы числа.</p>
-                    </div>
+                    </section>
                     <div class="info-content">
                         <h2>3.</h2>
                         <div class="info_image">
@@ -115,7 +117,9 @@
                     </button>
                 </section>
                 <section class="score_section">
-
+                    <h2 id="score_record">Рекорды:</h2>
+                    <div class="score_table" id="score_table">
+                    </div>
                 </section>
             </section>
         </section>
@@ -127,6 +131,6 @@
         }
     </script>
     <script src="renderer.js"></script>
-    <script src="game_digit.js"></script>
+    <script type="module" src="game_digit.js"></script>
 </body>
 </html>

@@ -94,6 +94,7 @@ img[alt="digit_icon"] {
 }
 
 .digit_setup span {
+    font-family: "Playball";
     display: inline-block;
     margin: 5px;
     /*padding: 8px;*/
@@ -135,7 +136,7 @@ img[alt="digit_icon"] {
     border: 1px solid #eb92be;
     width: 112px;
     height: 14px;
-    padding: 3px 0 13px 0;
+    padding: 0px 0 15px 0;
     font-size: 20px;
     color: azure;
     background-color: #eb92be;
@@ -152,7 +153,7 @@ img[alt="digit_icon"] {
 }
 
 .game_ctrl_btn {
-    font-family: 'Roboto Bold';
+    font-family:'Snide hand';
     color: azure;
     background-color: #eb92be;
     border: 2px solid #eb92be;
@@ -298,6 +299,13 @@ img[alt="digit_icon"] {
     font-size: 25px;
     color: #4b4b4b;
 }
+/*
+.timer_container span {
+    font-family: 'Playball';
+    font-size: 25px;
+    color: #4b4b4b;
+}
+*/
 
 .grid {     
     display: grid; 
@@ -357,6 +365,101 @@ img[alt="digit_icon"] {
     justify-content: center;
     text-align: center;
     gap: 20px;
+}
+
+.score_table {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.score_table h2 {
+    font-family: 'Playball';
+    font-size: 120px;
+    color: rgba(255, 215, 0);
+    margin: 0px;
+    cursor: default;
+}
+
+.digit_label {
+    font-family: 'Playball';
+    font-size: 30px;
+    color: #4b4b4b;
+    cursor: default;
+}
+
+.best_label {
+    display: flex;
+    justify-content: center;
+    cursor:default;
+    color: rgba(255, 215, 0);
+    height: 28px;
+}
+
+.nav_section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 20px;
+}
+
+.nav_section span {
+    font-size: 20px;
+    width: 120px;
+    color: #4b4b4b;
+    cursor: default;
+}
+
+.score_ctrl_btn {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: azure;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #eb92be;
+    padding: 0px;
+}
+
+.score_ctrl_btn:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+    color: #63c9b4
+}
+
+.score_ctrl_icon {
+    width: 48px;
+    height: 48px;
+    background: #eb92be;
+}
+
+.score_ctrl_icon:hover {
+    width: 48px;
+    height: 48px;
+    background: #63c9b4;
+}
+
+#nav_left {
+    display: flex;
+    -webkit-mask: url('assets/icons8-back-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-back-64.png') no-repeat center;
+    mask-size: contain;
+}
+
+#nav_right {
+    display: flex;
+    -webkit-mask: url('assets/icons8-back-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons8-back-64.png') no-repeat center;
+    mask-size: contain;
+    transform: scaleX(-1); /* Flip horizontally */
 }
 
 #pause {

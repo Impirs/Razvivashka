@@ -8,11 +8,10 @@
     background: rgba(0, 0, 0, 0.75);
     justify-content: center;
     align-items: center;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     border-radius: 15px;
-    column-gap: 10px;
-    row-gap: 0px;
+    gap: 15px;
 }
 
 .modul-content {
@@ -38,19 +37,27 @@
     margin: 2px 0;
 }
 
+
+.info-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
 .info-content {
     display: flex;
-    flex: 1 1 auto;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     gap: 5px;;
 }
 
 .info-content h2 {
     font-size: 26px;
+    margin:0;
     color: rgba(255, 215, 0);
-    margin: 20px 0 0 0;
 }
 .info-content p {
     color: azure;

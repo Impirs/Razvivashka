@@ -13,6 +13,16 @@
     src: url('assets/Stick-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'PlayBall';
+    src: url('assets/Playball-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Snide hand';
+    src: url('assets/snide_hand/fonts/SnideHandTT.ttf') format('truetype');
+}
+
 body {
     background: linear-gradient(320deg, #eb92be, #ffef79, #63c9b4);
     display: flex;
@@ -20,7 +30,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-family: 'Roboto Bold';
+    font-family: 'Snide hand';
 }
 
 .container {
@@ -93,6 +103,7 @@ img[alt="welcome"] {
 }
 
 .text_btn {
+    font-family: 'Snide hand';
     width: 256px;
     height: 84px;
     display: flex;
@@ -127,6 +138,32 @@ img[alt="welcome"] {
     text-align: center;
 }
 
+.achievement_notification {
+    display: flex;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 256px;
+    height: 84px;
+    padding: 14px 24px;
+    background: azure;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border-color: #63c9b4;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}
 
 #play {
     -webkit-mask: url('assets/icons8-play-64.png') no-repeat center;

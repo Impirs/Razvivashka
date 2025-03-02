@@ -1,4 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { 
+    addHighScore, unlockAchievement,
+    getAchievements, getHighScores,
+    parseAchievementId, generateAchievementId 
+} from './data_manager.js';
+
+document.addEventListener("DOMContentLoaded", () => {     
     let numberDistribution = {
         6: { 
             board: 7, 
@@ -24,7 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
             numbers: { 1:8, 2:8, 3:8, 4:8, 5:16, 6:8, 7:8, 8:8, 9:8 } 
         }
     };
-
+    let notificationQueue = [];
+    let isDisplayingNotification = false;
     let gameState = false
     let infoState = false
     let pause = false
@@ -128,6 +135,109 @@ document.addEventListener("DOMContentLoaded", () => {
         reloadButton.addEventListener("click", handleReloadClick)
         infoButton.addEventListener("click", handleInfoClick)
         pauseButton.addEventListener("click", handlePauseClick)
+    }
+
+    function setupScoreSection() {
+        const highScores = getHighScores("digit");
+        const scoreTable = document.getElementById("score_table");
+        scoreTable.innerHTML = ""; 
+    
+        let bestScoreEntry = getBestScore(); // Теперь возвращает { digit, size }
+        let bestDigit = bestScoreEntry.digit;
+        let bestSize = bestScoreEntry.size;
+    
+        highScores.sort((a, b) => {
+            let parsedA = parseAchievementId(a.id);
+            let parsedB = parseAchievementId(b.id);
+            if (parsedA.digit === 8 && parsedB.digit === 8) {
+                return parsedA.size - parsedB.size;
+            }
+            return parsedA.digit - parsedB.digit;
+        });
+    
+        let uniqueEntries = highScores.map(hs => {
+            let parsed = parseAchievementId(hs.id);
+            return { ...parsed, highScore: hs.score };
+        });
+        let currentIndex = uniqueEntries.findIndex(entry => entry.digit === bestDigit && entry.size === bestSize);
+        
+        // console.log("Default index:", currentIndex);
+        if (currentIndex === -1) currentIndex = 0;
+    
+        let container = document.createElement("div");
+        container.classList.add("highscore_container");
+        let title = document.createElement("h2");
+        let span1 = document.createElement("span");
+        let span2 = document.createElement("span");
+        let bestLabel = document.createElement("span");
+        let nav_section = document.createElement("div");
+        let btnLeft = document.createElement("button");
+        let leftBtnIcon = document.createElement("div");
+        let btnRight = document.createElement("button");
+        let rightBtnIcon = document.createElement("div");
+        
+        span1.classList.add("digit_label");
+        bestLabel.classList.add("best_label");
+        bestLabel.textContent = "Лучший результат";
+        btnLeft.classList.add("score_ctrl_btn");
+        leftBtnIcon.classList.add("score_ctrl_icon");
+        leftBtnIcon.id = "nav_left";
+        btnRight.classList.add("score_ctrl_btn");
+        rightBtnIcon.classList.add("score_ctrl_icon");
+        rightBtnIcon.id = "nav_right";
+    
+        function updateDisplay(index) {
+            if (index < 0 || index >= uniqueEntries.length) return;
+    
+            currentIndex = index;
+            let entry = uniqueEntries[currentIndex];
+    
+            title.textContent = entry.highScore;
+            span1.textContent = `#${entry.digit}`;
+            span2.textContent = (entry.size === 7) ? "Стандарт" : "Большая";
+            
+            bestLabel.style.visibility = (entry.digit === bestDigit && entry.size === bestSize) ? "visible" : "hidden";
+        }
+    
+        updateDisplay(currentIndex);
+        btnLeft.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                updateDisplay(currentIndex - 1);
+            }
+        });
+        btnRight.addEventListener("click", () => {
+            if (currentIndex < uniqueEntries.length - 1) {
+                updateDisplay(currentIndex + 1);
+            }
+        });
+        nav_section.classList.add("nav_section");
+        btnLeft.appendChild(leftBtnIcon);
+        nav_section.appendChild(btnLeft);
+        nav_section.appendChild(span2);
+        btnRight.appendChild(rightBtnIcon);
+        nav_section.appendChild(btnRight);
+
+        container.appendChild(title);
+        container.appendChild(bestLabel);
+        container.appendChild(span1);
+        container.appendChild(nav_section);
+        scoreTable.appendChild(container);
+    }
+
+    function getBestScore() {
+        const highScores = getHighScores("digit");
+        let bestScore = 1000;
+        let bestDigit = 0;
+        let bestSize = 0;
+        highScores.forEach(hs => {
+            let parsed = parseAchievementId(hs.id);
+            if (hs.score < bestScore){
+                bestScore = hs.score;
+                bestDigit = parsed.digit;
+                bestSize = parsed.size;
+            }
+        });
+        return { digit: bestDigit, size: bestSize };
     }
 
     function startGame() {
@@ -327,6 +437,39 @@ document.addEventListener("DOMContentLoaded", () => {
             mistakes[i].classList.add("cross");
         }
     }
+
+    function checkAchievement(game, id, score) {
+        let unlockedAchievements = unlockAchievement(game, id, score);
+        if (unlockedAchievements.length > 0) {
+            notificationQueue.push(...unlockedAchievements);
+            if (!isDisplayingNotification) {
+                displayNextNotification();
+            }
+        }
+    }
+    
+    function displayNextNotification() {
+        if (notificationQueue.length === 0) {
+            isDisplayingNotification = false;
+            return;
+        }
+        
+        isDisplayingNotification = true;
+        let achievement = notificationQueue.shift();
+        
+        let notification = document.createElement("div");
+        notification.classList.add("achievement_notification");
+        notification.textContent = `Достижение разблокировано: ${achievement.id}`;
+        console.log(`Достижение разблокировано: ${achievement.id}`);
+    
+        const container = document.querySelector(".game_container") || document.body;
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+            displayNextNotification();
+        }, 3000);
+    }
     
 
     function checkWin() {
@@ -337,7 +480,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function endGame(win) {
         clearInterval(timer);
-        win ? showWinCongrads(time) : showLose();
+        if (win) {
+            showWinCongrads(time);
+            const addach = {size: boardSize, digit: sumTarget};
+            const achId = generateAchievementId(addach);
+            console.log(achId);
+            addHighScore("digit", achId , time);
+            checkAchievement("digit", achId, time);
+            setupScoreSection();
+            // unlockAchievement("digit", generateAchievementId(6, boardSize));
+        } else showLose();
         gameState = false;
 
         digitSetup.classList.remove("disabled");
@@ -356,4 +508,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setupGameMenu();
+    setupScoreSection();
 });
