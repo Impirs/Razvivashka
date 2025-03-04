@@ -139,13 +139,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function setupScoreSection() {
         const highScores = getHighScores("digit");
+        if (!highScores || highScores.length === 0) {
+            console.warn("No high scores available.");
+            return;
+        }
         const scoreTable = document.getElementById("score_table");
         scoreTable.innerHTML = ""; 
     
-        let bestScoreEntry = getBestScore(); // Теперь возвращает { digit, size }
+        let bestScoreEntry = getBestScore();
         let bestDigit = bestScoreEntry.digit;
         let bestSize = bestScoreEntry.size;
-    
+        // console.log("Лучший результат:", bestDigit, bestSize);
         highScores.sort((a, b) => {
             let parsedA = parseAchievementId(a.id);
             let parsedB = parseAchievementId(b.id);
@@ -226,17 +230,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getBestScore() {
         const highScores = getHighScores("digit");
-        let bestScore = 1000;
-        let bestDigit = 0;
-        let bestSize = 0;
+        if (!highScores || highScores.length === 0) {
+            console.warn("No high scores available.");
+            return { digit: null, size: null };
+        }
+        // console.log("High scores:", highScores);
+        let bestScore = Infinity;
+        let bestDigit = null;
+        let bestSize = null;
+    
         highScores.forEach(hs => {
-            let parsed = parseAchievementId(hs.id);
-            if (hs.score < bestScore){
+            const parsed = parseAchievementId(hs.id);
+            // console.log("Parsed:", parsed);
+            // console.log("Score:", hs.score);
+            if (hs.score < bestScore) {
                 bestScore = hs.score;
                 bestDigit = parsed.digit;
                 bestSize = parsed.size;
             }
         });
+        console.log("Лучший результат:", bestScore, "секунд");
         return { digit: bestDigit, size: bestSize };
     }
 
@@ -409,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 board[second.row][second.col] = null;
                 renderBoard();
                 checkWin();
-            }, 500);
+            }, 300);
         } else {
             mistakes++;
             updateMistakes(mistakes);
@@ -423,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 first.element.classList.remove("wrong", "selected");
                 second.element.classList.remove("wrong", "selected");
-            }, 500);
+            }, 300);
         }
         selectedCells = [];
     }
@@ -458,11 +471,26 @@ document.addEventListener("DOMContentLoaded", () => {
         let achievement = notificationQueue.shift();
         
         let notification = document.createElement("div");
+        let icon = document.createElement("div");
+        icon.classList.add("achievement_icon");
+        icon.classList.add(`rank_${achievement.rank}`);
+        icon.id = "trophy";
+        let avards_section = document.createElement("div");
+        avards_section.classList.add("avards_section");
+        let title = document.createElement("h3");
+        title.textContent = achievement.title;
+        let description = document.createElement("p");
+        // console.log(achievement.ranks);
+        description.textContent = `Закончить игру в режиме ${achievement.id} за ${achievement.ranks[achievement.rank - 1]} секунд или быстрее.`;
+
         notification.classList.add("achievement_notification");
-        notification.textContent = `Достижение разблокировано: ${achievement.id}`;
-        console.log(`Достижение разблокировано: ${achievement.id}`);
-    
+        console.log(`Достижение разблокировано: ${achievement.title} (Ранг ${achievement.rank})`);
+        
         const container = document.querySelector(".game_container") || document.body;
+        notification.appendChild(icon);
+        avards_section.appendChild(title);
+        avards_section.appendChild(description);
+        notification.appendChild(avards_section);
         container.appendChild(notification);
         
         setTimeout(() => {
@@ -470,7 +498,6 @@ document.addEventListener("DOMContentLoaded", () => {
             displayNextNotification();
         }, 3000);
     }
-    
 
     function checkWin() {
         if (board.flat().every(cell => cell === null)) {
@@ -507,6 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
         LOSEmodul.style.display = "flex";
     }
 
+    window.checkAchievement = checkAchievement;
     setupGameMenu();
     setupScoreSection();
 });

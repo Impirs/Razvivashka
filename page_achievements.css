@@ -1,0 +1,59 @@
+.large_container {
+    background-color: rgba(240,255,255,0.8);
+    border: 1px solid #eb92be;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    color: #232323;
+    width: 1510px;
+    height: 840px;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+}
+
+.semi_header {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+.achievements_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 30px;
+}
+
+.game_list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 130px;
+}
+
+.game_list_item {
+    display: flex;
+    background-color: azure;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+}
+.game_list_item:hover {
+    background-color: #eb92be;
+    color: azure;
+}
+
+
+.achievements_list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}

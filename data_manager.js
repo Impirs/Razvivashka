@@ -4,31 +4,21 @@ const initialData = {
         highScores: {},
         achievements: {
             "digit": [
-                { id: "7x6",score: 60, unlocked: false },
-                { id: "7x6",score: 120, unlocked: false },
-                { id: "7x7",score: 60, unlocked: false },
-                { id: "7x7",score: 120, unlocked: false },
-                { id: "7x8",score: 60, unlocked: false },
-                { id: "7x8",score: 120, unlocked: false },
-                { id: "9x8",score: 120, unlocked: false },
-                { id: "9x8",score: 180, unlocked: false },
-                { id: "9x8",score: 240, unlocked: false },
-                { id: "9x9",score: 120, unlocked: false },
-                { id: "9x9",score: 180, unlocked: false },
-                { id: "9x9",score: 240, unlocked: false },
-                { id: "9x10",score: 120, unlocked: false },
-                { id: "9x10",score: 180, unlocked: false },
-                { id: "9x10",score: 240, unlocked: false },
+                { id: "7x6", ranks: [60, 120], unlocked: [false, false], title: "Отличное начало!" },
+                { id: "7x7", ranks: [60, 120], unlocked: [false, false], title: "7Я" },
+                { id: "7x8", ranks: [60, 120], unlocked: [false, false], title: "Знаток основ" },
+                { id: "9x8", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Высшая лига" },
+                { id: "9x9", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Юный математик" },
+                { id: "9x10", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Профессионал" },
+                { id: "7x100", ranks: [10000], unlocked: [false], title: "Идеальный подход" },
+                { id: "9x100", ranks: [20000], unlocked: [false], title: "Идеальный подход" },
             ],
-            "sum": [
-                { id: "ach1", unlocked: false },
-                { id: "ach2", unlocked: false }
-            ],
-            "multi": [
-                { id: "ach1", unlocked: false },
-                { id: "ach2", unlocked: false }
-            ]
-        }
+        },
+        games: [
+            {id: "digit", title: "Состав числа"},
+            {id: "sum", title: "Сумма чисел"},
+            {id: "multi", title: "Произведение чисел"},
+        ]
     },
     settings: {
         volume: 100,
@@ -110,9 +100,13 @@ export function unlockAchievement(game, id, score) {
     
     if (achievements) {
         achievements.forEach(achievement => {
-            if (achievement.id === id && !achievement.unlocked && score < achievement.score) {
-                achievement.unlocked = true;
-                unlockedAchievements.push(achievement);
+            if (achievement.id === id) {
+                achievement.ranks.forEach((rank, index) => {
+                    if (!achievement.unlocked[index] && score < rank) {
+                        achievement.unlocked[index] = true;
+                        unlockedAchievements.unshift({ ...achievement, rank: index + 1 });
+                    }
+                });
             }
         });
         saveData(data);
@@ -133,7 +127,12 @@ export function getVolume() {
 export function getPassword() {
     let data = loadData();
     return data.settings.password;
-}  
+}
+
+export function getGames() {
+    let data = loadData();
+    return data.user.games;
+}
 
 export function getAchievements(game) {
     let data = loadData();

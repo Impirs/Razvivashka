@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Игры</title>
     <link rel="stylesheet" href="style_base.css">
-    <link rel="stylesheet" href="style_page.css">
+    <link rel="stylesheet" href="page_achievements.css">
 </head>
 <body>
     <div class="large_container">
@@ -17,13 +17,20 @@
                 <div class="nav_btn_icon" id="settings"></div>
             </button>
         </section>
-
+        <section class="achievements_container">
+            <div class="game_list" id="game_list">
+            </div>
+            <div class="achievements_list" id="achievements_list">
+            </div>
+        </section>
     </div>
+
     <script>
         function goBack(){
             window.location.href = 'index.html'
         }
     </script>
+    <script type="module" src="page_achievements.js"></script>
     <script src="renderer.js"></script>
 </body>
 </html>

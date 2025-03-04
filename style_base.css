@@ -144,18 +144,52 @@ img[alt="welcome"] {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    width: 256px;
-    height: 84px;
-    padding: 14px 24px;
+    width: 400px;
+    height: 100px;
+    padding: 12px 24px;
     background: azure;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-direction: row;
     border-color: #63c9b4;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
     animation: fadeInOut 3s ease-in-out;
+    gap: 16px;
+}
+
+.avards_section {
+    display: flex;
+    width: 350px;
+    flex-direction: column;
+}
+
+.avards_section h3 {
+    font-size: 25px;
+    color: #4b4b4b;
+    margin: 0;
+    justify-content: flex-start;
+}
+
+.avards_section p {
+    font-size: 14px;
+    color: #4b4b4b;
+    margin: 0;
+    justify-content: flex-start;
+}
+
+.achievement_icon{
+    width: 80px;
+    height: 80px;
+}
+.achievement_icon.rank_3 {
+    background: rgba(196, 141, 68);
+}
+.achievement_icon.rank_2 {
+    background: rgba(189, 198, 197);
+}
+.achievement_icon.rank_1 {
+    background: rgba(255, 215, 0);
 }
 
 @keyframes fadeInOut {
@@ -163,6 +197,13 @@ img[alt="welcome"] {
     10% { opacity: 1; transform: translateX(-50%) translateY(0); }
     90% { opacity: 1; transform: translateX(-50%) translateY(0); }
     100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}
+
+#trophy {
+    -webkit-mask: url('assets/trophy.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/trophy.png') no-repeat center;
+    mask-size: contain;
 }
 
 #play {
