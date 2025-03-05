@@ -1,7 +1,6 @@
 import { 
-    addHighScore, unlockAchievement,
-    getAchievements, getHighScores,
-    parseAchievementId, generateAchievementId 
+    addHighScore, unlockAchievement, getHighScores,
+    getVolume ,parseAchievementId, generateAchievementId 
 } from './data_manager.js';
 
 document.addEventListener("DOMContentLoaded", () => {     
@@ -41,6 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let time = 0;
     let timer;
 
+    const savedVolume = getVolume();
+    console.log(savedVolume);
+    
     const boardSetup = document.getElementById("board_setup");
     let boardSize = 9;
     const digitSetup = document.getElementById("digit_setup");
@@ -62,11 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const pauseButton = document.getElementById("pause_btn");
     document.getElementById("close_info").addEventListener("click", closeInfo);
     
+    
+
     function setupSounds() {
-        achieveSound.volume = 0.3;
-        defeatSound.volume = 0.1;
-        errorSound.volume = 0.3;
-        winSound.volume = 0.1;
+        achieveSound.volume = savedVolume.notification;
+        errorSound.volume = savedVolume.notification;
+        defeatSound.volume = savedVolume.game_effects;
+        winSound.volume = savedVolume.game_effects;
     }
 
     function setupGameMenu() {
@@ -491,7 +495,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let title = document.createElement("h3");
         title.textContent = achievement.title;
         let description = document.createElement("p");
-        // console.log(achievement.ranks);
         const parsed = parseAchievementId(achievement.id);
         if (mistakes === 0){
             description.textContent = `Закончить игру с размером игровой доски ${parsed.size} без ошибок.`;
@@ -507,11 +510,13 @@ document.addEventListener("DOMContentLoaded", () => {
         avards_section.appendChild(description);
         notification.appendChild(avards_section);
         container.appendChild(notification);
+
         achieveSound.play();
+        
         setTimeout(() => {
             notification.remove();
             displayNextNotification();
-        }, 3000);
+        }, 3500);
     }
 
     function checkWin() {
@@ -524,8 +529,11 @@ document.addEventListener("DOMContentLoaded", () => {
         clearInterval(timer);
         if (win) {
             let digit_target;
-            showWinCongrads(time);
+            const winTime = document.getElementById("win_time");
+            WINmodul.style.display = "flex";
+            winTime.textContent = time;
             winSound.play();
+
             if (mistakes === 0) {
                 digit_target = 100;
             } else {
@@ -537,29 +545,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const highId = generateAchievementId(addhigh);
             addHighScore("digit", highId, time);
             setupScoreSection();
+
             setTimeout(() => {
                 checkAchievement("digit", achId, time);
                 checkAchievement("digit", highId, time);
             }, 3000); 
         } else {
             defeatSound.play();
-            showLose();
+            LOSEmodul.style.display = "flex";
         }
         gameState = false;
 
         digitSetup.classList.remove("disabled");
         boardSetup.classList.remove("disabled");
         startButton.classList.remove("disabled");
-    }
-
-    function showWinCongrads(time) {
-        const winTime = document.getElementById("win_time");
-        WINmodul.style.display = "flex";
-        winTime.textContent = time;
-    }
-
-    function showLose() {
-        LOSEmodul.style.display = "flex";
     }
 
     window.checkAchievement = checkAchievement;

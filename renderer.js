@@ -1,5 +1,3 @@
-const clickSound = document.getElementById("click_sound");
-
 function goCatalog() {
     window.location.href = 'page_catalog.html';
 }

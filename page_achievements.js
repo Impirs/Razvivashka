@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
         allItem.classList.add("game_list_item");
         allItem.addEventListener("click", () => {
             renderAchievements('all');
-            clickSound.play();
         });
         game_list.appendChild(allItem);
         for (let game of games) {
@@ -57,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
             gameItem.classList.add("game_list_item");
             gameItem.addEventListener("click", () => {
                 renderAchievements(game.id);
-                clickSound.play();
             });
             game_list.appendChild(gameItem);
         }

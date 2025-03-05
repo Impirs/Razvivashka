@@ -9,8 +9,8 @@
     "build": "electron-builder"
   },
   "build": {
-    "appId": "com.yourname.myapp",
-    "productName": "MyApp",
+    "appId": "com.impirs.razvivashka",
+    "productName": "Razvivashka",
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico"
@@ -19,24 +19,30 @@
       "app.js",
       "preload.js",
       "renderer.js",
+      "data_manager.js",
       "index.html",
       "style_base.css",
-      "style_page.css",
-      "style_result_module.css",
+      "style_overlap_module.css",
 
       "page_catalog.html",
+      "page_catalog.css",
       "page_achievements.html",
+      "page_achievements.js",
+      "page_achievements.css",
       "page_settings.html",
+      "page_settings.js",
+      "page_settings.css",
 
       "game_digit_solver.html",
       "game_digit.js",
       "game_digit.css",
 
-      "game_sum_solver.html",
-      "game_sum.js",
       "assets/**/*"
     ],
-    "asar": true
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "repository": {
     "type": "git",

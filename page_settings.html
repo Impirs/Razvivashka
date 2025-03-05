@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Игры</title>
     <link rel="stylesheet" href="style_base.css">
-    <link rel="stylesheet" href="style_page.css">
+    <link rel="stylesheet" href="page_settings.css">
 </head>
 <body>
     <div class="large_container">
@@ -17,13 +17,28 @@
                 <div class="nav_btn_icon" id="home"></div>
             </button>
         </section>
-
+        <section class="settings">
+            <section class="sound_setting">
+                <h2>Громкость эффектов</h2>
+                <input type="range" class="volume_slider" id="effects_slider"
+                    min="0" max="1" step="0.05" value="1">
+                <span id="effects_volume">1</span>
+            </section>
+            <section class="sound_setting">
+                <h2>Громкость уведомлений</h2>
+                <input type="range" class="volume_slider" id="notification_slider"
+                    min="0" max="1" step="0.05" value="1">
+                <span id="notification_volume">1</span>
+            </section>
+        </section>
     </div>
+
     <script>
         function goBack(){
             window.location.href = 'index.html'
         }
     </script>
+    <script type="module" src="page_settings.js"></script>
     <script src="renderer.js"></script>
 </body>
 </html>

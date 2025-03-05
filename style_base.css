@@ -4,7 +4,7 @@
 }
 
 @font-face {
-    font-family: 'Roboto Regular';
+    font-family: 'Roboto Regu';
     src: url('assets/Roboto/static/Roboto-Black.ttf') format('truetype');
 }
 
@@ -40,7 +40,7 @@ body {
     box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
     color: #232323;
     width: 400px;
-    height: 600px;
+    height: 620px;
     padding: 30px 45px;
     display: flex;
     flex-direction: column;

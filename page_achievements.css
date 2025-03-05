@@ -67,6 +67,7 @@
     gap: 8px;
     height: 680px; 
     overflow-y: auto;
+    overflow-x: hidden;
     padding-right: 10px;
 }
 

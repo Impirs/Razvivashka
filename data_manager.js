@@ -21,7 +21,10 @@ const initialData = {
         ]
     },
     settings: {
-        volume: 100,
+        volume: {
+            notification: 1,
+            game_effects: 1,
+        },
         password: "default",
         games: {
             "digit": {
