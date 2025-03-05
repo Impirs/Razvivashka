@@ -1,9 +1,13 @@
+const clickSound = document.getElementById("click_sound");
+
 function goCatalog() {
     window.location.href = 'page_catalog.html';
 }
+
 function goAchievements() {
     window.location.href = 'page_achievements.html';
 }
+
 function goSettings() {
     window.location.href = 'page_settings.html';
 }
@@ -27,7 +31,3 @@ if (document.getElementById('sum_solver')){
         window.location.href = 'game_sum_solver.html'
     })
 }
-
-//document.getElementById('play_bnt').addEventListener('click', () => {
-//  alert("Start to Play!")
-//});

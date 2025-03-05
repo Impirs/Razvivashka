@@ -4,14 +4,13 @@
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
     color: #232323;
-    width: 1510px;
+    width: 1180px;
     height: 840px;
     padding: 40px 50px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    gap: 40px;
+    gap: 20px;
 }
 
 .semi_header {
@@ -36,24 +35,103 @@
     justify-content: flex-start;
     gap: 10px;
     margin-bottom: 130px;
+    height: max-content;
 }
 
 .game_list_item {
     display: flex;
+    width: 256px;
     background-color: azure;
     border: 1px solid #eb92be;
     border-radius: 8px;
     padding: 10px;
     cursor: pointer;
-}
-.game_list_item:hover {
+}/*.game_list_item:hover {
     background-color: #eb92be;
-    color: azure;
-}
+}*/
 
+.game_list_item h3 {
+    font-size: 20px;
+    color: #4b4b4b;
+    margin: 0;
+    justify-content: flex-start;
+}.game_list_item:hover h3,
+.game_list_item.active h3 {
+    color: #eb92be;
+}
 
 .achievements_list {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    height: 680px; 
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.achievements_list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.achievements_list::-webkit-scrollbar-thumb {
+    background-color: #eb92be;
+    border-radius: 4px;
+}
+
+.achievements_list::-webkit-scrollbar-track {
+    background-color: rgba(240,255,255,0.8);
+}
+
+.achievement {
+    display: flex;
+    flex-direction: row;
+    width: 800px;
+    height: 78px;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    background-color: azure;
+}
+
+.trophies {
+    display: flex;
+    width: 220px;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 2px;
+}
+.trophies .achievement_icon.locked {
+    background: rgba(199, 199, 199, 0.25);
+}
+.trophies .achievement_icon.rank_1 {
+    width: 80px;
+    height: 80px;
+}
+.trophies .achievement_icon.rank_2 {
+    width: 70px;
+    height: 70px;
+}
+.trophies .achievement_icon.rank_3 {
+    width: 60px;
+    height: 60px;
+}
+
+.description {
+    width: 512px;
+    flex-direction: column;
+}
+.description h3 {
+    font-size: 25px;
+    color: #4b4b4b;
+    margin: 0;
+    justify-content: flex-start;
+}
+.description p {
+    font-size: 14px;
+    color: #4b4b4b;
+    margin: 0;
     justify-content: flex-start;
 }

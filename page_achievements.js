@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const game_list = document.getElementById("game_list");
     const game_records = document.getElementById("achievements_list");
+    const clickSound = document.getElementById("click_sound");
 
     function getAllRecords() {
         for (let game of games) {
@@ -20,10 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             const records = [];
             for (let achievement of achievements) {
+                const parsed = parseAchievementId(achievement.id);
+                let description_srt;
+                if (parsed.digit === 100){
+                    description_srt = `Закончить игру с размером игровой доски ${parsed.size} без ошибок.`;
+                } else description_srt = `Закончить игру в режиме ${achievement.id} за ${Math.min(...achievement.ranks)} секунд или быстрее.`
                 records.push({
                     game: game.id,
                     title: achievement.title,
-                    description: `Закончить игру в режиме ${achievement.id} за ${Math.min(...achievement.ranks)} секунд или быстрее.`,
+                    description: description_srt,
                     ranks: achievement.ranks,
                     unlocked: achievement.unlocked,
                 });
@@ -36,20 +42,22 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderGameList() {
         game_list.innerHTML = '';
         const allItem = document.createElement("div");
-        allItem.textContent = "Все игры";
+        allItem.innerHTML = `<h3>Все</h3>`;
         allItem.dataset.gameId = 'all';
         allItem.classList.add("game_list_item");
         allItem.addEventListener("click", () => {
             renderAchievements('all');
+            clickSound.play();
         });
         game_list.appendChild(allItem);
         for (let game of games) {
             const gameItem = document.createElement("div");
-            gameItem.textContent = game.title;
+            gameItem.innerHTML = `<h3>${game.title}<h3>`;
             gameItem.dataset.gameId = game.id;
             gameItem.classList.add("game_list_item");
             gameItem.addEventListener("click", () => {
                 renderAchievements(game.id);
+                clickSound.play();
             });
             game_list.appendChild(gameItem);
         }
@@ -58,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderAchievements(gameId) {
         game_records.innerHTML = '';
         for (let record of allRecords) {
-            console.log("Record:", record);
+            // console.log("Record:", record);
             if (gameId === 'all' || record.game === gameId) {
                 const achievement = document.createElement("div");
                 achievement.classList.add("achievement");
@@ -70,8 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     trophy.classList.add("achievement_icon");
                     trophy.id = "trophy";
                     const unlocked = record.unlocked[i];
-                    trophy.classList.add(unlocked ? "unlocked" : "locked");
                     trophy.classList.add(`rank_${i + 1}`);
+                    trophy.classList.add(unlocked ? "unlocked" : "locked");
                     trophies.appendChild(trophy);
                 }
 

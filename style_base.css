@@ -182,13 +182,13 @@ img[alt="welcome"] {
     width: 80px;
     height: 80px;
 }
-.achievement_icon.rank_3 {
+.rank_3 {
     background: rgba(196, 141, 68);
 }
-.achievement_icon.rank_2 {
+.rank_2 {
     background: rgba(189, 198, 197);
 }
-.achievement_icon.rank_1 {
+.rank_1 {
     background: rgba(255, 215, 0);
 }
 

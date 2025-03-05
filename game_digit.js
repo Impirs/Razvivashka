@@ -48,17 +48,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameBoard = document.getElementById("game_board");
     const WINmodul = document.getElementById("winModul");
     const LOSEmodul = document.getElementById("loseModul");
-    
     const timerDisplay = document.getElementById("timer");
-
     const mistakesCounter = document.getElementById("mistakes");
+
+    const achieveSound = document.getElementById("achieve_sound");
+    const defeatSound = document.getElementById("defeat_sound");
+    const errorSound = document.getElementById("error_sound");
+    const winSound = document.getElementById("win_sound");
 
     const startButton = document.getElementById("start_btn");
     const infoButton = document.getElementById("info_btn");
     const reloadButton = document.getElementById("reload_btn");
-    const pauseButton = document.getElementById("pause_btn")
+    const pauseButton = document.getElementById("pause_btn");
     document.getElementById("close_info").addEventListener("click", closeInfo);
     
+    function setupSounds() {
+        achieveSound.volume = 0.3;
+        defeatSound.volume = 0.1;
+        errorSound.volume = 0.3;
+        winSound.volume = 0.1;
+    }
+
     function setupGameMenu() {
         const digitButtons = document.querySelectorAll("#digit_setup span");
         const boardButtons = document.querySelectorAll("#board_setup span");
@@ -424,6 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 checkWin();
             }, 300);
         } else {
+            errorSound.play();
             mistakes++;
             updateMistakes(mistakes);
             first.element.classList.add("wrong");
@@ -481,7 +492,11 @@ document.addEventListener("DOMContentLoaded", () => {
         title.textContent = achievement.title;
         let description = document.createElement("p");
         // console.log(achievement.ranks);
-        description.textContent = `Закончить игру в режиме ${achievement.id} за ${achievement.ranks[achievement.rank - 1]} секунд или быстрее.`;
+        const parsed = parseAchievementId(achievement.id);
+        if (mistakes === 0){
+            description.textContent = `Закончить игру с размером игровой доски ${parsed.size} без ошибок.`;
+        }
+        else description.textContent = `Закончить игру в режиме ${achievement.id} за ${achievement.ranks[achievement.rank - 1]} секунд или быстрее.`;
 
         notification.classList.add("achievement_notification");
         console.log(`Достижение разблокировано: ${achievement.title} (Ранг ${achievement.rank})`);
@@ -492,7 +507,7 @@ document.addEventListener("DOMContentLoaded", () => {
         avards_section.appendChild(description);
         notification.appendChild(avards_section);
         container.appendChild(notification);
-        
+        achieveSound.play();
         setTimeout(() => {
             notification.remove();
             displayNextNotification();
@@ -508,15 +523,28 @@ document.addEventListener("DOMContentLoaded", () => {
     function endGame(win) {
         clearInterval(timer);
         if (win) {
+            let digit_target;
             showWinCongrads(time);
-            const addach = {size: boardSize, digit: sumTarget};
+            winSound.play();
+            if (mistakes === 0) {
+                digit_target = 100;
+            } else {
+                digit_target = sumTarget;
+            }
+            const addach = { size: boardSize, digit: digit_target };
             const achId = generateAchievementId(addach);
-            console.log(achId);
-            addHighScore("digit", achId , time);
-            checkAchievement("digit", achId, time);
+            const addhigh = { size: boardSize, digit: sumTarget };
+            const highId = generateAchievementId(addhigh);
+            addHighScore("digit", highId, time);
             setupScoreSection();
-            // unlockAchievement("digit", generateAchievementId(6, boardSize));
-        } else showLose();
+            setTimeout(() => {
+                checkAchievement("digit", achId, time);
+                checkAchievement("digit", highId, time);
+            }, 3000); 
+        } else {
+            defeatSound.play();
+            showLose();
+        }
         gameState = false;
 
         digitSetup.classList.remove("disabled");
@@ -535,6 +563,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.checkAchievement = checkAchievement;
+    setupSounds();
     setupGameMenu();
     setupScoreSection();
 });

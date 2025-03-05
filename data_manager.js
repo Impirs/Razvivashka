@@ -5,7 +5,7 @@ const initialData = {
         achievements: {
             "digit": [
                 { id: "7x6", ranks: [60, 120], unlocked: [false, false], title: "Отличное начало!" },
-                { id: "7x7", ranks: [60, 120], unlocked: [false, false], title: "7Я" },
+                { id: "7x7", ranks: [60, 120], unlocked: [false, false], title: "Семь+Я" },
                 { id: "7x8", ranks: [60, 120], unlocked: [false, false], title: "Знаток основ" },
                 { id: "9x8", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Высшая лига" },
                 { id: "9x9", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Юный математик" },
