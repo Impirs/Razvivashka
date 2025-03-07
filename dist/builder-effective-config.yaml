@@ -1,0 +1,38 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.impirs.razvivashka
+productName: Развивашка
+win:
+  target: nsis
+  icon: assets/icon.ico
+  signtoolOptions:
+    signingHashAlgorithms:
+      - sha256
+    certificateFile: D:/Test_1/certificate.pfx
+    certificatePassword: <stripped sensitive data>
+files:
+  - filter:
+      - app.js
+      - preload.js
+      - renderer.js
+      - data_manager.js
+      - index.html
+      - style_base.css
+      - style_overlap_module.css
+      - page_catalog.html
+      - page_catalog.css
+      - page_achievements.html
+      - page_achievements.js
+      - page_achievements.css
+      - page_settings.html
+      - page_settings.js
+      - page_settings.css
+      - game_digit_solver.html
+      - game_digit.js
+      - game_digit.css
+      - assets/**/*
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+electronVersion: 34.2.0

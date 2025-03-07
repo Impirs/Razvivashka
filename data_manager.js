@@ -16,8 +16,8 @@ const initialData = {
         },
         games: [
             {id: "digit", title: "Состав числа"},
-            {id: "sum", title: "Сумма чисел"},
-            {id: "multi", title: "Произведение чисел"},
+            //{id: "sum", title: "Сумма чисел"},
+            //{id: "multi", title: "Произведение чисел"},
         ]
     },
     settings: {

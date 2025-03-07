@@ -516,7 +516,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             notification.remove();
             displayNextNotification();
-        }, 3500);
+        }, 3000);
     }
 
     function checkWin() {

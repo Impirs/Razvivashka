@@ -1,7 +1,7 @@
 {
-  "name": "summ_solver",
+  "name": "play_and_learn",
   "version": "1.0.0",
-  "description": "",
+  "description": "An educational application with games for kids",
   "main": "app.js",
   "scripts": {
     "start": "electron .",
@@ -10,10 +10,15 @@
   },
   "build": {
     "appId": "com.impirs.razvivashka",
-    "productName": "Razvivashka",
+    "productName": "Развивашка",
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico"
+      "icon": "assets/icon.ico",
+      "signtoolOptions": {
+        "signingHashAlgorithms": ["sha256"],
+        "certificateFile": "D:/Test_1/certificate.pfx",
+        "certificatePassword": "jdi5l92lplx0seq390"
+      }
     },
     "files": [
       "app.js",
@@ -48,8 +53,8 @@
     "type": "git",
     "url": "git+https://github.com/Impirs/Summ_solver.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["games", "for kids", "learning"],
+  "author": "Artem Mamitov",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Impirs/Summ_solver/issues"

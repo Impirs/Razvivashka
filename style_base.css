@@ -1,14 +1,4 @@
 @font-face {
-    font-family: 'Roboto Bold';
-    src: url('assets/Roboto/static/Roboto-Bold.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Roboto Regu';
-    src: url('assets/Roboto/static/Roboto-Black.ttf') format('truetype');
-}
-
-@font-face {
     font-family: 'Stick';
     src: url('assets/Stick-Regular.ttf') format('truetype');
 }
