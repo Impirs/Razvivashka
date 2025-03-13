@@ -1,3 +1,4 @@
 node_modules
 dist/.cache
 dist/win-unpacked
+dist/win-unpacked.zip

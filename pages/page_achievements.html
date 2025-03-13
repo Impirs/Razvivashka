@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Игры</title>
-    <link rel="stylesheet" href="style_base.css">
-    <link rel="stylesheet" href="style_page.css">
+    <link rel="stylesheet" href="../style_base.css">
+    <link rel="stylesheet" href="page_achievements.css">
 </head>
 <body>
     <div class="large_container">
@@ -12,30 +12,24 @@
             <button class="nav_btn" onclick="goBack()">
                 <div class="nav_btn_icon" id="back"></div>
             </button>
-            <h1>Сумма чисел</h1>
+            <h1>Достижения</h1>
             <button class="nav_btn" onclick="goSettings()">
                 <div class="nav_btn_icon" id="settings"></div>
             </button>
-        </section>  
-        <section class="game_section">
-            <section class="game_menu">
-
-            </section>
-            <section class="game_desk">
-
-            </section>
         </section>
-        <section class="score_section">
-
+        <section class="achievements_container">
+            <div class="game_list" id="game_list">
+            </div>
+            <div class="achievements_list" id="achievements_list">
+            </div>
         </section>
     </div>
-
     <script>
-        function goBack() {
-            window.location.href = 'page_catalog.html'
+        function goBack(){
+            window.location.href = '../index.html'
         }
     </script>
-    <script src="renderer.js"></script>
-    <script src="game_digit.js"></script>
+    <script type="module" src="page_achievements.js"></script>
+    <script src="../renderer.js"></script>
 </body>
 </html>

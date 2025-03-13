@@ -1,6 +1,6 @@
 import { 
     updateData, getVolume
-} from './data_manager.js';
+} from '../data_manager.js';
 
 document.addEventListener("DOMContentLoaded", () => {     
     const effectSlider = document.getElementById("effects_slider");

@@ -2,7 +2,7 @@ import {
     addHighScore, unlockAchievement,
     getAchievements, getHighScores, getGames,
     parseAchievementId, generateAchievementId 
-} from './data_manager.js';
+} from '../data_manager.js';
 
 document.addEventListener("DOMContentLoaded", () => {   
     const games = getGames();

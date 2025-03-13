@@ -1,7 +1,7 @@
 import { 
     addHighScore, unlockAchievement, getHighScores,
     getVolume ,parseAchievementId, generateAchievementId 
-} from './data_manager.js';
+} from '../../data_manager.js';
 
 document.addEventListener("DOMContentLoaded", () => {     
     let numberDistribution = {
