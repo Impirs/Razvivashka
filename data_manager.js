@@ -4,12 +4,12 @@ const initialData = {
         highScores: {},
         achievements: {
             "digit": [
-                { id: "7x6", ranks: [60, 120], unlocked: [false, false], title: "Отличное начало!" },
-                { id: "7x7", ranks: [60, 120], unlocked: [false, false], title: "Семь+Я" },
-                { id: "7x8", ranks: [60, 120], unlocked: [false, false], title: "Знаток основ" },
-                { id: "9x8", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Высшая лига" },
-                { id: "9x9", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Юный математик" },
-                { id: "9x10", ranks: [120, 180, 240], unlocked: [false, false, false], title: "Профессионал" },
+                { id: "7x6", ranks: [150, 200], unlocked: [false, false], title: "Отличное начало!" },
+                { id: "7x7", ranks: [150, 200], unlocked: [false, false], title: "Семь+Я" },
+                { id: "7x8", ranks: [150, 200], unlocked: [false, false], title: "Знаток основ" },
+                { id: "9x8", ranks: [180, 240, 360], unlocked: [false, false, false], title: "Высшая лига" },
+                { id: "9x9", ranks: [180, 240, 360], unlocked: [false, false, false], title: "Юный математик" },
+                { id: "9x10", ranks: [180, 240, 360], unlocked: [false, false, false], title: "Профессионал" },
                 { id: "7x100", ranks: [10000], unlocked: [false], title: "Идеальный подход" },
                 { id: "9x100", ranks: [20000], unlocked: [false], title: "Идеальный подход" },
             ],
@@ -164,3 +164,23 @@ export function generateAchievementId({ size, digit }) {
     }
     return `${size}x${digit}`;
 }
+
+function changeAchievementScore({ gameId, id, ranks }) {
+    let data = loadData();
+    let achievements = data.user.achievements[gameId];
+
+    if (achievements) {
+        let achievement = achievements.find(ach => ach.id === id);
+        if (achievement) {
+            achievement.ranks = ranks;
+            saveData(data);
+            console.log(`Achievement ${id} ranks updated to:`, ranks);
+        } else {
+            console.error(`Achievement with id ${id} not found.`);
+        }
+    } else {
+        console.error(`No achievements found for game "${gameId}".`);
+    }
+}
+
+window.changeAchievementScore = changeAchievementScore;

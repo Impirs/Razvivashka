@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  quitApp: () => ipcRenderer.send('app-quit')
+    navigate: (path) => ipcRenderer.send('navigate', path),
+    quitApp: () => ipcRenderer.send('app-quit')
 });

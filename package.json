@@ -15,7 +15,9 @@
       "target": "nsis",
       "icon": "assets/icon.ico",
       "signtoolOptions": {
-        "signingHashAlgorithms": ["sha256"],
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
         "certificateFile": "D:/Test_1/certificate.pfx",
         "certificatePassword": "jdi5l92lplx0seq390"
       }
@@ -27,22 +29,9 @@
       "data_manager.js",
       "index.html",
       "style_base.css",
-      "style_overlap_module.css",
-
-      "page_catalog.html",
-      "page_catalog.css",
-      "page_achievements.html",
-      "page_achievements.js",
-      "page_achievements.css",
-      "page_settings.html",
-      "page_settings.js",
-      "page_settings.css",
-
-      "game_digit_solver.html",
-      "game_digit.js",
-      "game_digit.css",
-
-      "assets/**/*"
+      "pages/**/*",
+      "assets/**/*",
+      "games/**/*"
     ],
     "nsis": {
       "oneClick": false,
@@ -53,7 +42,11 @@
     "type": "git",
     "url": "git+https://github.com/Impirs/Summ_solver.git"
   },
-  "keywords": ["games", "for kids", "learning"],
+  "keywords": [
+    "games",
+    "for kids",
+    "learning"
+  ],
   "author": "Artem Mamitov",
   "license": "ISC",
   "bugs": {

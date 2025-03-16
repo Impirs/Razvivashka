@@ -1,8 +1,8 @@
 version: 1.0.0
 files:
   - url: play_and_learn-setup-1.0.0.exe
-    sha512: TBiArLwbV4e2FgThE+DDHoHpcjF921hNXc80SbbcTR2tOciqkSuIhUfTxZyfx7OQJPaduBYA/9WXXqqsAPQKrA==
-    size: 86137040
+    sha512: iseEQZECnTizCfI50l5SOd5XwrN0L4yNw5kkT0yzHAhIYzZMNhjDxxe9/NQVI1IukTTK593eOrpv0e0EW2RqBw==
+    size: 86137288
 path: play_and_learn-setup-1.0.0.exe
-sha512: TBiArLwbV4e2FgThE+DDHoHpcjF921hNXc80SbbcTR2tOciqkSuIhUfTxZyfx7OQJPaduBYA/9WXXqqsAPQKrA==
-releaseDate: '2025-03-07T09:04:32.843Z'
+sha512: iseEQZECnTizCfI50l5SOd5XwrN0L4yNw5kkT0yzHAhIYzZMNhjDxxe9/NQVI1IukTTK593eOrpv0e0EW2RqBw==
+releaseDate: '2025-03-16T13:38:49.733Z'

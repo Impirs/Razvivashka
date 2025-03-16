@@ -24,12 +24,28 @@
                 <div class="btn_icon" id="settings"></div>
                 <span class="btn_text">Настройки</span>
             </button>
-            <button class="text_btn" id="exit_btn">
+            <button class="text_btn" id="exit_btn" onclick="quitApp()">
                 <div class="btn_icon" id="back"></div>
                 <span class="btn_text">Выйти</span>
             </button>
         </section>
     </div>
-    <script src="renderer.js"></script>
+    <script>
+        function goCatalog() {
+            window.electronAPI.navigate('pages/page_catalog.html');
+        }
+
+        function goAchievements() {
+            window.electronAPI.navigate('pages/page_achievements.html');
+        }
+
+        function goSettings() {
+            window.electronAPI.navigate('pages/page_settings.html');
+        }
+
+        function quitApp() {
+            window.electronAPI.quitApp();
+        }
+    </script>
 </body>
 </html>

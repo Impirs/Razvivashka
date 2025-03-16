@@ -1,19 +1,3 @@
-function goCatalog() {
-    window.location.href = 'pages/page_catalog.html';
-}
-
-function goAchievements() {
-    window.location.href = 'pages/page_achievements.html';
-}
-
-function goSettings() {
-    window.location.href = 'pages/page_settings.html';
-}
-
-function goHome() {
-    window.location.href = 'index.html'
-}
-
 if (document.getElementById('exit_btn')) {
     document.getElementById('exit_btn').addEventListener('click', () => {
         window.electronAPI.quitApp();
@@ -34,3 +18,6 @@ if (document.getElementById('')){
         window.location.href = '../games/.html'
     })
 }
+window.electronAPI.navigate = (path) => {
+    window.location.href = path;
+};
