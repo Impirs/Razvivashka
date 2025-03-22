@@ -1,6 +1,6 @@
 {
   "name": "play_and_learn",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An educational application with games for kids",
   "main": "app.js",
   "scripts": {
@@ -15,9 +15,7 @@
       "target": "nsis",
       "icon": "assets/icon.ico",
       "signtoolOptions": {
-        "signingHashAlgorithms": [
-          "sha256"
-        ],
+        "signingHashAlgorithms": ["sha256"],
         "certificateFile": "D:/Test_1/certificate.pfx",
         "certificatePassword": "jdi5l92lplx0seq390"
       }
@@ -36,7 +34,14 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Impirs",
+        "repo": "Summ_solver"
+      }
+    ]
   },
   "repository": {
     "type": "git",
@@ -56,5 +61,9 @@
   "devDependencies": {
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-log": "^5.3.2",
+    "electron-updater": "^6.3.9"
   }
 }

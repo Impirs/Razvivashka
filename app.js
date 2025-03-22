@@ -1,5 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
+
+log.transports.file.level = 'info';
+autoUpdater.logger = log;
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -17,12 +22,16 @@ function createWindow() {
     win.show();
     win.loadFile('index.html');
 
+    ipcMain.on('app-quit', () => {
+        app.quit();
+    });
+
     ipcMain.on('navigate', (event, targetPath) => {
         win.loadFile(path.join(__dirname, targetPath));
     });
 
-    ipcMain.on('app-quit', () => {
-        app.quit();
+    win.once('ready-to-show', () => {
+        autoUpdater.checkForUpdatesAndNotify();
     });
 }
 
@@ -38,4 +47,13 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
+});
+
+autoUpdater.on('update-available', () => {
+    log.info('Update available.');
+});
+
+autoUpdater.on('update-downloaded', () => {
+    log.info('Update downloaded; will install now');
+    autoUpdater.quitAndInstall();
 });

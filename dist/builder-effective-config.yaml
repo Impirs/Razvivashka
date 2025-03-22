@@ -25,4 +25,8 @@ files:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
+publish:
+  - provider: github
+    owner: Impirs
+    repo: Summ_solver
 electronVersion: 34.2.0
