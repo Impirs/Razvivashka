@@ -1,0 +1,359 @@
+.game_container{
+    width: 1510px;
+    height: 840px;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.semi_header {
+    background-color: rgba(240,255,255,0.8);
+    border: 1px solid #eb92be;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    color: #232323;
+    width: 640px;
+    height: 104px;
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+.game_section {
+    background-color: rgba(240,255,255,0.8);
+    border: 1px solid #eb92be;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    color: #232323;
+    width: 1420px;
+    height: 720px;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+}
+
+.side_sector {
+    border: 1px solid #eb92be;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 25%;
+    gap: 20px;
+}
+
+img[alt="syllable_icon"] {
+    width: 90%;
+}
+
+.side_sector h2 {
+    color: #4b4b4b;
+    font-size: 22px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    cursor: default;
+}
+
+.side_sector .selected { 
+    color: #eb92be;
+    background-color: azure;
+}
+
+#start_btn {
+    font-family:'Snide hand';
+    color: azure;
+    background-color: #eb92be;
+    border: 2px solid #eb92be;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    width: 260px;
+    height: 64px;
+    margin-top: 25px;
+    font-size: 30px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#start_btn:hover {
+    color: #eb92be;
+    background-color: azure;
+    border: 2px solid #eb92be;
+}
+
+#finish_btn{
+    font-family:'Snide hand';
+    color: azure;
+    background-color: #eb92be;
+    border: 2px solid #eb92be;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    width: 400px;
+    height: 64px;
+    margin-top: 25px;
+    font-size: 30px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#finish_btn:hover {
+    color: #eb92be;
+    background-color: azure;
+    border: 2px solid #eb92be;
+}
+
+.pack_setup {
+    background-color: azure;
+    border: 2px solid #eb92be;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    width: 310px;
+    height: 48px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.pack_setup span{
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid #eb92be;
+    width: 140px;
+    height: 14px;
+    padding: 0px 0 15px 0;
+    font-size: 20px;
+    color: azure;
+    background-color: #eb92be;
+}
+
+.pack_setup span:hover {
+    color: #eb92be;
+    background-color: azure;
+}
+
+.game_desk {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 75%;
+    height: 100%;
+}
+
+.game_ctrl_btn_small {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    background-color: azure;
+    border: 1px solid #eb92be;
+    border-radius: 16px;
+    cursor: pointer;
+    color: #eb92be;
+    padding: 0px;
+}
+
+.game_ctrl_btn_small:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+    color: #63c9b4
+}
+
+.game_ctrl_btn_icon {
+    width: 64px;
+    height: 64px;
+    background: #eb92be;
+}
+
+.game_ctrl_btn_icon:hover {
+    width: 64px;
+    height: 64px;
+    background: #63c9b4;
+}
+
+.syllable-game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.syllable-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 480px;
+
+    border: 1px solid #eb92be;
+    border-radius: 16px;
+    padding: 10px;
+    gap: 20px;
+}
+.syllable-container.active{
+    background-color: rgba(240,255,255,0.8);
+}
+
+.letter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(240,255,255,0.8);
+    border: 1px solid #eb92be;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+    color: #232323;
+    width: 200px;
+    height: 320px;
+    padding: 20px 10px;
+
+    font-size: 130px;
+}
+
+.letter-ctrl-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    height: 64px;
+    gap: 20px;
+}
+
+.ltr-ctrl-btn {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: azure;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #eb92be;
+    padding: 0px;
+}
+
+.ltr-ctrl-btn:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+    color: #63c9b4;
+}
+
+.ltr-ctrl-btn-width {
+    width: 64px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: azure;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #eb92be;
+    padding: 0px;
+}
+
+.ltr-ctrl-btn-width:hover {
+    background-color: rgba(240,255,255,0.60);
+    border: 2px solid #63c9b4;
+    color: #63c9b4;
+}
+
+.ltr-ctrl-btn-icon {
+    width: 48px;
+    height: 48px;
+    background: #eb92be;
+}
+
+.ltr-ctrl-btn-icon:hover {
+    width: 48px;
+    height: 48px;
+    background: #63c9b4;
+}
+
+#key_left {
+    display: flex;
+    -webkit-mask: url('../../assets/icons/left-key.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('../../assets/icons/left-key.png') no-repeat center;
+    mask-size: contain;
+}
+#key_right {
+    display: flex;
+    -webkit-mask: url('../../assets/icons/right-key.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('../../assets/icons/right-key.png') no-repeat center;
+    mask-size: contain;
+}
+#key_up {
+    display: flex;
+    -webkit-mask: url('../../assets/icons/up-key.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('../../assets/icons/up-key.png') no-repeat center;
+    mask-size: contain;
+}
+#key_down {
+    display: flex;
+    -webkit-mask: url('../../assets/icons/down-key.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('../../assets/icons/down-key.png') no-repeat center;
+    mask-size: contain;
+}
+#key_space {
+    display: flex;
+    -webkit-mask: url('../../assets/icons/space-key.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('../../assets/icons/space-key.png') no-repeat center;
+    mask-size: contain;
+}
+
+.cross {
+    background: #eb5252;
+
+    -webkit-mask-image: url('../../assets/icons/icons8-cross-64.png');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+
+    mask-image: url('../../assets/icons/icons8-cross-64.png');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+}

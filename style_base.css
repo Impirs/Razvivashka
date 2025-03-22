@@ -1,16 +1,16 @@
 @font-face {
     font-family: 'Stick';
-    src: url('assets/Stick-Regular.ttf') format('truetype');
+    src: url('assets/fonts/Stick-Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'PlayBall';
-    src: url('assets/Playball-Regular.ttf') format('truetype');
+    src: url('assets/fonts/Playball-Regular.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Snide hand';
-    src: url('assets/snide_hand/fonts/SnideHandTT.ttf') format('truetype');
+    src: url('assets/fonts/snide_hand/fonts/SnideHandTT.ttf') format('truetype');
 }
 
 body {
@@ -190,57 +190,57 @@ img[alt="welcome"] {
 }
 
 #trophy {
-    -webkit-mask: url('assets/trophy.png') no-repeat center;
+    -webkit-mask: url('assets/icons/trophy.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/trophy.png') no-repeat center;
+    mask: url('assets/icons/trophy.png') no-repeat center;
     mask-size: contain;
 }
 
 #play {
-    -webkit-mask: url('assets/icons8-play-64.png') no-repeat center;
+    -webkit-mask: url('assets/icons/icons8-play-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/icons8-play-64.png') no-repeat center;
+    mask: url('assets/icons/icons8-play-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #achieve {
-    -webkit-mask: url('assets/icons8-achievements-64.png') no-repeat center;
+    -webkit-mask: url('assets/icons/icons8-achievements-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/icons8-achievements-64.png') no-repeat center;
+    mask: url('assets/icons/icons8-achievements-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #settings {
-    -webkit-mask: url('assets/icons8-settings-64.png') no-repeat center;
+    -webkit-mask: url('assets/icons/icons8-settings-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/icons8-settings-64.png') no-repeat center;
+    mask: url('assets/icons/icons8-settings-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #back {
-    -webkit-mask: url('assets/icons8-back-64.png') no-repeat center;
+    -webkit-mask: url('assets/icons/icons8-back-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/icons8-back-64.png') no-repeat center;
+    mask: url('assets/icons/icons8-back-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #home {
-    -webkit-mask: url('assets/icons8-home-64.png') no-repeat center;
+    -webkit-mask: url('assets/icons/icons8-home-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/icons8-home-64.png') no-repeat center;
+    mask: url('assets/icons/icons8-home-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #info {
-    -webkit-mask: url('assets/square-info.png') no-repeat center;
+    -webkit-mask: url('assets/icons/square-info.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/square-info.png') no-repeat center;
+    mask: url('assets/icons/square-info.png') no-repeat center;
     mask-size: contain;
 }
 
 #reload {
-    -webkit-mask: url('assets/refresh.png') no-repeat center;
+    -webkit-mask: url('assets/icons/refresh.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('assets/refresh.png') no-repeat center;
+    mask: url('assets/icons/refresh.png') no-repeat center;
     mask-size: contain;
 }

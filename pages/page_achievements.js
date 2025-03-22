@@ -1,10 +1,12 @@
 import { 
-    addHighScore, unlockAchievement,
+    addHighScore, unlockAchievement, syncDataWithInitial,
     getAchievements, getHighScores, getGames,
     parseAchievementId, generateAchievementId 
 } from '../data_manager.js';
 
-document.addEventListener("DOMContentLoaded", () => {   
+document.addEventListener("DOMContentLoaded", () => {
+    syncDataWithInitial();
+
     const games = getGames();
     const allRecords = [];
 

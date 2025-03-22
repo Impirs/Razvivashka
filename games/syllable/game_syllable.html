@@ -2,9 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Игры</title>
+    <link rel="stylesheet" href="../../style_base.css">
+    <link rel="stylesheet" href="game_syllable.css">
+    <link rel="stylesheet" href="../style_overlap_module.css">
 </head>
 <body>
-    
+    <div class="game_container">
+        <section class="semi_header">
+            <button class="nav_btn" onclick="goBack()">
+                <div class="nav_btn_icon" id="back"></div>
+            </button>
+            <h1>Гласные - согласные</h1>
+            <button class="nav_btn" onclick="goSettings()">
+                <div class="nav_btn_icon" id="settings"></div>
+            </button>
+        </section>  
+        <section class="game_section">
+            <section class="side_sector">
+                <img src="../../assets/syllable/syllable_icon.png" alt="syllable_icon">
+                <div class="board_setup" id="board_setup">
+                    <h2>Количество слогов</h3>
+                    <div class="pack_setup" id="select_slog">
+                        <span data-value="1" >1</span>
+                        <span data-value="2" >2</span>
+                    </div>
+                    <h2>Набор согласных</h3>
+                    <div class="pack_setup" id="select_vow">
+                        <span data-value="1" >Базовый</span>
+                        <span data-value="2" >Продвинутый</span>
+                    </div>
+                    
+                    <h2>Набор гласных</h3>
+                    <div class="pack_setup" id="select_cons">
+                        <span data-value="1" >Базовый</span>
+                        <span data-value="2" >Продвинутый</span>
+                    </div>
+                </div>
+                <button class="game_ctrl_btn" id="start_btn">
+                    Начать
+                </button>
+            </section>
+            <section class="game_desk">
+                <button class="game_ctrl_btn_small" id="info_btn">
+                    <div class="game_ctrl_btn_icon" id="info"></div>
+                </button>
+
+                <div class="syllable-game">
+                </div>
+                
+                <div class="game_ctrl_btn" id="finish_btn">
+                    Завершить упражнение
+                </div>
+
+                <div id="winModul" class="modul">
+                    <div class="modul-content">
+                        <img src="../../assets/fireworks.gif" alt="fireworks">
+                        <h2>Молодец!</h2>
+                        <p>На шаг ближе к миру книг и интересных историй</p>
+                    </div>
+                </div>
+                <div id="infoModul" class="modul">
+                    <section class="info-section">
+                        <div class="info-content">
+                            <h2>1.</h2>
+                            <div class="info_image">
+                                <img src="../../assets/game_digit/settings_static.png" alt="settings_static" class="static">
+                                <img src="../../assets/game_digit/settings.gif" alt="settings_info" class="gif">
+                            </div>
+                            <p>Выбери число и размер игрового поля.</p>
+                        </div>
+                        <div class="info-content">
+                            <h2>2.</h2>
+                            <div class="info_image">
+                                <img src="../../assets/game_digit/game_process_static.png" alt="gameplay_static" class="static">
+                                <img src="../../assets/game_digit/game_process.gif" alt="gameplay_info" class="gif">
+                            </div>
+                            <p>Найди все возможные составы числа.</p>
+                        </div>
+                    </section>
+                    <div class="info-content">
+                        <h2>3.</h2>
+                        <div class="info_image">
+                            <img src="../../assets/game_digit/mistakes_static.png" alt="mistakes_static" class="static">
+                            <img src="../../assets/game_digit/mistakes.gif" alt="mistakes_info" class="gif">
+                        </div>
+                        <p>Следи за временем и количеством допустимых ошибок.</p>
+                    </div>
+                    <button class="info_ctrl_btn" id="close_info">
+                        Закрыть
+                    </button>
+                </div>
+            </section>
+        </section>
+    </div>
+    <audio src="../../assets/sounds/achievement.mp3" id="achieve_sound"></audio>
+    <audio src="../../assets/sounds/fanfare-win.mp3" id="win_sound"></audio>
+    <script>
+        function goBack() {
+            window.location.href = '../../pages/page_catalog.html'
+        }
+        function goSettings() {
+            window.location.href = '../../pages/page_settings.html';
+        }
+    </script>
+    <script src="../../renderer.js"></script>
+    <script type="module" src="game_syllable.js"></script>
 </body>
 </html>

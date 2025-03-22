@@ -13,6 +13,11 @@ if (document.getElementById('sum_solver')){
         window.location.href = '../games/game_sum_solver.html'
     })
 }
+if (document.getElementById('syllable')){
+    document.getElementById('syllable').addEventListener('click', () => {
+        window.location.href = '../games/syllable/game_syllable.html'
+    })
+}
 if (document.getElementById('')){
     document.getElementById('').addEventListener('click', () => {
         window.location.href = '../games/.html'

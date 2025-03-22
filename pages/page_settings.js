@@ -1,5 +1,5 @@
 import { 
-    updateData, getVolume
+    updateData, getVolume, syncDataWithInitial
 } from '../data_manager.js';
 
 document.addEventListener("DOMContentLoaded", () => {     
@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const effectsVolumeSpan = document.getElementById("effects_volume");
     const notifVolumeSpan = document.getElementById("notification_volume");
 
+    syncDataWithInitial();
 
     const savedVolume = getVolume(); 
     if (savedVolume !== null) {

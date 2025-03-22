@@ -13,23 +13,33 @@ const initialData = {
                 { id: "7x100", ranks: [10000], unlocked: [false], title: "Идеальный подход" },
                 { id: "9x100", ranks: [20000], unlocked: [false], title: "Идеальный подход" },
             ],
-        },
+            "syllable": [
+                { id: "1x1", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Секреты букваря" },
+                { id: "1x2", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Весёлый буквоед" },
+                { id: "2x1", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Загадочный шёпот" },
+                { id: "2x2", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Читающий герой" }
+            ],
+        },  
         games: [
             {id: "digit", title: "Состав числа"},
+            {id: "syllable", title: "Гласные - согласные"},
             //{id: "sum", title: "Сумма чисел"},
             //{id: "multi", title: "Произведение чисел"},
         ]
     },
     settings: {
         volume: {
-            notification: 1,
-            game_effects: 1,
+            notification: 0.5,
+            game_effects: 0.5,
         },
         password: "default",
         games: {
             "digit": {
                 show_available: true,
             },
+            "syllable": {
+                time_score: true,
+            }
         }
     }
 };
@@ -183,4 +193,91 @@ function changeAchievementScore({ gameId, id, ranks }) {
     }
 }
 
+function deleteHighScore(game, id) {
+    let data = loadData();
+    if (data.user.highScores[game]) {
+        data.user.highScores[game] = data.user.highScores[game].filter(hs => hs.id !== id);
+        saveData(data);
+        console.log(`High score with id ${id} deleted for game ${game}.`);
+    } else {
+        console.error(`No high scores found for game "${game}".`);
+    }
+}
+
+function updateAchievementUnlocked(game, id, unlocked) {
+    let data = loadData();
+    let achievements = data.user.achievements[game];
+
+    if (achievements) {
+        let achievement = achievements.find(ach => ach.id === id);
+        if (achievement) {
+            achievement.unlocked = unlocked;
+            saveData(data);
+            console.log(`Achievement ${id} unlocked state updated to:`, unlocked);
+        } else {
+            console.error(`Achievement with id ${id} not found.`);
+        }
+    } else {
+        console.error(`No achievements found for game "${game}".`);
+    }
+}
+
+export function syncDataWithInitial() {
+    let data = loadData();
+    let updated = false;
+
+    for (let game in initialData.user.achievements) {
+        if (!data.user.achievements[game]) {
+            data.user.achievements[game] = initialData.user.achievements[game];
+            updated = true;
+        } else {
+            initialData.user.achievements[game].forEach(initialAchievement => {
+                let achievement = data.user.achievements[game].find(ach => ach.id === initialAchievement.id);
+                if (!achievement) {
+                    data.user.achievements[game].push(initialAchievement);
+                    updated = true;
+                } else {
+                    if (JSON.stringify(achievement.ranks) !== JSON.stringify(initialAchievement.ranks)) {
+                        achievement.ranks = initialAchievement.ranks;
+                        updated = true;
+                    }
+                    let highScore = data.user.highScores[game]?.find(hs => hs.id === initialAchievement.id);
+                    if (highScore) {
+                        initialAchievement.ranks.forEach((rank, index) => {
+                            if (highScore.score < rank) {
+                                achievement.unlocked[index] = true;
+                            } else {
+                                achievement.unlocked[index] = false;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    initialData.user.games.forEach(initialGame => {
+        if (!data.user.games.some(game => game.id === initialGame.id)) {
+            data.user.games.push(initialGame);
+            updated = true;
+        }
+    });
+
+    for (let game in initialData.settings.games) {
+        if (!data.settings.games[game]) {
+            data.settings.games[game] = initialData.settings.games[game];
+            updated = true;
+        }
+    }
+
+    if (updated) {
+        saveData(data);
+        console.log("Data synchronized with initial data.");
+    } else {
+        console.log("Data is already up-to-date.");
+    }
+}
+
+window.deleteHighScore = deleteHighScore;
+window.updateAchievementUnlocked = updateAchievementUnlocked;
 window.changeAchievementScore = changeAchievementScore;
