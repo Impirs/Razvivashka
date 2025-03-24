@@ -19,9 +19,14 @@ const initialData = {
                 { id: "2x1", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Загадочный шёпот" },
                 { id: "2x2", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Читающий герой" }
             ],
+            "shulte": [
+                { id: "4x4", ranks: [90, 120, 150], unlocked: [false, false, false], title: "Зоркий глаз"},
+                { id: "5x5", ranks: [120, 150, 180], unlocked: [false, false, false], title: "Сама Внимательность"}
+            ],
         },  
         games: [
             {id: "digit", title: "Состав числа"},
+            {id: "shulte", title: "Тфблица Шульте"},
             {id: "syllable", title: "Гласные - согласные"},
             //{id: "sum", title: "Сумма чисел"},
             //{id: "multi", title: "Произведение чисел"},
@@ -39,6 +44,9 @@ const initialData = {
             },
             "syllable": {
                 time_score: true,
+            },
+            "shulte": {
+                shide_scored: true,
             }
         }
     }

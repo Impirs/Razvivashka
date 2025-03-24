@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Игры</title>
+    <link rel="stylesheet" href="../../style_base.css">
+    <link rel="stylesheet" href="game_digit.css">
+    <link rel="stylesheet" href="../style_overlap_module.css">
+</head>
+<body>
+    <div class="game_container">
+        <section class="semi_header">
+            <button class="nav_btn" onclick="goBack()">
+                <div class="nav_btn_icon" id="back"></div>
+            </button>
+            <h1>Состав числа</h1>
+            <button class="nav_btn" onclick="goSettings()">
+                <div class="nav_btn_icon" id="settings"></div>
+            </button>
+        </section>  
+        <section class="game_section">
+            <section class="side_sector">
+                <section class="game_ctrl_btns">
+                    <button class="game_ctrl_btn_small" id="info_btn">
+                        <div class="game_ctrl_btn_icon" id="info"></div>
+                    </button>
+                </section>
+                <section class="game_menu">
+                    <img src="../../assets/game_digit/digit_icon.png" alt="digit_icon">
+                    <h2>Найти составы числа:</h2>
+                    <div class="digit_setup" id="digit_setup">
+                        <span data-value="6">6</span>
+                        <span data-value="7">7</span>
+                        <span data-value="8">8</span>
+                        <span data-value="9">9</span>
+                        <span data-value="10">10</span>
+                    </div>
+                    <h2>Размер доски:</h2>
+                    <div class="board_setup" id="board_setup">
+                        <span data-value="7">Стандарт</span> 
+                        <span data-value="9">Большой</span>
+                    </div>
+                    <button class="game_ctrl_btn" id="start_btn">
+                        Играть
+                    </button>
+                </section>
+            </section>
+            <section class="game_desk">
+                <section class="game_ctrl">
+                    <div class="mistakes_counter" id="mistakes">
+                        <div class="mistake"></div>
+                        <div class="mistake"></div>
+                        <div class="mistake"></div>
+                    </div>
+                    <div class="timer_container">
+                        <p><span id="timer">0</span> сек.</p>
+                    </div>
+                </section>
+                
+                <div class="grid" id="game_board"></div>
+
+                <div id="winModul" class="modul">
+                    <div class="modul-content">
+                        <img src="../../assets/fireworks.gif" alt="fireworks">
+                        <h2>Победа!</h2>
+                        <p>Поле было очищено за <span id="win_time">0</span> секунд!</p>
+                    </div>
+                </div>
+                <div id="loseModul" class="modul">
+                    <div class="modul-content">
+                        <img src="../../assets/unlucky.gif" alt="unlucky">
+                        <h2>Неудача!</h2>
+                        <p>Попробуй еще раз!</p>
+                        <p>У тебя обязательно получится!</p>
+                    </div>
+                </div>
+                <div id="infoModul" class="modul">
+                    <section class="info-section">
+                        <div class="info-content">
+                            <h2>1.</h2>
+                            <div class="info_image">
+                                <img src="../../assets/game_digit/settings_static.png" alt="settings_static" class="static">
+                                <img src="../../assets/game_digit/settings.gif" alt="settings_info" class="gif">
+                            </div>
+                            <p>Выбери число и размер игрового поля.</p>
+                        </div>
+                        <div class="info-content">
+                            <h2>2.</h2>
+                            <div class="info_image">
+                                <img src="../../assets/game_digit/game_process_static.png" alt="gameplay_static" class="static">
+                                <img src="../../assets/game_digit/game_process.gif" alt="gameplay_info" class="gif">
+                            </div>
+                            <p>Найди все возможные составы числа.</p>
+                        </div>
+                    </section>
+                    <div class="info-content">
+                        <h2>3.</h2>
+                        <div class="info_image">
+                            <img src="../../assets/game_digit/mistakes_static.png" alt="mistakes_static" class="static">
+                            <img src="../../assets/game_digit/mistakes.gif" alt="mistakes_info" class="gif">
+                        </div>
+                        <p>Следи за временем и количеством допустимых ошибок.</p>
+                    </div>
+                    <button class="info_ctrl_btn" id="close_info">
+                        Закрыть
+                    </button>
+                </div>
+            </section>
+            <section class="side_sector">
+                <section class="game_ctrl_btns">
+                    <button class="game_ctrl_btn_small" id="pause_btn">
+                        <div class="game_ctrl_btn_icon" id="pause"></div>
+                        <div class="game_ctrl_btn_icon" id="continue"></div>
+                    </button>
+                    <button class="game_ctrl_btn_small" id="reload_btn">
+                        <div class="game_ctrl_btn_icon" id="reload"></div>
+                    </button>
+                </section>
+                <section class="score_section">
+                    <h2 id="score_record">Рекорды:</h2>
+                    <div class="score_table" id="score_table">
+                    </div>
+                </section>
+            </section>
+        </section>
+    </div>
+    <audio src="../../assets/sounds/achievement.mp3" id="achieve_sound"></audio>
+    <audio src="../../assets/sounds/fanfare-win.mp3" id="win_sound"></audio>
+    <audio src="../../assets/sounds/defeat.mp3" id="defeat_sound"></audio>
+    <audio src="../../assets/sounds/error.mp3" id="error_sound"></audio>
+    <script>
+        function goBack() {
+            window.location.href = '../../pages/page_catalog.html'
+        }
+        function goSettings() {
+            window.location.href = '../../pages/page_settings.html';
+        }
+    </script>
+    <script src="../renderer.js"></script>
+    <script type="module" src="game_digit.js"></script>
+</body>
+</html>
