@@ -3,6 +3,8 @@ import {
     getVolume ,parseAchievementId, generateAchievementId 
 } from '../../data_manager.js';
 
+import { checkAchievement } from '../achievements.js';
+
 document.addEventListener("DOMContentLoaded", () => {     
     let numberDistribution = {
         6: { 
@@ -29,8 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             numbers: { 1:8, 2:8, 3:8, 4:8, 5:16, 6:8, 7:8, 8:8, 9:8 } 
         }
     };
-    let notificationQueue = [];
-    let isDisplayingNotification = false;
     let gameState = false
     let infoState = false
     let pause = false
@@ -63,8 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const reloadButton = document.getElementById("reload_btn");
     const pauseButton = document.getElementById("pause_btn");
     document.getElementById("close_info").addEventListener("click", closeInfo);
-    
-    
 
     function setupSounds() {
         achieveSound.volume = savedVolume.notification;
@@ -271,9 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!sumTarget || !boardSize) return;
 
         gameState = true;
-        digitSetup.classList.add("disabled");
-        boardSetup.classList.add("disabled");
-        startButton.classList.add("disabled");
         WINmodul.style.display = "none";
         LOSEmodul.style.display = "none";
 
@@ -466,59 +461,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function checkAchievement(game, id, score) {
-        let unlockedAchievements = unlockAchievement(game, id, score);
-        if (unlockedAchievements.length > 0) {
-            notificationQueue.push(...unlockedAchievements);
-            if (!isDisplayingNotification) {
-                displayNextNotification();
-            }
-        }
-    }
-    
-    function displayNextNotification() {
-        if (notificationQueue.length === 0) {
-            isDisplayingNotification = false;
-            return;
-        }
-        
-        isDisplayingNotification = true;
-        let achievement = notificationQueue.shift();
-        
-        let notification = document.createElement("div");
-        let icon = document.createElement("div");
-        icon.classList.add("achievement_icon");
-        icon.classList.add(`rank_${achievement.rank}`);
-        icon.id = "trophy";
-        let avards_section = document.createElement("div");
-        avards_section.classList.add("avards_section");
-        let title = document.createElement("h3");
-        title.textContent = achievement.title;
-        let description = document.createElement("p");
-        const parsed = parseAchievementId(achievement.id);
-        if (mistakes === 0){
-            description.textContent = `Закончить игру с размером игровой доски ${parsed.size} без ошибок.`;
-        }
-        else description.textContent = `Закончить игру в режиме ${achievement.id} за ${achievement.ranks[achievement.rank - 1]} секунд или быстрее.`;
-
-        notification.classList.add("achievement_notification");
-        console.log(`Достижение разблокировано: ${achievement.title} (Ранг ${achievement.rank})`);
-        
-        const container = document.querySelector(".game_container") || document.body;
-        notification.appendChild(icon);
-        avards_section.appendChild(title);
-        avards_section.appendChild(description);
-        notification.appendChild(avards_section);
-        container.appendChild(notification);
-
-        achieveSound.play();
-        
-        setTimeout(() => {
-            notification.remove();
-            displayNextNotification();
-        }, 3000);
-    }
-
     function checkWin() {
         if (board.flat().every(cell => cell === null)) {
             endGame(true);
@@ -555,13 +497,8 @@ document.addEventListener("DOMContentLoaded", () => {
             LOSEmodul.style.display = "flex";
         }
         gameState = false;
-
-        digitSetup.classList.remove("disabled");
-        boardSetup.classList.remove("disabled");
-        startButton.classList.remove("disabled");
     }
 
-    window.checkAchievement = checkAchievement;
     setupSounds();
     setupGameMenu();
     setupScoreSection();

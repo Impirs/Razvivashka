@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Игры</title>
     <link rel="stylesheet" href="../../style_base.css">
-    <link rel="stylesheet" href="game_digit.css">
+    <link rel="stylesheet" href="game_shulte.css">
     <link rel="stylesheet" href="../style_overlap_module.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
             <button class="nav_btn" onclick="goBack()">
                 <div class="nav_btn_icon" id="back"></div>
             </button>
-            <h1>Состав числа</h1>
+            <h1>Таблица Шульте</h1>
             <button class="nav_btn" onclick="goSettings()">
                 <div class="nav_btn_icon" id="settings"></div>
             </button>
@@ -26,19 +26,11 @@
                     </button>
                 </section>
                 <section class="game_menu">
-                    <img src="../../assets/game_digit/digit_icon.png" alt="digit_icon">
-                    <h2>Найти составы числа:</h2>
-                    <div class="digit_setup" id="digit_setup">
-                        <span data-value="6">6</span>
-                        <span data-value="7">7</span>
-                        <span data-value="8">8</span>
-                        <span data-value="9">9</span>
-                        <span data-value="10">10</span>
-                    </div>
+                    <img src="../../assets/game_shulte/shulte_icon.png" alt="shulte_icon">
                     <h2>Размер доски:</h2>
                     <div class="board_setup" id="board_setup">
-                        <span data-value="7">Стандарт</span> 
-                        <span data-value="9">Большой</span>
+                        <span data-value="4">Стандарт</span> 
+                        <span data-value="5">Большой</span>
                     </div>
                     <button class="game_ctrl_btn" id="start_btn">
                         Играть
@@ -79,18 +71,18 @@
                         <div class="info-content">
                             <h2>1.</h2>
                             <div class="info_image">
-                                <img src="../../assets/game_digit/settings_static.png" alt="settings_static" class="static">
-                                <img src="../../assets/game_digit/settings.gif" alt="settings_info" class="gif">
+                                <img src="../../assets/game_shulte/settings_static.png" alt="settings_static" class="static">
+                                <img src="../../assets/game_shulte/settings.gif" alt="settings_info" class="gif">
                             </div>
-                            <p>Выбери число и размер игрового поля.</p>
+                            <p>Выбери размер игрового поля.</p>
                         </div>
-                        <div class="info-content">
+                        <div class="info-content short">
                             <h2>2.</h2>
                             <div class="info_image">
-                                <img src="../../assets/game_digit/game_process_static.png" alt="gameplay_static" class="static">
-                                <img src="../../assets/game_digit/game_process.gif" alt="gameplay_info" class="gif">
+                                <img src="../../assets/game_shulte/gameplay_static.png" alt="gameplay_static" class="static">
+                                <img src="../../assets/game_shulte/gameplay.gif" alt="gameplay_info" class="gif">
                             </div>
-                            <p>Найди все возможные составы числа.</p>
+                            <p>Поочередно нажимай на цифры чтобы отчистить поле.</p>
                         </div>
                     </section>
                     <div class="info-content">
@@ -136,7 +128,7 @@
             window.location.href = '../../pages/page_settings.html';
         }
     </script>
-    <script src="../renderer.js"></script>
-    <script type="module" src="game_digit.js"></script>
+    <script src="../../renderer.js"></script>
+    <script type="module" src="game_shulte.js"></script>
 </body>
 </html>

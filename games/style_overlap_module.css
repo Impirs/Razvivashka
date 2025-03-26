@@ -63,6 +63,11 @@
     color: azure;
     margin: 2px 0;
 }
+.info-content.short p {
+    max-width: 290px;
+    color: azure;
+    margin: 2px 0;
+}
 
 .info_image {
     display: inline-block;

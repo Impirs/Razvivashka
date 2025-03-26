@@ -146,6 +146,7 @@ img[alt="welcome"] {
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
     animation: fadeInOut 3s ease-in-out;
     gap: 16px;
+    cursor: pointer;
 }
 
 .avards_section {
@@ -159,6 +160,7 @@ img[alt="welcome"] {
     color: #4b4b4b;
     margin: 0;
     justify-content: flex-start;
+    cursor: pointer;
 }
 
 .avards_section p {
@@ -166,11 +168,13 @@ img[alt="welcome"] {
     color: #4b4b4b;
     margin: 0;
     justify-content: flex-start;
+    cursor: pointer;
 }
 
 .achievement_icon{
     width: 80px;
     height: 80px;
+    cursor: pointer;
 }
 .rank_3 {
     background: rgba(196, 141, 68);

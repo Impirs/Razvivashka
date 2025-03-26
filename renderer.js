@@ -1,28 +1,40 @@
-if (document.getElementById('exit_btn')) {
-    document.getElementById('exit_btn').addEventListener('click', () => {
-        window.electronAPI.quitApp();
-    });
-}
-if (document.getElementById('digit_solver')){
-    document.getElementById('digit_solver').addEventListener('click', () => {
-        window.location.href = '../games/digit/game_digit_solver.html'
-    })
-}
-if (document.getElementById('sum_solver')){
-    document.getElementById('sum_solver').addEventListener('click', () => {
-        window.location.href = '../games/game_sum_solver.html'
-    })
-}
-if (document.getElementById('syllable')){
-    document.getElementById('syllable').addEventListener('click', () => {
-        window.location.href = '../games/syllable/game_syllable.html'
-    })
-}
-if (document.getElementById('')){
-    document.getElementById('').addEventListener('click', () => {
-        window.location.href = '../games/.html'
-    })
-}
-window.electronAPI.navigate = (path) => {
-    window.location.href = path;
-};
+document.addEventListener("DOMContentLoaded", () => {
+    const exitBtn = document.getElementById('exit_btn');
+    if (exitBtn) {
+        exitBtn.addEventListener('click', () => {
+            window.electronAPI.quitApp();
+        });
+    }
+
+    const digitSolverBtn = document.getElementById('digit_solver');
+    if (digitSolverBtn) {
+        digitSolverBtn.addEventListener('click', () => {
+            window.location.href = '../games/digit/game_digit_solver.html';
+        });
+    }
+
+    const sumSolverBtn = document.getElementById('sum_solver');
+    if (sumSolverBtn) {
+        sumSolverBtn.addEventListener('click', () => {
+            window.location.href = '../games/game_sum_solver.html';
+        });
+    }
+
+    const syllableBtn = document.getElementById('syllable');
+    if (syllableBtn) {
+        syllableBtn.addEventListener('click', () => {
+            window.location.href = '../games/syllable/game_syllable.html';
+        });
+    }
+
+    const shulteBtn = document.getElementById('shulte');
+    if (shulteBtn) {
+        shulteBtn.addEventListener('click', () => {
+            window.location.href = '../games/shulte/game_shulte.html';
+        });
+    }
+
+    window.electronAPI.navigate = (path) => {
+        window.location.href = path;
+    };
+});

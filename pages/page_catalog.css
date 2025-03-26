@@ -61,8 +61,18 @@
     color: #63c9b4;
 }
 
-.game_cell img {
+img[alt='digit_solver'] {
     width: 50%;
+    height: auto;
+    margin-bottom: 10px;
+}
+img[alt='syllable'] {
+    width: 70%;
+    height: auto;
+    margin-bottom: 10px;
+}
+img[alt='shulte'] {
+    width: 35%;
     height: auto;
     margin-bottom: 10px;
 }

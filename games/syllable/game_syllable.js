@@ -181,12 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
             syllableGame.innerHTML = '';
         });
 
-        // Выбор значений по умолчанию
         document.querySelector("#select_slog span[data-value='1']").classList.add("selected");
         document.querySelector("#select_vow span[data-value='1']").classList.add("selected");
         document.querySelector("#select_cons span[data-value='1']").classList.add("selected");
 
-        // Обработчик для переключения между контейнерами
         document.addEventListener('keydown', (event) => {
             if (!gameState) return;
             const activeContainer = document.querySelector('.syllable-container.active');
