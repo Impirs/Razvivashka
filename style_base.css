@@ -13,6 +13,11 @@
     src: url('assets/fonts/snide_hand/fonts/SnideHandTT.ttf') format('truetype');
 }
 
+html {
+    transform-origin: center;
+    transition: transform 0.2s ease-in-out;
+}
+
 body {
     background: linear-gradient(320deg, #eb92be, #ffef79, #63c9b4);
     display: flex;
@@ -247,4 +252,64 @@ img[alt="welcome"] {
     -webkit-mask-size: contain;
     mask: url('assets/icons/refresh.png') no-repeat center;
     mask-size: contain;
+}
+
+@media (max-width: 1600px) {
+    html{
+        transform: scale(0.9);
+    }
+}
+
+@media (max-width: 1400px) {
+    html {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 1200px) {
+    html {
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 1100px) {
+    html {
+        transform: scale(0.6);
+    }
+}
+
+@media (max-width: 1000px) {
+    html {
+        transform: scale(0.5);
+    }
+}
+
+@media (max-width: 1600px), (max-height: 900px) {
+    html {
+        transform: scale(0.9);
+    }
+}
+
+@media (max-width: 1400px), (max-height: 800px) {
+    html {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 1200px), (max-height: 700px) {
+    html {
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 1100px), (max-height: 600px) {
+    html {
+        transform: scale(0.6);
+    }
+}
+
+@media (max-width: 1000px), (max-height: 500px) {
+    html {
+        transform: scale(0.5);
+    }
 }

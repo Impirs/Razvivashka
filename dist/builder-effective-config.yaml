@@ -4,7 +4,15 @@ directories:
 appId: com.impirs.razvivashka
 productName: Развивашка
 win:
-  target: nsis
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - ia32
+    - target: zip
+      arch:
+        - x64
+        - ia32
   icon: assets/icon.ico
   signtoolOptions:
     signingHashAlgorithms:
@@ -22,6 +30,10 @@ files:
       - pages/**/*
       - assets/**/*
       - games/**/*
+      - '!**/local_data/**'
+      - '!**/*.log'
+      - '!**/test/**'
+      - '!**/*.bak'
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true

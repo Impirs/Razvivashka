@@ -46,9 +46,7 @@
     border-radius: 8px;
     padding: 10px;
     cursor: pointer;
-}/*.game_list_item:hover {
-    background-color: #eb92be;
-}*/
+}
 
 .game_list_item h3 {
     font-size: 20px;
@@ -85,7 +83,7 @@
 }
 
 .achievement {
-    display: flex;
+    display: flex;  
     flex-direction: row;
     width: 800px;
     height: 78px;

@@ -1,6 +1,6 @@
 {
   "name": "play_and_learn",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "An educational application with games for kids",
   "main": "app.js",
   "scripts": {
@@ -12,7 +12,16 @@
     "appId": "com.impirs.razvivashka",
     "productName": "Развивашка",
     "win": {
-      "target": "nsis",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "ia32"]
+        }
+      ],
       "icon": "assets/icon.ico",
       "signtoolOptions": {
         "signingHashAlgorithms": ["sha256"],
@@ -29,7 +38,11 @@
       "style_base.css",
       "pages/**/*",
       "assets/**/*",
-      "games/**/*"
+      "games/**/*",
+      "!**/local_data/**",
+      "!**/*.log",
+      "!**/test/**",
+      "!**/*.bak"
     ],
     "nsis": {
       "oneClick": false,
@@ -45,7 +58,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Impirs/Summ_solver.git"
+    "url": "git+https://github.com/Impirs/Razvivashka.git"
   },
   "keywords": [
     "games",
@@ -55,9 +68,9 @@
   "author": "Artem Mamitov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Impirs/Summ_solver/issues"
+    "url": "https://github.com/Impirs/Razvivashka/issues"
   },
-  "homepage": "https://github.com/Impirs/Summ_solver#readme",
+  "homepage": "https://github.com/Impirs/Razvivashka#readme",
   "devDependencies": {
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8"

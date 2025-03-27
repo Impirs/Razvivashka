@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Игры</title>
+    <title>Игры</title>    
     <link rel="stylesheet" href="../style_base.css">
     <link rel="stylesheet" href="page_settings.css">
 </head>
@@ -18,21 +18,12 @@
             </button>
         </section>
         <section class="settings">
-            <section class="sound_setting">
-                <h2>Громкость эффектов</h2>
-                <input type="range" class="volume_slider" id="effects_slider"
-                    min="0" max="1" step="0.05" value="1">
-                <span id="effects_volume">1</span>
+            <section class="settings_categories" id="settings_categories">
             </section>
-            <section class="sound_setting">
-                <h2>Громкость уведомлений</h2>
-                <input type="range" class="volume_slider" id="notification_slider"
-                    min="0" max="1" step="0.05" value="1">
-                <span id="notification_volume">1</span>
+            <section class="settings_list" id="settings_list">
             </section>
         </section>
     </div>
-
     <script>
         function goBack(){
             window.location.href = '../index.html'

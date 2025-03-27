@@ -25,11 +25,11 @@ const initialData = {
             ],
         },  
         games: [
-            {id: "digit", title: "Состав числа"},
-            {id: "shulte", title: "Тфблица Шульте"},
-            {id: "syllable", title: "Гласные - согласные"},
-            //{id: "sum", title: "Сумма чисел"},
-            //{id: "multi", title: "Произведение чисел"},
+            {id: "digit", title: "Состав числа", type: "count"},
+            {id: "shulte", title: "Таблица Шульте", type: "attention"},
+            {id: "syllable", title: "Гласные - согласные", type: "reading"},
+            //{id: "sum", title: "Сумма чисел", type: "count"},
+            //{id: "multi", title: "Произведение чисел", type: "count"},
         ]
     },
     settings: {
@@ -37,16 +37,24 @@ const initialData = {
             notification: 0.5,
             game_effects: 0.5,
         },
-        password: "default",
         games: {
             "digit": {
-                show_available: true,
+                show_available: {
+                    state: true,
+                    description: "Подсвечивать доступные к нажатию клетки другим цветом"
+                },
             },
             "syllable": {
-                time_score: true,
+                check_all_letters_tested: {
+                    state: true,
+                    description: "Засчитывать упражнения только когда все буквы были прочитаны"
+                },
             },
             "shulte": {
-                shide_scored: true,
+                shide_scored: {
+                    state: true,
+                    description: "Скрывать цифры после нажатия"
+                } 
             }
         }
     }
@@ -88,12 +96,6 @@ export function updateData(section, key, value) {
     } else {
         console.error(`Section "${section}" not found in data.`);
     }
-}
-
-export function changePassword(new_password) {
-    let data = loadData();
-    data.settings.password = new_password;
-    saveData(data);
 }
 
 export function addHighScore(game, id, score) {
@@ -145,9 +147,9 @@ export function getVolume() {
     return data.settings.volume;
 }
 
-export function getPassword() {
+export function getSettings() {
     let data = loadData();
-    return data.settings.password;
+    return data.settings;
 }
 
 export function getGames() {
@@ -230,6 +232,29 @@ function updateAchievementUnlocked(game, id, unlocked) {
     }
 }
 
+function removeInvalidSettings(data) {
+    const validSettings = Object.keys(initialData.settings.games);
+    let updated = false;
+
+    for (let gameId in data.settings.games) {
+        if (validSettings.includes(gameId)) {
+            const validKeys = Object.keys(initialData.settings.games[gameId]);
+            for (let key in data.settings.games[gameId]) {
+                if (!validKeys.includes(key)) {
+                    console.log(`Removing invalid setting "${key}" from game "${gameId}".`);
+                    delete data.settings.games[gameId][key];
+                    updated = true;
+                }
+            }
+        }
+    }
+
+    if (updated) {
+        console.log("Invalid settings removed. Saving updated data...");
+        saveData(data); 
+    }
+}
+
 export function syncDataWithInitial() {
     let data = loadData();
     let updated = false;
@@ -265,18 +290,54 @@ export function syncDataWithInitial() {
     }
 
     initialData.user.games.forEach(initialGame => {
-        if (!data.user.games.some(game => game.id === initialGame.id)) {
+        let existingGame = data.user.games.find(game => game.id === initialGame.id);
+        if (!existingGame) {
             data.user.games.push(initialGame);
             updated = true;
+        } else {
+            if (existingGame.title !== initialGame.title) {
+                existingGame.title = initialGame.title;
+                updated = true;
+            }
+            if (!existingGame.type || existingGame.type !== initialGame.type) {
+                existingGame.type = initialGame.type;
+                updated = true;
+            }
         }
     });
 
-    for (let game in initialData.settings.games) {
-        if (!data.settings.games[game]) {
-            data.settings.games[game] = initialData.settings.games[game];
+    for (let gameId in initialData.settings.games) {
+        if (!data.settings.games[gameId]) {
+            data.settings.games[gameId] = initialData.settings.games[gameId];
             updated = true;
+        } else {
+            for (let settingKey in initialData.settings.games[gameId]) {
+                if (!data.settings.games[gameId][settingKey]) {
+                    data.settings.games[gameId][settingKey] = initialData.settings.games[gameId][settingKey];
+                    updated = true;
+                } else {
+                    let initialSetting = initialData.settings.games[gameId][settingKey];
+                    let currentSetting = data.settings.games[gameId][settingKey];
+
+                    if (typeof currentSetting !== 'object' || currentSetting === null) {
+                        data.settings.games[gameId][settingKey] = { ...initialSetting };
+                        updated = true;
+                    } else {
+                        if (currentSetting.state === undefined) {
+                            currentSetting.state = initialSetting.state;
+                            updated = true;
+                        }
+                        if (currentSetting.description === undefined) {
+                            currentSetting.description = initialSetting.description;
+                            updated = true;
+                        }
+                    }
+                }
+            }
         }
     }
+
+    removeInvalidSettings(data);
 
     if (updated) {
         saveData(data);
