@@ -61,8 +61,7 @@
       {
         "provider": "github",
         "owner": "Impirs",
-        "repo": "Razvivashka",
-        "releaseType": "draft"
+        "repo": "Razvivashka"
       }
     ]
   },
