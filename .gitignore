@@ -3,11 +3,10 @@ node_modules
 dist/.cache
 dist/win-unpacked
 dist/win-ia32-unpacked
-dist/*.zip
-dist/*.exe
-dist/*.blockmap
-dist/*.exe.blockmap
-
+dist/v1.2.3
+dist/v1.2.2
+dist/v1.2.1
+    
 local_data/
 *.log
 test/

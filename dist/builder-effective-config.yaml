@@ -13,6 +13,7 @@ win:
       arch:
         - x64
         - ia32
+  artifactName: play_and_learn-Setup-${version}.${ext}
   icon: assets/icon.ico
   signtoolOptions:
     signingHashAlgorithms:
@@ -40,5 +41,6 @@ nsis:
 publish:
   - provider: github
     owner: Impirs
-    repo: Summ_solver
+    repo: Razvivashka
+    releaseType: draft
 electronVersion: 34.2.0

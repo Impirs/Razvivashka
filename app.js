@@ -62,30 +62,72 @@ autoUpdater.on('checking-for-update', () => {
 autoUpdater.on('update-available', (info) => {
     log.info('Update available.');
 
-    const isPrerelease = info.releaseNotes && info.releaseNotes.some(note => note.includes('pre-release'));
     const releaseUrl = 'https://github.com/Impirs/Summ_solver/releases';
 
-    if (isPrerelease) {
+    log.info('Asking user to update...');
+    if (Array.isArray(info.releaseNotes)) {
+        const isPrerelease = info.releaseNotes.some(note => {
+            if (typeof note === 'string') {
+                return note.includes('pre-release');
+            }
+            return false;
+        });
+
+        if (isPrerelease) {
+            dialog.showMessageBox({
+                type: 'question',
+                buttons: ['Обновить', 'Посмотреть детали', 'Нет'],
+                defaultId: 0,
+                title: 'Доступно обновление',
+                message: 'Доступен пре-релиз новой версии приложения. Хотите обновиться?',
+                detail: `Версия: ${info.version}\n\nВы также можете посмотреть изменения в релизах.`,
+                cancelId: 2,
+                noLink: true
+            }).then(result => {
+                if (result.response === 0) {
+                    autoUpdater.downloadUpdate();
+                } else if (result.response === 1) {
+                    shell.openExternal(releaseUrl);
+                }
+            });
+        } else {
+            autoUpdater.downloadUpdate();
+        }
+    } else if (typeof info.releaseNotes === 'string') {
         dialog.showMessageBox({
-            type: 'question',
+            type: 'info',
             buttons: ['Обновить', 'Посмотреть детали', 'Нет'],
             defaultId: 0,
             title: 'Доступно обновление',
-            message: 'Доступен пре-релиз новой версии приложения. Хотите обновиться?',
-            detail: `Версия: ${info.version}\n\nВы также можете посмотреть изменения в релизах.`,
+            message: 'Доступна новая версия приложения. Хотите обновиться?',
+            detail: `Версия: ${info.version}\n\nИзменения:\n${info.releaseNotes}`,
             cancelId: 2,
             noLink: true
         }).then(result => {
             if (result.response === 0) {
-                // "Обновить"
                 autoUpdater.downloadUpdate();
             } else if (result.response === 1) {
-                // "Посмотреть детали"
                 shell.openExternal(releaseUrl);
             }
         });
     } else {
-        autoUpdater.downloadUpdate();
+        log.info('Release notes отсутствуют или имеют неизвестный формат.');
+        dialog.showMessageBox({
+            type: 'info',
+            buttons: ['Обновить', 'Посмотреть детали', 'Нет'],
+            defaultId: 0,
+            title: 'Доступно обновление',
+            message: 'Доступна новая версия приложения. Хотите обновиться?',
+            detail: `Версия: ${info.version}\n\nИзменения не указаны.`,
+            cancelId: 2,
+            noLink: true
+        }).then(result => {
+            if (result.response === 0) {
+                autoUpdater.downloadUpdate();
+            } else if (result.response === 1) {
+                shell.openExternal(releaseUrl);
+            }
+        });
     }
 });
 
@@ -96,6 +138,14 @@ autoUpdater.on('update-not-available', (info) => {
 autoUpdater.on('error', (err) => {
     log.error('Error in auto-updater. ' + err);
     log.error(err.stack);
+
+    // Уведомление об ошибке обновления
+    dialog.showMessageBox({
+        type: 'error',
+        title: 'Ошибка обновления',
+        message: 'Не удалось загрузить обновление. Попробуйте позже.',
+        buttons: ['ОК']
+    });
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
@@ -103,6 +153,13 @@ autoUpdater.on('download-progress', (progressObj) => {
     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
     log_message = log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')';
     log.info(log_message);
+
+    dialog.showMessageBox({
+        type: 'info',
+        title: 'Загрузка обновления',
+        message: `Загрузка обновления: ${Math.round(progressObj.percent)}%`,
+        buttons: ['ОК']
+    });
 });
 
 autoUpdater.on('update-downloaded', (info) => {
@@ -121,4 +178,20 @@ autoUpdater.on('update-downloaded', (info) => {
             autoUpdater.quitAndInstall();
         }
     });
+});
+
+autoUpdater.on('error', (error) => {
+    if (error.message.includes('is not signed by the application owner')) {
+        console.warn('Skipping the certificate sign check...');
+        autoUpdater.quitAndInstall(false, true);
+    } else {
+        console.error('Autoupdate error:', error);
+
+        dialog.showMessageBox({
+            type: 'error',
+            title: 'Ошибка обновления',
+            message: 'Не удалось загрузить обновление. Попробуйте позже.',
+            buttons: ['ОК']
+        });
+    }
 });

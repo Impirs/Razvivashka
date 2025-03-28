@@ -1,6 +1,6 @@
 {
   "name": "play_and_learn",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "An educational application with games for kids",
   "main": "app.js",
   "scripts": {
@@ -15,16 +15,25 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64", "ia32"]
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "ia32"]
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ],
+      "artifactName": "play_and_learn-Setup-${version}.${ext}",
       "icon": "assets/icon.ico",
       "signtoolOptions": {
-        "signingHashAlgorithms": ["sha256"],
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
         "certificateFile": "D:/Test_1/certificate.pfx",
         "certificatePassword": "jdi5l92lplx0seq390"
       }
@@ -52,7 +61,8 @@
       {
         "provider": "github",
         "owner": "Impirs",
-        "repo": "Summ_solver"
+        "repo": "Razvivashka",
+        "releaseType": "draft"
       }
     ]
   },
@@ -73,7 +83,7 @@
   "homepage": "https://github.com/Impirs/Razvivashka#readme",
   "devDependencies": {
     "electron": "^34.2.0",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^26.0.12"
   },
   "dependencies": {
     "electron-log": "^5.3.2",
