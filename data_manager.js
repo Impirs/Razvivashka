@@ -1,7 +1,20 @@
 const initialData = {
     user: {
         name: "default",
-        highScores: {},
+        highScores: {
+            digit: {
+                "7x6": [],
+                "7x7": [],
+                "7x8": [],
+                "9x8": [],
+                "9x9": [],
+                "9x10": []
+            },
+            shulte: {
+                "4x4": [],
+                "5x5": []
+            }
+        },
         achievements: {
             "digit": [
                 { id: "7x6", ranks: [150, 200], unlocked: [false, false], title: "Отличное начало!" },
@@ -67,8 +80,8 @@ function initData() {
 function loadData() {
     try {
         const data = localStorage.getItem('gameData');
-        if (!data) {
-            console.log("Data not found. Initializing new data...");
+        if (!data || data === "undefined") {
+            console.log("Data not found or invalid. Initializing new data...");
             initData();
             return initialData;
         }
@@ -98,20 +111,43 @@ export function updateData(section, key, value) {
     }
 }
 
-export function addHighScore(game, id, score) {
-    let data = loadData();
-    if (!data.user.highScores[game]) {
-        data.user.highScores[game] = [];
+export function addHighScore(game, id, score, date) {
+    try {
+        let data = loadData();
+        console.log("Got data for adding:", game, id, score, date);
+    
+        if (!data.user.highScores[game]) {
+            data.user.highScores[game] = {};
+        }
+        if (!data.user.highScores[game][id]) {
+            data.user.highScores[game][id] = [];
+        }
+    
+        data.user.highScores[game][id].push({ score, date });
+        data.user.highScores[game][id].sort((a, b) => a.score - b.score);
+        saveData(data);
+    } catch (error) {
+        console.error("Error adding new highscore:", error);
     }
-    if (!data.user.highScores[game].some(hs => hs.id === id)) {
-        data.user.highScores[game].push({ id, score });
+
+}
+
+export function removeHighScore(game, id, score, date) {
+    let data = loadData();
+
+    if (!data.user.highScores[game] || !data.user.highScores[game][id]) {
+        console.warn(`No high scores found for game "${game}" and id "${id}".`);
+        return false;
+    }
+
+    const index = data.user.highScores[game][id].findIndex(record => record.score === score && record.date === date);
+    if (index !== -1) {
+        data.user.highScores[game][id].splice(index, 1);
         saveData(data);
-        return true;
-    } else if (data.user.highScores[game].some(hs => hs.id === id && hs.score > score)) {
-        data.user.highScores[game].find(hs => hs.id === id).score = score;
-        saveData(data);
+        console.log(`High score removed for game "${game}", id "${id}", score "${score}", date "${date}".`);
         return true;
     } else {
+        console.warn(`No matching high score found for game "${game}", id "${id}", score "${score}", date "${date}".`);
         return false;
     }
 }
@@ -140,6 +176,16 @@ export function unlockAchievement(game, id, score) {
 export function getName() {
     let data = loadData();
     return data.user.name;
+}
+
+export function setName(newName) {
+    try {
+        let data = loadData();
+        data.user.name = newName;
+        saveData(data);
+    } catch (error) {
+        console.error("Error saving new user name:", error);
+    }
 }
 
 export function getVolume() {
@@ -177,7 +223,7 @@ export function parseAchievementId(id) {
     return { size, digit };
 }
 
-export function generateAchievementId({ size, digit }) {
+export function generateAchievementId({size, digit}) {
     if (size === undefined || digit === undefined ) {
         console.error("Invalid parameters for generating achievement ID");
         return null;
@@ -185,7 +231,7 @@ export function generateAchievementId({ size, digit }) {
     return `${size}x${digit}`;
 }
 
-function changeAchievementScore({ gameId, id, ranks }) {
+function changeAchievementScore({gameId, id, ranks}) {
     let data = loadData();
     let achievements = data.user.achievements[gameId];
 
@@ -200,17 +246,6 @@ function changeAchievementScore({ gameId, id, ranks }) {
         }
     } else {
         console.error(`No achievements found for game "${gameId}".`);
-    }
-}
-
-function deleteHighScore(game, id) {
-    let data = loadData();
-    if (data.user.highScores[game]) {
-        data.user.highScores[game] = data.user.highScores[game].filter(hs => hs.id !== id);
-        saveData(data);
-        console.log(`High score with id ${id} deleted for game ${game}.`);
-    } else {
-        console.error(`No high scores found for game "${game}".`);
     }
 }
 
@@ -259,6 +294,38 @@ export function syncDataWithInitial() {
     let data = loadData();
     let updated = false;
 
+    for (let game in initialData.user.highScores) {
+        if (!data.user.highScores[game]) {
+            data.user.highScores[game] = initialData.user.highScores[game];
+            updated = true;
+        } else {
+            for (let id in initialData.user.highScores[game]) {
+                if (!data.user.highScores[game][id]) {
+                    data.user.highScores[game][id] = [];
+                    updated = true;
+                } else {
+                    if (Array.isArray(data.user.highScores[game][id]) && typeof data.user.highScores[game][id][0] === 'number') {
+                        data.user.highScores[game][id] = data.user.highScores[game][id].map(score => ({
+                            score,
+                            date: "unknown"
+                        }));
+                        updated = true;
+                    }
+
+                    if (Array.isArray(data.user.highScores[game][id])) {
+                        data.user.highScores[game][id].forEach(record => {
+                            if (!record.date) {
+                                console.log(`Adding missing date for highScore in game: ${game}, id: ${id}`);
+                                record.date = "unknown";
+                                updated = true;
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
     for (let game in initialData.user.achievements) {
         if (!data.user.achievements[game]) {
             data.user.achievements[game] = initialData.user.achievements[game];
@@ -274,18 +341,27 @@ export function syncDataWithInitial() {
                         achievement.ranks = initialAchievement.ranks;
                         updated = true;
                     }
-                    let highScore = data.user.highScores[game]?.find(hs => hs.id === initialAchievement.id);
-                    if (highScore) {
+
+                    let highScores = data.user.highScores[game]?.[initialAchievement.id];
+                    if (highScores && highScores.length > 0) {
                         initialAchievement.ranks.forEach((rank, index) => {
-                            if (highScore.score < rank) {
+                            if (highScores.some(record => record.score <= rank)) {
+                                // console.log(`Achievement is now unlocked for game: ${game}, id: ${initialAchievement.id}, rank: ${rank}`);
+                                // console.log(`HighScores:`, highScores.map(record => record.score));
                                 achievement.unlocked[index] = true;
+                                // console.log(achievement);
                             } else {
+                                // console.log(`Achievement not unlocked for game: ${game}, id: ${initialAchievement.id}, rank: ${rank}`);
+                                // console.log(`HighScores:`, highScores.map(record => record.score));
                                 achievement.unlocked[index] = false;
                             }
                         });
+                    } else {
+                        // console.log(`No highScores found for game: ${game}, id: ${initialAchievement.id}`);
                     }
                 }
             });
+            updated = true;
         }
     }
 
@@ -347,6 +423,7 @@ export function syncDataWithInitial() {
     }
 }
 
-window.deleteHighScore = deleteHighScore;
+window.setName = setName;
+window.removeHighScore = removeHighScore;
 window.updateAchievementUnlocked = updateAchievementUnlocked;
 window.changeAchievementScore = changeAchievementScore;

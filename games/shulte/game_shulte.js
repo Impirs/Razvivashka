@@ -1,5 +1,5 @@
-import { 
-    addHighScore, getHighScores, getVolume ,parseAchievementId, generateAchievementId 
+import { addHighScore, getHighScores, getVolume,  
+    parseAchievementId, generateAchievementId, getName
 } from '../../data_manager.js';
 
 import { checkAchievement } from '../achievements.js';
@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
             target.classList.add("selected");
     
             boardSize = selectedValue;
+            setupScoreSection();
         }
     
         boardButtons.forEach(button => button.addEventListener("click", handleBoardSelection));
@@ -72,105 +73,56 @@ document.addEventListener("DOMContentLoaded", () => {
         pauseButton.addEventListener("click", handlePauseClick);
     }
 
-    function setupScoreSection() {
-        const highScores = getHighScores("shulte");
-        if (!highScores || highScores.length === 0) {
-            console.warn("No high scores available.");
-            return;
-        }
+    function setupScoreSection(newScore = null) {
         const scoreTable = document.getElementById("score_table");
-        scoreTable.innerHTML = ""; 
-    
-        let bestScoreEntry = getBestScore();
-        let bestSize = bestScoreEntry.size;
-        highScores.sort((a, b) => {
-            let parsedA = parseAchievementId(a.id);
-            let parsedB = parseAchievementId(b.id);
-            return parsedA.size - parsedB.size;
-        });
-    
-        let uniqueEntries = highScores.map(hs => {
-            let parsed = parseAchievementId(hs.id);
-            return { ...parsed, highScore: hs.score };
-        });
-        let currentIndex = uniqueEntries.findIndex(entry => entry.size === bestSize);
-        
-        if (currentIndex === -1) currentIndex = 0;
-    
-        let container = document.createElement("div");
-        container.classList.add("highscore_container");
-        let title = document.createElement("h2");
-        let span = document.createElement("span");
-        let bestLabel = document.createElement("span");
-        let nav_section = document.createElement("div");
-        let btnLeft = document.createElement("button");
-        let leftBtnIcon = document.createElement("div");
-        let btnRight = document.createElement("button");
-        let rightBtnIcon = document.createElement("div");
-        
-        bestLabel.classList.add("best_label");
-        bestLabel.textContent = "Лучший результат";
-        btnLeft.classList.add("score_ctrl_btn");
-        leftBtnIcon.classList.add("score_ctrl_icon");
-        leftBtnIcon.id = "nav_left";
-        btnRight.classList.add("score_ctrl_btn");
-        rightBtnIcon.classList.add("score_ctrl_icon");
-        rightBtnIcon.id = "nav_right";
-    
-        function updateDisplay(index) {
-            if (index < 0 || index >= uniqueEntries.length) return;
-    
-            currentIndex = index;
-            let entry = uniqueEntries[currentIndex];
-    
-            title.textContent = entry.highScore;
-            span.textContent = `#${entry.size}`;
-            
-            bestLabel.style.visibility = (entry.size === bestSize) ? "visible" : "hidden";
-        }
-    
-        updateDisplay(currentIndex);
-        btnLeft.addEventListener("click", () => {
-            if (currentIndex > 0) {
-                updateDisplay(currentIndex - 1);
-            }
-        });
-        btnRight.addEventListener("click", () => {
-            if (currentIndex < uniqueEntries.length - 1) {
-                updateDisplay(currentIndex + 1);
-            }
-        });
-        nav_section.classList.add("nav_section");
-        btnLeft.appendChild(leftBtnIcon);
-        nav_section.appendChild(btnLeft);
-        nav_section.appendChild(span);
-        btnRight.appendChild(rightBtnIcon);
-        nav_section.appendChild(btnRight);
-
-        container.appendChild(title);
-        container.appendChild(bestLabel);
-        container.appendChild(nav_section);
-        scoreTable.appendChild(container);
-    }
-
-    function getBestScore() {
         const highScores = getHighScores("shulte");
-        if (!highScores || highScores.length === 0) {
-            console.warn("No high scores available.");
-            return { size: null };
-        }
-        let bestScore = Infinity;
-        let bestSize = null;
-    
-        highScores.forEach(hs => {
-            const parsed = parseAchievementId(hs.id);
-            if (hs.score < bestScore) {
-                bestScore = hs.score;
-                bestSize = parsed.size;
+
+        scoreTable.innerHTML = '';
+        
+        let targetId = generateAchievementId({ size: boardSize, digit: boardSize });
+        let scoreArray = highScores[targetId] || [];
+
+        const scrollContainer = document.createElement("div");
+        scrollContainer.classList.add("scroll-container");
+        const theScroll = document.createElement("div");
+        theScroll.className = "the-scroll";
+
+        if (scoreArray.length === 0) {
+            const warnMsg = document.createElement("span");
+            warnMsg.className = "warn-msg";
+            warnMsg.innerHTML = "Рекордов не найдено"; 
+            theScroll.appendChild(warnMsg);
+        } else {
+            for (let record of scoreArray) {
+                const recordContainer = document.createElement("div");
+                recordContainer.classList.add("record-container");
+
+                if (newScore && record.score === newScore.score && record.date === newScore.date) {
+                    recordContainer.classList.add("new-score");
+                }
+
+                const infoContainer = document.createElement("div");
+                infoContainer.className = "score-info-container";
+                const nameLabel = document.createElement("h3");
+                nameLabel.innerHTML = getName();
+                const dateSpan = document.createElement("span");
+                dateSpan.innerHTML = record.date === "unknown" ? "В прошлых версиях" : record.date;
+                const scoreContainer = document.createElement("div");
+                scoreContainer.className = "score-container-score";
+                scoreContainer.innerHTML = record.score;
+
+                infoContainer.appendChild(nameLabel);
+                infoContainer.appendChild(dateSpan);
+
+                recordContainer.appendChild(infoContainer);
+                recordContainer.appendChild(scoreContainer);
+
+                theScroll.appendChild(recordContainer);
             }
-        });
-        console.log("Лучший результат:", bestScore, "секунд");
-        return { size: bestSize };
+        }
+
+        scrollContainer.appendChild(theScroll);
+        scoreTable.appendChild(scrollContainer);
     }
 
     function startGame() {
@@ -287,6 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let col = Number(cell.dataset.col);
         let value = Number(cell.dataset.value);
 
+        console.log(value);
+
         if (value === currentNumber) {
             cell.classList.add("correct");
             setTimeout(() => {
@@ -295,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentNumber++;
                 checkWin();
             }, 300);
-        } else {
+        } else if ( !value.isNaN() ) {
             errorSound.play();
             mistakes++;
             updateMistakes(mistakes);
@@ -335,12 +289,24 @@ document.addEventListener("DOMContentLoaded", () => {
             winTime.textContent = time;
             winSound.play();
 
-            const addach = { size: boardSize, digit: boardSize};
+            const addach = { size: boardSize, digit: boardSize };
             const achId = generateAchievementId(addach);
-            const addhigh = { size: boardSize, digit: boardSize};
+            const addhigh = { size: boardSize, digit: boardSize };
             const highId = generateAchievementId(addhigh);
-            addHighScore("shulte", highId, time);
-            setupScoreSection();
+    
+            const today = new Date();
+            const date = today.getDate();
+            const month = today.getMonth() + 1;
+            const year = today.getFullYear();
+            const hours = today.getHours() < 10 ? `0${today.getHours()}` : today.getHours();
+            const minutes = today.getMinutes() < 10 ? `0${today.getMinutes()}` : today.getMinutes();
+
+            const scoreDate = `${hours}:${minutes} ${date}.${month}.${year}`;
+            // console.log(scoreDate);
+
+            addHighScore("shulte", highId, time, scoreDate);
+
+            setupScoreSection({ id: highId, score: time, date: scoreDate });
 
             setTimeout(() => {
                 checkAchievement("shulte", achId, time);

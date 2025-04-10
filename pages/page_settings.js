@@ -1,5 +1,5 @@
 import { 
-    updateData, getSettings, syncDataWithInitial
+    updateData, getSettings, syncDataWithInitial, getName, setName
 } from '../data_manager.js';
 
 document.addEventListener("DOMContentLoaded", () => {     
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const settings = getSettings();
 
     const categories = [
-        { id: "sound", name: "Настройки звука" },
+        { id: "sound", name: "Общие настройки" },
         { id: "gameplay", name: "Настройки геймплея" }
     ];
 
@@ -38,6 +38,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function renderSoundSettings() {
+        const RTname = getName();
+
+        const userContainer = document.createElement("div");
+        userContainer.className = "user-name-settings";
+        const settingLabel = document.createElement("h2");
+        settingLabel.innerHTML = "Твое имя: ";
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.placeholder = "Введи свое имя";
+        if (RTname != "default") {
+            nameInput.value = RTname;
+        }
+        nameInput.addEventListener("input", () => {
+            setName(nameInput.value === "" ? "default" : nameInput.value);
+        });
+        
+        userContainer.appendChild(settingLabel);
+        userContainer.appendChild(nameInput);
+
+        settingsList.appendChild(userContainer);
+
         const soundSettings = [
             {
                 title: "Громкость эффектов",

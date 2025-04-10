@@ -125,6 +125,50 @@
     background-color: rgba(240,255,255,0.8);
 }
 
+.user-name-settings {
+    display: flex;
+    height: 60px;
+    position: relative;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    flex-direction: row;
+}
+
+.user-name-settings h2 {
+    font-size: 26px;
+    color: #4b4b4b;
+    margin: 0;
+}
+
+.user-name-settings input {
+    font-family: "Snide hand";
+    display: flex;
+    position: absolute;
+    right: 0px;
+    width: 300px;
+    padding: 4px 10px;
+    height: 40px;
+    font-size: 20px;
+    color: #4b4b4b;
+    background-color: #f0ffff;
+    border: 1px solid #eb92be;
+    border-radius: 8px;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.user-name-settings input:focus {
+    border-color: #d16aa5;
+    box-shadow: 0 4px 8px rgba(209, 106, 165, 0.2);
+}
+
+.user-name-settings input::placeholder {
+    color: #a9a9a9;
+    font-style: italic;
+}
+
 .sound_setting {
     display: flex;
     height: 60px;

@@ -1,6 +1,6 @@
 {
   "name": "play_and_learn",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "An educational application with games for kids",
   "main": "app.js",
   "scripts": {

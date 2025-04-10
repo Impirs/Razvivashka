@@ -98,12 +98,15 @@ img[alt="welcome"] {
 }
 
 .text_btn {
+    position: relative;
     font-family: 'Snide hand';
     width: 256px;
     height: 84px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
+    z-index: 0;
     padding: 10px;
     background-color:azure;
     border: 2px solid #eb92be;
@@ -131,6 +134,47 @@ img[alt="welcome"] {
     color: #4b4b4b;
     flex: 1;
     text-align: center;
+}
+
+.new-feature-added::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    
+    width: 400%;
+    height: 400%;
+    top: -150%;
+    left: -150%;
+
+    background: conic-gradient(
+        from 0deg,
+        #eb92be,
+        #63c9b4,
+        #ffef79,
+        #eb92be
+    );
+    animation: spin 2s linear infinite;
+}
+
+.new-feature-added::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border-radius: inherit;
+    background: azure; 
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .achievement_notification {

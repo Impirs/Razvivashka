@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <section class="header">
-            <h1>Женькины игры</h1>
+            <h1>Развивашка</h1>
             <img src="assets/welcome.png" alt="welcome">
         </section>
         <section class="menu">
@@ -30,6 +30,18 @@
             </button>
         </section>
     </div>
+    <script type="module">
+        import {getName} from './data_manager.js';
+
+        const userName = getName();
+        
+        if (userName === "default") {
+            const target = document.getElementById("settings");
+            const settingsButton = target ? target.closest("button") : null;
+
+            settingsButton.classList.add("new-feature-added");
+        }
+    </script>
     <script>
         function goCatalog() {
             window.electronAPI.navigate('pages/page_catalog.html');

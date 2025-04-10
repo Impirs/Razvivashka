@@ -364,7 +364,11 @@ img[alt="digit_icon"] {
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    gap: 20px;
+    gap: 10px;
+}
+
+.score_record {
+    margin: 10px 0 10px 0;
 }
 
 .score_table {
@@ -374,75 +378,114 @@ img[alt="digit_icon"] {
     align-items: center;
 }
 
-.score_table h2 {
-    font-family: 'Playball';
-    font-size: 120px;
-    color: rgba(255, 215, 0);
-    margin: 0px;
-    cursor: default;
+.scroll-container {
+    height: 320px;
+    width: 250px;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    padding-left: 8px;
 }
 
-.digit_label {
-    font-family: 'Playball';
-    font-size: 30px;
-    color: #4b4b4b;
-    cursor: default;
+.the-scroll {
+    height: max-content;
 }
 
-.best_label {
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #eb92be;
+    border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: rgba(240,255,255,0.8);
+}
+
+.record-container {
+    position: relative;
     display: flex;
-    justify-content: center;
-    cursor:default;
-    color: rgba(255, 215, 0);
-    height: 28px;
-}
-
-.nav_section {
-    display: flex;
+    width: 200px;
+    height: 70px;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 20px;
-}
+    padding-inline: 15px;
 
-.nav_section span {
-    font-size: 20px;
-    width: 120px;
-    color: #4b4b4b;
-    cursor: default;
-}
-
-.score_ctrl_btn {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: azure;
-    border: 1px solid #eb92be;
-    border-radius: 8px;
-    cursor: pointer;
-    color: #eb92be;
-    padding: 0px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(35, 35, 35, 0.1);
+    margin-bottom: 6px;
+    overflow: hidden;
+    z-index: 0;
 }
 
-.score_ctrl_btn:hover {
-    background-color: rgba(240,255,255,0.60);
-    border: 2px solid #63c9b4;
-    color: #63c9b4
+.record-container.new-score::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    
+    width: 400%;
+    height: 400%;
+    top: -150%;
+    left: -150%;
+
+    background: conic-gradient(
+        from 0deg,
+        #eb92be,
+        #63c9b4,
+        #ffef79,
+        #eb92be
+    );
+    animation: spin 2s linear infinite;
 }
 
-.score_ctrl_icon {
-    width: 48px;
-    height: 48px;
-    background: #eb92be;
+.record-container.new-score::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: inherit;
+    background: azure; 
 }
 
-.score_ctrl_icon:hover {
-    width: 48px;
-    height: 48px;
-    background: #63c9b4;
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.score-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 170px;
+}
+
+.score-info-container h3 {
+    font-size: 20px;
+    margin: 0;
+    margin-top: 12px;
+
+}
+.score-info-container span {
+    font-family: "Playball";
+    font-size: 14px;
+}
+
+.score-container-score {
+    width: 50px;
+    height: max-content;
+    font-family: "Playball";
+    font-size: 42px;
+    text-align: center;
+    padding-top: 10px;
 }
 
 #nav_left {
