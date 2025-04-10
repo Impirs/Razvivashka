@@ -299,19 +299,33 @@ export function syncDataWithInitial() {
             data.user.highScores[game] = initialData.user.highScores[game];
             updated = true;
         } else {
-            for (let id in initialData.user.highScores[game]) {
+            // Check if highScores are in the old format (array of objects with id and score)
+            if (Array.isArray(data.user.highScores[game])) {
+                console.log(`Converting old highScores format for game: ${game}`);
+                const convertedHighScores = {};
+
+                data.user.highScores[game].forEach(record => {
+                    if (record.id && record.score !== undefined) {
+                        if (!convertedHighScores[record.id]) {
+                            convertedHighScores[record.id] = [];
+                        }
+                        convertedHighScores[record.id].push({
+                            score: record.score,
+                            date: "unknown" // Add default date
+                        });
+                    }
+                });
+
+                data.user.highScores[game] = convertedHighScores;
+                updated = true;
+            }
+
+            // Ensure each highScore entry is in the correct format
+            for (let id in data.user.highScores[game]) {
                 if (!data.user.highScores[game][id]) {
                     data.user.highScores[game][id] = [];
                     updated = true;
                 } else {
-                    if (Array.isArray(data.user.highScores[game][id]) && typeof data.user.highScores[game][id][0] === 'number') {
-                        data.user.highScores[game][id] = data.user.highScores[game][id].map(score => ({
-                            score,
-                            date: "unknown"
-                        }));
-                        updated = true;
-                    }
-
                     if (Array.isArray(data.user.highScores[game][id])) {
                         data.user.highScores[game][id].forEach(record => {
                             if (!record.date) {
