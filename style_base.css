@@ -242,6 +242,53 @@ img[alt="welcome"] {
     100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
 }
 
+/* Form button */
+
+.form-btn {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    position: fixed;
+    right: 24px;
+    top: 24px;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: azure;
+    border: 0.5px solid azure;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: width 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.form-btn span {
+    opacity: 0;
+    white-space: nowrap;
+    margin-left: 10px;
+    color: #4b4b4b;
+    font-family: 'Snide hand';
+    font-size: 18px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.form-btn:hover {
+    width: 258px;
+}
+
+.form-btn:hover span {
+    opacity: 1;
+}
+
+.form-icon {
+    width: 64px;
+    height: 64px;
+    position: absolute; /* Фиксируем иконку */
+    right: 0; /* Иконка всегда справа */
+    top: 0;
+    background: #63c9b4;
+}
+
 #trophy {
     -webkit-mask: url('assets/icons/trophy.png') no-repeat center;
     -webkit-mask-size: contain;
@@ -291,11 +338,24 @@ img[alt="welcome"] {
     mask-size: contain;
 }
 
+#question {
+    -webkit-mask: url('assets/icons/icons8-question-64.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('assets/icons/icons8-question-64.png') no-repeat center;
+    mask-size: contain;
+}
+
 #reload {
     -webkit-mask: url('assets/icons/refresh.png') no-repeat center;
     -webkit-mask-size: contain;
     mask: url('assets/icons/refresh.png') no-repeat center;
     mask-size: contain;
+}
+
+@media (max-width: 1700px) {
+    html{
+        transform: scale(0.95);
+    }
 }
 
 @media (max-width: 1600px) {
@@ -304,9 +364,21 @@ img[alt="welcome"] {
     }
 }
 
+@media (max-width: 1500px) {
+    html{
+        transform: scale(0.85);
+    }
+}
+
 @media (max-width: 1400px) {
     html {
         transform: scale(0.8);
+    }
+}
+
+@media (max-width: 1300px) {
+    html {
+        transform: scale(0.75);
     }
 }
 
@@ -328,15 +400,33 @@ img[alt="welcome"] {
     }
 }
 
+@media (max-width: 1700px), (max-height: 950px) {
+    html {
+        transform: scale(0.95);
+    }
+}
+
 @media (max-width: 1600px), (max-height: 900px) {
     html {
         transform: scale(0.9);
     }
 }
 
+@media (max-width: 1500px), (max-height: 850px) {
+    html {
+        transform: scale(0.85);
+    }
+}
+
 @media (max-width: 1400px), (max-height: 800px) {
     html {
         transform: scale(0.8);
+    }
+}
+
+@media (max-width: 1300px), (max-height: 750px) {
+    html {
+        transform: scale(0.75);
     }
 }
 

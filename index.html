@@ -30,9 +30,13 @@
             </button>
         </section>
     </div>
+    <div class="form-btn new-feature-added" onclick="openForm()">
+        <span>Форма обратной связи</span>
+        <div class="form-icon" id="question" />
+    </div>
     <script type="module">
         import {getName} from './data_manager.js';
-
+        
         const userName = getName();
         
         if (userName === "default") {
@@ -43,6 +47,8 @@
         }
     </script>
     <script>
+        const formURL = 'https://forms.gle/hQ3Fo3BozxDgZqeM6';
+
         function goCatalog() {
             window.electronAPI.navigate('pages/page_catalog.html');
         }
@@ -57,6 +63,14 @@
 
         function quitApp() {
             window.electronAPI.quitApp();
+        }
+
+        function openForm() {
+            if (window.electronAPI && window.electronAPI.openExternal) {
+                window.electronAPI.openExternal(formURL);
+            } else {
+                console.error('electronAPI.openExternal is not defined');
+            }
         }
     </script>
 </body>

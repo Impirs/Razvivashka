@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         function handleDigitSelection(event) {
             const target = event.target;
-            if (gameState || !target.dataset.value) return;
+            if (!target.dataset.value) return;
     
             const selectedValue = parseInt(target.dataset.value, 10);
             if (isNaN(selectedValue)) return;
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         function handleBoardSelection(event) {
             const target = event.target;
-            if (gameState || !target.classList.contains("available") || !target.dataset.value) return;
+            if (!target.classList.contains("available") || !target.dataset.value) return;
     
             const boardValue = parseInt(target.dataset.value, 10);
             if (isNaN(boardValue)) return;

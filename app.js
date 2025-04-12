@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
-const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
+const axios = require('axios');
+const path = require('path');
 
 log.transports.file.level = 'info';
 autoUpdater.logger = log;
@@ -32,6 +33,16 @@ function createWindow() {
 
     ipcMain.on('navigate', (event, targetPath) => {
         win.loadFile(path.join(__dirname, targetPath));
+    });
+
+    ipcMain.on('open-external', (event, url) => {
+        // console.log('Opening external URL:', url);
+        try {
+            const result = shell.openExternal(url);
+            // console.log('Result of shell.openExternal:', result);
+        } catch (error) {
+            console.error('Error while opening external URL:', error);
+        }
     });
 
     win.once('ready-to-show', () => {

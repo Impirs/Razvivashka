@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         function handleBoardSelection(event) {
             const target = event.target;
-            if (gameState || !target.dataset.value) return;
+            if (!target.dataset.value) return;
     
             const selectedValue = parseInt(target.dataset.value, 10);
             if (isNaN(selectedValue)) return;
@@ -241,28 +241,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log(value);
 
-        if (value === currentNumber) {
-            cell.classList.add("correct");
-            setTimeout(() => {
-                board[row][col] = null;
-                renderBoard();
-                currentNumber++;
-                checkWin();
-            }, 300);
-        } else if ( !value.isNaN() ) {
-            errorSound.play();
-            mistakes++;
-            updateMistakes(mistakes);
+        if ( !isEmptyCell(row, col) ) {
+            if (value === currentNumber) {
+                cell.classList.add("correct");
+                setTimeout(() => {
+                    board[row][col] = null;
+                    renderBoard();
+                    currentNumber++;
+                    checkWin();
+                }, 300);
+            } else {
+                errorSound.play();
+                mistakes++;
+                updateMistakes(mistakes);
 
-            if (mistakes >= 3) {
-                endGame(false);
+                if (mistakes >= 3) {
+                    endGame(false);
+                }
+
+                cell.classList.add("wrong");
+                setTimeout(() => {
+                    cell.classList.remove("wrong");
+                }, 300);
             }
-
-            cell.classList.add("wrong");
-            setTimeout(() => {
-                cell.classList.remove("wrong");
-            }, 300);
         }
+    }
+
+    function isEmptyCell( row, col ) {
+        return board[row][col] === null ? true : false;
     }
 
     function updateMistakes(counter) {
@@ -310,7 +316,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => {
                 checkAchievement("shulte", achId, time);
-                checkAchievement("shulte", highId, time);
             }, 3000); 
         } else {
             defeatSound.play();

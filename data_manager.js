@@ -15,6 +15,14 @@ const initialData = {
                 "5x5": []
             }
         },
+        played: {
+            syllable : [
+                {id: "1x1" , count: 0},
+                {id: "1x2" , count: 0}, 
+                {id: "2x1" , count: 0},  
+                {id: "2x2" , count: 0}
+            ]
+        },
         achievements: {
             "digit": [
                 { id: "7x6", ranks: [150, 200], unlocked: [false, false], title: "Отличное начало!" },
@@ -27,10 +35,10 @@ const initialData = {
                 { id: "9x100", ranks: [20000], unlocked: [false], title: "Идеальный подход" },
             ],
             "syllable": [
-                { id: "1x1", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Секреты букваря" },
-                { id: "1x2", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Весёлый буквоед" },
-                { id: "2x1", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Загадочный шёпот" },
-                { id: "2x2", ranks: [1, 5, 10], unlocked: [false, false, false], title: "Читающий герой" }
+                { id: "1x1", ranks: [10, 5, 1], unlocked: [false, false, false], title: "Секреты букваря" },
+                { id: "1x2", ranks: [10, 5, 1], unlocked: [false, false, false], title: "Весёлый буквоед" },
+                { id: "2x1", ranks: [10, 5, 1], unlocked: [false, false, false], title: "Загадочный шёпот" },
+                { id: "2x2", ranks: [10, 5, 1], unlocked: [false, false, false], title: "Читающий герой" }
             ],
             "shulte": [
                 { id: "4x4", ranks: [45, 60, 90], unlocked: [false, false, false], title: "Зоркий глаз"},
@@ -213,6 +221,37 @@ export function getHighScores(game) {
     return data.user.highScores[game];
 }
 
+export function getPlayedCounter(game, id) {
+    try {
+        const data = loadData();
+        const playedGame = data.user.played[game]?.find(entry => entry.id === id);
+        return playedGame ? playedGame.count : 0;
+    } catch (error) {
+        console.error(`Error getting played counter for game "${game}" and id "${id}":`, error);
+        return 0;
+    }
+}
+
+export function setPlayedCounter(game, id, counter) {
+    try {
+        const data = loadData();
+        let playedGame = data.user.played[game]?.find(entry => entry.id === id);
+
+        if (playedGame) {
+            playedGame.count = counter; 
+        } else {
+            if (!data.user.played[game]) {
+                data.user.played[game] = [];
+            }
+            data.user.played[game].push({ id, count: counter });
+        }
+
+        saveData(data);
+    } catch (error) {
+        console.error(`Error setting played counter for game "${game}" and id "${id}":`, error);
+    }
+}
+
 export function parseAchievementId(id) {
     const [size, digit] = id.split('x').map(Number);
     //console.log("Size:", size, "Digit:", digit);
@@ -357,22 +396,18 @@ export function syncDataWithInitial() {
                     }
 
                     let highScores = data.user.highScores[game]?.[initialAchievement.id];
-                    if (highScores && highScores.length > 0) {
-                        initialAchievement.ranks.forEach((rank, index) => {
-                            if (highScores.some(record => record.score <= rank)) {
-                                // console.log(`Achievement is now unlocked for game: ${game}, id: ${initialAchievement.id}, rank: ${rank}`);
-                                // console.log(`HighScores:`, highScores.map(record => record.score));
-                                achievement.unlocked[index] = true;
-                                // console.log(achievement);
-                            } else {
-                                // console.log(`Achievement not unlocked for game: ${game}, id: ${initialAchievement.id}, rank: ${rank}`);
-                                // console.log(`HighScores:`, highScores.map(record => record.score));
-                                achievement.unlocked[index] = false;
-                            }
-                        });
-                    } else {
-                        // console.log(`No highScores found for game: ${game}, id: ${initialAchievement.id}`);
-                    }
+                    let playedCount = data.user.played[game]?.find(entry => entry.id === initialAchievement.id)?.count || 0;
+
+                    initialAchievement.ranks.forEach((rank, index) => {
+                        if (
+                            (highScores && highScores.some(record => record.score <= rank)) ||
+                            (playedCount >= rank)
+                        ) {
+                            achievement.unlocked[index] = true;
+                        } else {
+                            achievement.unlocked[index] = false;
+                        }
+                    });
                 }
             });
             updated = true;
@@ -423,6 +458,27 @@ export function syncDataWithInitial() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    if (!data.user.played) {
+        console.log("Adding missing 'played' parameter to user data.");
+        data.user.played = initialData.user.played;
+        updated = true;
+    } else {
+        for (let game in initialData.user.played) {
+            if (!data.user.played[game]) {
+                data.user.played[game] = initialData.user.played[game];
+                updated = true;
+            } else {
+                initialData.user.played[game].forEach(initialPlayed => {
+                    let playedEntry = data.user.played[game].find(entry => entry.id === initialPlayed.id);
+                    if (!playedEntry) {
+                        data.user.played[game].push(initialPlayed);
+                        updated = true;
+                    }
+                });
             }
         }
     }

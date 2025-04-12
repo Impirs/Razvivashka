@@ -126,6 +126,16 @@ img[alt="syllable_icon"] {
     border: 2px solid #eb92be;
 }
 
+#finish_btn.not-allowed {
+    background-color: #eb92bea0;
+    border: 2px solid #eb92bea0;
+}
+#finish_btn.not-allowed:hover {
+    background-color: #eb92bea0;
+    border: 2px solid #eb92bea0;
+    color: azure;
+}
+
 .pack_setup {
     background-color: azure;
     border: 2px solid #eb92be;
