@@ -18,6 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedVolume = getVolume();
     const winSound = document.getElementById("win_sound");
     const achieveSound = document.getElementById("achieve_sound");
+    const infoButton = document.getElementById("info_btn");
+    infoButton.addEventListener("click", handleInfoClick);
+    document.getElementById("close_info").addEventListener("click", closeInfo);
+    let infoState = false;
+
+    finishBtn.classList.add("not-allowed");
+    finishBtn.disabled = true
 
     function setupSounds() {
         achieveSound.volume = savedVolume.notification;
@@ -275,6 +282,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
+    }
+
+    function handleInfoClick() {
+        if (!infoState) {
+            infoState = true;
+            document.getElementById("infoModul").style.display = "flex";
+        } else {
+            closeInfo();
+        }
+    }
+
+    function closeInfo() {
+        infoState = false;
+        document.getElementById("infoModul").style.display = "none";
     }
 
     function endGame() {

@@ -119,6 +119,73 @@ export function updateData(section, key, value) {
     }
 }
 
+export function getName() {
+    let data = loadData();
+    return data.user.name;
+}
+
+export function setName(newName) {
+    try {
+        let data = loadData();
+        data.user.name = newName;
+        saveData(data);
+    } catch (error) {
+        console.error("Error saving new user name:", error);
+    }
+}
+
+export function getVolume() {
+    let data = loadData();
+    return data.settings.volume;
+}
+
+export function getSettings() {
+    let data = loadData();
+    return data.settings;
+}
+
+export function getGames() {
+    let data = loadData();
+    return data.user.games;
+}
+
+export function getAchievements(game) {
+    let data = loadData();
+    return data.user.achievements[game];
+}
+
+export function unlockAchievement(game, id, score) {
+    let data = loadData();
+    let achievements = data.user.achievements[game];
+    let unlockedAchievements = [];
+    
+    if (achievements) {
+        achievements.forEach(achievement => {
+            if (achievement.id === id) {
+                achievement.ranks.forEach((rank, index) => {
+                    if (game === "digit" && !achievement.unlocked[index] && score < rank) {
+                        achievement.unlocked[index] = true;
+                        unlockedAchievements.unshift({ ...achievement, rank: index + 1 });
+                    } else if (game === "shulte" && !achievement.unlocked[index] && score < rank) {
+                        achievement.unlocked[index] = true;
+                        unlockedAchievements.unshift({ ...achievement, rank: index + 1 });
+                    } else if (game === "syllable" && !achievement.unlocked[index] && score >= rank) {
+                        achievement.unlocked[index] = true;
+                        unlockedAchievements.unshift({ ...achievement, rank: index + 1 });
+                    }
+                });
+            }
+        });
+        saveData(data);
+    }
+    return unlockedAchievements;
+}
+
+export function getHighScores(game) {
+    let data = loadData();
+    return data.user.highScores[game];
+}
+
 export function addHighScore(game, id, score, date) {
     try {
         let data = loadData();
@@ -158,67 +225,6 @@ export function removeHighScore(game, id, score, date) {
         console.warn(`No matching high score found for game "${game}", id "${id}", score "${score}", date "${date}".`);
         return false;
     }
-}
-
-export function unlockAchievement(game, id, score) {
-    let data = loadData();
-    let achievements = data.user.achievements[game];
-    let unlockedAchievements = [];
-    
-    if (achievements) {
-        achievements.forEach(achievement => {
-            if (achievement.id === id) {
-                achievement.ranks.forEach((rank, index) => {
-                    if (!achievement.unlocked[index] && score < rank) {
-                        achievement.unlocked[index] = true;
-                        unlockedAchievements.unshift({ ...achievement, rank: index + 1 });
-                    }
-                });
-            }
-        });
-        saveData(data);
-    }
-    return unlockedAchievements;
-}
-
-export function getName() {
-    let data = loadData();
-    return data.user.name;
-}
-
-export function setName(newName) {
-    try {
-        let data = loadData();
-        data.user.name = newName;
-        saveData(data);
-    } catch (error) {
-        console.error("Error saving new user name:", error);
-    }
-}
-
-export function getVolume() {
-    let data = loadData();
-    return data.settings.volume;
-}
-
-export function getSettings() {
-    let data = loadData();
-    return data.settings;
-}
-
-export function getGames() {
-    let data = loadData();
-    return data.user.games;
-}
-
-export function getAchievements(game) {
-    let data = loadData();
-    return data.user.achievements[game];
-}
-
-export function getHighScores(game) {
-    let data = loadData();
-    return data.user.highScores[game];
 }
 
 export function getPlayedCounter(game, id) {

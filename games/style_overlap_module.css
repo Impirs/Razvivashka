@@ -37,7 +37,6 @@
     margin: 2px 0;
 }
 
-
 .info-section {
     display: flex;
     flex-direction: row;
@@ -59,6 +58,11 @@
     margin:0;
     color: rgba(255, 215, 0);
 }
+.info-content h3 {
+    font-size: 16px;
+    margin:0;
+    color: azure;
+}
 .info-content p {
     color: azure;
     margin: 2px 0;
@@ -67,6 +71,14 @@
     max-width: 290px;
     color: azure;
     margin: 2px 0;
+}
+
+.info-content.small img {
+    max-height: 320px;
+}
+
+.info-content.small .gif {
+    max-height: 320px;
 }
 
 .info_image {

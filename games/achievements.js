@@ -9,12 +9,12 @@ export function checkAchievement(game, id, score) {
     if (unlockedAchievements.length > 0) {
         notificationQueue.push(...unlockedAchievements);
         if (!isDisplayingNotification) {
-            displayNextNotification();
+            displayNextNotification(game);
         }
     }
 }
 
-function displayNextNotification() {
+function displayNextNotification(game) {
     if (notificationQueue.length === 0) {
         isDisplayingNotification = false;
         return;
@@ -34,7 +34,11 @@ function displayNextNotification() {
     title.textContent = achievement.title;
     let description = document.createElement("p");
     const parsed = parseAchievementId(achievement.id);
-    description.textContent = `Закончить игру с размером игровой доски ${parsed.size} за ${achievement.ranks[achievement.rank - 1]} секунд или быстрее.`;
+    if ( game === "syllable") {
+        description.textContent = `Закончить упражнение с уровнем сложности ${parsed.size}x${parsed.digit} в ${achievement.ranks[achievement.rank - 1]}ый раз.`;
+    } else {
+        description.textContent = `Закончить игру с размером игровой доски ${parsed.size} за ${achievement.ranks[achievement.rank - 1]} секунд или быстрее.`;
+    }
 
     notification.classList.add("achievement_notification");
     notification.addEventListener('click', () => {

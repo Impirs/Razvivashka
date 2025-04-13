@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 let description_srt;
                 if (parsed.digit === 100){
                     description_srt = `Закончить игру с размером игровой доски ${parsed.size} без ошибок.`;
+                } else if (game.id === "syllable"){
+                    description_srt = `Закончить упражнение с уровнем сложности ${achievement.id} в ${Math.min(...achievement.ranks)}-ый раз.`;
                 } else description_srt = `Закончить игру в режиме ${achievement.id} за ${Math.min(...achievement.ranks)} секунд или быстрее.`
                 records.push({
                     game: game.id,
