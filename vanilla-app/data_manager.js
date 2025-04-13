@@ -339,6 +339,27 @@ export function syncDataWithInitial() {
     let data = loadData();
     let updated = false;
 
+    if (!data.user.played) {
+        console.log("Adding missing 'played' parameter to user data.");
+        data.user.played = initialData.user.played;
+        updated = true;
+    } else {
+        for (let game in initialData.user.played) {
+            if (!data.user.played[game]) {
+                data.user.played[game] = initialData.user.played[game];
+                updated = true;
+            } else {
+                initialData.user.played[game].forEach(initialPlayed => {
+                    let playedEntry = data.user.played[game].find(entry => entry.id === initialPlayed.id);
+                    if (!playedEntry) {
+                        data.user.played[game].push(initialPlayed);
+                        updated = true;
+                    }
+                });
+            }
+        }
+    }
+
     for (let game in initialData.user.highScores) {
         if (!data.user.highScores[game]) {
             data.user.highScores[game] = initialData.user.highScores[game];
@@ -400,10 +421,14 @@ export function syncDataWithInitial() {
                         achievement.ranks = initialAchievement.ranks;
                         updated = true;
                     }
-
+            
                     let highScores = data.user.highScores[game]?.[initialAchievement.id];
-                    let playedCount = data.user.played[game]?.find(entry => entry.id === initialAchievement.id)?.count || 0;
-
+                    let playedCount = 0;
+            
+                    if (game === "syllable") {
+                        playedCount = data.user.played[game]?.find(entry => entry.id === initialAchievement.id)?.count || 0;
+                    }
+            
                     initialAchievement.ranks.forEach((rank, index) => {
                         if (
                             (highScores && highScores.some(record => record.score <= rank)) ||
@@ -464,27 +489,6 @@ export function syncDataWithInitial() {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    if (!data.user.played) {
-        console.log("Adding missing 'played' parameter to user data.");
-        data.user.played = initialData.user.played;
-        updated = true;
-    } else {
-        for (let game in initialData.user.played) {
-            if (!data.user.played[game]) {
-                data.user.played[game] = initialData.user.played[game];
-                updated = true;
-            } else {
-                initialData.user.played[game].forEach(initialPlayed => {
-                    let playedEntry = data.user.played[game].find(entry => entry.id === initialPlayed.id);
-                    if (!playedEntry) {
-                        data.user.played[game].push(initialPlayed);
-                        updated = true;
-                    }
-                });
             }
         }
     }

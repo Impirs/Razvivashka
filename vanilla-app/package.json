@@ -29,7 +29,7 @@
         }
       ],
       "artifactName": "play_and_learn-Setup-${version}.${ext}",
-      "icon": "assets/icon.ico",
+      "icon": "../shared/assets/icon.ico",
       "signtoolOptions": {
         "signingHashAlgorithms": [
           "sha256"

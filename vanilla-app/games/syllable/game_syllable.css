@@ -320,49 +320,49 @@ img[alt="syllable_icon"] {
 
 #key_left {
     display: flex;
-    -webkit-mask: url('../../assets/icons/left-key.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/left-key.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/left-key.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/left-key.png') no-repeat center;
     mask-size: contain;
 }
 #key_right {
     display: flex;
-    -webkit-mask: url('../../assets/icons/right-key.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/right-key.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/right-key.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/right-key.png') no-repeat center;
     mask-size: contain;
 }
 #key_up {
     display: flex;
-    -webkit-mask: url('../../assets/icons/up-key.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/up-key.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/up-key.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/up-key.png') no-repeat center;
     mask-size: contain;
 }
 #key_down {
     display: flex;
-    -webkit-mask: url('../../assets/icons/down-key.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/down-key.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/down-key.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/down-key.png') no-repeat center;
     mask-size: contain;
 }
 #key_space {
     display: flex;
-    -webkit-mask: url('../../assets/icons/space-key.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/space-key.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/space-key.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/space-key.png') no-repeat center;
     mask-size: contain;
 }
 
 .cross {
     background: #eb5252;
 
-    -webkit-mask-image: url('../../assets/icons/icons8-cross-64.png');
+    -webkit-mask-image: url('../../../shared/assets/icons/icons8-cross-64.png');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: contain;
 
-    mask-image: url('../../assets/icons/icons8-cross-64.png');
+    mask-image: url('../../../shared/assets/icons/icons8-cross-64.png');
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;

@@ -256,12 +256,12 @@ img[alt="digit_icon"] {
     height: 48px;
     background: #4b4b4b;
 
-    -webkit-mask-image: url('../../assets/icons/icons8-dot-64.png');
+    -webkit-mask-image: url('../../../shared/assets/icons/icons8-dot-64.png');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: contain;
 
-    mask-image: url('../../assets/icons/icons8-dot-64.png');
+    mask-image: url('../../../shared/assets/icons/icons8-dot-64.png');
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;
@@ -270,12 +270,12 @@ img[alt="digit_icon"] {
 .mistake.cross {
     background: #eb5252;
 
-    -webkit-mask-image: url('../../assets/icons/icons8-cross-64.png');
+    -webkit-mask-image: url('../../../shared/assets/icons/icons8-cross-64.png');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
     -webkit-mask-size: contain;
 
-    mask-image: url('../../assets/icons/icons8-cross-64.png');
+    mask-image: url('../../../shared/assets/icons/icons8-cross-64.png');
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;
@@ -490,33 +490,33 @@ img[alt="digit_icon"] {
 
 #nav_left {
     display: flex;
-    -webkit-mask: url('../../assets/icons/icons8-back-64.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/icons8-back-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/icons8-back-64.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/icons8-back-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #nav_right {
     display: flex;
-    -webkit-mask: url('../../assets/icons/icons8-back-64.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/icons8-back-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/icons8-back-64.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/icons8-back-64.png') no-repeat center;
     mask-size: contain;
     transform: scaleX(-1);
 }
 
 #pause {
     display: flex ;
-    -webkit-mask: url('../../assets/icons/icons8-pause-64.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/icons8-pause-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/icons8-pause-64.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/icons8-pause-64.png') no-repeat center;
     mask-size: contain;
 }
 
 #continue {
     display: none;
-    -webkit-mask: url('../../assets/icons/icons8-play-64.png') no-repeat center;
+    -webkit-mask: url('../../../shared/assets/icons/icons8-play-64.png') no-repeat center;
     -webkit-mask-size: contain;
-    mask: url('../../assets/icons/icons8-play-64.png') no-repeat center;
+    mask: url('../../../shared/assets/icons/icons8-play-64.png') no-repeat center;
     mask-size: contain;
 }

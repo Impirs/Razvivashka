@@ -1,13 +1,13 @@
 node_modules
 
-dist/.cache
-dist/win-unpacked
-dist/win-ia32-unpacked
-dist/v1.2.5
-dist/v1.2.4
-dist/v1.2.3
-dist/v1.2.2
-dist/v1.2.1
+vanilla-app/dist/.cache
+vanilla-app/dist/win-unpacked
+vanilla-app/dist/win-ia32-unpacked
+vanilla-app/dist/v1.2.5
+vanilla-app/dist/v1.2.4
+vanilla-app/dist/v1.2.3
+vanilla-app/dist/v1.2.2
+vanilla-app/dist/v1.2.1
     
 local_data/
 *.log
