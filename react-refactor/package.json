@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "name": "react-refactor",
   "version": "1.0.0",
   "main": "index.js",
@@ -13,11 +14,100 @@
     "concurrently": "^9.1.2",
     "electron": "^35.1.5",
     "electron-builder": "^26.0.12",
+=======
+  "name": "play_and_learn",
+  "version": "2.0.0",
+  "description": "An educational application with games for kids",
+  "main": "./electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && npm run start\"",
+    "build:react": "vite build",
+    "build": "npm run build:react && electron-builder",
+    "start": "electron ."
+  },
+  "build": {
+    "appId": "com.impirs.razvivashka",
+    "productName": "Развивашка",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "artifactName": "play_and_learn-Setup-${version}.${ext}",
+      "icon": "../shared/assets/icon",
+      "signtoolOptions": {
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
+        "certificateFile": "D:/Test_1/certificate.pfx",
+        "certificatePassword": "jdi5l92lplx0seq390"
+      }
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Impirs",
+        "repo": "Razvivashka"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Impirs/Razvivashka.git"
+  },
+  "keywords": [
+    "games",
+    "for kids",
+    "learning"
+  ],
+  "author": "Artem Mamitov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Impirs/Razvivashka/issues"
+  },
+  "homepage": "https://github.com/Impirs/Razvivashka#readme",
+  "dependencies": {
+>>>>>>> Stashed changes
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
+<<<<<<< Updated upstream
     "vite": "^6.2.6"
   }
+=======
+    "concurrently": "^9.1.2",
+    "electron": "^35.1.5",
+    "electron-builder": "^26.0.12",
+    "electron-log": "^5.3.3",
+    "electron-updater": "^6.6.2",
+    "vite": "^6.2.6",
+    "wait-on": "^8.0.3"
+  },
+  "extraResources": [],
+  "asar": true
+>>>>>>> Stashed changes
 }
