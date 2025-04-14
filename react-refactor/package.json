@@ -1,20 +1,4 @@
 {
-<<<<<<< Updated upstream
-  "name": "react-refactor",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "concurrently": "^9.1.2",
-    "electron": "^35.1.5",
-    "electron-builder": "^26.0.12",
-=======
   "name": "play_and_learn",
   "version": "2.0.0",
   "description": "An educational application with games for kids",
@@ -89,16 +73,11 @@
   },
   "homepage": "https://github.com/Impirs/Razvivashka#readme",
   "dependencies": {
->>>>>>> Stashed changes
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-<<<<<<< Updated upstream
-    "vite": "^6.2.6"
-  }
-=======
     "concurrently": "^9.1.2",
     "electron": "^35.1.5",
     "electron-builder": "^26.0.12",
@@ -109,5 +88,4 @@
   },
   "extraResources": [],
   "asar": true
->>>>>>> Stashed changes
 }

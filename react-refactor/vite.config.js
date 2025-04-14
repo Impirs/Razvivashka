@@ -4,14 +4,10 @@ import path from 'path';
 
 export default defineConfig({
     plugins: [react()],
-<<<<<<< Updated upstream
-    root: './',
-=======
     root: '.',
     server: {
         port: 5173,
     },
->>>>>>> Stashed changes
     build: {
         outDir: 'dist',
         emptyOutDir: true,
