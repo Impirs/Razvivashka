@@ -1,5 +1,6 @@
 const {contextBridge, ipcRenderer} = require('electron');
-const language = require('../../shared/data/language');
+const { getUser, getGames, removeHighScore } = require('./storage');
+const {getAchievements, getHighScores, addHighScore } = require('../../vanilla-app/data_manager');
 
 contextBridge.exposeInMainWorld('electronAPI', {
     sendMessage: (msg) => ipcRenderer.send('message', msg),
@@ -12,36 +13,25 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openExternal: (url) => ipcRenderer.send('open-external', url)
 });
 
-// default language can saved in settings.json later
-language.loadLanguage('ru');
-
 contextBridge.exposeInMainWorld('languageAPI', {
-    t: (tag) => language.t(tag),
-    setLanguage: (langCode) => language.setLanguage(langCode),
-    getLanguage: () => language.getLanguage()
+    t: (tag) => ipcRenderer.invoke('language-t', tag),
+    setLanguage: (langCode) => ipcRenderer.invoke('language-set', langCode),
+    getLanguage: () => ipcRenderer.invoke('language-get')
 });
 
-/*
-in JSX
+contextBridge.exposeInMainWorld('storageAPI', {
+    getUser: () => ipcRenderer.invoke('get-user'),
+    getSettings: () => ipcRenderer.invoke('get-settings'),
 
-const { t } = HOOK();
+    saveUser: (data) => ipcRenderer.invoke('save-user', data),
+    saveSettings: (data) => ipcRenderer.invoke('save-settings', data),
 
-const tagPrefix = `ach_${game}_${ach.id}`;
-
-...<h2>{t(`${tagPrefix}_title`)}<h2>
-...<p>{t(`${tagPrefix}_des`)}<p>
-*/
-
-/*
-HOOK
-
-const [lang, setLang] = useState(window.languageAPI.getLanguage());
-const t = (tag) => windows.languageAPI.t(tag);
-
-const setLanguage = (newLang) => {
-    window.languageAPI.setLanguage(newLang);
-    setLang(newLang); // prerender trigger    
-}
-
-return {t, lang, setLanguage};
-*/
+    getAchievements: () => ipcRenderer.invoke('get-achievements'),
+    getHighScores: () => ipcRenderer.invoke('get-highscore'),
+    getGames: () => ipcRenderer.invoke('get-games'),
+    
+    addHighScore: (game, id, score, date) => 
+        ipcRenderer.invoke('add-highscore', game, id, score, date),
+    removeHighScore: (game, id, score, date) => 
+        ipcRenderer.invoke('remove-highscore', game, id, score, date),
+})

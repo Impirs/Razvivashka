@@ -74,7 +74,9 @@
   "homepage": "https://github.com/Impirs/Razvivashka#readme",
   "dependencies": {
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "sass": "^1.86.3",
+    "scss": "^0.2.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

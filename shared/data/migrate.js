@@ -1,4 +1,3 @@
-const { cleanTitlesAndDescriptions, saveCleanedData } = require('./update');
 const path = require('path');
 
 function migrateFromLocalStorage() {

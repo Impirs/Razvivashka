@@ -4,10 +4,11 @@ const log = require('electron-log');
 const path = require('path');
 const os = require('os');
 
-const { cleanTitlesAndDescriptions, saveCleanedData } = require('../../shared/data/update');
+const { cleanTitlesAndDescriptions } = require('../../shared/data/update');
 const { migrateFromLocalStorage } = require('../../shared/data/migrate');
 const initialData = require('../../shared/data/initialData');
 const storage = require('./storage');
+const api = require('./api');
 
 log.transports.file.level = 'info';
 autoUpdater.logger = log;
@@ -18,7 +19,7 @@ const isDev = !app.isPackaged;
 function createWindow() {
     const win = new BrowserWindow({
         show: false,
-        icon: path.join(__dirname, '../shared/assets/icon.ico'),
+        icon: path.join(__dirname, '../../shared/assets/icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -59,8 +60,9 @@ function createWindow() {
 app.whenReady().then(() => {
     storage.ensureAppDirExists();
 
-    const appDir = path.join(os.homedir(), '.play_and_learn');
-    console.log(appDir);
+    // Registrate API
+    api.handleLanguageAPI();
+    api.handleStorageAPI();
 
     if (!storage.hasMigrated()) {
         const localData = migrateFromLocalStorage();
