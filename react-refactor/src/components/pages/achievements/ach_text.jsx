@@ -18,7 +18,7 @@ const AchievementText = React.memo(({ tag }) => {
     }, [tag, t]);
 
     return (
-        <div className="ach-text">
+        <div className="achievement-text">
             <h3>{title}</h3>
             <p>{description}</p>
         </div>

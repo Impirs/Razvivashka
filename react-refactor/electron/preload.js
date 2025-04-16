@@ -1,6 +1,4 @@
 const {contextBridge, ipcRenderer} = require('electron');
-const { getUser, getGames, removeHighScore } = require('./storage');
-const {getAchievements, getHighScores, addHighScore } = require('../../vanilla-app/data_manager');
 
 contextBridge.exposeInMainWorld('electronAPI', {
     sendMessage: (msg) => ipcRenderer.send('message', msg),
@@ -23,15 +21,14 @@ contextBridge.exposeInMainWorld('storageAPI', {
     getUser: () => ipcRenderer.invoke('get-user'),
     getSettings: () => ipcRenderer.invoke('get-settings'),
 
-    saveUser: (data) => ipcRenderer.invoke('save-user', data),
-    saveSettings: (data) => ipcRenderer.invoke('save-settings', data),
-
     getAchievements: () => ipcRenderer.invoke('get-achievements'),
-    getHighScores: () => ipcRenderer.invoke('get-highscore'),
+    getHighScores: () => ipcRenderer.invoke('get-highscores'),
     getGames: () => ipcRenderer.invoke('get-games'),
-    
+
     addHighScore: (game, id, score, date) => 
         ipcRenderer.invoke('add-highscore', game, id, score, date),
     removeHighScore: (game, id, score, date) => 
         ipcRenderer.invoke('remove-highscore', game, id, score, date),
+    unlockAchievement: (game, id, score) =>
+        ipcRenderer.invoke('unlock-achieve', game, id, score)
 })

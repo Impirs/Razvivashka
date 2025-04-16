@@ -25,7 +25,6 @@ function handleStorageAPI() {
     ipcMain.handle('get-user', () => {
         return storage.getUser();
     });
-
     ipcMain.handle('get-settings', () => {
         return storage.getSettings();
     });
@@ -33,7 +32,6 @@ function handleStorageAPI() {
     ipcMain.handle('save-user', (event, data) => {
         storage.saveUser(data);
     });
-
     ipcMain.handle('save-settings', (event, data) => {
         storage.saveSettings(data);
     });
@@ -41,11 +39,9 @@ function handleStorageAPI() {
     ipcMain.handle('get-games', () => {
         return storage.getGames();
     });
-
     ipcMain.handle('get-achievements', () => {
         return storage.getAchievements();
     });
-
     ipcMain.handle('get-highscores', () => {
         return storage.getHighScores();
     })
@@ -53,10 +49,12 @@ function handleStorageAPI() {
     ipcMain.handle('add-highscore', (event, game, id, score, date) => {
         storage.addHighScore(game, id, score, date);
     });
-
     ipcMain.handle('remove-highscore', (event, game, id, score, date) => {
         storage.removeHighScore(game, id, score, date);
     });
+    ipcMain.handle('unlock-achieve', (event, game, id, score) => {
+        storage.unlockAchievement(game, id, score);
+    })
 }
 
 module.exports = {

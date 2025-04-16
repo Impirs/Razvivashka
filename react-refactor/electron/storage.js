@@ -56,9 +56,9 @@ function getGames() {
     return data.games;
 }
 
-function getAchievements(game) {
+function getAchievements() {
     const data = getUser();
-    return data.achievements[game];
+    return data.achievements;
 }
 
 function unlockAchievement(game, id, score) {
@@ -134,8 +134,6 @@ function removeHighScore(game, id, score, date) {
 }
 
 module.exports = {
-    saveUser,
-    saveSettings,
     hasMigrated,
     setMigrated,
     ensureAppDirExists,
@@ -145,6 +143,8 @@ module.exports = {
     getGames,
     getAchievements,
     getHighScores,
+
     addHighScore,
-    removeHighScore
+    removeHighScore,
+    unlockAchievement
 };
