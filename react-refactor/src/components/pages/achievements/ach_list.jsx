@@ -33,7 +33,7 @@ function AchievementList({ game }) {
             {acharr.map(({ id, game, ranks, unlocked }) => (
                 <div key={`${game}_${id}`} className="achievement">
                     <TrophyList ranks={ranks} unlocked={unlocked} />
-                    <AchievementText tag={`ach_${game}_${id}`} />
+                    <AchievementText game={game} tag={`ach_${game}_${id}`} ranks={ranks} unlocked={unlocked}/>
                 </div>
             ))}
         </div>

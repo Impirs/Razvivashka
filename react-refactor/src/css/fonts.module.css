@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Stick';
+    src: url('../shared/assets/fonts/Stick-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'PlayBall';
+    src: url('../shared/assets/fonts/Playball-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Snide hand';
+    src: url('../shared/assets/fonts/snide_hand/fonts/SnideHandTT.ttf') format('truetype');
+}

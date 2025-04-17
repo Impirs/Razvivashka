@@ -14,7 +14,7 @@ autoUpdater.allowPrerelease = true;
 function createWindow() {
     const win = new BrowserWindow({
         show: false,
-        icon: path.join(__dirname, 'assets', 'icon.ico'),
+        icon: path.join(__dirname, '../shared/assets', 'icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,

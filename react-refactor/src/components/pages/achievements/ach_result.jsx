@@ -9,11 +9,10 @@ function TrophyList({ ranks, unlocked }) {
 
                 return (
                     <div
+                        id="trophy"
                         key={index}
                         className={`trophy ${trophyClass} ${isUnlocked ? "unlocked" : "locked"}`}
-                    >
-                        {/* Trophy icon import */}
-                    </div>
+                    />
                 );
             })}
         </div>

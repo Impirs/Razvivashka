@@ -1,5 +1,6 @@
 import React from "react";
 import AchievementPage from "./components/pages/achievements/ach_page";
+import './css/icons.module.css';
 
 function App() {
 
