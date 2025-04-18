@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('storageAPI', {
     getAchievements: () => ipcRenderer.invoke('get-achievements'),
     getHighScores: () => ipcRenderer.invoke('get-highscores'),
     getGames: () => ipcRenderer.invoke('get-games'),
+    getTypes: () => ipcRenderer.invoke('get-types'),
 
     addHighScore: (game, id, score, date) => 
         ipcRenderer.invoke('add-highscore', game, id, score, date),

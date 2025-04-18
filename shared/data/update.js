@@ -30,6 +30,27 @@ function cleanTitlesAndDescriptions(dataType, data) {
     return data;
 }
 
+function ensureTypes(data) {
+    if (!data.types) {
+        data.types = ["type_logic", "type_count", "type_attention", "type_reading"];
+    }
+
+    if (Array.isArray(data.games)) {
+        data.games = data.games.map(game => {
+            if (typeof game.type === "string") {
+                game.type = [game.type];
+            }
+            if (game.id === "digit" && !game.type.includes("attention")) {
+                game.type.push("attention");
+            }
+            return game;
+        });
+    }
+
+    return data;
+}
+
 module.exports = {
-    cleanTitlesAndDescriptions
+    cleanTitlesAndDescriptions,
+    ensureTypes
 };

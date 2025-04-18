@@ -5,20 +5,29 @@ const os = require('os');
 const appDir = path.join(os.homedir(),'AppData/Roaming/play_and_learn' ,'data');
 const userFile = path.join(appDir, 'user.json');
 const settingsFile = path.join(appDir, 'settings.json');
-const migrationFlag = path.join(appDir, '.migrated');
 
+//////////////////// MIGRATE & UPDATE ////////////////////
+
+// v2.0
 function ensureAppDirExists() {
     if (!fs.existsSync(appDir)) {
         fs.mkdirSync(appDir, { recursive: true });
     }
 }
 
-function hasMigrated() {
-    return fs.existsSync(migrationFlag);
+function hasFlag(flagName) {
+    const flagPath = path.join(appDir, 'flags', flagName);
+    return fs.existsSync(flagPath);
 }
 
-function setMigrated() {
-    fs.writeFileSync(migrationFlag, 'true', 'utf8');
+function setFlag(flagName) {
+    const flagPath = path.join(appDir, 'flags', flagName);
+    ensureAppDirExists(); // Убедимся, что папка существует
+    const flagsDir = path.join(appDir, 'flags');
+    if (!fs.existsSync(flagsDir)) {
+        fs.mkdirSync(flagsDir, { recursive: true });
+    }
+    fs.writeFileSync(flagPath, 'true', 'utf8');
 }
 
 function writeJSON(filePath, data) {
@@ -31,6 +40,8 @@ function readJSON(filePath) {
     return JSON.parse(raw);
 }
 
+//////////////////// functions for API ////////////////////
+
 function saveUser(data) {
     ensureAppDirExists();
     writeJSON(userFile, data);
@@ -40,8 +51,6 @@ function saveSettings(data) {
     ensureAppDirExists();
     writeJSON(settingsFile, data);
 }
-
-// functions for api
 
 function getUser() {
     return readJSON(userFile);
@@ -54,6 +63,11 @@ function getSettings() {
 function getGames() {
     const data = getUser();
     return data.games;
+}
+
+function getTypes() {
+    const data = getUser();
+    return data.types;
 }
 
 function getAchievements() {
@@ -134,13 +148,16 @@ function removeHighScore(game, id, score, date) {
 }
 
 module.exports = {
-    hasMigrated,
-    setMigrated,
+    saveUser,
+    saveSettings,
+    hasFlag,
+    setFlag,
     ensureAppDirExists,
     
     getUser,
     getSettings,
     getGames,
+    getTypes,
     getAchievements,
     getHighScores,
 

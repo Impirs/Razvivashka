@@ -39,6 +39,9 @@ function handleStorageAPI() {
     ipcMain.handle('get-games', () => {
         return storage.getGames();
     });
+    ipcMain.handle('get-types', () => {
+        return storage.getTypes();
+    })
     ipcMain.handle('get-achievements', () => {
         return storage.getAchievements();
     });

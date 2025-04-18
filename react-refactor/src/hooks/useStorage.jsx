@@ -6,6 +6,7 @@ export default function useStorage() {
     const [achievements, setAchevements] = useState([]);
     const [highscores, setHighscores] = useState(null);
     const [games, setGames] = useState([]);
+    const [types, setTypes] = useState([]);
 
     // trigger for useEffects -> updating data after changing by functions
     const [refreshUser, setUserTrigger] = useState(0);
@@ -81,6 +82,15 @@ export default function useStorage() {
             console.error("Error fetching games list:", error);
         }
     }
+    const fetchTypes = async () => {
+        try {
+            const alltypes = await window.storageAPI.getTypes();
+            // console.log(alltypes);
+            setTypes(alltypes);
+        } catch (error) {
+            console.error("Error fetching types list:", error);
+        }
+    }
 
     useEffect(() => {
         fetchUser();
@@ -88,6 +98,7 @@ export default function useStorage() {
         fetchAchievements();
         fetchHighscores();
         fetchGames();
+        fetchTypes();
     }, []);
 
     useEffect(() => {
@@ -100,6 +111,6 @@ export default function useStorage() {
         fetchSettings();
     }, [refreshSettings]);
 
-    return {user, settings, achievements, highscores, games,
+    return {user, settings, achievements, highscores, games, types,
             addScore, removeScore, unlockAchive};
 }

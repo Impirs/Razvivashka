@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 
-function List({ data, dataValue, onItemClick }) {
+const List = React.memo(({ data, dataValue, onItemClick }) => {
     return(
         <div className="ctrl-list">
             {data.map((item, index) => (
-                <div key={index} className="list-item" 
-                     onClick={() => onItemClick(dataValue[index])}
-                     style={{cursor: "pointer"}}>
+                <div 
+                    key={index} className="list-item" 
+                    onClick={() => onItemClick(dataValue[index])}
+                    style={{cursor: "pointer"}}
+                >
                     <h2>
                         {item}
                     </h2>
@@ -14,6 +16,6 @@ function List({ data, dataValue, onItemClick }) {
             ))}
         </div>
     );
-}
+});
 
 export default List;

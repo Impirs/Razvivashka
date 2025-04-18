@@ -11,6 +11,7 @@
     "game_syllable": "По сло-гам",
     "game_sum": "Сумма чисел",
 
+    "type_all": "Все категории",
     "type_logic": "Логика",
     "type_count": "Счет",
     "type_reading":"Чтение",
@@ -50,6 +51,8 @@
     "set_digit_show_available": "Подсвечивать доступные к нажатию клетки другим цветом",
     "set_syllable_check_all_letters_tested": "Засчитывать упражнения только когда все буквы были прочитаны",
     "set_shulte_hide_scored" : "Скрывать цифры после нажатия",
+
+    "choose_case": "Выберите...",
 
     "seconds": "секунд",
     "minutes": "минут",

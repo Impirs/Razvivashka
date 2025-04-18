@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import useStorage from "../../../hooks/useStorage";
 import usei18n from "../../../hooks/usei18n";
 
@@ -41,9 +41,9 @@ function AchievementPage() {
 
     if (isLoading) return <div>Loading...</div>;
 
-    const handleItemClick = (value) => {
+    const handleItemClick = useCallback((value) => {
         setgame(value);
-    }
+    });
 
     return (
         <div className="achievement-content">

@@ -1,12 +1,14 @@
 import React from "react";
 import AchievementPage from "./components/pages/achievements/ach_page";
-import './css/icons.module.css';
+import CatalogPage from "./components/pages/catalog/ctg_page";
+import './styles/icons.module.css';
 
 function App() {
-
+    // <AchievementPage />
     return (
         <div className="test-instrument">
-            <AchievementPage />
+            <CatalogPage />
+            
         </div>
     );
 }

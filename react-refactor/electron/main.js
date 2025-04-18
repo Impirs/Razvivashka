@@ -4,7 +4,7 @@ const log = require('electron-log');
 const path = require('path');
 const os = require('os');
 
-const { cleanTitlesAndDescriptions } = require('../../shared/data/update');
+const { cleanTitlesAndDescriptions, ensureTypes } = require('../../shared/data/update');
 const { migrateFromLocalStorage } = require('../../shared/data/migrate');
 const initialData = require('../../shared/data/initialData');
 const storage = require('./storage');
@@ -55,7 +55,7 @@ function createWindow() {
     });
 }
 
-// ========================= INITIALIZATION ========================= //
+// ========================= APP OPEN AND EXIT ========================= //
 
 app.whenReady().then(() => {
     storage.ensureAppDirExists();
@@ -64,7 +64,7 @@ app.whenReady().then(() => {
     api.handleLanguageAPI();
     api.handleStorageAPI();
 
-    if (!storage.hasMigrated()) {
+    if (!storage.hasFlag('.migrated')) {
         const localData = migrateFromLocalStorage();
 
         let userData, settingsData;
@@ -84,9 +84,19 @@ app.whenReady().then(() => {
 
         storage.saveUser(userData);
         storage.saveSettings(settingsData);
-        storage.setMigrated();
+        storage.setFlag('.migrated');
 
         console.log('Migration (or initialization) complete.');
+    }
+    if (!storage.hasFlag('.UPDtypes')) {
+        console.log('Game types are stored in an unsupported form. Updating...');
+        let userData = storage.getUser();
+
+        userData = ensureTypes(userData);
+        storage.saveUser(userData);
+        storage.setFlag('.UPDtypes');
+
+        console.log('Game types update complete.');
     }
 
     createWindow();
