@@ -30,6 +30,16 @@ function setFlag(flagName) {
     fs.writeFileSync(flagPath, 'true', 'utf8');
 }
 
+function saveUser(data) {
+    ensureAppDirExists();
+    writeJSON(userFile, data);
+}
+
+function saveSettings(data) {
+    ensureAppDirExists();
+    writeJSON(settingsFile, data);
+}
+
 function writeJSON(filePath, data) {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 4), 'utf8');
 }
@@ -41,16 +51,6 @@ function readJSON(filePath) {
 }
 
 //////////////////// functions for API ////////////////////
-
-function saveUser(data) {
-    ensureAppDirExists();
-    writeJSON(userFile, data);
-}
-
-function saveSettings(data) {
-    ensureAppDirExists();
-    writeJSON(settingsFile, data);
-}
 
 function getUser() {
     return readJSON(userFile);
@@ -73,6 +73,35 @@ function getTypes() {
 function getAchievements() {
     const data = getUser();
     return data.achievements;
+}
+
+function getHighScores(game) {
+    const data = getUser();
+    return data.highScores[game];
+}
+
+function getGameSettings() {
+    const data = getSettings();
+    return data.games;
+}
+
+function getVolume() {
+    const data = getSettings();
+    return data.volume;
+}
+
+function getName() {
+    const data = getUser();
+    return data.name;
+}
+
+function setName(name) {
+    if (typeof name !== "string") {
+        throw new TypeError("The 'name' argument must be a string.");
+    }
+    const data = getUser();
+    data.name = name.trim();
+    saveUser(data);
 }
 
 function unlockAchievement(game, id, score) {
@@ -100,11 +129,6 @@ function unlockAchievement(game, id, score) {
         saveUser(data);
     }
     return unlockedAchievements;
-}
-
-function getHighScores(game) {
-    const data = getUser();
-    return data.highScores[game];
 }
 
 function addHighScore(game, id, score, date) {
@@ -147,6 +171,37 @@ function removeHighScore(game, id, score, date) {
     }
 }
 
+function getPlayedCounter(game, id) {
+    try {
+        const data = loadData();
+        const playedGame = data.user.played[game]?.find(entry => entry.id === id);
+        return playedGame ? playedGame.count : 0;
+    } catch (error) {
+        console.error(`Error getting played counter for game "${game}" and id "${id}":`, error);
+        return 0;
+    }
+}
+
+function setPlayedCounter(game, id, counter) {
+    try {
+        const data = loadData();
+        let playedGame = data.user.played[game]?.find(entry => entry.id === id);
+
+        if (playedGame) {
+            playedGame.count = counter; 
+        } else {
+            if (!data.user.played[game]) {
+                data.user.played[game] = [];
+            }
+            data.user.played[game].push({ id, count: counter });
+        }
+
+        saveData(data);
+    } catch (error) {
+        console.error(`Error setting played counter for game "${game}" and id "${id}":`, error);
+    }
+}
+
 module.exports = {
     saveUser,
     saveSettings,
@@ -155,13 +210,20 @@ module.exports = {
     ensureAppDirExists,
     
     getUser,
-    getSettings,
+    getName,
     getGames,
     getTypes,
     getAchievements,
     getHighScores,
+    getPlayedCounter,
 
+    getSettings,
+    getVolume,
+    getGameSettings,
+
+    setName,
     addHighScore,
+    setPlayedCounter,
     removeHighScore,
     unlockAchievement
 };

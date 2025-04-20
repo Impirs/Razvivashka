@@ -28,14 +28,23 @@ function handleStorageAPI() {
     ipcMain.handle('get-settings', () => {
         return storage.getSettings();
     });
-
+    // save data
     ipcMain.handle('save-user', (event, data) => {
         storage.saveUser(data);
     });
     ipcMain.handle('save-settings', (event, data) => {
-        storage.saveSettings(data);
+        try {
+            storage.saveSettings(data);
+            return { success: true };
+        } catch (error) {
+            console.error('Error saving settings:', error);
+            throw error;
+        }
     });
-
+    // user info
+    ipcMain.handle('get-username', () => {
+        return storage.getName();
+    })
     ipcMain.handle('get-games', () => {
         return storage.getGames();
     });
@@ -48,7 +57,21 @@ function handleStorageAPI() {
     ipcMain.handle('get-highscores', () => {
         return storage.getHighScores();
     })
-
+    // settings info
+    ipcMain.handle('get-gamesettings', () => {
+        return storage.getGameSettings();
+    })
+    ipcMain.handle('get-volume', () => {
+        return storage.getVolume();
+    })
+    // change data 
+    ipcMain.handle('set-name', (event, name) => {
+        if (typeof name !== "string") {
+            throw new TypeError("The 'name' argument must be a string.");
+        }
+        console.warn(name === "" ? "Username set to an empty string." : `Username set to: ${name}`);
+        storage.setName(name.trim());
+    });
     ipcMain.handle('add-highscore', (event, game, id, score, date) => {
         storage.addHighScore(game, id, score, date);
     });

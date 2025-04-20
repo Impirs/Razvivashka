@@ -20,12 +20,23 @@ contextBridge.exposeInMainWorld('languageAPI', {
 contextBridge.exposeInMainWorld('storageAPI', {
     getUser: () => ipcRenderer.invoke('get-user'),
     getSettings: () => ipcRenderer.invoke('get-settings'),
+    saveSettings: (data) => ipcRenderer.invoke('save-settings', data),
 
+    getName: () => ipcRenderer.invoke('get-username'),
     getAchievements: () => ipcRenderer.invoke('get-achievements'),
     getHighScores: () => ipcRenderer.invoke('get-highscores'),
     getGames: () => ipcRenderer.invoke('get-games'),
     getTypes: () => ipcRenderer.invoke('get-types'),
+    getVolume: () => ipcRenderer.invoke('get-volume'),
+    getGameSettings: () => ipcRenderer.invoke('get-gamesettings'),
 
+    setName: (name) => {
+        if (typeof name !== "string") {
+            console.error("Invalid name passed to setName:", name);
+            return Promise.reject(new Error("Invalid name"));
+        }
+        return ipcRenderer.invoke('set-name', name.trim());
+    },
     addHighScore: (game, id, score, date) => 
         ipcRenderer.invoke('add-highscore', game, id, score, date),
     removeHighScore: (game, id, score, date) => 
