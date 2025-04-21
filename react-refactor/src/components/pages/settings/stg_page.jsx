@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import TextInput from "../../inputs/input";
 import DropdownMenu from "../../inputs/dropdown";
 import Slider from "../../inputs/slider";
@@ -34,10 +35,9 @@ function SettingsPage() {
 
     useEffect(() => {
         const fetchTranslations = async () => {
-            if (!t || !lang) return; // Проверяем, что t и lang готовы
+            if (!t || !lang) return;
 
             try {
-                // Запрашиваем переводы
                 const generalSettings = await t("general_settings");
                 const player = await t("player");
                 const name = await t("name");
@@ -49,7 +49,6 @@ function SettingsPage() {
                 const gameEffects = await t("volume_effects");
                 const gameplaySettings = await t("gameplay_settings");
 
-                // Запрашиваем переводы для игр и их настроек
                 const gameTitles = {};
                 for (const [gameKey, settings] of Object.entries(game_settings || {})) {
                     const gameTitle = await t(`game_${gameKey}`);
@@ -64,7 +63,6 @@ function SettingsPage() {
                     }
                 }
 
-                // Устанавливаем переводы в состояние
                 setTranslations({
                     generalSettings,
                     username,

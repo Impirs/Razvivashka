@@ -48,6 +48,7 @@ export default function useStorage() {
             console.error("Error trying to set new username:", error);
         }
     };
+    
     // functions changing settings data
     const changeVolume = (key, value) => {
         try {

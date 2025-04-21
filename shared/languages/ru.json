@@ -3,12 +3,14 @@
     "exit": "Выход",
 
     "catalog": "Каталог",
+    "play": "Играть",
 
     "game_all": "Все игры",
     "game_digit": "Состав числа",
     "game_shulte": "Таблица Шульте",
     "game_syllable": "По сло-гам",
     "game_sum": "Сумма чисел",
+
     "type_all": "Все категории",
     "type_logic": "Логика",
     "type_count": "Счет",
