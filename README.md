@@ -5,6 +5,7 @@
 ![Latest Release](https://img.shields.io/github/v/release/Impirs/Razvivashka)
 ![Downloads](https://img.shields.io/github/downloads/Impirs/Razvivashka/total)
 ![Visitors](https://visitor-badge.glitch.me/badge?page_id=Impirs.Razvivashka)
+![License](https://img.shields.io/badge/license-MIT--Limited-orange)
 
 ---
 
