@@ -1,54 +1,47 @@
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import useStorage from "../../../hooks/useStorage";
 import usei18n from "../../../hooks/usei18n";
 
-import List from "../../lists/ctrl_list";
+import DropdownMenu from "../../inputs/dropdown";
 import AchievementList from "./ach_list";
 
-function AchievementPage() {
-    const [ selectedgame, setgame ] = useState("all");
-    const [ gameslist, setGameslist ] = useState(["game_all"]);
+import '../../../styles/modules/achievements.scss';
 
+function AchievementPage() {
+    const [selectedGame, setSelectedGame] = useState("all");
     const { games, isLoading } = useStorage();
     const { t } = usei18n();
 
-    useEffect(() => {
-        const fetchGameNames = async () => {
-            if (isLoading) return;
-
-            const gamesArr = games || [];
-            const translatedAllGames = await t('game_all');
-            const translatedGameNames = await Promise.all(
-                gamesArr.map(async (game) => {
-                    const translatedName = await t(`game_${game.id}`);
-                    return translatedName;
-                })
-            );
-
-            setGameslist([translatedAllGames, ...translatedGameNames]);
-        };
-
-        fetchGameNames();
-    }, [games, isLoading, t]);
-
-    const gametags = useMemo(() => {
+    const options = useMemo(() => {
         if (isLoading) return [];
-    
         const gamesArr = games || [];
-        const gameNames = gamesArr.map(game => game.id);
-        return ["all", ...gameNames];
+        return ["game_all", ...gamesArr.map(game => `game_${game.id}`)];
     }, [games, isLoading]);
 
     if (isLoading) return <div>Loading...</div>;
 
-    const handleItemClick = useCallback((value) => {
-        setgame(value);
-    });
+    const handleSelect = useCallback((value) => {
+        setSelectedGame(value.slice(5));
+    }, []);
 
     return (
-        <div className="achievement-content">
-            <List data={gameslist} dataValue={gametags} onItemClick={handleItemClick} />
-            <AchievementList game={selectedgame} />
+        <div className="page-content">
+            <div className="container-header">
+                <div>{/* Поиск */}</div>
+                <div>{/* Центр */}</div>
+                <div style={{justifySelf: "center"}}>
+                    {
+                        <DropdownMenu
+                            options={options}
+                            onSelect={handleSelect}
+                            value={`game_${selectedGame}`}
+                        />
+                    }
+                </div>
+            </div>
+            <div className="container-content">
+                <AchievementList game={selectedGame} />
+            </div>
         </div>
     );
 }

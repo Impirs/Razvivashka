@@ -8,6 +8,8 @@ import Checkbox from "../../inputs/checkbox";
 import usei18n from "../../../hooks/usei18n";
 import useStorage from "../../../hooks/useStorage";
 
+import '../../../styles/modules/settings.scss';
+
 function SettingsPage() {
     const {
         username,
@@ -85,6 +87,7 @@ function SettingsPage() {
     }, [game_settings, t, lang]);
 
     const handleCheckbox = (gameKey, settingKey, newValue) => {
+        // console.log(gameKey,settingKey,newValue);
         setFeature(gameKey, settingKey, newValue);
     };
 
@@ -93,7 +96,9 @@ function SettingsPage() {
     };
 
     const handleUsernameChange = (newUsername) => {
-        changeUsername(newUsername);
+        if (username !== newUsername) {
+            changeUsername(newUsername);
+        }
     };
 
     const handleLanguageChange = (newLang) => {
@@ -101,89 +106,96 @@ function SettingsPage() {
     };
 
     return (
-        <div className="settings-content">
-            {/* General Settings */}
-            <section className="general">
-                <div className="section-header">
-                    <h2>{translations.generalSettings}</h2>
-                    <hr />
-                </div>
-                <div className="section-content">
-                    {/* Username Setting */}
-                    <div className="settings-line-parameter">
-                        <h3>{translations.player}</h3>
-                        <TextInput
-                            placeholder={translations.name}
-                            value={(username === "default" )||(username === "") ? "" : username}
-                            onChange={handleUsernameChange}
-                        />
-                    </div>
-
-                    {/* Language Setting */}
-                    <div className="settings-line-parameter">
-                        <h3>{translations.language}</h3>
-                        <DropdownMenu
-                            options={["en", "ru", "sb_l", "sb_k"]}
-                            placeholder={translations.currentLanguage}
-                            onSelect={handleLanguageChange}
-                        />
-                    </div>
-
-                    {/* Volume Settings */}
+        <div className="page-content">
+            <div className="container-header">
+                <div>{/* Поиск */}</div>
+                <div>{/* Центр */}</div>
+                <div>{/* Дропдаун */}</div>
+            </div>
+            <div className="container-content">
+                {/* General Settings */}
+                <section className="general">
                     <div className="section-header">
-                        <h2>{translations.volume}</h2>
+                        <h2>{translations.generalSettings}</h2>
                         <hr />
                     </div>
                     <div className="section-content">
+                        {/* Username Setting */}
                         <div className="settings-line-parameter">
-                            <h3>{translations.notification}</h3>
-                            <Slider
-                                value={volume?.notification || 0.5}
-                                onChange={(value) => handleVolumeChange("notification", value)}
+                            <h3>{translations.player}</h3>
+                            <TextInput
+                                placeholder={translations.name}
+                                value={(username === "default" )||(username === "") ? "" : username}
+                                onChange={handleUsernameChange}
                             />
                         </div>
+
+                        {/* Language Setting */}
                         <div className="settings-line-parameter">
-                            <h3>{translations.gameEffects}</h3>
-                            <Slider
-                                value={volume?.game_effects || 0.5}
-                                onChange={(value) => handleVolumeChange("game_effects", value)}
+                            <h3>{translations.language}</h3>
+                            <DropdownMenu
+                                options={["en", "ru", "sb_l", "sb_k"]}
+                                placeholder={translations.currentLanguage}
+                                onSelect={handleLanguageChange}
                             />
+                        </div>
+
+                        {/* Volume Settings */}
+                        <div className="section-header">
+                            <h2>{translations.volume}</h2>
+                            <hr />
+                        </div>
+                        <div className="section-content">
+                            <div className="settings-line-parameter">
+                                <h3>{translations.notification}</h3>
+                                <Slider
+                                    value={volume?.notification || 0.5}
+                                    onChange={(value) => handleVolumeChange("notification", value)}
+                                />
+                            </div>
+                            <div className="settings-line-parameter">
+                                <h3>{translations.gameEffects}</h3>
+                                <Slider
+                                    value={volume?.game_effects || 0.5}
+                                    onChange={(value) => handleVolumeChange("game_effects", value)}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Gameplay Settings */}
-            <section className="gameplay">
-                <div className="section-header">
-                    <h2>{translations.gameplaySettings}</h2>
-                    <hr />
-                </div>
-                <div className="section-content">
-                    {game_settings &&
-                        Object.entries(game_settings).map(([gameKey, settings]) => (
-                            <div key={gameKey}>
-                                <h3>{translations.games[gameKey]?.title}</h3>
-                                {Object.entries(settings).map(([settingKey, setting]) => (
-                                    <div
-                                        className="settings-line-parameter"
-                                        key={`${gameKey}_${settingKey}`}
-                                    >
-                                        <div className="game-setting">
-                                            <h4>{translations.games[gameKey]?.settings[settingKey]}</h4>
+                {/* Gameplay Settings */}
+                <section className="gameplay">
+                    <div className="section-header">
+                        <h2>{translations.gameplaySettings}</h2>
+                        <hr />
+                    </div>
+                    <div className="section-content">
+                        {game_settings &&
+                            Object.entries(game_settings).map(([gameKey, settings]) => (
+                                <div key={gameKey}>
+                                    <h3>{translations.games[gameKey]?.title}</h3>
+                                    {Object.entries(settings).map(([settingKey, setting]) => (
+                                        <div
+                                            className="settings-line-parameter"
+                                            key={`${gameKey}_${settingKey}`}
+                                        >
+                                            <div className="game-setting">
+                                                <h4>{translations.games[gameKey]?.settings[settingKey]}</h4>
+                                            </div>
+                                            <Checkbox
+                                                checked={setting.state}
+                                                onClick={(newValue) =>
+                                                    handleCheckbox(gameKey, settingKey, newValue)
+                                                }
+                                            />
                                         </div>
-                                        <Checkbox
-                                            checked={setting.state}
-                                            onClick={(newValue) =>
-                                                handleCheckbox(gameKey, settingKey, newValue)
-                                            }
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                </div>
-            </section>
+                                    ))}
+                                </div>
+                            ))}
+                    </div>
+                </section>
+            </div>
         </div>
     );
 }

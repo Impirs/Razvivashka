@@ -41,9 +41,12 @@ export default function useStorage() {
         }
     };
     const changeUsername = async (newName) => {
+        const trimmed = newName.trim();
+        if (trimmed === username) return;
         try {
-            await window.storageAPI.setName(newName.trim());
+            await window.storageAPI.setName(trimmed);
             setUserTrigger((prev) => prev + 1);
+            console.log("changeUsername set:", trimmed);
         } catch (error) {
             console.error("Error trying to set new username:", error);
         }
@@ -52,36 +55,36 @@ export default function useStorage() {
     // functions changing settings data
     const changeVolume = (key, value) => {
         try {
-            setVolume((prevVolume) => ({
-                ...prevVolume,
-                [key]: value, 
-            }));
+            setVolume((prevVolume) => {
+                const updatedVolume = { ...prevVolume, [key]: value };
+                window.storageAPI.saveSettings({ ...settings, volume: updatedVolume });
+                return updatedVolume;
+            });
             setSettingsTrigger((prev) => prev + 1);
-            window.storageAPI.saveSettings({ ...settings, volume: { ...volume, [key]: value } });
         } catch (error) {
             console.error(`Error updating volume for key "${key}":`, error);
         }
     };
     const setFeature = (gameKey, featureKey, newState) => {
         try {
-            setGameSettings((prevGameSettings) => ({
-                ...prevGameSettings,
-                [gameKey]: {
-                    ...prevGameSettings[gameKey],
-                    [featureKey]: newState, 
-                },
-            }));
-            setSettingsTrigger((prev) => prev + 1);
-            window.storageAPI.saveSettings({
-                ...settings,
-                games: {
-                    ...game_settings,
+            setGameSettings((prevGameSettings) => {
+                const updatedGameSettings = {
+                    ...prevGameSettings,
                     [gameKey]: {
-                        ...game_settings[gameKey],
-                        [featureKey]: newState,
+                        ...prevGameSettings[gameKey],
+                        [featureKey]: { 
+                            ...prevGameSettings[gameKey][featureKey], 
+                            state: newState 
+                        },
                     },
-                },
+                };
+                window.storageAPI.saveSettings({
+                    ...settings,
+                    games: updatedGameSettings,
+                });
+                return updatedGameSettings;
             });
+            setSettingsTrigger((prev) => prev + 1);
         } catch (error) {
             console.error(
                 `Error updating feature "${featureKey}" for game "${gameKey}":`,

@@ -1,0 +1,146 @@
+@use '../colors';
+
+.main-layout {
+    background-color: colors.$background;
+    border: 1px solid colors.$primary;
+    border-radius: 24px;
+    box-shadow: 0 4px 30px colors.$shadow;
+    color: #232323;
+
+    display: flex;
+    position: relative;
+    align-items: center;
+
+    padding: 30px 45px;
+    gap: 40px;
+    height: 620px;
+    width: 400px;
+}
+
+.secondary-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    gap: 0;
+
+    .layout-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 80px;
+        background: transparent;
+        margin-bottom: 0;
+        
+        h1 {
+            flex: 1 1 auto;
+            text-align: center;
+            font-size: 38px;
+            padding: 0 40px;
+            color: colors.$text_secondary;
+            margin: 0;
+            font-weight: 700;
+        }
+    }
+
+    .layout-content {
+        background-color: colors.$background;
+        border: 1px solid colors.$primary;
+        border-radius: 24px;
+        box-shadow: 0 4px 30px colors.$shadow;
+        color: #232323;
+
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+        align-items: center;
+
+        width: 1240px;
+        height: 840px;
+        gap: 20px;
+
+        .page-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            .container-header {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                align-items: center;
+                top: 0px;
+                width: calc(100% - 44px);
+                height: 60px;
+                content: '';
+            
+                border-top-right-radius: 22px;
+                border-top-left-radius: 22px;
+                border-bottom: 1px solid colors.$primary;
+
+                background-color: #eb92beB0;
+                padding: 0 22px;
+            }
+
+            .container-content {
+                overflow-y: auto;
+                max-height: calc(100% - 120px);
+                padding: 20px 35px;
+            }
+        }
+    }
+}
+
+.game-central-layout {
+    width: 1510px;
+    height: 840px;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    .game-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 80px;
+        background: transparent;
+        margin-bottom: 0;
+
+        h1 {
+            flex: 1 1 auto;
+            text-align: center;
+            font-size: 38px;
+            padding: 0 40px;
+            color: colors.$text_secondary;
+            margin: 0;
+            font-weight: 700;
+        }
+    }
+
+    .game-content {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        gap: 30px;
+
+        .game-side {
+            width: 300px;
+            min-width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .game-main {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+}

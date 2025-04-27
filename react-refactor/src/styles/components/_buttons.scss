@@ -1,0 +1,67 @@
+@use '../colors';
+
+.nav-button {
+    font-family: 'Snide hand';
+    position: relative;
+    display: flex;
+    align-items: center;    
+    border: 1px solid colors.$primary;
+    font-size: 25px;
+    background-color: colors.$fourth;
+    color: colors.$text_secondary;
+    cursor: pointer;
+    transition: 
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s;
+
+    &.small {
+        height: 58px;
+        width: 58px;
+        border-radius: 16px;
+        justify-content: center;
+        .nav-btn-icon {
+            margin: 0;
+        }
+        h2 {
+            display: none;
+        }
+    }
+
+    &.large {
+        height: 84px;
+        padding: 10px 24px;
+        border-radius: 16px;
+        width: 340px;
+        justify-content: flex-start;
+        .nav-btn-icon {
+            margin-right: 20px;
+        }
+        h2 {
+            margin: 0;
+            width: auto;
+            font-size: 25px;
+            color: colors.$text_secondary;
+        }
+    }
+
+    .nav-btn-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(320deg, colors.$primary, colors.$secondary, colors.$third);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 8px;
+    }
+
+    &:hover {
+        color: colors.$third;
+        background-color: colors.$hover;
+        border: 2px solid colors.$third;
+        h2 {
+            color: colors.$third;
+        }
+    }
+}

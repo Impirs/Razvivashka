@@ -5,7 +5,7 @@ import usei18n from "../../hooks/usei18n";
 
 function HomePage() {
     const { t } = usei18n();
-const navigate = useNavigate(); // Хук для навигации
+    const navigate = useNavigate(); // Хук для навигации
 
     const [translations, setTranslations] = useState({
         application: "",
@@ -48,11 +48,11 @@ const navigate = useNavigate(); // Хук для навигации
 
     return (
         <div className="home-page">
-                        <h1>{translations.application}</h1>
-            <NavButton key={"play"} value={translations.play} onClick={handlePlayClick} />
-            <NavButton key={"achievements"} value={translations.achievements} onClick={handleAchievementsClick} />
-            <NavButton key={"settings"} value={translations.settings} onClick={handleSettingsClick} />
-            <NavButton key={"exit"} value={translations.exit} onClick={handleExitClick} />
+            <h1>{translations.application}</h1>
+            <NavButton key={"play"} id={"play"} value={translations.play} onClick={handlePlayClick} />
+            <NavButton key={"achievements"} id={"achieve"} value={translations.achievements} onClick={handleAchievementsClick} />
+            <NavButton key={"settings"} id={"settings"} value={translations.settings} onClick={handleSettingsClick} />
+            <NavButton key={"exit"} id={"back"} value={translations.exit} onClick={handleExitClick} />
         </div>
     );
 }

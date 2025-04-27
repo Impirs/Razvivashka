@@ -27,10 +27,3 @@ const TypesLine = React.memo(({game}) => {
 });
 
 export default TypesLine;
-
-/*
-Логика          #6b9eb8 
-Счёт            #a3c47e
-Чтение          #d6a86a 
-Внимательность  #b29dd9 
-*/

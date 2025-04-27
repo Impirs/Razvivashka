@@ -7,6 +7,9 @@ export default defineConfig({
     root: '.',
     server: {
         port: 5173,
+        fs: {
+            allow: ['..'],
+        },
     },
     build: {
         outDir: 'dist',
@@ -17,5 +20,10 @@ export default defineConfig({
             '@': path.resolve(__dirname, './src'),
             '@shared': path.resolve(__dirname, '../shared'),
         },
-    }
+    },
+    css: {
+        modules: {
+            scopeBehaviour: "local",
+        },
+    },
 });

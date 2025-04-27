@@ -1,0 +1,56 @@
+.achievement-notification {
+    display: flex;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 100px;
+    padding: 12px 24px;
+    background: colors.$fourth;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    border: 2px solid colors.$third;
+    border-radius: 12px;
+    box-shadow: 0 0 10px colors.$gold_shadow;
+    animation: fadeInOut 3s ease-in-out;
+    gap: 16px;
+    cursor: pointer;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+}
+
+.achievement-icon {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    &.rank-3 { background: colors.$bronze; }
+    &.rank-2 { background: colors.$silver; }
+    &.rank-1 { background: colors.$gold; }
+}
+
+.awards-section {
+    display: flex;
+    width: 350px;
+    flex-direction: column;
+
+    h3, p {
+        color: colors.$text_secondary;
+        margin: 0;
+        justify-content: flex-start;
+        cursor: pointer;
+    }
+
+    h3 {
+        font-size: 25px;
+    }
+    p {
+        font-size: 14px;
+    }
+}

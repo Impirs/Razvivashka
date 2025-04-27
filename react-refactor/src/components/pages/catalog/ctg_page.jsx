@@ -4,6 +4,8 @@ import useStorage from "../../../hooks/useStorage";
 import GamesList from "./ctg_list";
 import DropdownMenu from "../../inputs/dropdown";
 
+import '../../../styles/modules/catalog.scss';
+
 function CatalogPage() {
     const { games, types, isLoading } = useStorage();
 
@@ -32,11 +34,20 @@ function CatalogPage() {
     }, []);
 
     return (
-        <div className="catalog-container">
-            <div className="content-header">
-                <DropdownMenu options={options} onSelect={handleFilter} />
+        <div className="page-content">
+            <div className="container-header">
+                <div>{/* Поиск */}</div>
+                <div>{/* Центр */}</div>
+                <div style={{justifySelf: "end"}}>
+                    {
+                        <DropdownMenu 
+                            options={options} 
+                            onSelect={handleFilter} 
+                        />
+                    }
+                </div>
             </div>
-            <div className="catalog-content">
+            <div className="container-content">
                 <GamesList games={gamesMeta} />
             </div>
         </div>
