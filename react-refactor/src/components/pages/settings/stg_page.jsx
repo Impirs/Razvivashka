@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useLanguage } from "../../../lang_provider";
 
 import TextInput from "../../inputs/input";
 import DropdownMenu from "../../inputs/dropdown";
 import Slider from "../../inputs/slider";
 import Checkbox from "../../inputs/checkbox";
 
-import usei18n from "../../../hooks/usei18n";
 import useStorage from "../../../hooks/useStorage";
 
 import '../../../styles/modules/settings.scss';
@@ -19,7 +19,7 @@ function SettingsPage() {
         changeVolume,
         setFeature,
     } = useStorage();
-    const { t, lang, setLanguage } = usei18n();
+    const { t, lang, setLanguage } = useLanguage();
 
     const [translations, setTranslations] = useState({
         generalSettings: "",

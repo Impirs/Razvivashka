@@ -1,12 +1,12 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from "../../lang_provider";
 
 import NavButton from '../buttons/nav_btn';
-import usei18n from '../../hooks/usei18n';
 
 const SecondaryLayout = ({ pageType }) => {
     const [title, setTitle] = useState("");
-    const {t} = usei18n();
+    const {t, lang} = useLanguage();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -20,14 +20,14 @@ const SecondaryLayout = ({ pageType }) => {
 
     useEffect(() => {
         const fetchTranslation = async () => {
-            if(!t) return;
-
+            if(!t || !lang) return;
+            // console.log(lang);
             const translation = await t(pageType);
             setTitle(translation);
         };
 
         fetchTranslation();
-    }, [t])
+    }, [t, lang, pageType])
 
     const handleBack = () => {
         const stack = JSON.parse(sessionStorage.getItem('navStack') || '[]');

@@ -14,7 +14,7 @@ function GameBadge({game}) {
     }, [game?.id]);
 
     const handleClick = () => {
-        if (game?.id === "digit" || game?.id === "shulte") {
+        if (game?.id) {
             navigate(`/catalog/${game.id}`);
         }
     };

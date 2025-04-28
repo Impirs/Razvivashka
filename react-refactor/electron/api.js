@@ -3,7 +3,7 @@ const language = require('../../shared/data/language.js');
 const storage = require('./storage');
 
 function handleLanguageAPI() {
-    language.loadLanguage('ru');
+    language.initLanguage();
 
     ipcMain.handle('language-get', (event) => {
         // console.log('Handling language-get');
@@ -11,7 +11,7 @@ function handleLanguageAPI() {
     });
 
     ipcMain.handle('language-set', (event, langCode) => {
-        // console.log(`Handling language-set: ${langCode}`);
+        console.log(`Handling language-set: ${langCode}`);
         return language.setLanguage(langCode);
     });
 
