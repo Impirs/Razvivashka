@@ -1,5 +1,5 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import React, {useState, useEffect} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 import GameLeftPanel from "../gameplay/left_panel";
 import GameMainPanel from "../gameplay/central_panel";
@@ -9,12 +9,13 @@ import usei18n from "../../hooks/usei18n";
 
 const GameCentralLayout = ({ gameId }) => {
     const [gameTitle, setTitle] = useState("");
-    const [settings, setSettings] = useState(null);
+    const [settings, setSettings] = useState(null); // обычные настройки (меню)
+    const [activeSettings, setActiveSettings] = useState(null); // настройки для текущей игры/рекордов
     const [started, setStarted] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
-    const {t} = usei18n();
+    const { t } = usei18n();
 
     useEffect(() => {
         const stack = JSON.parse(sessionStorage.getItem('navStack') || '[]');
@@ -26,8 +27,7 @@ const GameCentralLayout = ({ gameId }) => {
 
     useEffect(() => {
         const fetchTranslation = async () => {
-            if(!t || !gameId) return;
-
+            if (!t || !gameId) return;
             const translation = await t(`game_${gameId}`);
             setTitle(translation);
         };
@@ -49,20 +49,20 @@ const GameCentralLayout = ({ gameId }) => {
             navigate('/');
         }
     };
-    
+
     const handleSecond = () => {
         navigate('/settings');
     };
 
-    const handleStart = (params) => {
-        // Для digit: { target, size }
-        // Для shulte: { size }
-        if (gameId === "digit") {
-            setSettings({ target: Number(params.target), size: Number(params.size) });
-        } else if (gameId === "shulte") {
-            setSettings({ size: Number(params.size) });
-        }
+    // При старте фиксируем активные настройки и запускаем игру
+    const handleStart = () => {
+        setActiveSettings(settings);
         setStarted(true);
+    };
+
+    // После завершения игры сбрасываем started (делается в central_panel по фазе pregame)
+    const handleGameEnd = () => {
+        setStarted(false);
     };
 
     return (
@@ -74,22 +74,25 @@ const GameCentralLayout = ({ gameId }) => {
             </div>
             <div className="game-content">
                 <aside className="game-side left">
-                    <GameLeftPanel 
-                        gameId={gameId} 
+                    <GameLeftPanel
+                        gameId={gameId}
                         onStart={handleStart}
+                        setSettings={setSettings}
+                        settings={settings}
                     />
                 </aside>
                 <main className="game-main">
-                    <GameMainPanel 
-                        gameId={gameId} 
-                        settings={settings}
+                    <GameMainPanel
+                        gameId={gameId}
+                        settings={activeSettings}
                         started={started}
+                        onGameEnd={handleGameEnd}
                     />
                 </main>
                 <aside className="game-side right">
-                    <ScoreSection 
+                    <ScoreSection
                         gameId={gameId}
-                        settings={settings} 
+                        settings={settings}
                     />
                 </aside>
             </div>

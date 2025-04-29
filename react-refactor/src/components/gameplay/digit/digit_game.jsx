@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import usei18n from "../../../hooks/usei18n";
-import useStorage from "../../../hooks/useStorage";
+import { useStorageContext } from "../../../provider_storage";
+import { useAchNotif } from "../../../provider_notif";
 
-// Наборы чисел для каждой цели и размера поля
 const numberDistribution = {
     6: { board: 7, numbers: { 1:8, 2:8, 3:16, 4:8, 5:8 } },
     7: { board: 7, numbers: { 1:8, 2:8, 3:8, 4:8, 5:8, 6:8 } },
@@ -66,43 +66,58 @@ const isNextToEmpty = (board, row, col) => {
     });
 };
 
-const DigitGame = ({ settings, onMistake, onWin, gameState, disabled }) => {
-    const { game_settings, unlockAchive, addScore } = useStorage();
-    // removing and showing score will be in score section
+const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
+    const { game_settings, unlockAchive, addScore } = useStorageContext();
+    const { notifyAchievements } = useAchNotif();
     const { t } = usei18n();
 
     const target = settings.target;
     const size = settings.size;
-    const enableCells = game_settings?.digit?.show_available?.state === true;
+    const enableCells = game_settings?.digit?.show_available?.state;
     const [board, setBoard] = useState([]);
     const [selected, setSelected] = useState([]);
-    const [status, setStatus] = useState(""); // "win" | "lose" | ""
+    const [scoreAdded, setScoreAdded] = useState(false);
 
     useEffect(() => {
         setBoard(generateBoard(target, size));
         setSelected([]);
-        setStatus("");
-    }, [target, size]);
+        setScoreAdded(false);
+    }, [target, size, phase]);
 
-    // Проверка победы
     useEffect(() => {
-        if (board.length && board.flat().every(cell => cell === null)) {
-            setStatus("win");
-            if (onWin) onWin();
+        if (phase === "playing" && board.length && board.flat().every(cell => cell === null)) {
+            onWin && onWin();
         }
-    }, [board, onWin]);
+    }, [board, phase, onWin]);
 
-    // Обработка поражения
     useEffect(() => {
-        if (gameState === "lose") setStatus("lose");
-    }, [gameState]);
+        async function updateRecords() {
+            setScoreAdded(true);
+            const highId = `${size}x${target}`;
+            const today = new Date();
+            const date = today.getDate();
+            const month = today.getMonth() + 1;
+            const year = today.getFullYear();
+            const hours = today.getHours().toString().padStart(2, "0");
+            const minutes = today.getMinutes().toString().padStart(2, "0");
+            const scoreDate = `${hours}:${minutes} ${date}.${month}.${year}`;
 
-    // Обработка данных из Storage
-    useEffect(() => {
-        if (!t) return;
+            if (addScore) {
+                await addScore("digit", highId, timer, scoreDate);
+            }
 
+            if (unlockAchive) {
+                const newAchievements = await unlockAchive("digit", highId, timer);
+                if (newAchievements && newAchievements.length > 0) {
+                    notifyAchievements(newAchievements);
+                }
+            }
+        }
 
-    }, [ t ] )
+        if (phase === "win" && !scoreAdded) {
+            updateRecords();
+        }
+    }, [phase, scoreAdded, addScore, unlockAchive, size, target, timer, notifyAchievements]);
 
     const handleCellClick = (row, col) => {
         if (disabled || board[row][col] === null || selected.length >= 2) return;
@@ -115,10 +130,8 @@ const DigitGame = ({ settings, onMistake, onWin, gameState, disabled }) => {
             setSelected(newSelected);
 
             if (newSelected.length === 2) {
-                // Проверяем сумму
                 const sum = newSelected[0].value + newSelected[1].value;
                 if (sum === target) {
-                    // Убираем выбранные клетки
                     setTimeout(() => {
                         setBoard(prev => {
                             const newBoard = prev.map(rowArr => [...rowArr]);
@@ -129,19 +142,26 @@ const DigitGame = ({ settings, onMistake, onWin, gameState, disabled }) => {
                         setSelected([]);
                     }, 300);
                 } else {
-                    if (onMistake) onMistake();
+                    onMistake && onMistake();
                     setTimeout(() => setSelected([]), 300);
                 }
             }
         }
     };
 
-    // Победа/поражение экраны
-    if (status === "win") {
-        return <div className="win-screen">Победа!</div>;
+    if (phase === "win") {
+        return (
+            <div className="win-screen">
+                Победа!
+            </div>
+        );
     }
-    if (status === "lose") {
-        return <div className="lose-screen">Поражение!</div>;
+    if (phase === "lose") {
+        return (
+            <div className="lose-screen">
+                Поражение!
+            </div>
+        );
     }
 
     return (
@@ -151,9 +171,9 @@ const DigitGame = ({ settings, onMistake, onWin, gameState, disabled }) => {
                 className="digit-board"
                 style={{
                     display: "grid",
-                    gridTemplateColumns: `repeat(${size}, 50px)`,
-                    gridTemplateRows: `repeat(${size}, 50px)`,
-                    gap: "6px",
+                    gridTemplateColumns: `repeat(${size}, 64px)`,
+                    gridTemplateRows: `repeat(${size}, 64px)`,
+                    gap: "1px",
                 }}
             >
                 {board.map((rowArr, row) =>
@@ -172,17 +192,7 @@ const DigitGame = ({ settings, onMistake, onWin, gameState, disabled }) => {
                                 }
                                 onClick={() => handleCellClick(row, col)}
                                 style={{
-                                    width: 50,
-                                    height: 50,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontWeight: 600,
-                                    fontSize: 20,
                                     cursor: isEnabled && !disabled ? "pointer" : "default",
-                                    background: isSelected ? "#e0e0ff" : isEmpty ? "#f5f5f5" : "#fff",
-                                    border: "1.5px solid #888",
-                                    borderRadius: 8,
                                     userSelect: "none"
                                 }}
                             >

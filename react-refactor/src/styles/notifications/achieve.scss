@@ -1,56 +1,46 @@
 .achievement-notification {
-    display: flex;
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 400px;
-    height: 100px;
-    padding: 12px 24px;
-    background: colors.$fourth;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    border: 2px solid colors.$third;
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+    z-index: 9999;
+    min-width: 320px;
+    max-width: 400px;
+    background: #fff;
+    border: 2px solid #d4af37;
     border-radius: 12px;
-    box-shadow: 0 0 10px colors.$gold_shadow;
-    animation: fadeInOut 3s ease-in-out;
-    gap: 16px;
-    cursor: pointer;
-}
-
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-}
-
-.achievement-icon {
-    width: 80px;
-    height: 80px;
-    cursor: pointer;
-    &.rank-3 { background: colors.$bronze; }
-    &.rank-2 { background: colors.$silver; }
-    &.rank-1 { background: colors.$gold; }
-}
-
-.awards-section {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
     display: flex;
-    width: 350px;
-    flex-direction: column;
-
-    h3, p {
-        color: colors.$text_secondary;
-        margin: 0;
-        justify-content: flex-start;
-        cursor: pointer;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    cursor: pointer;
+    animation: notif-fade-in 0.3s;
+    transition: box-shadow 0.2s;
+    &:hover {
+        box-shadow: 0 8px 32px rgba(0,0,0,0.28);
     }
-
-    h3 {
-        font-size: 25px;
+    .achievement-icon {
+        width: 48px;
+        height: 48px;
+        background: url('/trophy.svg') center/cover no-repeat;
+        border-radius: 50%;
+        flex-shrink: 0;
     }
-    p {
-        font-size: 14px;
+    .achievement-info {
+        flex: 1;
+        h3 {
+            margin: 0 0 4px 0;
+            font-size: 1.1em;
+            color: #d4af37;
+        }
+        p {
+            margin: 0;
+            font-size: 0.98em;
+            color: #333;
+        }
     }
+}
+@keyframes notif-fade-in {
+    from { opacity: 0; transform: translateY(40px);}
+    to   { opacity: 1; transform: translateY(0);}
 }

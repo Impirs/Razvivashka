@@ -3,6 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import DigitGame from "./digit/digit_game";
 import ShulteGame from "./shulte/shulte_game";
 
+import "../../styles/modules/game_shulte.scss";
+import "../../styles/modules/game_digit.scss";
+
 const formatTime = (seconds) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
@@ -11,47 +14,84 @@ const formatTime = (seconds) => {
 
 const MAX_MISTAKES = 3;
 
-const GameMainPanel = ({ gameId, settings, started }) => {
+const GAME_PHASES = {
+    PREGAME: "pregame",
+    PLAYING: "playing",
+    WIN: "win",
+    LOSE: "lose"
+};
+
+const WIN_TIMEOUT = 10000;
+const LOSE_TIMEOUT = 5000;
+
+const GameMainPanel = ({ gameId, settings, started, onGameEnd }) => {
     const [mistakes, setMistakes] = useState(0);
     const [timer, setTimer] = useState(0);
-    const [gameState, setGameState] = useState("playing");
+    const [phase, setPhase] = useState(GAME_PHASES.PREGAME);
     const timerRef = useRef(null);
+    const phaseTimeoutRef = useRef(null);
 
     useEffect(() => {
-        if (gameState === "playing" && started) {
+        setMistakes(0);
+        setTimer(0);
+        setPhase(started ? GAME_PHASES.PLAYING : GAME_PHASES.PREGAME);
+    }, [gameId, settings, started]);
+
+    useEffect(() => {
+        if (phase === GAME_PHASES.PLAYING) {
             timerRef.current = setInterval(() => setTimer(t => t + 1), 1000);
         } else {
             clearInterval(timerRef.current);
         }
         return () => clearInterval(timerRef.current);
-    }, [gameState, started]);
+    }, [phase]);
 
     useEffect(() => {
-        setMistakes(0);
-        setTimer(0);
-        setGameState("playing");
-    }, [gameId, settings, started]);
+        if (phase === GAME_PHASES.WIN) {
+            phaseTimeoutRef.current = setTimeout(() => setPhase(GAME_PHASES.PREGAME), WIN_TIMEOUT);
+            // onGameEnd && onGameEnd();
+        } else if (phase === GAME_PHASES.LOSE) {
+            phaseTimeoutRef.current = setTimeout(() => setPhase(GAME_PHASES.PREGAME), LOSE_TIMEOUT);
+            // onGameEnd && onGameEnd();
+        } else {
+            clearTimeout(phaseTimeoutRef.current);
+        }
+        return () => clearTimeout(phaseTimeoutRef.current);
+    }, [phase]);
+
+    // Сброс started в родителе после завершения игры
+    // useEffect(() => {
+    //     if (phase === GAME_PHASES.PREGAME && started) {
+    //         onGameEnd && onGameEnd();
+    //     }
+    // }, [phase, started, onGameEnd]);
 
     const handleMistake = () => {
         setMistakes(m => {
             const newMistakes = m + 1;
-            console.log(newMistakes);
             if (newMistakes >= MAX_MISTAKES) {
-                setGameState("lose");
+                setPhase(GAME_PHASES.LOSE);
             }
             return newMistakes;
         });
     };
 
     const handleWin = () => {
-        setGameState("win");
+        setPhase(GAME_PHASES.WIN);
+    };
+
+    const handleManualStart = () => {
+        setMistakes(0);
+        setTimer(0);
+        setPhase(GAME_PHASES.PLAYING);
     };
 
     const gameProps = {
         settings,
         onMistake: handleMistake,
         onWin: handleWin,
-        disabled: gameState !== "playing"
+        disabled: phase !== GAME_PHASES.PLAYING,
+        timer
     };
 
     const renderMistakes = () => (
@@ -66,8 +106,11 @@ const GameMainPanel = ({ gameId, settings, started }) => {
     );
 
     let gameContent = null;
-    if (
-        started &&
+    if (phase === GAME_PHASES.PREGAME) {
+        gameContent = <div style={{ textAlign: "center", marginTop: "40px" }}>
+            <p>Выберите настройки и нажмите "Старт"</p>
+        </div>;
+    } else if (
         settings &&
         (
             (gameId === "digit" && typeof settings.target === "number" && typeof settings.size === "number") ||
@@ -75,35 +118,38 @@ const GameMainPanel = ({ gameId, settings, started }) => {
         )
     ) {
         const gameKey = gameId === "digit"
-            ? `${gameId}-${settings.target}-${settings.size}-${started}`
-            : `${gameId}-${settings.size}-${started}`;
-        // console.log(gameKey);
+            ? `${gameId}-${settings.target}-${settings.size}`
+            : `${gameId}-${settings.size}`;
         switch (gameId) {
             case "digit":
-                gameContent = <DigitGame key={gameKey} {...gameProps} gameState={gameState} />;
+                gameContent = <DigitGame key={gameKey} {...gameProps} phase={phase} />;
                 break;
             case "shulte":
-                gameContent = <ShulteGame key={gameKey} started={started} {...gameProps} gameState={gameState} />;
+                gameContent = <ShulteGame key={gameKey} started={started} {...gameProps} phase={phase} />;
                 break;
             default:
                 gameContent = <div>Выберите игру</div>;
         }
-    } else {
-        gameContent = <div style={{ textAlign: "center", marginTop: "40px" }}>
-            <p>Выберите настройки и нажмите "Старт"</p>
-        </div>;
     }
 
     return (
         <div className="game-main-panel">
-            <div className="game-header-panel" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                {renderMistakes()}
-                <div className="game-timer" style={{ fontSize: 22, fontWeight: 600 }}>
-                    {formatTime(timer)}
+            <div className="game-header-panel">
+                <div>{renderMistakes()}</div>
+                <div> {/* Центр */} </div>
+                <div>
+                    <div className="game-timer">{formatTime(timer)}</div>
                 </div>
             </div>
             <div className="game-space">
                 {gameContent}
+                {(phase === GAME_PHASES.WIN || phase === GAME_PHASES.LOSE) && (
+                    <button className="game-restart-btn"
+                        onClick={handleManualStart}
+                    >
+                        Играть ещё
+                    </button>
+                )}
             </div>
         </div>
     );

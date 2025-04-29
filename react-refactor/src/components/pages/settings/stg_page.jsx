@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLanguage } from "../../../lang_provider";
+import { useLanguage } from "../../../provider_lang";
 
 import TextInput from "../../inputs/input";
 import DropdownMenu from "../../inputs/dropdown";

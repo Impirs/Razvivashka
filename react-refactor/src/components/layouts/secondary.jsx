@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from "../../lang_provider";
+import { useLanguage } from "../../provider_lang";
 
 import NavButton from '../buttons/nav_btn';
 

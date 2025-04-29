@@ -75,9 +75,9 @@ function getAchievements() {
     return data.achievements;
 }
 
-function getHighScores(game) {
+function getHighScores() {
     const data = getUser();
-    return data.highScores[game];
+    return data.highScores;
 }
 
 function getGameSettings() {
@@ -146,8 +146,10 @@ function addHighScore(game, id, score, date) {
         data.highScores[game][id].push({ score, date });
         data.highScores[game][id].sort((a, b) => a.score - b.score);
         saveUser(data);
+        return true;
     } catch (error) {
         console.error("Error adding new highscore:", error);
+        return false;
     }
 }
 
@@ -162,7 +164,7 @@ function removeHighScore(game, id, score, date) {
     const index = data.highScores[game][id].findIndex(record => record.score === score && record.date === date);
     if (index !== -1) {
         data.highScores[game][id].splice(index, 1);
-        saveData(data);
+        saveUser(data);
         console.log(`High score removed for game "${game}", id "${id}", score "${score}", date "${date}".`);
         return true;
     } else {

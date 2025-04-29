@@ -2,7 +2,10 @@ import React from "react";
 import './styles/main.scss';
 
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import { LanguageProvider } from "./lang_provider";
+import { LanguageProvider } from "./provider_lang";
+import { NotifProvider } from "./provider_notif";
+import { StorageProvider } from "./provider_storage";
+
 import AchievementPage from "./components/pages/achievements/ach_page";
 import CatalogPage from "./components/pages/catalog/ctg_page";
 import SettingsPage from "./components/pages/settings/stg_page";
@@ -21,7 +24,9 @@ function GameCentralWrapper() {
 
 function App() {
     return (
+        <StorageProvider>
         <LanguageProvider>
+        <NotifProvider>
             <Router>
                 <Routes>
                     {/* Main */}
@@ -43,7 +48,9 @@ function App() {
                     </Route>
                 </Routes>
             </Router>
+        </NotifProvider>
         </LanguageProvider>
+        </StorageProvider>
     );
 }
 

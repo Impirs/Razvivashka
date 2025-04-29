@@ -11,33 +11,35 @@ export default function useStorage() {
     const [games, setGames] = useState([]);
     const [types, setTypes] = useState([]);
 
-    // trigger for useEffects -> updating data after changing by functions
     const [refreshUser, setUserTrigger] = useState(0);
     const [refreshSettings, setSettingsTrigger] = useState(0);
 
     // functions changing user data
     const addScore = async (game, id, score, date) => {
         try {
-            await window.storageAPI.addHighscore(game, id, score, date);
-            setUserTrigger(prev => prev + 1);
+            await window.storageAPI.addHighScore(game, id, score, date);
+            // console.log("Adding new highscore...");
+            await fetchHighscores();
         } catch (error) {
             console.error('Error adding the score:', error);
         }
     };
     const removeScore = async (game, id, score, date) => {
         try {
-            await window.storageAPI.removeHighscore(game, id, score, date);
-            setUserTrigger(prev => prev + 1);
+            await window.storageAPI.removeHighScore(game, id, score, date);
+            await fetchHighscores();
         } catch (error) {
             console.error('Error deleting the score:', error);
         }
     };
     const unlockAchive = async (game, id, score) => {
         try {
-            await window.storageAPI.unlockAchievement(game, id,score);
+            const unlocked = await window.storageAPI.unlockAchievement(game, id, score);
             setUserTrigger(prev => prev + 1);
+            return unlocked;
         } catch (error) {
             console.error('Error trying to unlock the achievement:', error);
+            return [];
         }
     };
     const changeUsername = async (newName) => {
@@ -146,8 +148,10 @@ export default function useStorage() {
     const fetchHighscores = async () => {
         try {
             const allhighscores = await window.storageAPI.getHighScores();
-            setHighscores(allhighscores);
+            // console.log("Fetched highscores:", allhighscores);
+            setHighscores(JSON.parse(JSON.stringify(allhighscores)));
         } catch (error) {
+            setHighscores({});
             console.error('Error fetching highscores:', error);
         }
     }
