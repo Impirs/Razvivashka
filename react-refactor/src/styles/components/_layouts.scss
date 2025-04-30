@@ -80,7 +80,7 @@
                 border-top-left-radius: 22px;
                 border-bottom: 1px solid colors.$primary;
 
-                background-color: #eb92beB0;
+                background-color: colors.$header;
                 padding: 0 22px;
             }
 
@@ -174,7 +174,7 @@
                     border-top-left-radius: 14px;
                     border-bottom: 1px solid colors.$primary;
 
-                    background-color: #eb92beB0;
+                    background-color: colors.$header;
                     padding: 0 22px;
 
                     > * {
@@ -337,14 +337,13 @@
 }
 
 .score-container-score {
-    width: 50px;
+    width: 80px;
     font-family: "Playball";
-    font-size: 32px;
+    font-size: 28px;
     text-align: center;
     padding-top: 15px;
 }
 
-// Счетчик ошибок
 .mistakes_counter {
     border: 1px solid colors.$primary;
     border-radius: 12px;
@@ -374,8 +373,8 @@
     }
 }
 
-// Таймер
 .game-timer {
+    font-family: 'PlayBall';
     border: 1px solid colors.$primary;
     border-radius: 12px;
     box-shadow: 0 4px 30px colors.$shadow;
@@ -387,6 +386,6 @@
     align-items: center;
     gap: 5px;
     background: colors.$fourth;
-    font-size: 32px;
+    font-size: 28px;
     color: colors.$text_secondary;
 }

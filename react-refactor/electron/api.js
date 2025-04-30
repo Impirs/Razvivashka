@@ -79,7 +79,7 @@ function handleStorageAPI() {
         storage.removeHighScore(game, id, score, date);
     });
     ipcMain.handle('unlock-achieve', (event, game, id, score) => {
-        storage.unlockAchievement(game, id, score);
+        return storage.unlockAchievement(game, id, score);
     })
 }
 

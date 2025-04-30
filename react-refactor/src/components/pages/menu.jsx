@@ -5,7 +5,7 @@ import usei18n from "../../hooks/usei18n";
 
 function HomePage() {
     const { t } = usei18n();
-    const navigate = useNavigate(); // Хук для навигации
+    const navigate = useNavigate();
 
     const [translations, setTranslations] = useState({
         application: "",
@@ -41,11 +41,10 @@ function HomePage() {
         fetchTranslations();
     }, [t]);
 
-    const handlePlayClick = () => navigate("/catalog"); // Переход на страницу каталога
-    const handleAchievementsClick = () => navigate("/achievements"); // Переход на страницу достижений
-    const handleSettingsClick = () => navigate("/settings"); // Переход на страницу настроек
-    const handleExitClick = () => window.electronAPI.quitApp(); // Закрытие приложения
-
+    const handlePlayClick = () => navigate("/catalog");
+    const handleAchievementsClick = () => navigate("/achievements");
+    const handleSettingsClick = () => navigate("/settings");
+    const handleExitClick = () => window.electronAPI.quitApp();
     return (
         <div className="home-page">
             <h1>{translations.application}</h1>

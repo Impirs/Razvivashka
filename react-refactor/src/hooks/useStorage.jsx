@@ -35,7 +35,8 @@ export default function useStorage() {
     const unlockAchive = async (game, id, score) => {
         try {
             const unlocked = await window.storageAPI.unlockAchievement(game, id, score);
-            setUserTrigger(prev => prev + 1);
+            console.log(unlocked);
+            await fetchAchievements();
             return unlocked;
         } catch (error) {
             console.error('Error trying to unlock the achievement:', error);

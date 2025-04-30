@@ -72,32 +72,72 @@
     }
 }
 
+.shulte-setup-setting {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 20px;
+    color: $text_secondary;
+
+    > div {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        margin-top: 4px;
+        font-family: 'PlayBall';
+    }
+}
+
+.shulte-size-options {
+    display: flex;
+    width: 100%;
+    gap: 4px;
+
+    &--1 .shulte-size-option {
+        border-radius: 8px;
+        width: 100%;
+    }
+    &--2 .shulte-size-option:first-child {
+        border-radius: 8px 0 0 8px;
+    }
+    &--2 .shulte-size-option:last-child {
+        border-radius: 0 8px 8px 0;
+    }
+    &--2 .shulte-size-option {
+        border-radius: 0;
+        border-right: 1px solid $primary;
+        width: 50%;
+    }
+}
+
 .shulte-size-option {
-    font-family: "Playball";
     display: inline-block;
-    margin: 0 2px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid $primary;
-    background: $background;
+    margin: 0;
+    padding: 6px 0;
+    border: 1.5px solid $primary;
+    background: $header;
     cursor: pointer;
     font-size: 18px;
+    font-family: 'PlayBall';
+    text-align: center;
     transition: background 0.15s, color 0.15s, border 0.15s;
 
     &.active, &:hover {
-        background: $primary;
-        color: $text_rev;
+        background: $background;
+        color: $text_secondary;
         border-color: $primary;
     }
 }
 
 .shulte-setup button {
+    font-family: 'Snide hand';
     margin-top: 10px;
     font-size: 18px;
     background: $primary;
     color: $text_rev;
-    border: 2px solid $primary;
+    border: 1px solid $primary;
     border-radius: 10px;
+    width: 100%;
     padding: 8px 24px;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;

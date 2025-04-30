@@ -26,8 +26,8 @@ function App() {
     return (
         <StorageProvider>
         <LanguageProvider>
-        <NotifProvider>
             <Router>
+            <NotifProvider>
                 <Routes>
                     {/* Main */}
                     <Route element={<MainLayout />}>
@@ -47,8 +47,8 @@ function App() {
                         <Route path="/achievements" element={<AchievementPage />} />
                     </Route>
                 </Routes>
+            </NotifProvider>
             </Router>
-        </NotifProvider>
         </LanguageProvider>
         </StorageProvider>
     );

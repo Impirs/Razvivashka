@@ -9,7 +9,7 @@ import "../../styles/modules/game_digit.scss";
 const formatTime = (seconds) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
-    return `${min}:${sec.toString().padStart(2, "0")}`;
+    return `${min}: ${sec.toString().padStart(2, "0")}`;
 };
 
 const MAX_MISTAKES = 3;
@@ -21,22 +21,24 @@ const GAME_PHASES = {
     LOSE: "lose"
 };
 
-const WIN_TIMEOUT = 10000;
+const WIN_TIMEOUT = 5000;
 const LOSE_TIMEOUT = 5000;
 
-const GameMainPanel = ({ gameId, settings, started, onGameEnd }) => {
+const GameMainPanel = ({ gameId, settings, started, onGameEnd, onNewRecord }) => {
     const [mistakes, setMistakes] = useState(0);
     const [timer, setTimer] = useState(0);
     const [phase, setPhase] = useState(GAME_PHASES.PREGAME);
     const timerRef = useRef(null);
     const phaseTimeoutRef = useRef(null);
 
+    // pregame => playing state
     useEffect(() => {
         setMistakes(0);
         setTimer(0);
         setPhase(started ? GAME_PHASES.PLAYING : GAME_PHASES.PREGAME);
     }, [gameId, settings, started]);
 
+    // game timer
     useEffect(() => {
         if (phase === GAME_PHASES.PLAYING) {
             timerRef.current = setInterval(() => setTimer(t => t + 1), 1000);
@@ -46,25 +48,28 @@ const GameMainPanel = ({ gameId, settings, started, onGameEnd }) => {
         return () => clearInterval(timerRef.current);
     }, [phase]);
 
+    // playing => win|lose screen state 
     useEffect(() => {
         if (phase === GAME_PHASES.WIN) {
             phaseTimeoutRef.current = setTimeout(() => setPhase(GAME_PHASES.PREGAME), WIN_TIMEOUT);
-            // onGameEnd && onGameEnd();
         } else if (phase === GAME_PHASES.LOSE) {
             phaseTimeoutRef.current = setTimeout(() => setPhase(GAME_PHASES.PREGAME), LOSE_TIMEOUT);
-            // onGameEnd && onGameEnd();
         } else {
             clearTimeout(phaseTimeoutRef.current);
+            
         }
         return () => clearTimeout(phaseTimeoutRef.current);
     }, [phase]);
 
-    // Сброс started в родителе после завершения игры
-    // useEffect(() => {
-    //     if (phase === GAME_PHASES.PREGAME && started) {
-    //         onGameEnd && onGameEnd();
-    //     }
-    // }, [phase, started, onGameEnd]);
+    // win|lose => pregame state
+    useEffect(() => {
+        if (
+            (phase === GAME_PHASES.PREGAME) &&
+            (started || phaseTimeoutRef.current)
+        ) {
+            onGameEnd && onGameEnd();
+        }
+    }, [phase]);
 
     const handleMistake = () => {
         setMistakes(m => {
@@ -91,7 +96,8 @@ const GameMainPanel = ({ gameId, settings, started, onGameEnd }) => {
         onMistake: handleMistake,
         onWin: handleWin,
         disabled: phase !== GAME_PHASES.PLAYING,
-        timer
+        timer,
+        onNewRecord
     };
 
     const renderMistakes = () => (

@@ -6,7 +6,7 @@ import DropdownMenu from "../../inputs/dropdown";
 import Slider from "../../inputs/slider";
 import Checkbox from "../../inputs/checkbox";
 
-import useStorage from "../../../hooks/useStorage";
+import { useStorageContext } from "../../../provider_storage";
 
 import '../../../styles/modules/settings.scss';
 
@@ -18,7 +18,7 @@ function SettingsPage() {
         changeUsername,
         changeVolume,
         setFeature,
-    } = useStorage();
+    } = useStorageContext();
     const { t, lang, setLanguage } = useLanguage();
 
     const [translations, setTranslations] = useState({

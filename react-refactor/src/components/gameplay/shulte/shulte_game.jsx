@@ -13,7 +13,7 @@ function generateShulteBoard(size) {
     );
 }
 
-const ShulteGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
+const ShulteGame = ({ settings, onMistake, onWin, disabled, timer, phase, onNewRecord }) => {
     const { game_settings, addScore, unlockAchive } = useStorageContext();
     const { notifyAchievements } = useAchNotif();
     const hideNumbers = game_settings?.shulte?.shide_scored?.state;
@@ -58,11 +58,17 @@ const ShulteGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
             if (addScore) {
                 await addScore("shulte", highId, timer, scoreDate);
             }
+            if (onNewRecord) {
+                onNewRecord({ score: timer, date: scoreDate });
+            }
 
             if (unlockAchive) {
                 const newAchievements = await unlockAchive("shulte", highId, timer);
+                console.log("newAchievements:", newAchievements);
                 if (newAchievements && newAchievements.length > 0) {
-                    notifyAchievements(newAchievements);
+                    const achievementsWithGame = newAchievements.map(a => ({ ...a, game: "shulte" }));
+                    notifyAchievements(achievementsWithGame);
+                    console.log("notifyAchievements called", achievementsWithGame);
                 }
             }
         }
@@ -70,13 +76,14 @@ const ShulteGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
         if (phase === "win" && !scoreAdded) {
             updateRecords();
         }
-    }, [phase, scoreAdded, addScore, unlockAchive, size, timer, notifyAchievements]);
+    }, [phase, scoreAdded, addScore, unlockAchive, size, timer, notifyAchievements, onNewRecord]);
 
     const handleCellClick = (row, col) => {
         if (disabled || phase !== "playing") return;
         const value = board[row][col];
         if (value === current) {
             if (hideNumbers) {
+                // console.log("Затираем ячейку, hideNumbers:", hideNumbers);
                 setBoard(prev => {
                     const newBoard = prev.map(r => [...r]);
                     newBoard[row][col] = null;
@@ -125,7 +132,7 @@ const ShulteGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
                                 key={`${row}-${col}`}
                                 className={
                                     (isEmpty ? "empty " : "") +
-                                    (isFound ? "found " : "")
+                                    (hideNumbers && isFound ? "found " : "")
                                 }
                                 onClick={() => num !== null && handleCellClick(row, col)}
                                 style={{

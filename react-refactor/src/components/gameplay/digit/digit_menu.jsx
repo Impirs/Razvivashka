@@ -36,6 +36,7 @@ const DigitMenu = ({ onStart, setSettings, settings }) => {
                             className={`digit-setup-value${target === val ? " active" : ""}`}
                             value={val}
                             style={{
+                                minWidth: "10%",
                                 background: target === val ? "#e0e0ff" : "#fff",
                                 cursor: "pointer",
                                 userSelect: "none"
@@ -49,20 +50,23 @@ const DigitMenu = ({ onStart, setSettings, settings }) => {
             </div>
             <div className="digit-setup-setting">
                 Размер поля:
-                <div>
+                <div className={`digit-size-options digit-size-options--${availableSizes.length}`}>
                     {availableSizes.map((val) => (
                         <div
                             key={val}
                             className={`digit-setup-value${size === val ? " active" : ""}`}
                             value={val}
                             style={{
+                                fontFamily: 'Snide hand',
+                                width: availableSizes.length === 1 ? "100%" : "50%",
+                                textAlign: "center",
                                 background: size === val ? "#e0e0ff" : "#fff",
                                 cursor: "pointer",
                                 userSelect: "none"
                             }}
                             onClick={() => handleSizeClick(val)}
                         >
-                            {val}
+                            {val === 7 ? "Стандарт" : "Большой"}
                         </div>
                     ))}
                 </div>

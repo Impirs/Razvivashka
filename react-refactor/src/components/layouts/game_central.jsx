@@ -9,9 +9,10 @@ import usei18n from "../../hooks/usei18n";
 
 const GameCentralLayout = ({ gameId }) => {
     const [gameTitle, setTitle] = useState("");
-    const [settings, setSettings] = useState(null); // обычные настройки (меню)
-    const [activeSettings, setActiveSettings] = useState(null); // настройки для текущей игры/рекордов
+    const [settings, setSettings] = useState(null);
+    const [activeSettings, setActiveSettings] = useState(null);
     const [started, setStarted] = useState(false);
+    const [justAddedRecord, setJustAddedRecord] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,6 +35,13 @@ const GameCentralLayout = ({ gameId }) => {
         fetchTranslation();
     }, [t, gameId]);
 
+    useEffect(() => {
+        if (justAddedRecord) {
+            const timer = setTimeout(() => setJustAddedRecord(null), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [justAddedRecord]);
+
     const handleBack = () => {
         const stack = JSON.parse(sessionStorage.getItem('navStack') || '[]');
         if (stack.length > 1) {
@@ -54,15 +62,17 @@ const GameCentralLayout = ({ gameId }) => {
         navigate('/settings');
     };
 
-    // При старте фиксируем активные настройки и запускаем игру
     const handleStart = () => {
         setActiveSettings(settings);
         setStarted(true);
     };
 
-    // После завершения игры сбрасываем started (делается в central_panel по фазе pregame)
     const handleGameEnd = () => {
         setStarted(false);
+    };
+
+    const handleNewRecord = (record) => {
+        setJustAddedRecord(record);
     };
 
     return (
@@ -87,12 +97,14 @@ const GameCentralLayout = ({ gameId }) => {
                         settings={activeSettings}
                         started={started}
                         onGameEnd={handleGameEnd}
+                        onNewRecord={handleNewRecord}
                     />
                 </main>
                 <aside className="game-side right">
                     <ScoreSection
                         gameId={gameId}
                         settings={settings}
+                        justAddedRecord={justAddedRecord}
                     />
                 </aside>
             </div>

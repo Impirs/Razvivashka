@@ -12,6 +12,7 @@ export function NotifProvider({ children }) {
     const [current, setCurrent] = useState(null);
     // Добавить достижения в очередь
     const notifyAchievements = useCallback((achievements) => {
+        console.log("Adding to queue:", achievements);
         setQueue(prev => [...prev, ...achievements]);
     }, []);
 
@@ -32,7 +33,9 @@ export function NotifProvider({ children }) {
     return (
         <NotifContext.Provider value={{ notifyAchievements }}>
             {children}
-            {current && <AchNotif achievement={current} />}
+            {current && 
+                (console.log("Rendering AchNotif", current),
+                <AchNotif achievement={current} />)}
         </NotifContext.Provider>
     );
 }

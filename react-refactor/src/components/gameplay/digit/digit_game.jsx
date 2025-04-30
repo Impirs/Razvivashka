@@ -66,7 +66,7 @@ const isNextToEmpty = (board, row, col) => {
     });
 };
 
-const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
+const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase, onNewRecord}) => {
     const { game_settings, unlockAchive, addScore } = useStorageContext();
     const { notifyAchievements } = useAchNotif();
     const { t } = usei18n();
@@ -77,6 +77,7 @@ const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
     const [board, setBoard] = useState([]);
     const [selected, setSelected] = useState([]);
     const [scoreAdded, setScoreAdded] = useState(false);
+    const [mistakes, setMistakes] = useState(0);
 
     useEffect(() => {
         setBoard(generateBoard(target, size));
@@ -102,14 +103,31 @@ const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
             const minutes = today.getMinutes().toString().padStart(2, "0");
             const scoreDate = `${hours}:${minutes} ${date}.${month}.${year}`;
 
+            const recKey = `${timer}_${scoreDate}`;
+            sessionStorage.setItem("LAST_SCORE_KEY", recKey);
+
             if (addScore) {
                 await addScore("digit", highId, timer, scoreDate);
             }
+            if (onNewRecord) {
+                onNewRecord({ score: timer, date: scoreDate });
+            }
 
             if (unlockAchive) {
-                const newAchievements = await unlockAchive("digit", highId, timer);
-                if (newAchievements && newAchievements.length > 0) {
-                    notifyAchievements(newAchievements);
+                let achievements = [];
+                if (mistakes === 0) {
+                    const achPerfect = await unlockAchive("digit", `${size}x100`, timer);
+                    const achNormal = await unlockAchive("digit", `${size}x${target}`, timer);
+                    achievements = [
+                        ...(achPerfect || []),
+                        ...(achNormal || [])
+                    ];
+                } else {
+                    achievements = await unlockAchive("digit", `${size}x${target}`, timer) || [];
+                }
+                if (achievements.length > 0) {
+                    const achievementsWithGame = achievements.map(a => ({ ...a, game: "digit" }));
+                    notifyAchievements(achievementsWithGame);
                 }
             }
         }
@@ -117,7 +135,7 @@ const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
         if (phase === "win" && !scoreAdded) {
             updateRecords();
         }
-    }, [phase, scoreAdded, addScore, unlockAchive, size, target, timer, notifyAchievements]);
+    }, [phase, scoreAdded, addScore, unlockAchive, size, target, timer, notifyAchievements, onNewRecord]);
 
     const handleCellClick = (row, col) => {
         if (disabled || board[row][col] === null || selected.length >= 2) return;
@@ -143,6 +161,7 @@ const DigitGame = ({ settings, onMistake, onWin, disabled, timer, phase }) => {
                     }, 300);
                 } else {
                     onMistake && onMistake();
+                    setMistakes( prev => prev + 1);
                     setTimeout(() => setSelected([]), 300);
                 }
             }
