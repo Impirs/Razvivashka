@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useStorage from "../../../hooks/useStorage";
+import { useDevFilter } from "../../../contexts/provider_dev";
 
 import GamesList from "./ctg_list";
 import DropdownMenu from "../../inputs/dropdown";
@@ -8,9 +9,12 @@ import '../../../styles/modules/catalog.scss';
 
 function CatalogPage() {
     const { games, types, isLoading } = useStorage();
+    const { filterGames } = useDevFilter();
 
     const [filter, setFilter] = useState("type_all");
     const [gamesMeta, setMeta] = useState([]);
+
+    const filteredGames = useMemo(() => filterGames(games), [games, filterGames]);
 
     const options = useMemo(() => {
         if (isLoading || !types) return [];
@@ -18,16 +22,16 @@ function CatalogPage() {
     }, [types, isLoading]);
 
     useEffect(() => {
-        if (isLoading || !games) return;
+        if (isLoading || !filteredGames) return;
 
-        const gamesArr = games || [];
+        const gamesArr = filteredGames || [];
         const meta = gamesArr.filter((game) => {
             if (filter === "type_all") return true;
             return game.type.includes(filter.slice(5)); 
         });
 
         setMeta(meta);
-    }, [filter, games, isLoading]);
+    }, [filter, filteredGames, isLoading]);
 
     const handleFilter = useCallback((value) => {
         setFilter(value);
@@ -39,12 +43,10 @@ function CatalogPage() {
                 <div>{/* Поиск */}</div>
                 <div>{/* Центр */}</div>
                 <div style={{justifySelf: "end"}}>
-                    {
-                        <DropdownMenu 
-                            options={options} 
-                            onSelect={handleFilter} 
-                        />
-                    }
+                    <DropdownMenu 
+                        options={options} 
+                        onSelect={handleFilter} 
+                    />
                 </div>
             </div>
             <div className="container-content">

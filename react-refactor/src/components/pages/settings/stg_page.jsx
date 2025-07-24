@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useLanguage } from "../../../provider_lang";
+import { useLanguage } from "../../../contexts/provider_lang";
+import { useDevFilter } from "../../../contexts/provider_dev";
 
 import TextInput from "../../inputs/input";
 import DropdownMenu from "../../inputs/dropdown";
 import Slider from "../../inputs/slider";
 import Checkbox from "../../inputs/checkbox";
 
-import { useStorageContext } from "../../../provider_storage";
+import { useStorageContext } from "../../../contexts/provider_storage";
 
 import '../../../styles/modules/settings.scss';
 
@@ -20,6 +21,9 @@ function SettingsPage() {
         setFeature,
     } = useStorageContext();
     const { t, lang, setLanguage } = useLanguage();
+    const { filterGameSettings } = useDevFilter();
+
+    const filteredGameSettings = filterGameSettings(game_settings);
 
     const [translations, setTranslations] = useState({
         generalSettings: "",
@@ -52,7 +56,7 @@ function SettingsPage() {
                 const gameplaySettings = await t("gameplay_settings");
 
                 const gameTitles = {};
-                for (const [gameKey, settings] of Object.entries(game_settings || {})) {
+                for (const [gameKey, settings] of Object.entries(filteredGameSettings || {})) {
                     const gameTitle = await t(`game_${gameKey}`);
                     gameTitles[gameKey] = {
                         title: gameTitle,
@@ -84,10 +88,9 @@ function SettingsPage() {
         };
 
         fetchTranslations();
-    }, [game_settings, t, lang]);
+    }, [filteredGameSettings, t, lang]);
 
     const handleCheckbox = (gameKey, settingKey, newValue) => {
-        // console.log(gameKey,settingKey,newValue);
         setFeature(gameKey, settingKey, newValue);
     };
 
@@ -171,8 +174,8 @@ function SettingsPage() {
                         <hr />
                     </div>
                     <div className="section-content">
-                        {game_settings &&
-                            Object.entries(game_settings).map(([gameKey, settings]) => (
+                        {filteredGameSettings &&
+                            Object.entries(filteredGameSettings).map(([gameKey, settings]) => (
                                 <div key={gameKey}>
                                     <h3>{translations.games[gameKey]?.title}</h3>
                                     {Object.entries(settings).map(([settingKey, setting]) => (

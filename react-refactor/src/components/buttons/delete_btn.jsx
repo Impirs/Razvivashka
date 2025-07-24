@@ -6,7 +6,6 @@ const DeletePopup = ({ onFinish, onCancel, style }) => {
     const timeoutRef = useRef(null);
     const [holding, setHolding] = useState(false);
 
-    // Начать удержание
     const handleHoldStart = () => {
         setHolding(true);
         let prog = 0;
@@ -21,7 +20,6 @@ const DeletePopup = ({ onFinish, onCancel, style }) => {
         }, 750);
     };
 
-    // Прервать удержание
     const handleHoldEnd = () => {
         setHolding(false);
         setProgress(0);

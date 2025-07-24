@@ -1,5 +1,5 @@
 const { ipcMain } = require('electron');
-const language = require('../../shared/data/language.js');
+const language = require('../src/data/language.js');
 const storage = require('./storage');
 
 function handleLanguageAPI() {

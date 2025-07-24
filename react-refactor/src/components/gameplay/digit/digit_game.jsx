@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import usei18n from "../../../hooks/usei18n";
-import { useStorageContext } from "../../../provider_storage";
-import { useAchNotif } from "../../../provider_notif";
+import { useStorageContext } from "../../../contexts/provider_storage";
+import { useAchNotif } from "../../../contexts/provider_notif";
 
 const numberDistribution = {
     6: { board: 7, numbers: { 1:8, 2:8, 3:16, 4:8, 5:8 } },

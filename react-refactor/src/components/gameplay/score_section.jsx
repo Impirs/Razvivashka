@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DeletePopup from "../buttons/delete_btn";
-import { useStorageContext } from "../../provider_storage";
+import { useStorageContext } from "../../contexts/provider_storage";
 
 function formatTime(seconds) {
     const min = Math.floor(seconds / 60);

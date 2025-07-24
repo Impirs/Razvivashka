@@ -1,10 +1,11 @@
 import React from "react";
 import './styles/main.scss';
 
-import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import { LanguageProvider } from "./provider_lang";
-import { NotifProvider } from "./provider_notif";
-import { StorageProvider } from "./provider_storage";
+import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+import { LanguageProvider } from "./contexts/provider_lang";
+import { NotifProvider } from "./contexts/provider_notif";
+import { StorageProvider } from "./contexts/provider_storage";
+import { DevFilterProvider } from "./contexts/provider_dev";
 
 import AchievementPage from "./components/pages/achievements/ach_page";
 import CatalogPage from "./components/pages/catalog/ctg_page";
@@ -26,6 +27,7 @@ function App() {
     return (
         <StorageProvider>
         <LanguageProvider>
+        <DevFilterProvider>
             <Router>
             <NotifProvider>
                 <Routes>
@@ -49,6 +51,7 @@ function App() {
                 </Routes>
             </NotifProvider>
             </Router>
+        </DevFilterProvider>
         </LanguageProvider>
         </StorageProvider>
     );

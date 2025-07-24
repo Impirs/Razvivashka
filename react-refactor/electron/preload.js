@@ -8,6 +8,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     sendLocalStorage:(data) => ipcRenderer.invoke('send-localstorage', data),
 
     quitApp: () => ipcRenderer.send('app-quit'),
+    onUpdateAvailable: (callback) => ipcRenderer.on('update-available', (event, data) => callback(data)),
+    onUpdateTesting: (callback) => ipcRenderer.on('test-update-notif', (event, data) => callback(data)),
+    sendTestUpdateNotif: () => ipcRenderer.send('test-update-notif'),
     openExternal: (url) => ipcRenderer.send('open-external', url)
 });
 

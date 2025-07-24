@@ -1,0 +1,52 @@
+@use "../colors";
+
+.update-notification{
+    position: fixed;
+    right: 32px;
+    top: 32px;
+    z-index: 9999;
+    min-width: 280px;
+    max-width: 640px;
+    background: colors.$background;
+    border: 1px solid colors.$third;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    cursor: pointer;
+    animation: notif-fade-in 0.3s;
+    transition: box-shadow 0.2s;
+    &:hover {
+        box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+    }
+    .notification-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        flex-shrink: 0;
+
+        width: 52px;
+        height: 52px;
+        background: colors.$third;
+        
+    }
+    .notification-info {
+        flex: 1;
+        h3 {
+            margin: 0 0 4px 0;
+            font-size: 1em;
+            color: colors.$text_secondary;
+        }
+        p {
+            margin: 0;
+            font-size: 0.9em;
+            color: colors.$text_secondary;
+        }
+    }
+}
+@keyframes notif-fade-in {
+    from { opacity: 0; transform: translateY(40px);}
+    to   { opacity: 1; transform: translateY(0);}
+}

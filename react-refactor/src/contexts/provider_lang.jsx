@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-import usei18n from "./hooks/usei18n";
+import usei18n from "../hooks/usei18n";
 
 const LanguageContext = createContext();
 

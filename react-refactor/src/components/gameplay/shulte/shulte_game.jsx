@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useStorageContext } from "../../../provider_storage";
-import { useAchNotif } from "../../../provider_notif";
+import { useStorageContext } from "../../../contexts/provider_storage";
+import { useAchNotif } from "../../../contexts/provider_notif";
 
 function generateShulteBoard(size) {
     const arr = Array.from({ length: size * size }, (_, i) => i + 1);
@@ -64,11 +64,11 @@ const ShulteGame = ({ settings, onMistake, onWin, disabled, timer, phase, onNewR
 
             if (unlockAchive) {
                 const newAchievements = await unlockAchive("shulte", highId, timer);
-                console.log("newAchievements:", newAchievements);
+                // console.log("newAchievements:", newAchievements);
                 if (newAchievements && newAchievements.length > 0) {
                     const achievementsWithGame = newAchievements.map(a => ({ ...a, game: "shulte" }));
                     notifyAchievements(achievementsWithGame);
-                    console.log("notifyAchievements called", achievementsWithGame);
+                    // console.log("notifyAchievements called", achievementsWithGame);
                 }
             }
         }

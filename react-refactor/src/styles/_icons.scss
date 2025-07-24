@@ -134,6 +134,13 @@
     mask-size: contain;
 }
 
+#warning {
+    -webkit-mask: url('@shared/assets/icons/warning.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@shared/assets/icons/warning.png') no-repeat center;
+    mask-size: contain;
+}
+
 .mistake {
     background: #4b4b4b;
 

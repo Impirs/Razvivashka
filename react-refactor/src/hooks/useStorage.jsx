@@ -35,7 +35,7 @@ export default function useStorage() {
     const unlockAchive = async (game, id, score) => {
         try {
             const unlocked = await window.storageAPI.unlockAchievement(game, id, score);
-            console.log(unlocked);
+            // console.log(unlocked);
             await fetchAchievements();
             return unlocked;
         } catch (error) {
@@ -49,7 +49,7 @@ export default function useStorage() {
         try {
             await window.storageAPI.setName(trimmed);
             setUserTrigger((prev) => prev + 1);
-            console.log("changeUsername set:", trimmed);
+            // console.log("changeUsername set:", trimmed);
         } catch (error) {
             console.error("Error trying to set new username:", error);
         }

@@ -4,11 +4,11 @@ const log = require('electron-log');
 const path = require('path');
 const os = require('os');
 
-const { cleanTitlesAndDescriptions, ensureTypes } = require('../../shared/data/update');
-const { migrateFromLocalStorage } = require('../../shared/data/migrate');
-const initialData = require('../../shared/data/initialData');
-const storage = require('./storage');
-const api = require('./api');
+const { cleanTitlesAndDescriptions, ensureTypes } = require('../src/data/update.js');
+const { migrateFromLocalStorage } = require('../src/data/migrate.js');
+const initialData = require('../src/data/initialData.js');
+const storage = require('./storage.js');
+const api = require('./api.js');
 
 log.transports.file.level = 'info';
 autoUpdater.logger = log;
@@ -139,20 +139,12 @@ autoUpdater.on('update-available', (info) => {
 
     const releaseNotes = cleanReleaseNotes(info.releaseNotes);
 
-    dialog.showMessageBox({
-        type: 'info',
-        buttons: ['Перейти на страницу', 'Посмотреть позже'],
-        defaultId: 0,
-        title: 'Доступно обновление',
-        message: `Доступно обновление до версии ${info.version}.`,
-        detail: `Изменения:\n\n${releaseNotes}`,
-        noLink: true
-    }).then(result => {
-        if (result.response === 0) {
-            shell.openExternal(releaseUrl);
-        } else {
-            log.info('User chose to update later.');
-        }
+    BrowserWindow.getAllWindows().forEach(win => {
+        win.webContents.send('update-available', {
+            version: info.version,
+            releaseNotes,
+            releaseUrl
+        });
     });
 });
 
@@ -160,6 +152,18 @@ autoUpdater.on('update-not-available', (info) => {
     log.info('No update available. Current version:', app.getVersion());
     log.info('Update info:', info);
 });
+
+if (isDev) {
+    setTimeout(() => {
+        BrowserWindow.getAllWindows().forEach(win => {
+            win.webContents.send('update-available', {
+                version: app.getVersion(),
+                releaseNotes: 'Тестовое уведомление: это последняя версия приложения.',
+                releaseUrl: 'https://github.com/Impirs/Summ_solver/releases'
+            });
+        });
+    }, 2000);
+}
 
 autoUpdater.on('error', (error) => {
     log.error("Updating error: ", error);
