@@ -75,13 +75,13 @@
   },
   "homepage": "https://github.com/Impirs/Razvivashka#readme",
   "dependencies": {
+    "electron-log": "^5.3.3",
+    "electron-updater": "^6.6.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.5.1",
     "sass": "^1.86.3",
-    "scss": "^0.2.4",
-    "electron-log": "^5.3.3",
-    "electron-updater": "^6.6.2"
+    "scss": "^0.2.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
@@ -89,6 +89,7 @@
     "electron": "^35.1.5",
     "electron-builder": "^26.0.12",
     "vite": "^6.2.6",
+    "vite-plugin-svgr": "^4.3.0",
     "wait-on": "^8.0.3"
   },
   "extraResources": [],

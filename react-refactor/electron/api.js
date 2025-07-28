@@ -11,7 +11,7 @@ function handleLanguageAPI() {
     });
 
     ipcMain.handle('language-set', (event, langCode) => {
-        console.log(`Handling language-set: ${langCode}`);
+        // console.log(`Handling language-set: ${langCode}`);
         return language.setLanguage(langCode);
     });
 

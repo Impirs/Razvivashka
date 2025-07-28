@@ -1,28 +1,247 @@
-# TODO
+# Project Refactoring Documentation
 
-## Изменение структуры хранения данных
+## Table of Contents
 
-- [x] Нужно изменить хранение games, поменять type на types для игр и сделать в данных отдельную позицию для списка типов вне зависимости от того все ли игры сейчас существуют
-- [x] После изменения хранения типов проверить файлы для страницы achievements.
-- [ ] добавить функцию для снижения пороговых значений для получения достижений при обновлении. Стартовые данные можно сразу привести к нужному виду и не парится с доп функциями, но старые данные пользователей нужно правильно обновить и перенести в файлы.
-- [ ] Стоит добавить что-то в виде контроллера для временного отключения некоторых функций, данных и тому подобное на время нескольких патчей. Скорее всего это будет реализовываться при помощи еще одного контекста с фильтрацией
+- [Project Refactoring Documentation](#project-refactoring-documentation)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Motivation for Refactoring](#motivation-for-refactoring)
+  - [Technology Stack](#technology-stack)
+    - [Previous Stack](#previous-stack)
+    - [Current Stack](#current-stack)
+  - [New Architecture](#new-architecture)
+    - [Bridge Layer architecture overview](#bridge-layer-architecture-overview)
+    - [Business Logic Layer architecture overview](#business-logic-layer-architecture-overview)
+    - [Core Modules](#core-modules)
+    - [Data Flow](#data-flow)
+    - [File Structure](#file-structure)
+  - [Refactoring Process](#refactoring-process)
+    - [Migration Strategy](#migration-strategy)
+    - [Breaking Changes](#breaking-changes)
+    - [Backward Compatibility](#backward-compatibility)
+  - [Key Decisions](#key-decisions)
+  - [Tooling \& Infrastructure](#tooling--infrastructure)
+  - [Testing \& Quality Assurance](#testing--quality-assurance)
+  - [Known Issues \& Limitations](#known-issues--limitations)
+  - [Future Improvements](#future-improvements)
+  - [Appendix](#appendix)
 
-## Изменение навигации
+---
 
-- [x] Нужно будет добавить для всех страниц возможность выйти на предыдущю пол логике страницу при помощи Back
-- [x] Нужно настроить нажатие не уведомление о достижении для обработки перехода и внесения в стек игры, с которой был осуществлен переход (тот же принцип что и при нажатии кнопки перехода)
+## Overview
 
-## Изменения в дизайне
+## Motivation for Refactoring
 
-- [x] На стадии рефакторинга каталога игр столкнулся с желанием добавить фильтрацию по категориям игр, стоит учесть что в таком случае все страницы иноормации и вспомогательной навигации (каталог, настройки, достижения) должны будут иметь `<div className="content-header">` возможно их рендеринг нужно будет переделать после стадии разработки веток и лейаутов.
+Explain the rationale behind the refactor:
+- Technical debt
+- Maintainability
+- Scalability
+- Framework deprecation
+- Business goals
 
-## FIX
+> The main idea of refactoring is to make this project something bigger and valueable, improve different skills and knowledge.
 
-- [x] Отладить смену языка (добавлен контекст)
-- [x] Переписать немного код для уведомления о новом достижении, так как на данный момент не учитываются типы описаний, кроме "описание `время выполнения` секунд/раз"
+## Technology Stack
 
-## Games
+### Previous Stack
 
-> Такие игры как Состав числа и Таблица Шулье работают исправно, в них нет необходимости что-то кардинально менять или добавлять. Чего нельзя сказать об игре для обучения чтения. Даже если не брать в рассчет тот факт, что она плохо работает даже для изучения русского языка, но еще и совершенно не преспособленна к свободному ее переводу на другие языки. Также стоит обдумать хотя бы пару новых игр на логику и внимательность, а также реализовать сумму и таблицу уможений  
+Briefly describe the technologies used before:
+- Vanilla js
+- Electron
 
-### Syllable
+### Current Stack
+
+List all updated technologies and why each was chosen:
+- React Typescript
+- Electron
+- Vite
+- svgr-plugin
+- scss
+
+## New Architecture
+
+### Bridge Layer architecture overview
+
+``` bash
+       ┌─────────────────────────────┐
+       │         ОС + Files          │
+       │  ┌───────────────────────┐  │
+       │  │ /locales/en.json      │◄─┤
+       │  │ /locales/ru.json      │◄─┤
+       │  │ /config/user.json     │◄─┤
+       │  │ /config/settings.json │◄─┘
+       └─────────────────────────────┘
+                       ▲
+                       │ (fs.readFileSync / fs.promises.writeFile)
+                       ▼
+       ┌─────────────────────────────┐
+       │         Preload.js          │ ◄─ (using contextBridge)
+       │                             │
+       │  ┌────────────────────────────┐
+       │  │ globalThis.translations    │ ← loading from settings.lang
+       │  │ globalThis.settings        │ ← sync preload
+       │  │ globalThis.user            │ ← sync preload
+       │  └────────────────────────────┘
+       │                             │
+       │  window.api = {
+       │    getTranslation(tag) → translations[tag],
+       │    setLanguage(lang) → reloads translations & updates settings,
+       │
+       │    getSetting(key), setSetting(key, val), saveSettings(obj),
+       │    getUser(), setUserKey(key, val), saveUser(obj),
+       │  }
+       └─────────────────────────────┘
+                       ▲
+                       │ contextBridge
+                       ▼
+┌─────────────────────────────────────────────┐
+│                                             │
+│                  React (UI)                 │
+│                                             │
+│  ┌───────────────────────────────────────┐  │
+│  │           useTranslation()            │  │
+│  │                  ↓                    │  │
+│  │   window.api.getTranslation('tag')    │  │
+│  └───────────────────────────────────────┘  │
+│                                             │
+│  ┌───────────────────────────────────────┐  │
+│  │         useSettingsContext()          │  │
+│  │                  ↓                    │  │
+│  │  getSetting / setSetting / changeLang │◄────────┐
+│  └───────────────────────────────────────┘  │      │
+│                                             │      │
+│  ┌───────────────────────────────────────┐  │      │
+│  │           useUserContext()            │  │      │
+│  │                  ↓                    │  │      │
+│  │   getUser / updateUser / setUsername  │  │      │
+│  └───────────────────────────────────────┘  │      │
+│                                             │      │
+│                UI rerenders                 │      │
+│            when contexts update             │      │
+└─────────────────────────────────────────────┘      │
+             ▲                                       │
+             │     context triggers state update     │
+             └───────────────────────────────────────┘
+
+```
+
+### Business Logic Layer architecture overview
+
+```bash
+┌───────────────────────────────────────────────┐
+│                 <Routes>                      │
+│                                               │
+│  ┌───────────────────────────────────────┐    │
+│  │           RecordsProvider             │◄─┐ │  ← contains and controls records
+│  │                                       │  │ │         and achievements 
+│  │  ┌───────────────────────────────┐    │  │ │
+│  │  │       GameStateProvider       │◄─┐ │  │ │  ←  (idle, playing, win, lose)
+│  │  │                               │  │ │  │ │
+│  │  │  ┌─────────────────────────┐  │  │ │  │ │
+│  │  │  │    GameLayoutWrapper    │  │  │ │  │ │
+│  │  │  │   (defines layout by)   │  │  │ │  │ │
+│  │  │  │         gameId          │  │  │ │  │ │
+│  │  │  └────────────▲────────────┘  │  │ │  │ │
+│  │  │               │               │  │ │  │ │
+│  │  │  ┌────────────┴────────────┐  │  │ │  │ │
+│  │  │  │       GameLayout        │  │  │ │  │ │
+│  │  │  │  (Central or others)    │  │  │ │  │ │
+│  │  │  │                         │──────────┘ │
+│  │  │  │    ┌───────────────┐    │  │  │ │    │
+│  │  │  │    │ GameLeftPanel │    │  │  │ │    │
+│  │  │  │    └───────────────┘    │  │  │ │    │
+│  │  │  │    ┌───────────────┐    │  │  │ │    │
+│  │  │  │    │ GameMainPanel │──────────┘ │    │ ← calls: startGame / endGame →
+│  │  │  │    └───────────────┘    │  │    │    │          → submitResult → notify
+│  │  │  │    ┌───────────────┐    │  │    │    │
+│  │  │  │    │ ScoreSection  │    │  │    │    │ ← shows scores and justAddedRecord
+│  │  │  │    └───────────────┘    │  │    │    │
+│  │  │  └─────────────────────────┘  │    │──┐ │ 
+│  │  └───────────────────────────────┘    │  │ │
+│  └───────────────────────────────────────┘  │ │
+│                                             │ │
+│    ┌──────────────────────────────────┐     │ │
+│    │   <AchievementToastContainer/>   │◄────┘ │ ← render notification on higher level
+│    └──────────────────────────────────┘       │
+└───────────────────────────────────────────────┘
+
+```
+
+### Core Modules
+
+List and describe main architectural modules or layers:
+- UI Layer
+- Business Logic Layer
+- Data Layer
+- API Services
+- Utilities / Shared
+
+### Data Flow
+
+Describe the data flow (e.g., unidirectional, pub-sub, observer pattern).
+
+### File Structure
+
+```bash
+src/
+├── components/
+├── contexts/
+├── modules/
+├── state/
+├── utils/
+├── assets/
+└── main.ts
+```
+
+## Refactoring Process
+
+### Migration Strategy
+
+- Full rewrite of the project, building an architecture and all business logic
+- Parallel development branches -> Vanila [currently main] + React branch
+- On this step we don't need any feature freezes in case this is a project rebuilding with already build-in new features
+
+### Breaking Changes
+
+List of known breaking changes:
+- Language API
+- Changes in folder structure
+- Scalability for components/modules
+- Incompatible interface changes
+- Local data Storage is removed
+
+### Backward Compatibility
+
+- Data migration inbetween versions 
+- Versioned APIs
+
+## Key Decisions
+
+| Decision                         | Alternatives Considered     | Reason for Choice                    |
+|----------------------------------|-----------------------------|--------------------------------------|
+| Adopted Vite                     | Webpack, Parcel             | Faster development builds            |
+| Migrated to TypeScript           | Continue with JavaScript    | Improved type safety, better tooling |
+| Modularized components by domain | Flat structure              | Scalability and isolation            |
+
+## Tooling & Infrastructure
+
+Tools adopted or updated as part of the refactor:
+
+- **CI/CD**: GitHub Actions, GitLab CI, CircleCI
+- **Documentation**: Markdown
+
+## Testing & Quality Assurance
+
+Outline of testing approach and tools:
+
+- **Unit Testing**: Vitest *currently at work*
+
+## Known Issues & Limitations
+
+- [ ] the size of build
+
+## Future Improvements
+
+
+## Appendix
+
