@@ -1,4 +1,3 @@
-// SettingsContext.tsx
 import {
   createContext,
   useContext,
@@ -16,6 +15,7 @@ type Listener<K extends keyof AppSettings> = (value: AppSettings[K]) => void;
 interface SettingsAPI {
     get<K extends keyof AppSettings>( key: K ): AppSettings[K];
     set<K extends keyof AppSettings>( key: K, value: AppSettings[K] ): void;
+    getAll(): AppSettings;
     useSetting<K extends keyof AppSettings>( key: K )
         : [AppSettings[K], (value: AppSettings[K]) => void];
 }
@@ -42,6 +42,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         return settingsRef.current[key];
     }, []);
 
+    const getAll = useCallback(() => {
+        return settingsRef.current;
+    }, []);
+
     const set = useCallback(<K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
         window.settingsAPI.set(key, value); // triggers .subscribe in preload
     }, []);
@@ -50,6 +54,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         const [val, setVal] = useState(() => get(key));
         
         useEffect(() => {
+            // subscribe to changes
             const listener = (newVal: AppSettings[K]) => setVal(newVal);
             if (!subscribers.current[key]) subscribers.current[key] = new Set();
             subscribers.current[key]!.add(listener);
@@ -65,7 +70,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         return [val, update];
     };
 
-    const value: SettingsAPI = { get, set, useSetting };
+    const value: SettingsAPI = { get, getAll, set, useSetting };
 
     return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 };

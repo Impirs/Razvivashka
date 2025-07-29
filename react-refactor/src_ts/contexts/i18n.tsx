@@ -13,7 +13,7 @@ type AppLanguage = typeof ruTranslations; // translations structure type
 
 const LanguageContext = createContext<LanguageContextType<AppLanguage> | undefined>(undefined);
 
-export const LanguageProvider: React<{ children: ReactNode }> = ({ children }) => {
+export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [language, setLanguage] = React.useState<Language>(defaultLanguage);
     const [loading, setLoading] = React.useState(false);
 
