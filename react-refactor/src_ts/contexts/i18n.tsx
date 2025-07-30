@@ -12,8 +12,11 @@ import enTranslations from '../languages/en.json';
 type AppLanguage = typeof ruTranslations; // translations structure type
 
 const LanguageContext = createContext<LanguageContextType<AppLanguage> | undefined>(undefined);
+type LanguageProviderProps = {
+    children: ReactNode;
+};
 
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     const [language, setLanguage] = React.useState<Language>(defaultLanguage);
     const [loading, setLoading] = React.useState(false);
 

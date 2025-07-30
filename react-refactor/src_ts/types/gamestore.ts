@@ -2,8 +2,6 @@
 export type GameAchievement = {
     gameId: string;
     gameProps: string; // game-specific properties
-    title: string;
-    description: string;
     requirements: number[]; // [bronze, silver, gold] thresholds
 };
 

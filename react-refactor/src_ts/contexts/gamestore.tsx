@@ -86,9 +86,11 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
 export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(gameStoreReducer, initialState);
 
+    // If the same app is used for multiple accounts, then
+    // save user in local storage but save the ability to change "account" in settings
+    // So there will be several user files on device and family members can switch between them
     const login = async (username: string) => {
         try {
-            // In a real app, you would load this from Electron's AppData
             const userData: User = await window.gameStoreAPI.loadUserData(username);
             
             // Initialize achievements if missing
@@ -178,8 +180,9 @@ export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                     }
                 });
 
-                // In a real app, you might want to show a notification here
-                console.log(`Unlocked achievement: ${achievement.title}`);
+                // TODO:
+                // Call notification context to show the unlocked achievement
+                console.log(`Unlocked achievement: ${achievement.gameId} - ${achievement.gameProps}`, newUnlockedTiers);
             }
         });
     };
