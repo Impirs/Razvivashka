@@ -2,7 +2,10 @@
     "scripts": {
         "vanilla:start": "cd vanilla-app && npm start",
         "vanilla:build": "cd vanilla-app && npm run build",
-        "react:start": "cd react-refactor && npm run dev",
-        "react:build": "cd react-refactor && npm run build"
+        "react:js:start": "cd react-refactor && npm run dev:js",
+        "react:js:build": "cd react-refactor && npm run build:js",
+        "react:ts:start": "cd react-refactor && npm run dev:ts",
+        "react:ts:build": "cd react-refactor && npm run build:ts",
+        "react:ts:test" : "cd react-refactor && npm run test:ts"
     }
 }
