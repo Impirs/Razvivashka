@@ -1,15 +1,16 @@
-# 🚀 Развивашка
+# 🚀 Play and Learn
 
 Развивашка - это приложение с набором различных игр на логику, счет и чтение, количество которых неустанно растет. Приложение направленно на развитие базовых навыков детей дошкольного возраста и начальных классов.
 
 ![Latest Release](https://img.shields.io/github/v/release/Impirs/Razvivashka)
 ![Downloads](https://img.shields.io/github/downloads/Impirs/Razvivashka/total)
-![Visitors](https://visitor-badge.glitch.me/badge?page_id=Impirs.Razvivashka)
 ![License](https://img.shields.io/badge/license-MIT--Limited-orange)
 
 ---
 
-## 📌 Навигация
+## 📌 Navitagion
+
+- [🧑‍💻Development](#-development)
 
 - [🔽 Скачать](#-скачать-приложение)
 - [🆕 Что нового](#-что-нового-в-последней-версии)
@@ -53,6 +54,30 @@
 1. Установите zip архив из последнего релиза на ваш компьютер
 2. Распакуйте архив папкой, либо создайте преждевременно отдельную папку для приложения, чтобы не допустить случая, когда все файлы разбросаны по какой-либо общей папке
 3. Запустите `Развивашка.exe`
+
+## 🧑‍💻 Development
+
+### Technology Stack
+
+### Vanilla Version Tech Stack
+1. JavaScript
+2. Electron.js
+
+### React Version Tech Stack
+1. React
+2. TypeScript
+3. Electron
+4. Tailwind CSS
+5. Vite
+
+### Technical Documentation
+> As part of the transition to React, the application's logic and architecture were significantly restructured. The updated architecture, along with specific implementation details, is documented in a dedicated .md file.
+
+#### Instructions:
+
+1. Switch the branch from **main** to **react-refactor**.
+2. Upon switching, you will see newly added folders and files.
+3. Refer to the [refactoring documentation](react-refactor/refactoring.md) or locate it manually within the **react-refactor** directory.
 
 ---
 
