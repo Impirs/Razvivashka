@@ -1,6 +1,6 @@
-# 🚀 Развивашка
+# 🚀 Razvivashka (Play & Learn)
 
-Развивашка - это приложение с набором различных игр на логику, счет и чтение, количество которых неустанно растет. Приложение направленно на развитие базовых навыков детей дошкольного возраста и начальных классов.
+An educational desktop app with a growing set of mini‑games for logic, counting, attention, and early reading skills. Optimized for kids in preschool and early grades, but fun for anyone to train brain basics.
 
 ![Latest Release](https://img.shields.io/github/v/release/Impirs/Razvivashka)
 ![Downloads](https://img.shields.io/github/downloads/Impirs/Razvivashka/total)
@@ -8,62 +8,88 @@
 
 ---
 
-## 📌 Навигация
+## Quick links
 
-- [🔽 Скачать](#-скачать-приложение)
-- [🆕 Что нового](#-что-нового-в-последней-версии)
-- [📂 Все релизы](https://github.com/username/repo/releases)
-- [📄 Лицензия](#-лицензия)
-
-## Контакты
-
-[✉️ **Оставить отзыв или предложить новую идею**](https://forms.gle/hQ3Fo3BozxDgZqeM6)
-
-Если у вас возникла какая-то ошибка или вы хотели бы предложить идею для развития приложения вы можете прислать **снимки экрана** с ошибкой или с референсом на какую-то другую игру/ упраженения для детей, можете написать на почту: `razvivashka.gh@gmail.com`
+- Download: latest build        → https://github.com/Impirs/Razvivashka/releases/latest
+- All releases                  → https://github.com/Impirs/Razvivashka/releases
+- Feedback & feature requests   → https://forms.gle/hQ3Fo3BozxDgZqeM6
 
 ---
 
-## 🆕 Что нового в последней версии
+## Vanilla edition (current stable)
 
-- Теперь в настройках можно добавить имя, им будут подписаны ваши успехи в приложении
-- Изменено отображение рекордов в играх на время
-- Устранены ошибки в игре "Таблица Шульте"
+The vanilla Electron edition is what most users run today. It ships as a Windows installer and includes:
+
+- Games: Digit (arithmetic practice), Shulte (attention focus), Syllable (early reading basics)
+- Catalog/Home/Settings/Achievements pages
+- Local records saved on your device; per‑user name can be set in Settings to tag results
+- Works fully offline after installation
+
+Recent highlights (stable):
+- Added user name field in Settings; your scores are labeled with it
+- Improved record display for timed games
+- Fixed issues in “Shulte table”
+
+Download the latest installer from Releases (links above).
 
 ---
 
-## 📥 Скачать приложение
+## License
 
-🔽 [Скачать последнюю версию](https://github.com/Impirs/Razvivashka/releases/latest)  
-📂 [Все релизы](https://github.com/Impirs/Razvivashka/releases)
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
 ---
 
-## 🛠️ Как установить
+## Contact / Feedback
 
-### При помощи установщика (лучший способ)
+- Submit feedback or ideas: https://forms.gle/hQ3Fo3BozxDgZqeM6
+- For bug reports, please include screenshots if possible. You can also email: `razvivashka.gh@gmail.com`
 
-1. Откройте вкладку релизов и установите последний выложенный файл установщик `play_and_learn-Setup.exe` *(Установка других файлов не требуется)*
-2. Запустите файл установщик, выберите путь установки
-3. Во время установки появится предупреждение windows, выберите "Разрешить", программа не содержит никаких вредоносных файлов, предупреждение возникает по [следующей причине](#️-информация-о-предупреждении)
-4. Завершите установку и откройте приложение
+---
 
-### При помощи архива
+## Installation help
 
-1. Установите zip архив из последнего релиза на ваш компьютер
-2. Распакуйте архив папкой, либо создайте преждевременно отдельную папку для приложения, чтобы не допустить случая, когда все файлы разбросаны по какой-либо общей папке
+### English
+
+Installer (recommended)
+1. Open Releases and download the latest installer: `play_and_learn-Setup.exe` (no other files needed)
+2. Run the installer and choose an install path
+3. Windows may show a security warning; choose “Allow/Run”. The app is safe — the notice appears because the certificate isn’t from a commercial publisher
+4. Finish the setup and start the app
+
+ZIP archive
+1. Download the latest `.zip` from Releases
+2. Extract it into its own folder (don’t mix with unrelated files)
+3. Run `Развивашка.exe`
+
+Security warning (Windows)
+- You are installing software, which modifies files on your machine (normal for installers)
+- The signing certificate may not be trusted by Windows yet because this is not a commercial publisher; you can allow the app to run
+
+### Русский
+
+Установщик (рекомендуется)
+1. Откройте страницу релизов и скачайте последний установщик: `play_and_learn-Setup.exe` *(другие файлы не нужны)*
+2. Запустите установщик и выберите путь установки
+3. Windows может показать предупреждение безопасности — выберите «Разрешить/Выполнить». Приложение безопасно; предупреждение возникает из‑за отсутствия коммерческого издателя
+4. Завершите установку и запустите приложение
+
+Архив ZIP
+1. Скачайте последний `.zip` из релизов
+2. Распакуйте архив в отдельную папку (не смешивайте с другими файлами)
 3. Запустите `Развивашка.exe`
 
----
-
-## 📄 Лицензия
-
-Этот проект распространяется под лицензией MIT. Подробнее в [LICENSE](./LICENSE).
+Предупреждение безопасности (Windows)
+- Вы устанавливаете программу, что влечёт изменения на компьютере (это нормально для установщиков)
+- Сертификат подписи может быть не «доверенным» для Windows, так как издатель не коммерческий; можно разрешить запуск
 
 ---
 
-## ❗️ Информация о предупреждении
+## Refactor (React + TypeScript) preview
 
-Предупреждение об изменениях на вашем компьютере появляется по двум причинам:
+We’re rebuilding the app with React + TypeScript, Vite, and a stronger architecture (Electron main + preload bridge; typed contexts for settings, language, user/records, game controller, notifications). Styling will gradually move to Tailwind CSS.
 
-1. Вы устанавливаете программу, что уже является изменениями на вашем компьютере. Так же данное приложение создает файл на важем жестком диске, в который будут автоматически записываться логи об обновлениях и различных проверках жизненного цикла программы.
-2. Программа имеет сертификат, который не является изначально доверенным для windows, поскольку автор данного приложения не является коммерческой компанией и microsoft не осведомлен о моих работах соответствующим образом 😁.
+- Source: `react-refactor/` (renderer in `src_ts/`, Electron in `electron_ts/`)
+- Architecture and refactoring notes: see `react-refactor/refactoring.md`
+
+If you only want the stable app — use the Vanilla edition from Releases above. If you’re curious about the new architecture, start with the documentation linked above.
