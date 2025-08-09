@@ -48,25 +48,5 @@
         "gameId": "shulte",
         "gameProps": "5x5",
         "requirements": [90, 105, 120]
-    },
-    {
-        "gameId": "syllable",
-        "gameProps": "1x1",
-        "requirements": [10, 5, 1]
-    },
-    {
-        "gameId": "syllable",
-        "gameProps": "1x2",
-        "requirements": [10, 5, 1]
-    },
-    {
-        "gameId": "syllable",
-        "gameProps": "2x1",
-        "requirements": [10, 5, 1]
-    },
-    {
-        "gameId": "syllable",
-        "gameProps": "2x2",
-        "requirements": [10, 5, 1]
     }
 ]
