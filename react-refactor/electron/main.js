@@ -24,6 +24,8 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false,
+            // Ensure preload is not sandboxed so it can use Node modules like fs
+            sandbox: false,
         }
     });
 
