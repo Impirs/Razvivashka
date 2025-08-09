@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { generateBoard, isNextToEmpty, isBoardCleared } from './digitGameLogic';
+import { generateBoard, isBoardCleared } from './digitGameLogic';
 import type { DigitGameSettings } from './types/game_digital';
 
 import { useGameController } from '../../contexts/gameController';
 
 interface DigitGameProps {
     settings: DigitGameSettings;
-    onGameEnd: (result: 'win' | 'lose', stats?: any) => void;
-    disabled?: boolean;
 }
 
 function DigitGame({ settings }: DigitGameProps) {

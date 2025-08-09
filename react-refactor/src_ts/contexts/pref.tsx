@@ -1,11 +1,11 @@
 import {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+    useCallback,
+    ReactNode,
 } from "react";
 
 import type { AppSettings } from "../types/settings";
