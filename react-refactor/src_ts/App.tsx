@@ -13,16 +13,10 @@ import { SettingsProvider } from './contexts/pref';
 import CatalogPage from './pages/catalog/CatalogPage';
 import AchievementPage from './pages/achievements/AchievementsPage';
 import SettingsPage from './pages/settings/SettingsPage';
+import HomePage from './pages/home/HomePage';
 
 // Layout with game hub
 import GameLayout from './layouts/GameLayout';
-
-// Simple placeholder home
-const HomePage: React.FC = () => (
-	<div className="page-content">
-		<div className="container-content">Home</div>
-	</div>
-);
 
 function GameCentralWrapper() {
 	const { gameId } = useParams();
@@ -33,21 +27,21 @@ function GameCentralWrapper() {
 function App() {
 	return (
 		<SettingsProvider>
-			<LanguageProvider>
-				<GameStoreProvider>
-					<Router>
-						<NotificationProvider>
-							<Routes>
-								<Route path="/" element={<HomePage />} />
-								<Route path="/catalog" element={<CatalogPage />} />
-								<Route path="/catalog/:gameId" element={<GameCentralWrapper />} />
-								<Route path="/settings" element={<SettingsPage />} />
-								<Route path="/achievements" element={<AchievementPage />} />
-							</Routes>
-						</NotificationProvider>
-					</Router>
-				</GameStoreProvider>
-			</LanguageProvider>
+		<LanguageProvider>
+		<GameStoreProvider>
+			<Router>
+				<NotificationProvider>
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/catalog" element={<CatalogPage />} />
+					<Route path="/catalog/:gameId" element={<GameCentralWrapper />} />
+					<Route path="/settings" element={<SettingsPage />} />
+					<Route path="/achievements" element={<AchievementPage />} />
+				</Routes>
+				</NotificationProvider>
+			</Router>
+		</GameStoreProvider>
+		</LanguageProvider>
 		</SettingsProvider>
 	);
 }

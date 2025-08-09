@@ -124,8 +124,8 @@
             "options": {
                 "ru": "Русский",
                 "en": "English",
-                "sb_l": "Srpski (Latinica)",
-                "sb_k": "Српски (Cyrillic)"
+                "sb_lat": "Srpski (Latinica)",
+                "sb_cy": "Српски (Cyrillic)"
             }
         },
         "player": {

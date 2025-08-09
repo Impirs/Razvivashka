@@ -109,6 +109,64 @@ export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         dispatch({ type: 'LOGOUT' });
     };
 
+    // Switch active user profile and persist choice to settings
+    const switchUser = async (username: string): Promise<boolean> => {
+        if (!username) return false;
+        if (state.currentUser?.username === username) return true;
+        // Save current state before switching
+        if (state.currentUser) {
+            window.gameStoreAPI.saveUserData(state.currentUser.username, state.currentUser);
+        }
+        // Persist selection and login
+        window.settingsAPI.set('currentUser', username as any);
+        await login(username);
+        return true;
+    };
+
+    const listUsers = (): string[] => {
+        try {
+            return window.gameStoreAPI.listUsers();
+        } catch {
+            return [];
+        }
+    };
+
+    const createUser = async (username: string, switchTo: boolean = true): Promise<boolean> => {
+        if (!username) return false;
+        const ok = window.gameStoreAPI.createUser(username);
+        if (!ok) return false;
+        if (switchTo) {
+            window.settingsAPI.set('currentUser', username as any);
+            await login(username);
+        }
+        return true;
+    };
+
+    const deleteUser = async (username: string): Promise<boolean> => {
+        if (!username) return false;
+        const isCurrent = state.currentUser?.username === username;
+        const ok = window.gameStoreAPI.deleteUser(username);
+        if (!ok) return false;
+        if (isCurrent) {
+            // Preload resets currentUser to 'user' in settings when deleting current
+            const nextUser = window.settingsAPI.get('currentUser') as unknown as string;
+            await login(nextUser || 'user');
+        }
+        return true;
+    };
+
+    const renameCurrentUser = async (newUsername: string): Promise<boolean> => {
+        if (!state.currentUser || !newUsername) return false;
+        const old = state.currentUser.username;
+        if (old === newUsername) return true;
+        const ok = window.gameStoreAPI.renameUser(old, newUsername);
+        if (!ok) return false;
+        // Persist and refresh state from storage to be safe
+        window.settingsAPI.set('currentUser', newUsername as any);
+        await login(newUsername);
+        return true;
+    };
+
     const addGameAchievements = (gameId: string, achievements: GameAchievement[]) => {
         dispatch({
             type: 'ADD_GAME_ACHIEVEMENTS',
@@ -196,6 +254,14 @@ export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     }, [state.allAchievements]);
 
+    // Auto-login selected user on startup
+    useEffect(() => {
+        const selected = window.settingsAPI.get('currentUser') as unknown as string;
+        const username = selected || 'user';
+        login(username);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <GameStoreContext.Provider
             value={{
@@ -205,6 +271,12 @@ export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                 addGameAchievements,
                 unlockAchievementCheck,
                 addGameRecord,
+                // user management
+                listUsers,
+                switchUser,
+                createUser,
+                deleteUser,
+                renameCurrentUser,
             }}
         >
             {children}

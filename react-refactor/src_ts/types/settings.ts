@@ -6,6 +6,7 @@ export interface AppSettings {
         effects: number;
     },
     language: Language;
+    currentUser: string;
     games: {
         digit: {
             show_available: boolean;

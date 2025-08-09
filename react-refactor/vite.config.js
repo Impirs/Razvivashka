@@ -16,10 +16,12 @@ export default defineConfig({
         outDir: 'dist',
         emptyOutDir: true,
     },
+    // assetsInclude: ['**/*.json'],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src_ts'),
             '@shared': path.resolve(__dirname, '../shared'),
+            // '@translations': path.resolve(__dirname, './src_ts/translations'),
         },
     },
     css: {

@@ -42,6 +42,12 @@ export type GameStoreActions = {
     addGameAchievements: (gameId: string, achievements: GameAchievement[]) => void;
     unlockAchievementCheck: (gameId: string, gameProps: string, score: number) => void;
     addGameRecord: (gameId: string, gameProps: string, score: number) => void;
+    // User management
+    listUsers: () => string[];
+    switchUser: (username: string) => Promise<boolean>;
+    createUser: (username: string, switchTo?: boolean) => Promise<boolean>;
+    deleteUser: (username: string) => Promise<boolean>;
+    renameCurrentUser: (newUsername: string) => Promise<boolean>;
     // claimAchievementReward: (achievementId: string, tier: number) => boolean;
 };
 

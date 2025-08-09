@@ -7,9 +7,10 @@ type CheckboxProps = {
   children?: ReactNode;
   id?: string;
   className?: string;
+  ariaLabel?: string;
 };
 
-function Checkbox({ checked, onChange, children, id, className }: CheckboxProps) {
+function Checkbox({ checked, onChange, children, id, className, ariaLabel }: CheckboxProps) {
   return (
     <label className={className} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
       <input
@@ -17,6 +18,7 @@ function Checkbox({ checked, onChange, children, id, className }: CheckboxProps)
         checked={checked}
         onChange={e => onChange(e.target.checked)}
         id={id}
+        aria-label={ariaLabel}
         style={{ marginRight: 4 }}
       />
       {children}

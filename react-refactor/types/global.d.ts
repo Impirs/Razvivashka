@@ -10,6 +10,10 @@ interface SettingsAPI {
 interface GamestoreAPI {
   loadUserData(username: string): Promise<any>;
   saveUserData(username: string, data: any): void;
+  listUsers(): string[];
+  createUser(username: string): boolean;
+  deleteUser(username: string): boolean;
+  renameUser(oldUsername: string, newUsername: string): boolean;
 }
 
 declare global {
