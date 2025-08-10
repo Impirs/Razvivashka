@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/i18n';
 import { GameControllerProvider, useGameController } from '@/contexts/gameController';
+import { useNavigate } from 'react-router-dom';
+import Button from '@/components/button/button';
 
 import DigitMenu from '../modules/game_digital/DigitMenu';
 import DigitGame from '../modules/game_digital/DigitGame';
@@ -20,6 +22,7 @@ interface GameLayoutProps {
 function InnerGameLayout({ gameId }: GameLayoutProps) {
     const { t } = useLanguage();
     const { startGame, setGameContext } = useGameController();
+    const navigate = useNavigate();
     // store chosen settings per game
     const [digitSettings, setDigitSettings] = useState<DigitGameSettings | null>(null);
     const [shulteSettings, setShulteSettings] = useState<ShulteSettings | null>(null);
@@ -61,7 +64,12 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     return (
         <div className="game-central-layout">
             <div className="game-header">
+                <div style={{ display: 'flex', gap: 12 }}>
+                    <Button aria-label="nav-home" size="small" leftIcon="home" onClick={() => navigate('/')} />
+                    <Button aria-label="nav-back-catalog" size="small" leftIcon="circle-left" onClick={() => navigate('/catalog')} />
+                </div>
                 <h1>{t(`games.${gameId}` as TranslationKey<typeof ruTranslations>)}</h1>
+                <div />
             </div>
             <div className="game-content">
                 <aside className="game-side left">

@@ -1,11 +1,2 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<style>.cls-1{fill:#41416e;}</style>
-</defs>
-<title>chevron-circle-left</title>
-<g id="chevron-circle-left-Filled">
-<path id="chevron-circle-left-Filled-2" data-name="chevron-circle-left-Filled" class="cls-1" d="M12,2.5A9.5,9.5,0,1,0,21.5,12,9.509,9.509,0,0,0,12,2.5Zm1.71,11.79a1.008,1.008,0,0,1,0,1.42,1.014,1.014,0,0,1-1.42,0l-3-3a1.008,1.008,0,0,1,0-1.42l3-3a1,1,0,0,1,1.42,1.42L11.41,12Z"/>
-</g>
-</svg>
+<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="left-circle" class="icon glyph"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm1.71,12.29a1,1,0,0,1,0,1.42,1,1,0,0,1-1.42,0l-3-3a1,1,0,0,1,0-1.42l3-3a1,1,0,0,1,1.42,1.42L11.41,12Z" style="fill:#231f20"></path></svg>

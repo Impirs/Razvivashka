@@ -2,6 +2,8 @@ import React from 'react';
 import { useSettings } from '@/contexts/pref';
 import { useLanguage } from '@/contexts/i18n';
 import { useGameStore } from '@/contexts/gamestore';
+import { useNavigate } from 'react-router-dom';
+import Button from '@/components/button/button';
 
 import Checkbox from '@/components/checkbox/checkbox';
 
@@ -31,9 +33,17 @@ const SettingsPage: React.FC = () => {
         return res.startsWith('settings.language.options.') ? code : res;
     };
 
+    const navigate = useNavigate();
     return (
         <div className="page-content">
-            <div className="container-header" />
+            <div className="container-header">
+                <div style={{ display: 'flex', gap: 12 }}>
+                    <Button aria-label="nav-back" size="small" leftIcon="left" onClick={() => navigate('/')} />
+                    <Button aria-label="nav-home" size="small" leftIcon="home" onClick={() => navigate(-1)} />
+                </div>
+                <div />
+                <div />
+            </div>
             <div className="container-content">
                 <section className="general">
                     <div className="section-header"><h2>{t('settings.general' as any)}</h2><hr /></div>

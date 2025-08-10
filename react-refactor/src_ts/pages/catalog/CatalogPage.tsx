@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { useLanguage } from '@/contexts/i18n';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Button from '@/components/button/button';
 
 type GameMeta = {
     id: string;
@@ -19,6 +20,7 @@ const TYPES = ['all', 'math', 'attention', 'logic', 'reading'] as const;
 const CatalogPage: React.FC = () => {
     const [filter, setFilter] = useState<(typeof TYPES)[number]>('all');
     const { t } = useLanguage();
+    const navigate = useNavigate();
 
     const options = TYPES;
 
@@ -34,14 +36,17 @@ const CatalogPage: React.FC = () => {
     return (
         <div className="page-content">
             <div className="container-header">
-                <div />
+                <div style={{ display: 'flex', gap: 12 }}>
+                    <Button aria-label="nav-back" size="small" leftIcon="left" onClick={() => navigate('/')} />
+                    <Button aria-label="nav-settings" size="small" leftIcon="settings" onClick={() => navigate('/')} />
+                </div>
                 <div />
                 <div style={{ justifySelf: 'end' }}>
                     <label>
-                        {t('buttons.filter')}:
+                        {t('buttons.filter' as any)}:
                         <select aria-label="catalog-filter" value={filter} onChange={handleFilter}>
                             {options.map(opt => (
-                                <option key={opt} value={opt}>{t(`types.${opt}`)}</option>
+                                <option key={opt} value={opt}>{t(`types.${opt}` as any)}</option>
                             ))}
                         </select>
                     </label>

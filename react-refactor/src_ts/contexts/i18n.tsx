@@ -32,7 +32,7 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
         if (!translations[lang]) {
             setLoading(true);
             try {
-                const module = await import(`../translations/${lang}.json`);
+                const module = await import(`../languages/${lang}.json`);
                 setTranslations(prev => ({ ...prev, [lang]: module.default }));
             } catch (error) {
                 console.error(`Failed to load ${lang} translations:`, error);

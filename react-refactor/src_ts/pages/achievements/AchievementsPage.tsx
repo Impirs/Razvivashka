@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import achievementsData from '@/data/achievements.json';
 import { useLanguage } from '@/contexts/i18n';
+import { useNavigate } from 'react-router-dom';
+import Button from '@/components/button/button';
 
 interface AchRow {
   gameId: string;
@@ -55,10 +57,14 @@ const AchievementsPage: React.FC = () => {
         return `${base}${needsSpace ? ' ' : ''}${firstReq} ${secondsLabel}`;
     };
 
+    const navigate = useNavigate();
     return (
         <div className="page-content">
             <div className="container-header">
-                <div />
+                <div style={{ display: 'flex', gap: 12 }}>
+                    <Button aria-label="nav-back" size="small" leftIcon="left" onClick={() => navigate('/') } />
+                    <Button aria-label="nav-home" size="small" leftIcon="home" onClick={() => navigate(-1)} />
+                </div>
                 <div />
                 <div style={{ justifySelf: 'center' }}>
                     <select

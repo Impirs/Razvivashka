@@ -1,0 +1,187 @@
+@use '../colors';
+
+.dropdown {
+    position: relative;
+    width: 320px;
+    font-family: inherit;
+    z-index: 1;
+
+    .dropdown-header {
+        background: colors.$fourth;
+        border: 1px solid colors.$primary;
+        border-radius: 10px;
+        padding: 6px 9px;
+        color: colors.$text_secondary;
+        font-size: 18px;
+        transition: border-color 0.2s, color 0.2s;
+        user-select: none;
+        box-shadow: 0 2px 8px colors.$shadow;
+        min-height: 24px;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            border: 1px solid colors.$third;
+            color: colors.$third;
+            cursor: pointer;
+        }
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        left: 0;
+        top: calc(100% + 8px);
+        width: 100%;
+        background: colors.$fourth;
+        border: 1px solid colors.$primary;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px colors.$shadow;
+        z-index: 1000;
+        padding: 6px 0;
+        margin: 0;
+        list-style: none;
+        max-height: 260px;
+        overflow-y: auto;
+        justify-items: center;
+
+        li {
+            padding: 2px 9px 7px 9px;
+            color: colors.$text_secondary;
+            font-size: 17px;
+            transition: background 0.15s, color 0.15s;
+            cursor: pointer;
+            width: 280px;
+            height: 18px;
+            border-radius: 6px;
+            border: 0.5px solid colors.$primary;
+            margin-bottom: 4px;
+
+            &:hover,
+            &.selected {
+                background: colors.$hover;
+                color: colors.$third;
+                border: 1px solid colors.$third;
+            }
+        }
+    }
+}
+
+.text-input {
+    font-family: inherit;
+    width: 300px;
+    padding: 6px 9px;
+    font-size: 18px;
+    color: colors.$text_secondary;
+    background-color: colors.$fourth;
+    border: 1px solid colors.$primary;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: 0 2px 4px colors.$shadow;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+        border-color: colors.$third;
+        box-shadow: 0 4px 8px colors.$shadow;
+    }
+
+    &::placeholder {
+        color: #a9a9a9;
+        font-style: italic;
+    }
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 340px;
+    margin: 0 0 8px 0;
+
+    .slider {
+        width: 240px;
+        height: 6px;
+        background: colors.$primary;
+        border-radius: 4px;
+        outline: none;
+        transition: background 0.2s;
+        margin-right: 8px;
+        appearance: none;
+
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: colors.$third;
+            border-radius: 50%;
+            box-shadow: 0 0 4px colors.$shadow;
+            border: 2px solid colors.$primary;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+        }
+        &::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: colors.$third;
+            border-radius: 50%;
+            box-shadow: 0 0 4px colors.$shadow;
+            border: 2px solid colors.$primary;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+        }
+        &::-ms-thumb {
+            width: 20px;
+            height: 20px;
+            background: colors.$third;
+            border-radius: 50%;
+            box-shadow: 0 0 4px colors.$shadow;
+            border: 2px solid colors.$primary;
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+        }
+
+        &:focus {
+            background: colors.$third;
+        }
+    }
+
+    span {
+        font-size: 16px;
+        color: colors.$text_secondary;
+        min-width: 40px;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.checkbox {
+    width: 28px;
+    height: 28px;
+    border: 2px solid colors.$primary;
+    border-radius: 8px;
+    background: colors.$fourth;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 6px colors.$shadow;
+
+    > div {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background: transparent;
+        transition: background 0.2s;
+    }
+
+    &:hover {
+        border-color: colors.$third;
+        box-shadow: 0 4px 12px colors.$shadow;
+    }
+
+    .active {
+        background: colors.$third;
+        box-shadow: 0 0 4px colors.$shadow;
+        position: relative;
+    }
+}

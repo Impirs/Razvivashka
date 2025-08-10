@@ -18,7 +18,7 @@ export const numberDistribution = {
 
 export function getDistribution(target: number, size: number): Record<number, number> {
     if (target === 8) {
-        // Only allow 7 or 9
+        // allow both 7 and 9 board size
         return (numberDistribution[8].numbers as Record<number, Record<number, number>>)[size] || {};
     }
     return (numberDistribution as Record<number, any>)[target].numbers;

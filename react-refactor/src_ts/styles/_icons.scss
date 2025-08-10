@@ -1,0 +1,129 @@
+#medal {
+    -webkit-mask: url('@/assets/icons/achievement.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/achievement.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#award {
+    -webkit-mask: url('@/assets/icons/award.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/award.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#play {
+    -webkit-mask: url('@/assets/icons/play.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/play.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#settings {
+    -webkit-mask: url('@/assets/icons/settings.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/settings.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#exit {
+    -webkit-mask: url('@/assets/icons/exit.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/exit.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#home {
+    -webkit-mask: url('@/assets/icons/home.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/home.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#feedback {
+    -webkit-mask: url('@/assets/icons/feedback.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/feedback.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#refresh {
+    -webkit-mask: url('@/assets/icons/refresh.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/refresh.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#left {
+    display: flex;
+    -webkit-mask: url('@/assets/icons/circle-left.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/circle-left.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#right {
+    display: flex;
+    -webkit-mask: url('@/assets/icons/circle-right.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/circle-right.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#pause {
+    display: flex ;
+    -webkit-mask: url('@/assets/icons/pause.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/pause.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#continue {
+    display: none;
+    -webkit-mask: url('@/assets/icons/play.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/play.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#warning {
+    -webkit-mask: url('@/assets/icons/warning.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/warning.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#update {
+    -webkit-mask: url('@/assets/icons/update.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/update.svg') no-repeat center;
+    mask-size: contain;
+}
+
+.mistake {
+    background: #4b4b4b;
+
+    -webkit-mask-image: url('@/assets/icons/heart.svg');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+
+    mask-image: url('@/assets/icons/heart.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+}
+
+.mistake.cross {
+    background: #eb5252;
+
+    -webkit-mask-image: url('@/assets/icons/heart-broken.svg');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+
+    mask-image: url('@/assets/icons/heart-broken.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+}

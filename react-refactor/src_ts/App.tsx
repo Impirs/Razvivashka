@@ -1,5 +1,5 @@
 import React from 'react';
-// import './styles/main.scss';
+// SCSS is imported in main.ts
 
 import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 

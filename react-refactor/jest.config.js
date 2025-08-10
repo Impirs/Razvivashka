@@ -9,6 +9,8 @@ module.exports = {
     moduleNameMapper: {
         // Map TS path alias "@/" -> src_ts
         '^@/(.*)$': '<rootDir>/src_ts/$1',
+    // Map the iconMap module (which uses Vite import.meta.glob) to a mock for Jest
+    '^\.\/iconMap$': '<rootDir>/src_ts/components/icon/__mocks__/iconMap.tsx',
     },
         // Polyfills and shims before tests
         setupFiles: ['<rootDir>/jest.setup.js'],

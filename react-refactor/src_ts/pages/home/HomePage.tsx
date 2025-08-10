@@ -17,14 +17,24 @@ const HomePage: React.FC = () => {
 	};
 
 	return (
-		<div className="page-content">
-			<div className="container-content">
+		<div className="page-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+			<div className="menu-card">
 				<h1>{t('routes.home' as any)}</h1>
-				<div style={{ display: 'grid', gap: 12, marginTop: 16 }}>
-					<Button aria-label="nav-play" onClick={onPlay}>{t('buttons.play' as any)}</Button>
-					<Button aria-label="nav-achievements" onClick={onAchievements}>{t('routes.achievements' as any)}</Button>
-					<Button aria-label="nav-settings" onClick={onSettings}>{t('routes.settings' as any)}</Button>
-					<Button aria-label="nav-exit" onClick={onExit}>{t('buttons.close' as any)}</Button>
+				{/* Optional mascot slot — add an image in src_ts/assets/images and set src here if needed */}
+				{/* <img className={sty.menuLogo} src={new URL('@/assets/images/mascot.png', import.meta.url).toString()} alt="" /> */}
+				<div>
+					<Button aria-label="nav-play" onClick={onPlay} leftIcon="play" size="large">
+						{t('buttons.play' as any)}
+					</Button>
+					<Button aria-label="nav-achievements" onClick={onAchievements} leftIcon="medal" size="large">
+						{t('routes.achievements' as any)}
+					</Button>
+					<Button aria-label="nav-settings" onClick={onSettings} leftIcon="settings" size="large">
+						{t('routes.settings' as any)}
+					</Button>
+					<Button aria-label="nav-exit" onClick={onExit} leftIcon="exit" size="large">
+						{t('buttons.close' as any)}
+					</Button>
 				</div>
 			</div>
 		</div>

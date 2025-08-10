@@ -1,0 +1,66 @@
+@use '../colors';
+
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 800px;
+    height: 680px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    background: transparent;
+}
+
+.section-header {
+    margin: 0 0 12px 0;
+    h2 {
+        font-size: 30px;
+        color: colors.$text_secondary;
+        margin: 0;
+        font-weight: 700;
+    }
+    hr {
+        border: none;
+        border-bottom: 1.5px solid colors.$primary;
+        margin: 8px 0 0 0;
+        width: 100%;
+    }
+}
+
+.section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    h3 { margin: 0px; }
+}
+
+.settings-line-parameter {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    gap: 18px;
+    min-height: 48px;
+
+    > :nth-child(2) { justify-self: center; }
+    
+    h3, h4 {
+        font-size: 20px;
+        color: colors.$text_secondary;
+        margin: 0;
+        font-weight: 500;
+        text-align: left;
+    }
+}
+
+.game-setting {
+    display: flex;
+    align-items: center;
+    h4 {
+        font-size: 18px;
+        color: colors.$text_secondary;
+        margin: 0;
+        font-weight: 400;
+    }
+}
