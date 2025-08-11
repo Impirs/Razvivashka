@@ -54,10 +54,12 @@ function SettingsPage() {
                         <Button aria-label="nav-back" 
                                 size="small" 
                                 leftIcon="left" 
+                                className='nav-button'
                                 onClick={() => navigate(-1)} />
                         <Button aria-label="nav-home" 
                                 size="small" 
                                 leftIcon="home" 
+                                className='nav-button'
                                 onClick={() => navigate('/')} />
                     </div>
                 </div>

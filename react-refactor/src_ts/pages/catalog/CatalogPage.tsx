@@ -60,11 +60,13 @@ function CatalogPage() {
                         <Button aria-label="nav-back" 
                                 size="small" 
                                 leftIcon="left" 
+                                className='nav-button'
                                 onClick={() => navigate(-1)} 
                                 />
                         <Button aria-label="nav-settings" 
                                 size="small" 
                                 leftIcon="settings" 
+                                className='nav-button'
                                 onClick={() => navigate('/settings')} 
                                 />
                     </div>

@@ -23,16 +23,16 @@ function HomePage() {
 				{/* TODO: mascot slot — add an image in src_ts/assets/images and set src here if needed */}
 				{/* <img className={sty.menuLogo} src={new URL('@/assets/images/mascot.png', import.meta.url).toString()} alt="" /> */}
 				<div>
-					<Button aria-label="nav-play" onClick={onPlay} leftIcon="play" size="large">
+					<Button aria-label="nav-play" onClick={onPlay} leftIcon="play" className='nav-button' size="large">
 						{t('buttons.play' as any)}
 					</Button>
-					<Button aria-label="nav-achievements" onClick={onAchievements} leftIcon="medal" size="large">
+					<Button aria-label="nav-achievements" onClick={onAchievements} leftIcon="medal" className='nav-button' size="large">
 						{t('routes.achievements' as any)}
 					</Button>
-					<Button aria-label="nav-settings" onClick={onSettings} leftIcon="settings" size="large">
+					<Button aria-label="nav-settings" onClick={onSettings} leftIcon="settings" className='nav-button' size="large">
 						{t('routes.settings' as any)}
 					</Button>
-					<Button aria-label="nav-exit" onClick={onExit} leftIcon="exit" size="large">
+					<Button aria-label="nav-exit" onClick={onExit} leftIcon="exit" className='nav-button' size="large">
 						{t('buttons.close' as any)}
 					</Button>
 				</div>

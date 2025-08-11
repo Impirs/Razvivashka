@@ -3,7 +3,7 @@ import Icon from '@/components/icon/icon';
 import { cn } from '../../utils/cn';
 // Use SCSS classes from src_ts/styles/components/_buttons.scss
 
-export type ButtonSize = 'large' | 'small';
+export type ButtonSize = 'large' | 'small'; // | 'text' ?
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     // Optional children to render inside the label
@@ -17,7 +17,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 function Button({ children, size = 'large', leftIcon, iconOnly = false, className, ...props }: ButtonProps) {
-     const classes = cn('ui-button', 'nav-button', size, className);
+     const classes = cn('ui-button', size, className);
      const showLabel = !iconOnly && children != null;
 
     return (

@@ -64,36 +64,53 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
     };
 
     return (
-        <div className="shulte-game">
-            {phase === "win" ? (
-                <div>Congratulations! You won!</div>
-            ) : (
-                <div
-                    className="shulte-board"
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: `repeat(${settings.size}, 1fr)`
-                    }}
-                >
-                    {board.map((row, rowIndex) =>
-                        row.map((cell, colIndex) => (
-                            <div
-                                key={`${rowIndex}-${colIndex}`}
-                                onClick={() => handleCellClick(rowIndex, colIndex)}
-                                style={{
-                                    background: cell.isFound ? "lightgreen" : "white",
-                                    border: "1px solid black",
-                                    cursor: "pointer",
-                                    userSelect: "none"
-                                }}
-                            >
-                                {cell.value}
-                            </div>
-                        ))
-                    )}
+        <section className="game-main-panel">
+            <header className="game-header-panel">
+                <div />
+                <div style={{ textAlign: 'center', fontSize: 18 }}>Shulte {settings.size}x{settings.size}</div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                    {/* Placeholder for timer/actions */}
                 </div>
-            )}
-        </div>
+            </header>
+            <div className="game-space">
+                {phase === "win" ? (
+                    <div>Congratulations! You won!</div>
+                ) : (
+                    <div
+                        className="shulte-board"
+                        style={{
+                            display: "grid",
+                            gap: 8,
+                            gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
+                            width: '100%',
+                            maxWidth: 620
+                        }}
+                    >
+                        {board.map((row, rowIndex) =>
+                            row.map((cell, colIndex) => (
+                                <div
+                                    key={`${rowIndex}-${colIndex}`}
+                                    onClick={() => handleCellClick(rowIndex, colIndex)}
+                                    style={{
+                                        height: 60,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: 8,
+                                        border: '1px solid #9aa3ff',
+                                        background: cell.isFound ? "#d6f8d6" : "white",
+                                        cursor: "pointer",
+                                        userSelect: "none"
+                                    }}
+                                >
+                                    {cell.value}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
+            </div>
+        </section>
     );
 };
 

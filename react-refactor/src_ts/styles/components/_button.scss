@@ -51,6 +51,7 @@
         }
 
         &:hover {
+            border: 1px solid colors.$third;
             .nav-btn-icon{
                 > span {
                     background: colors.$third;
@@ -88,5 +89,36 @@
                 color: colors.$third;
             }
         }
+    }
+}
+
+.game-button {
+	border: 2px solid colors.$primary;
+    border-radius: 16px;
+	background: colors.$fourth;
+	padding: 6px;
+	width: 272px;	
+	cursor: pointer;
+	box-shadow: 0 2px 8px colors.$shadow;
+	transition: transform 0.05s ease, background 0.15s ease, box-shadow 0.15s ease;
+    
+    h2, .ui-button__label {
+        margin: 0;
+        width: auto;
+    	font-family: 'Playball', 'Snide hand', cursive;
+        font-size: 25px;
+        font-weight: 600;
+        color: colors.$primary;
+    }
+
+	&:hover {
+		background: rgba(colors.$primary, 0.75);
+        h2, .ui-button__label {
+            color: rgba(colors.$text_rev, 0.75);
+        }
+	}
+    
+    &:active {
+        background: rgba(colors.$primary, 0.5);
     }
 }

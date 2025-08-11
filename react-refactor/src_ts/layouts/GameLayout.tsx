@@ -9,9 +9,6 @@ import DigitGame from '../modules/game_digital/DigitGame';
 import ShulteGame from '@/modules/game_shulte/ShulteGame';
 import ShulteMenu from '@/modules/game_shulte/ShulteMenu';
 
-import ruTranslations from '@/languages/ru.json';
-import type { TranslationKey } from '@/types/language';
-
 import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
 import type { DigitGameSettings } from '../modules/game_digital/types/game_digital';
 
@@ -62,14 +59,21 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     };
 
     return (
-        <div className="game-central-layout">
+        <div className="game-layout">
             <div className="game-header">
-                <div style={{ display: 'flex', gap: 12 }}>
-                    <Button aria-label="nav-home" size="small" leftIcon="home" onClick={() => navigate('/')} />
-                    <Button aria-label="nav-back-catalog" size="small" leftIcon="circle-left" onClick={() => navigate('/catalog')} />
-                </div>
-                <h1>{t(`games.${gameId}` as TranslationKey<typeof ruTranslations>)}</h1>
-                <div />
+                <Button aria-label="nav-back" 
+                        size="small" 
+                        leftIcon="left" 
+                        className='nav-button' 
+                        onClick={() => navigate(-1)} 
+                />
+                <h1>{t(`games.${gameId}` as any)}</h1>
+                <Button aria-label="nav-settings" 
+                        size="small" 
+                        leftIcon="settings" 
+                        className='nav-button' 
+                        onClick={() => navigate('/settings')} 
+                />
             </div>
             <div className="game-content">
                 <aside className="game-side left">
@@ -78,7 +82,7 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                 <main className="game-main">
                     {renderGame()}
                 </main>
-                <aside className="game-side right">
+                <aside className="game-side right" style={{content: ''}}>
                     {/* Right panel reserved for stats, hints, etc. */}
                 </aside>
             </div>

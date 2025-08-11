@@ -60,40 +60,66 @@ function DigitGame({ settings }: DigitGameProps) {
         }
     }, [mistakes, score, endGame]);
 
-    if (status === 'idle') {
-        return (
-            <div className="digit-game-idle">
-                <h3>Составьте {settings.target} из чисел на поле</h3>
-                <button onClick={startGame}>Старт</button>
-            </div>
-        );
-    }
-
-    if (status === 'win') {
-        return <div className="digit-game-win">Победа! Ваш счет: {score}</div>;
-    }
-
-    if (status === 'lose') {
-        return <div className="digit-game-lose">Поражение! Ошибки: {mistakes}</div>;
-    }
-
     return (
-        <div className="digit-game">
-            <h3>Составьте {settings.target} из чисел на поле</h3>
-            <div className="digit-board">
-                {board.map((rowArr, row) =>
-                    rowArr.map((num, col) => (
-                        <div
-                            key={`${row}-${col}`}
-                            className="cell"
-                            onClick={() => handleCellClick(row, col)}
-                        >
-                            {num}
-                        </div>
-                    ))
+        <section className="game-main-panel">
+            <header className="game-header-panel">
+                <div className="mistakes_counter" aria-label="mistakes">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className={`mistake${i < mistakes ? ' cross' : ''}`} />
+                    ))}
+                </div>
+                <div style={{ textAlign: 'center', fontSize: 18 }}>Цель: {settings.target}</div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                    <button className="game-restart-btn" onClick={startGame}>Старт</button>
+                </div>
+            </header>
+            <div className="game-space">
+                {status === 'idle' && (
+                    <>
+                        <h3>Составьте {settings.target} из чисел на поле</h3>
+                        <button className="game-restart-btn" onClick={startGame}>Старт</button>
+                    </>
+                )}
+                {status === 'win' && (
+                    <div className="digit-game-win">Победа! Ваш счет: {score}</div>
+                )}
+                {status === 'lose' && (
+                    <div className="digit-game-lose">Поражение! Ошибки: {mistakes}</div>
+                )}
+                {status === 'playing' && (
+                    <div className="digit-board" style={{
+                        display: 'grid',
+                        gap: 8,
+                        gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
+                        width: '100%',
+                        maxWidth: 620
+                    }}>
+                        {board.map((rowArr, row) =>
+                            rowArr.map((num, col) => (
+                                <div
+                                    key={`${row}-${col}`}
+                                    className="cell"
+                                    style={{
+                                        height: 60,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: 8,
+                                        border: '1px solid #9aa3ff',
+                                        background: num === null ? '#f4f6ff' : 'white',
+                                        cursor: num === null ? 'default' : 'pointer',
+                                        userSelect: 'none'
+                                    }}
+                                    onClick={() => handleCellClick(row, col)}
+                                >
+                                    {num}
+                                </div>
+                            ))
+                        )}
+                    </div>
                 )}
             </div>
-        </div>
+        </section>
     );
 };
 

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import type { DigitGameSettings } from './types/game_digital';
+import { useGameController } from '../../contexts/gameController';
+import { useLanguage } from '@/contexts/i18n';
+
+import GameSetting from '@/components/gamesetting/gamesetting';
+import Button from '@/components/button/button';
 
 interface DigitMenuProps {
     onStart: (settings: DigitGameSettings) => void;
@@ -9,6 +14,8 @@ interface DigitMenuProps {
 function DigitMenu({ onStart, initialSettings } : DigitMenuProps) {
     const [target, setTarget] = useState<number>(initialSettings?.target || 6);
     const [size, setSize] = useState<number>(initialSettings?.size || 7);
+
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (target === 6 || target === 7) setSize(7);
@@ -22,51 +29,31 @@ function DigitMenu({ onStart, initialSettings } : DigitMenuProps) {
     else if (target === 8) availableSizes = [7, 9];
 
     return (
-        <div className="digit-setup">
-            <h3>Настройки игры</h3>
-            <div className="digit-setup-setting">
-                Найти состав числа:
-                <div>
-                    {[6, 7, 8, 9, 10].map((val) => (
-                        <div
-                            key={val}
-                            className={`digit-setup-value${target === val ? ' active' : ''}`}
-                            style={{
-                                minWidth: '10%',
-                                background: target === val ? '#e0e0ff' : '#fff',
-                                cursor: 'pointer',
-                                userSelect: 'none',
-                            }}
-                            onClick={() => setTarget(val)}
-                        >
-                            {val}
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className="digit-setup-setting">
-                Размер поля:
-                <div className={`digit-size-options digit-size-options--${availableSizes.length}`}>
-                    {availableSizes.map((val) => (
-                        <div
-                            key={val}
-                            className={`digit-setup-value${size === val ? ' active' : ''}`}
-                            style={{
-                                fontFamily: 'Snide hand',
-                                width: availableSizes.length === 1 ? '100%' : '50%',
-                                textAlign: 'center',
-                                background: size === val ? '#e0e0ff' : '#fff',
-                                cursor: 'pointer',
-                                userSelect: 'none',
-                            }}
-                            onClick={() => setSize(val)}
-                        >
-                            {val === 7 ? 'Стандарт' : 'Большой'}
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <button onClick={() => onStart({ target, size })}>Старт</button>
+        <div className="game-menu">
+            <h2>{t('game-menu.setup')}</h2>
+            <GameSetting
+                title={t('game-menu.digit.target')}
+                options={[6, 7, 8, 9, 10].map(v => ({ key: v, label: v }))}
+                selected={target}
+                onChange={(k) => setTarget(Number(k))}
+            />
+            <GameSetting
+                title={t('game-menu.digit.size')}
+                options={availableSizes.map(v => 
+                    ({ key: v, label: v === 7 ? 
+                        t('game-menu.bsize.standard') : 
+                        t('game-menu.bsize.large') 
+                    })
+                )}
+                selected={size}
+                onChange={(k) => setSize(Number(k))}
+            />
+            <Button
+                className="game-button"
+                onClick={() => onStart({ target, size })}
+            >
+                {t('buttons.start')}
+            </Button>
         </div>
     );
 };
