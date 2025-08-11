@@ -44,6 +44,8 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
                         {
                             gameId: action.payload.gameId,
                             gameProps: action.payload.gameProps,
+                            modification: [''], // default placeholder to satisfy [string]
+                            isperfect: false,
                             score: action.payload.score,
                             lastPlayed: new Date(),
                         }
@@ -220,11 +222,16 @@ export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
             if (!userAchievement) return;
 
-            // Check which tiers can be unlocked based on the score
-            const newUnlockedTiers = achievement.requirements.map(
-                (requirement, index) => 
-                    userAchievement.unlockedTiers[index] || score >= requirement
-            );
+            // requirements are ordered [gold, silver, bronze]
+            // unlockedTiers is [bronze, silver, gold]
+            const newUnlockedTiers = [
+                // bronze (requirements[2])
+                (userAchievement.unlockedTiers[0] || (achievement.requirements[2] != null && score >= achievement.requirements[2])) ?? false,
+                // silver (requirements[1])
+                (userAchievement.unlockedTiers[1] || (achievement.requirements[1] != null && score >= achievement.requirements[1])) ?? false,
+                // gold (requirements[0])
+                (userAchievement.unlockedTiers[2] || (achievement.requirements[0] != null && score >= achievement.requirements[0])) ?? false,
+            ];
 
             // If any tier was unlocked, update the achievement
             if (newUnlockedTiers.some((unlocked, i) => unlocked !== userAchievement.unlockedTiers[i])) {

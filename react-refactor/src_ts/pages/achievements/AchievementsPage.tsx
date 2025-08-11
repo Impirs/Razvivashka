@@ -1,8 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import achievementsData from '@/data/achievements.json';
 import { useLanguage } from '@/contexts/i18n';
 import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/button/button';
+import Select from '@/components/select/select';
+import Icon from '@/components/icon/icon';
+import { useGameStore } from '@/contexts/gamestore';
 
 interface AchRow {
   gameId: string;
@@ -10,9 +14,20 @@ interface AchRow {
   requirements: number[];
 }
 
-const AchievementsPage: React.FC = () => {
+// Optional GameStore access (component still works without provider, useful for tests)
+function useOptionalGameStore() {
+    try {
+        return useGameStore();
+    } catch {
+        return null;
+    }
+}
+
+function AchievementsPage() {
     const { t } = useLanguage();
     const [selectedGame, setSelectedGame] = useState<string>('all');
+    const gameStore = useOptionalGameStore();
+    const currentUser = gameStore?.currentUser ?? null;
 
     const games = useMemo(() => {
         const set = new Set<string>(['all']);
@@ -24,6 +39,25 @@ const AchievementsPage: React.FC = () => {
         const all = achievementsData as AchRow[];
         return selectedGame === 'all' ? all : all.filter(a => a.gameId === selectedGame);
     }, [selectedGame]);
+
+    // Register achievements in store (grouped by game) once when store is available
+    useEffect(() => {
+        if (!gameStore) return;
+        if (Object.keys(gameStore.allAchievements).length > 0) return;
+        const grouped = new Map<string, AchRow[]>();
+        (achievementsData as AchRow[]).forEach(a => {
+            const arr = grouped.get(a.gameId) ?? [];
+            arr.push(a);
+            grouped.set(a.gameId, arr);
+        });
+        grouped.forEach((list, gameId) => {
+            gameStore.addGameAchievements(
+                gameId,
+                list.map(l => ({ gameId: l.gameId, gameProps: l.gameProps, requirements: l.requirements })) as any
+            );
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gameStore]);
 
     // Resolve translation by trying plural (achievements) first, then singular (achievement)
     const translateWithFallback = (keys: string[]): string => {
@@ -54,41 +88,88 @@ const AchievementsPage: React.FC = () => {
         if (firstReq == null) return base;
         // Preserve trailing space if present, otherwise add one
         const needsSpace = base.length > 0 && !/[\s]$/.test(base);
-        return `${base}${needsSpace ? ' ' : ''}${firstReq} ${secondsLabel}`;
+        return `${base}${needsSpace ? ' ' : ''}${firstReq} ${secondsLabel}.`;
+    };
+
+    // Build a quick lookup for user achievements by key "gameId|gameProps"
+    const userAchByKey = useMemo(() => {
+        const map = new Map<string, boolean[]>();
+        const list = currentUser?.achievements ?? [];
+        for (const a of list) map.set(`${a.gameId}|${a.gameProps}`, a.unlockedTiers ?? [false, false, false]);
+        return map;
+    }, [currentUser?.achievements]);
+
+    // Map how many medals to show and in which visual order; we display highest tier first
+    const visualOrderForCount = (count: number): { variants: Array<'gold' | 'silver' | 'bronze'>; idxMap: number[] } => {
+        // requirements are [gold, silver, bronze]; unlockedTiers is [bronze, silver, gold]
+        if (count >= 3) return { variants: ['gold', 'silver', 'bronze'], idxMap: [2, 1, 0] };
+        if (count === 2) return { variants: ['gold', 'silver'], idxMap: [2, 1] };
+        return { variants: ['gold'], idxMap: [2] };
     };
 
     const navigate = useNavigate();
     return (
-        <div className="page-content">
-            <div className="container-header">
-                <div style={{ display: 'flex', gap: 12 }}>
-                    <Button aria-label="nav-back" size="small" leftIcon="left" onClick={() => navigate('/') } />
-                    <Button aria-label="nav-home" size="small" leftIcon="home" onClick={() => navigate(-1)} />
+        <div className='page-layout'>
+            <div className="page-content">
+                <div className="container-header">
+                    <div style={{ justifySelf: 'start' }}>
+                        <Select
+                            ariaLabel="game-filter"
+                            translationKeyPrefix='games'
+                            options={games}
+                            value={selectedGame}
+                            onValueChange={setSelectedGame}
+                        />
+                    </div>
+                    <div>
+                        <h1>{t('routes.achievements' as any)}</h1>
+                    </div>
+                    <div style={{ justifySelf: 'end' }}>
+                        <Button aria-label="nav-back" 
+                                size="small" 
+                                leftIcon="left" 
+                                onClick={() => navigate(-1) } />
+                        <Button aria-label="nav-home" 
+                                size="small" 
+                                leftIcon="home" 
+                                onClick={() => navigate('/')} />
+                    </div>
                 </div>
-                <div />
-                <div style={{ justifySelf: 'center' }}>
-                    <select
-                      aria-label="game-filter"
-                      value={selectedGame}
-                      onChange={(e) => setSelectedGame(e.target.value)}
-                    >
-                        {games.map(g => (
-                          <option key={g} value={g}>
-                            {g === 'all' ? t('games.all' as any) : t(`games.${g}` as any)}
-                          </option>
-                        ))}
-                    </select>
+                <div className="container-content" style={{marginTop: '18px', padding: '0 35px'}}>
+                    <ul className="achievement-list">
+                        {rows.map((r, idx) => {
+                            const key = `${r.gameId}|${r.gameProps}`;
+                            const unlocked = userAchByKey.get(key) ?? [false, false, false];
+                            const { variants, idxMap } = visualOrderForCount(r.requirements?.length ?? 0);
+                            return (
+                                <li key={`${r.gameId}-${r.gameProps}-${idx}`} className="achievement">
+                                    <div className="trophies" aria-label="achievement-trophies">
+                                        {variants.map((variant, i) => {
+                                            const achieved = unlocked[idxMap[i]] ?? false;
+                                            const cls = `trophy ${variant}${achieved ? '' : ' locked'}`;
+                                            const size = variant === 'gold' ? 80 : variant === 'silver' ? 70 : 60;
+                                            // Use masked Icon so color/background comes from CSS class
+                                            return (
+                                                <Icon
+                                                    key={`${key}-${variant}-${i}`}
+                                                    name="medal"
+                                                    masked
+                                                    className={cls}
+                                                    size={size}
+                                                    aria-hidden={true}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="achievement-text">
+                                        <h3>{getTitle(r)}</h3>
+                                        <p>{getDescription(r)}</p>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </div>
-            </div>
-            <div className="container-content">
-                <ul>
-                    {rows.map((r, idx) => (
-                      <li key={`${r.gameId}-${r.gameProps}-${idx}`}>
-                        <div style={{ fontWeight: 600 }}>{getTitle(r)}</div>
-                        <div style={{ opacity: 0.85 }}>{getDescription(r)}</div>
-                      </li>
-                    ))}
-                </ul>
             </div>
         </div>
     );
