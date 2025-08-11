@@ -13,7 +13,12 @@ test('renders catalog and filters by type', () => {
         </LanguageProvider>
     );
 
-    const getCount = () => screen.queryAllByRole('listitem').length;
+    // GameBadge renders as <a> links to /catalog/:id; count anchors with that href pattern
+    const getCount = () =>
+        screen
+            .queryAllByRole('link')
+            .filter((a) => (a as HTMLAnchorElement).getAttribute('href')?.startsWith('/catalog/'))
+            .length;
 
     // by default shows both games
     expect(getCount()).toBe(2);

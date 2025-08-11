@@ -38,6 +38,7 @@ function App() {
 					<Route path="/settings" element={<SettingsPage />} />
 					<Route path="/achievements" element={<AchievementPage />} />
 				</Routes>
+					{/* Notification component */}
 				</NotificationProvider>
 			</Router>
 		</GameStoreProvider>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ShulteSettings } from "./types/game_shulte";
 
-const ShulteMenu: React.FC<{ onStart: (settings: ShulteSettings) => void }> = ({ onStart }) => {
+function ShulteMenu({ onStart }: { onStart: (settings: ShulteSettings) => void }) {
     const [size, setSize] = useState(4);
     const availableSizes = [4, 5];
 

@@ -5,8 +5,10 @@
 
 // components
 @use './components/layouts';
-@use './components/buttons';
+@use './components/button';
 @use './components/inputs';
+@use './components/checkbox';
+@use './components/select';
 
 // modules and pages
 @use './modules/menu.scss';

@@ -6,7 +6,7 @@ interface DigitMenuProps {
     initialSettings?: DigitGameSettings;
 }
 
-const DigitMenu: React.FC<DigitMenuProps> = ({ onStart, initialSettings }) => {
+function DigitMenu({ onStart, initialSettings } : DigitMenuProps) {
     const [target, setTarget] = useState<number>(initialSettings?.target || 6);
     const [size, setSize] = useState<number>(initialSettings?.size || 7);
 

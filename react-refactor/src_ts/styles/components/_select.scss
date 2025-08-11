@@ -1,0 +1,49 @@
+@use '../colors';
+
+// Native select styling for the Select component (.ui-select)
+.ui-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: 240px;
+    font-family: inherit;
+
+    background: colors.$fourth;
+    border: 1px solid colors.$primary;
+    border-radius: 10px;
+    padding: 9px 36px 9px 9px; // extra right padding for the native arrow
+    color: colors.$text_secondary;
+    font-size: 18px;
+    line-height: 24px;
+    transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, background 0.2s;
+    user-select: none;
+    box-shadow: 0 2px 8px colors.$shadow;
+    cursor: pointer;
+
+    &:hover {
+        border-color: colors.$third;
+        color: colors.$third;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: colors.$third;
+        box-shadow: 0 0 0 3px colors.$hover;
+    }
+
+    &:disabled,
+    &.is-disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    // Hide the legacy IE arrow
+    &::-ms-expand { display: none; }
+
+    // Options styling (limited cross-browser support, but safe defaults)
+    option {
+        background: colors.$fourth;
+        color: colors.$text_secondary;
+    }
+}

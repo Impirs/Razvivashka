@@ -25,13 +25,15 @@
   - [Known Issues \& Limitations](#known-issues--limitations)
   - [Future Improvements](#future-improvements)
   - [Appendix](#appendix)
-    - [Tailwind CSS setup (planned)](#tailwind-css-setup-planned)
+    - [Note on Tailwind CSS](#note-on-tailwind-css)
 
 ---
 
 ## Overview
 
-This document reflects the ongoing refactor from the legacy vanilla Electron app to a modern Electron + React + TypeScript stack. It summarizes the current architecture (Electron main + preload bridge + React renderer), state management via typed React contexts (settings, language, game store, game controller, notifications), persistence through JSON files accessed from the preload bridge, and the planned styling migration to Tailwind CSS.
+This document reflects the ongoing refactor from the legacy vanilla Electron app to a modern Electron + React + TypeScript stack. It summarizes the current architecture (Electron main + preload bridge + React renderer), state management via typed React contexts (settings, language, game store, game controller, notifications), persistence through JSON files accessed from the preload bridge. 
+
+**Note:** Initially, there was a plan to migrate styling to Tailwind CSS. However, in the course of development, I decided to abandon this idea. Rewriting the already completed migration from CSS to SCSS once again seemed unreasonable and, in practice, would not be a skill-building exercise but a waste of time, especially considering that I am already rewriting a previously rewritten React app.
 
 ## Motivation for Refactoring
 
@@ -58,8 +60,7 @@ List all updated technologies and why each was chosen:
 - React + TypeScript — componentized UI with type safety and maintainability
 - Electron — desktop packaging, native shell integrations
 - Vite — fast dev server and optimized builds
-- Tailwind CSS (incoming) — utility-first styling to improve speed and consistency
-- SCSS (interim) — coexists during the styling migration
+- SCSS — main styling solution after migration from CSS; Tailwind CSS was considered but not adopted (see note above)
 - Jest + React Testing Library — unit/integration tests for the React app
 
 ## New Architecture
@@ -180,7 +181,7 @@ react-refactor/
 ├── jest.setup.js
 ├── tsconfig.json
 ├── vite.config.js
-└── (planned) tailwind.config.js, postcss.config.cjs, src_ts/styles/tailwind.css
+└── styles/ (SCSS)
 ```
 
 ## Refactoring Process
@@ -247,7 +248,6 @@ Outline of testing approach and tools:
 
 ## Future Improvements
 
-- Tailwind CSS rollout across pages/modules; remove most SCSS after parity
 - Achievement toast container and richer notification pipeline
 - Optional storage upgrade (schema versioning, migrations, potential DB)
 - E2E smoke tests with Playwright
@@ -255,43 +255,7 @@ Outline of testing approach and tools:
 
 ## Appendix
 
-### Tailwind CSS setup (planned)
+### Note on Tailwind CSS
 
-Add at react-refactor level:
-
-- tailwind.config.js
-  - content: ["./index.html", "./src_ts/**/*.{ts,tsx}"]
-  - theme extensions for tokens (colors, spacing, fonts)
-- postcss.config.cjs → plugins: tailwindcss, autoprefixer
-- src_ts/styles/tailwind.css with Tailwind directives
-- Import global stylesheet once (e.g., in App.tsx or main.ts)
-
-Example tailwind.config.js:
-
-```js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './react-refactor/index.html',
-    './react-refactor/src_ts/**/*.{ts,tsx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        brand: { DEFAULT: '#2563eb', dark: '#1e40af' },
-      },
-    },
-  },
-  darkMode: 'class',
-  plugins: [],
-};
-```
-
-Example src_ts/styles/tailwind.css:
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+Although Tailwind CSS was initially considered and planned for this project, the idea was abandoned during development. The main reason: rewriting the already completed migration from CSS to SCSS once again seemed unreasonable and, in practice, would not be a skill-building exercise but a waste of time, especially considering that the React part of the project was already being rewritten for the second time.
 

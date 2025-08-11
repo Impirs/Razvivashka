@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
 import { useLanguage } from '@/contexts/i18n';
 
-const HomePage: React.FC = () => {
+function HomePage() {
 	const navigate = useNavigate();
 	const { t } = useLanguage();
 
@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
 		<div className="page-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 			<div className="menu-card">
 				<h1>{t('routes.home' as any)}</h1>
-				{/* Optional mascot slot — add an image in src_ts/assets/images and set src here if needed */}
+				{/* TODO: mascot slot — add an image in src_ts/assets/images and set src here if needed */}
 				{/* <img className={sty.menuLogo} src={new URL('@/assets/images/mascot.png', import.meta.url).toString()} alt="" /> */}
 				<div>
 					<Button aria-label="nav-play" onClick={onPlay} leftIcon="play" size="large">

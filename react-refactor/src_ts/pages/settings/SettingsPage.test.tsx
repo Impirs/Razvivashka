@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SettingsPage from './SettingsPage';
+import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
 import { GameStoreProvider } from '@/contexts/gamestore';
@@ -72,7 +73,9 @@ const renderPage = async () => {
         <SettingsProvider>
             <LanguageProvider>
                 <GameStoreProvider>
-                    <SettingsPage />
+                    <MemoryRouter>
+                        <SettingsPage />
+                    </MemoryRouter>
                 </GameStoreProvider>
             </LanguageProvider>
         </SettingsProvider>
@@ -127,18 +130,18 @@ test('shows and renames current user', async () => {
 test('toggles gameplay checkboxes for digit and shulte', async () => {
     await renderPage();
 
-    const digitToggle = await screen.findByLabelText('game-digit-show-available');
-    const shulteToggle = await screen.findByLabelText('game-shulte-check-all-letters-tested');
+    const digitToggle = await screen.findByRole('checkbox', { name: 'game-digit-show-available' });
+    const shulteToggle = await screen.findByRole('checkbox', { name: 'game-shulte-check-all-letters-tested' });
 
     // initial states from shim: digit true, shulte false
-    expect((digitToggle as HTMLInputElement).checked).toBe(true);
-    expect((shulteToggle as HTMLInputElement).checked).toBe(false);
+    expect(digitToggle).toHaveAttribute('aria-checked', 'true');
+    expect(shulteToggle).toHaveAttribute('aria-checked', 'false');
 
     fireEvent.click(digitToggle);
     fireEvent.click(shulteToggle);
 
     await waitFor(() => {
-        expect((digitToggle as HTMLInputElement).checked).toBe(false);
-        expect((shulteToggle as HTMLInputElement).checked).toBe(true);
+        expect(digitToggle).toHaveAttribute('aria-checked', 'false');
+        expect(shulteToggle).toHaveAttribute('aria-checked', 'true');
     });
 });

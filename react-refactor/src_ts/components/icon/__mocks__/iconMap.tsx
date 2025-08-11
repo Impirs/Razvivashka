@@ -10,4 +10,7 @@ export const iconComponents: Record<string, IconComponent> = {
   ),
 };
 
+// Provide empty URL map so code can safely read iconUrls[name]
+export const iconUrls: Record<string, string> = {};
+
 export const availableIcons = Object.keys(iconComponents);

@@ -16,6 +16,8 @@ export type UserAchievement = {
 export type UserGameRecord = {
     gameId: string;
     gameProps: string; // game-specific properties
+    modification: [string]; // list of modifications made to the game
+    isperfect: boolean; // whether the game is perfect
     score: number; // Current score
     lastPlayed: Date;   
 };
