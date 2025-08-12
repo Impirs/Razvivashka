@@ -10,12 +10,19 @@ function ShulteMenu({ onStart }: { onStart: (settings: ShulteSettings) => void }
     const [size, setSize] = useState(4);
     const availableSizes = [4, 5];
 
+    const { t } = useLanguage();
+
     return (
         <div className="game-menu">
-            <h2>Shulte Game</h2>
+            <h2>{t('game-menu.setup')}</h2>
             <GameSetting
-                title="Размер доски:"
-                options={availableSizes.map(v => ({ key: v, label: v === 4 ? 'Стандарт' : 'Большой' }))}
+                title={t('game-menu.shulte.size')}
+                options={availableSizes.map(v => 
+                    ({ key: v, label: v === 4 ? 
+                        t('game-menu.bsize.standard') : 
+                        t('game-menu.bsize.large') 
+                    })
+                )}
                 selected={size}
                 onChange={(k) => setSize(Number(k))}
             />
@@ -23,7 +30,7 @@ function ShulteMenu({ onStart }: { onStart: (settings: ShulteSettings) => void }
                 className="game-button" 
                 onClick={() => onStart({ size })}
             >
-                Start Game
+                {t('buttons.start')}
             </Button>
         </div>
     );

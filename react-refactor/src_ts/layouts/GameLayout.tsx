@@ -3,6 +3,7 @@ import { useLanguage } from '@/contexts/i18n';
 import { GameControllerProvider, useGameController } from '@/contexts/gameController';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
+import ScoreList from '@/components/scorelist/scorelist';
 
 import DigitMenu from '../modules/game_digital/DigitMenu';
 import DigitGame from '../modules/game_digital/DigitGame';
@@ -58,6 +59,25 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
         }
     };
 
+    const renderScoreSection = () => {
+        // Render the score list via switch statement is relevant because each game has different props
+        // so it easier to manage it with cases rather than passing props directly through if statements
+        switch (gameId) {
+            case 'digit':
+                return <ScoreList 
+                            gameId={gameId} 
+                            gameProps={`${digitSettings?.size}x${digitSettings?.target}`} 
+                        />;
+            case 'shulte':
+                return <ScoreList 
+                            gameId={gameId} 
+                            gameProps={`${shulteSettings?.size}x${shulteSettings?.size}`} 
+                        />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="game-layout">
             <div className="game-header">
@@ -82,8 +102,9 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                 <main className="game-main">
                     {renderGame()}
                 </main>
-                <aside className="game-side right" style={{content: ''}}>
-                    {/* Right panel reserved for stats, hints, etc. */}
+                <aside className="game-side score_section">
+                    <h2>{t("game-menu.records" as any)}</h2>
+                    {renderScoreSection()}
                 </aside>
             </div>
         </div>

@@ -47,7 +47,7 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
                             modification: [''], // default placeholder to satisfy [string]
                             isperfect: false,
                             score: action.payload.score,
-                            lastPlayed: new Date(),
+                            played: new Date(),
                         }
                     ],
                 },
@@ -84,12 +84,12 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
     }
 }
 
-export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const GameStoreProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(gameStoreReducer, initialState);
 
     // If the same app is used for multiple accounts, then
     // save user in local storage but save the ability to change "account" in settings
-    // So there will be several user files on device and family members can switch between them
+    // So there will be several users in storage file with all related data
     const login = async (username: string) => {
         try {
             const userData: User = await window.gameStoreAPI.loadUserData(username);
@@ -266,8 +266,17 @@ export const GameStoreProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         const selected = window.settingsAPI.get('currentUser') as unknown as string;
         const username = selected || 'user';
         login(username);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Persist current user data whenever it changes (records/achievements, etc.)
+    useEffect(() => {
+        if (!state.currentUser) return;
+        try {
+            window.gameStoreAPI.saveUserData(state.currentUser.username, state.currentUser);
+        } catch (e) {
+            console.error('Failed to persist user data:', e);
+        }
+    }, [state.currentUser]);
 
     return (
         <GameStoreContext.Provider

@@ -3,6 +3,9 @@ const path = require('path');
 
 const isDev = !app.isPackaged;
 
+// TODO:
+// Write a script witch will automativaly send a bug report to the developer via mail.
+
 function createWindow() {
     const win = new BrowserWindow({
         show: false,
