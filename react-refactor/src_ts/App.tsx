@@ -6,7 +6,7 @@ import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom
 // TS providers
 import { LanguageProvider } from './contexts/i18n';
 import { NotificationProvider } from './contexts/notification';
-import { GameStoreProvider } from './contexts/gamestore';
+import { GameStoreProvider } from './contexts/gameStore';
 import { SettingsProvider } from './contexts/pref';
 
 // TS pages

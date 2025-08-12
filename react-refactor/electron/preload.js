@@ -43,6 +43,33 @@ function writeJson(file, data) {
 }
 
 let settings = readJson(settingsPath, defaultSettings);
+// Merge with defaults to avoid missing nested keys from older files
+function mergeSettings(current) {
+    const merged = {
+        ...defaultSettings,
+        ...current,
+        volume: {
+            ...defaultSettings.volume,
+            ...(current && current.volume ? current.volume : {}),
+        },
+        games: {
+            ...defaultSettings.games,
+            ...(current && current.games ? current.games : {}),
+            digit: {
+                ...defaultSettings.games.digit,
+                ...((current && current.games && current.games.digit) ? current.games.digit : {}),
+            },
+            shulte: {
+                ...defaultSettings.games.shulte,
+                ...((current && current.games && current.games.shulte) ? current.games.shulte : {}),
+            },
+        },
+    };
+    return merged;
+}
+settings = mergeSettings(settings);
+// If we had to merge in defaults, persist them back to disk
+writeJson(settingsPath, settings);
 let gameStorage = readJson(gameStoragePath, {});
 // Migrate settings to include currentUser if missing
 if (!settings.currentUser) {

@@ -1,4 +1,4 @@
-import { useGameStore } from "@/contexts/gamestore";
+import { useGameStore } from "@/contexts/gameStore";
 import type { UserGameRecord } from "@/types/gamestore";
 
 import Icon from "../icon/icon";
@@ -33,12 +33,12 @@ const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord
         </span>
         <section className="record-details">
             <div>
-                {record.modification.map((mod, index) => (
+                {/* {record.modification.map((mod, index) => (
                     <Icon 
                         key={index}
                         name={`${mod}`}
                     />
-                ))}
+                ))} */}
             </div>
             <time dateTime={record.played as any}>
                 {new Date(record.played as any).toLocaleString()}
@@ -65,14 +65,14 @@ const ScoreList = ({ gameId, gameProps }: Props) => {
         return toTime(r.played) > toTime(latest.played) ? r : latest;
     }, undefined);
 
-    // Best score sorting
-    const records = [...filtered].sort((a, b) => b.score - a.score);
+    // For time-based score, lower is better
+    const records = [...filtered].sort((a, b) => a.score - b.score);
 
     return (
         <ul className="score-list">
             {records.map((r) => (
-                <li>
-                    <Record key={`${r.gameId}-${r.gameProps}-${String(r.played)}`} 
+                <li key={`${r.gameId}-${r.gameProps}-${String(r.played)}`}>
+                    <Record 
                             record={r} 
                             latestRecord={latestRecord} 
                     />

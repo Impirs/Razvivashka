@@ -1,6 +1,7 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Language, LanguageContextType, TranslationKey } from '../types/language';
+import { useSettings } from './pref';
 
 const defaultLanguage: Language = 'ru';
 
@@ -17,7 +18,9 @@ type LanguageProviderProps = {
 };
 
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
-    const [language, setLanguage] = React.useState<Language>(defaultLanguage);
+    // Use Settings as the single source of truth for language
+    const { useSetting } = useSettings();
+    const [language, setLanguageSetting] = useSetting('language');
     const [loading, setLoading] = React.useState(false);
 
     const [translations, setTranslations] = React.useState<Record<Language, AppLanguage>>({
@@ -58,9 +61,17 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
         return typeof value === 'string' ? value : key;
     };
 
-    const handleSetLanguage = async (lang: Language) => {
-        await loadLanguage(lang);
-        setLanguage(lang);
+    // Ensure translations are loaded when language changes
+    useEffect(() => {
+        if (!language) return;
+        loadLanguage(language);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language]);
+
+    const handleSetLanguage = (lang: Language) => {
+        // Proactively kick off loading, and persist via SettingsProvider
+        void loadLanguage(lang);
+        setLanguageSetting(lang);
     };
 
     return (

@@ -9,6 +9,12 @@
 			"problemMatcher": [
 				"$tsc"
 			]
+		},
+		{
+			"label": "Run Jest tests",
+			"type": "shell",
+			"command": "npx jest --config ../../jest.config.js --passWithNoTests",
+			"group": "test"
 		}
 	]
 }

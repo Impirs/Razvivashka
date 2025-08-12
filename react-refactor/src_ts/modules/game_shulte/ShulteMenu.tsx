@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShulteSettings } from "./types/game_shulte";
 import { useLanguage } from "@/contexts/i18n";
 import { useGameController } from "@/contexts/gameController";
@@ -6,9 +6,14 @@ import { useGameController } from "@/contexts/gameController";
 import GameSetting from "@/components/gamesetting/gamesetting";
 import Button from "@/components/button/button";
 
-function ShulteMenu({ onStart }: { onStart: (settings: ShulteSettings) => void }) {
+function ShulteMenu({ onStart, onChangeSettings }: { onStart: (settings: ShulteSettings) => void, onChangeSettings?: (settings: ShulteSettings) => void }) {
     const [size, setSize] = useState(4);
     const availableSizes = [4, 5];
+    useEffect(() => {
+        if (onChangeSettings) onChangeSettings({ size });
+        // intentionally omit onChangeSettings to avoid effect re-run on identity changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [size]);
 
     const { t } = useLanguage();
 

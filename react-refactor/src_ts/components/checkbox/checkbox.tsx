@@ -19,7 +19,7 @@ type CheckboxProps = {
 function Checkbox({ checked, onChange, children, id, className, ariaLabel }: CheckboxProps) {
     return (
         <label className={className} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-            <span className="checkbox" onClick={() => onChange(!checked)} role="checkbox" aria-checked={checked} aria-label={ariaLabel}>
+            <span className="checkbox">
                 <div className={checked ? 'active' : ''} />
             </span>
             {children}
@@ -29,7 +29,7 @@ function Checkbox({ checked, onChange, children, id, className, ariaLabel }: Che
                 checked={checked}
                 onChange={e => onChange(e.target.checked)}
                 id={id}
-                aria-hidden
+                aria-label={ariaLabel}
                 style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
             />
         </label>

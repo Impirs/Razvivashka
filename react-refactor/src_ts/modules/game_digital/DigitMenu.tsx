@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { DigitGameSettings } from './types/game_digital';
+import type { DigitGameSettings } from './types/game_digit';
 import { useGameController } from '../../contexts/gameController';
 import { useLanguage } from '@/contexts/i18n';
 
@@ -9,9 +9,10 @@ import Button from '@/components/button/button';
 interface DigitMenuProps {
     onStart: (settings: DigitGameSettings) => void;
     initialSettings?: DigitGameSettings;
+    onChangeSettings?: (settings: DigitGameSettings) => void;
 }
 
-function DigitMenu({ onStart, initialSettings } : DigitMenuProps) {
+function DigitMenu({ onStart, initialSettings, onChangeSettings } : DigitMenuProps) {
     const [target, setTarget] = useState<number>(initialSettings?.target || 6);
     const [size, setSize] = useState<number>(initialSettings?.size || 7);
 
@@ -22,6 +23,13 @@ function DigitMenu({ onStart, initialSettings } : DigitMenuProps) {
         else if (target === 9 || target === 10) setSize(9);
         else if (target === 8 && size !== 7 && size !== 9) setSize(7);
     }, [target]);
+
+    // Notify parent when settings change so ScoreList can update immediately
+    useEffect(() => {
+        if (onChangeSettings) onChangeSettings({ target, size });
+        // intentionally omit onChangeSettings to avoid effect re-run on identity changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [target, size]);
 
     let availableSizes: number[] = [];
     if (target === 6 || target === 7) availableSizes = [7];

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
-import { useGameStore } from './gamestore';
+import { useGameStore } from './gameStore';
 
 // Define game states
 export type GameStatus = 'idle' | 'playing' | 'win' | 'lose';
@@ -8,7 +8,8 @@ interface GameControllerState {
     status: GameStatus;
     score: number;
     gameId?: string;
-    gameProps?: string; // serialized settings/props to identify the game variant (e.g., JSON.stringify)
+    gameProps?: string; // record props string to identify the game variant (e.g., '7x6', '4x4')
+    isPerfect?: boolean; // whether the run qualifies as "perfect" for achievements
     startedAt?: number; // timestamp to identify a run session
 }
 
@@ -20,7 +21,7 @@ interface GameControllerContextType extends GameControllerState {
     // update current score
     updateScore: (newScore: number) => void;
     // set the current game context so controller knows what to record on win
-    setGameContext: (gameId: string, gameProps: string) => void;
+    setGameContext: (gameId: string, gameProps: string, isPerfect?: boolean) => void;
 }
 
 const initialState: GameControllerState = {
@@ -39,7 +40,7 @@ function gameControllerReducer(state: GameControllerState, action: any): GameCon
         case 'UPDATE_SCORE':
             return { ...state, score: action.payload };
         case 'SET_GAME_CONTEXT':
-            return { ...state, gameId: action.payload.gameId, gameProps: action.payload.gameProps };
+            return { ...state, gameId: action.payload.gameId, gameProps: action.payload.gameProps, isPerfect: action.payload.isPerfect };
         default:
             return state;
     }
@@ -64,23 +65,21 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
         dispatch({ type: 'UPDATE_SCORE', payload: newScore });
     };
 
-    const setGameContext = (gameId: string, gameProps: string) => {
-        dispatch({ type: 'SET_GAME_CONTEXT', payload: { gameId, gameProps } });
+    const setGameContext = (gameId: string, gameProps: string, isPerfect?: boolean) => {
+        dispatch({ type: 'SET_GAME_CONTEXT', payload: { gameId, gameProps, isPerfect: !!isPerfect } });
     };
 
-    // When game ends with 'win', record the result and check achievements once per session
+    // When game ends (win or lose), record the result once per session; achievements only on win
     useEffect(() => {
-        if (
-            state.status === 'win' &&
-            state.gameId &&
-            state.gameProps &&
-            state.startedAt &&
-            lastReportedRef.current !== state.startedAt
-        ) {
-            addGameRecord(state.gameId, state.gameProps, state.score);
-            unlockAchievementCheck(state.gameId, state.gameProps, state.score);
-            lastReportedRef.current = state.startedAt;
+        if (!state.startedAt || !state.gameId || !state.gameProps) return;
+        if (state.status !== 'win' && state.status !== 'lose') return;
+        if (lastReportedRef.current === state.startedAt) return;
+
+        addGameRecord(state.gameId, state.gameProps, state.score, state.isPerfect);
+        if (state.status === 'win') {
+            unlockAchievementCheck(state.gameId, state.gameProps, state.score, state.isPerfect);
         }
+        lastReportedRef.current = state.startedAt;
     }, [state.status, state.score, state.gameId, state.gameProps, state.startedAt, addGameRecord, unlockAchievementCheck]);
 
     return (

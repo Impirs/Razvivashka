@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSettings } from '@/contexts/pref';
 import { useLanguage } from '@/contexts/i18n';
-import { useGameStore } from '@/contexts/gamestore';
+import { useGameStore } from '@/contexts/gameStore';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/button/button';
@@ -125,11 +125,11 @@ function SettingsPage() {
                                     <h3>{t('settings.gameplay.digit.label' as any)}</h3>
                                     <p>{t('settings.gameplay.digit.description' as any)}</p>
                                 </div>
-                                <Checkbox
+                <Checkbox
                                     ariaLabel="game-digit-show-available"
                                     checked={Boolean(games?.digit?.show_available)}
                                     onChange={(checked) => {
-                                        const g = games;
+                    const g = games ?? { digit: { show_available: false }, shulte: { check_all_letters_tested: false } } as typeof games;
                                         set('games', {
                                             ...g,
                                             digit: { ...g?.digit, show_available: checked },
@@ -144,11 +144,11 @@ function SettingsPage() {
                                     <h3>{t('settings.gameplay.shulte.label' as any)}</h3>
                                     <p>{t('settings.gameplay.shulte.description' as any)}</p>
                                 </div>
-                                <Checkbox
+                <Checkbox
                                     ariaLabel="game-shulte-check-all-letters-tested"
                                     checked={Boolean(games?.shulte?.check_all_letters_tested)}
                                     onChange={(checked) => {
-                                        const g = games;
+                    const g = games ?? { digit: { show_available: false }, shulte: { check_all_letters_tested: false } } as typeof games;
                                         set('games', {
                                             ...g,
                                             shulte: { ...g?.shulte, check_all_letters_tested: checked },

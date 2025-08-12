@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import achievementsData from '@/data/achievements.json';
 import { 
     GameStoreContextType, 
     GameStoreState, 
@@ -7,6 +8,7 @@ import {
     UserAchievement,
     UserGameRecord
 } from '../types/gamestore';
+import { generateAchievementProps } from '@/utils/pt';
 
 // Initial state
 const initialState: GameStoreState = {
@@ -32,20 +34,18 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
                     [action.payload.gameId]: action.payload.achievements,
                 },
             };
-        case 'ADD_GAME_RECORD':
+    case 'ADD_GAME_RECORD':
             return {
                 ...state,
                 currentUser: {
                     ...state.currentUser!,
                     gameRecords: [
-                        ...state.currentUser!.gameRecords.filter(
-                            r => r.gameId !== action.payload.gameId || r.gameProps !== action.payload.gameProps
-                        ),
+                        ...state.currentUser!.gameRecords,
                         {
                             gameId: action.payload.gameId,
                             gameProps: action.payload.gameProps,
                             modification: [''], // default placeholder to satisfy [string]
-                            isperfect: false,
+                            isperfect: !!action.payload.isPerfect,
                             score: action.payload.score,
                             played: new Date(),
                         }
@@ -86,6 +86,30 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
 
 export const GameStoreProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(gameStoreReducer, initialState);
+    // Load achievements definitions at startup so unlocks work even if Achievements page wasn't opened
+    useEffect(() => {
+        if (Object.keys(state.allAchievements).length > 0) return;
+        try {
+            const grouped = new Map<string, any[]>();
+            (achievementsData as any[]).forEach((a) => {
+                const arr = grouped.get(a.gameId) ?? [];
+                arr.push(a);
+                grouped.set(a.gameId, arr);
+            });
+            grouped.forEach((list, gameId) => {
+                dispatch({
+                    type: 'ADD_GAME_ACHIEVEMENTS',
+                    payload: {
+                        gameId,
+                        achievements: list.map((l) => ({ gameId: l.gameId, gameProps: l.gameProps, requirements: l.requirements })),
+                    },
+                });
+            });
+        } catch (e) {
+            console.error('Failed to load achievements data:', e);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // If the same app is used for multiple accounts, then
     // save user in local storage but save the ability to change "account" in settings
@@ -195,42 +219,46 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
         }
     };
 
-    const addGameRecord = (gameId: string, gameProps: string, score: number) => {
+    const addGameRecord = (gameId: string, gameProps: string, score: number, isPerfect: boolean = false) => {
         if (!state.currentUser) return;
 
         // Add the new game record
         dispatch({
             type: 'ADD_GAME_RECORD',
-            payload: { gameId, gameProps, score }
+            payload: { gameId, gameProps, score, isPerfect }
         });
-
-        // Check for unlocked achievements
-        unlockAchievementCheck(gameId, gameProps, score);
     };
 
-    const unlockAchievementCheck = (gameId: string, gameProps: string, score: number) => {
+    const unlockAchievementCheck = (gameId: string, gameProps: string, score: number, isPerfect: boolean = false) => {
         if (!state.currentUser) return;
 
+        // Map record props to achievement props (consider perfect flag)
+        const achievementProps = generateAchievementProps(gameId, gameProps, isPerfect);
+
         const gameAchievements = state.allAchievements[gameId]?.filter(
-            a => a.gameProps === gameProps
+            a => a.gameProps === achievementProps
         ) || [];
 
         gameAchievements.forEach(achievement => {
             const userAchievement = state.currentUser!.achievements.find(
-                a => a.gameId === gameId && a.gameProps === gameProps
+                a => a.gameId === gameId && a.gameProps === achievementProps
             );
 
             if (!userAchievement) return;
 
             // requirements are ordered [gold, silver, bronze]
-            // unlockedTiers is [bronze, silver, gold]
+            // unlockedTiers is [gold, silver, bronze]
+            // Note: For our games, lower score (time) is better, so unlock when score <= requested
+            const reqGold = achievement.requirements[0];
+            const reqSilver = achievement.requirements[1];
+            const reqBronze = achievement.requirements[2];
             const newUnlockedTiers = [
-                // bronze (requirements[2])
-                (userAchievement.unlockedTiers[0] || (achievement.requirements[2] != null && score >= achievement.requirements[2])) ?? false,
-                // silver (requirements[1])
-                (userAchievement.unlockedTiers[1] || (achievement.requirements[1] != null && score >= achievement.requirements[1])) ?? false,
                 // gold (requirements[0])
-                (userAchievement.unlockedTiers[2] || (achievement.requirements[0] != null && score >= achievement.requirements[0])) ?? false,
+                userAchievement.unlockedTiers[0] || (reqGold != null && score <= reqGold) || false,
+                // silver (requirements[1])
+                userAchievement.unlockedTiers[1] || (reqSilver != null && score <= reqSilver) || false,
+                // bronze (requirements[2])
+                userAchievement.unlockedTiers[2] || (reqBronze != null && score <= reqBronze) || false,
             ];
 
             // If any tier was unlocked, update the achievement
@@ -239,7 +267,7 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
                     type: 'UPDATE_ACHIEVEMENT',
                     payload: {
                         gameId,
-                        gameProps,
+                        gameProps: achievementProps,
                         unlockedTiers: newUnlockedTiers,
                     }
                 });

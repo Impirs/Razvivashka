@@ -1,6 +1,6 @@
 // Pure logic for the Digital (Digit) Game
 
-import type { DigitBoard, DigitCell, DigitGameSettings } from './types/game_digital';
+import type { DigitBoard, DigitCell, DigitGameSettings } from './types/game_digit';
 
 export const numberDistribution = {
     6: { board: 7, numbers: { 1:8, 2:8, 3:16, 4:8, 5:8 } },

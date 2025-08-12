@@ -48,5 +48,15 @@
         "gameId": "shulte",
         "gameProps": "5x5",
         "requirements": [90, 105, 120]
+    },
+    {
+        "gameId": "shulte",
+        "gameProps": "4x100",
+        "requirements": [100000]
+    },
+    {
+        "gameId": "shulte",
+        "gameProps": "5x100",
+        "requirements": [100000]
     }
 ]

@@ -2,14 +2,14 @@
 export type GameAchievement = {
     gameId: string;
     gameProps: string; // game-specific properties
-    requirements: number[]; // [bronze, silver, gold] thresholds
+    requirements: number[]; // [gold, silver, bronze] thresholds
 };
 
 // User-specific achievement progress
 export type UserAchievement = {
     gameId: string;
     gameProps: string; // game-specific properties
-    unlockedTiers: boolean[]; // Which tiers are unlocked [bronze, silver, gold]
+    unlockedTiers: boolean[]; // Which tiers are unlocked [gold, silver, bronze]
 };
 
 // User game progress
@@ -42,8 +42,8 @@ export type GameStoreActions = {
     login: (username: string) => Promise<void>;
     logout: () => void;
     addGameAchievements: (gameId: string, achievements: GameAchievement[]) => void;
-    unlockAchievementCheck: (gameId: string, gameProps: string, score: number) => void;
-    addGameRecord: (gameId: string, gameProps: string, score: number) => void;
+    unlockAchievementCheck: (gameId: string, gameProps: string, score: number, isPerfect?: boolean) => void;
+    addGameRecord: (gameId: string, gameProps: string, score: number, isPerfect?: boolean) => void;
     // User management
     listUsers: () => string[];
     switchUser: (username: string) => Promise<boolean>;

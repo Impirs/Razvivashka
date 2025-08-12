@@ -4,7 +4,7 @@ import SettingsPage from './SettingsPage';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
-import { GameStoreProvider } from '@/contexts/gamestore';
+import { GameStoreProvider } from '@/contexts/gameStore';
 
 // Shims for preload APIs (settings + gamestore)
 (() => {

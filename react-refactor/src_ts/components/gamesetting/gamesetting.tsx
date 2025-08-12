@@ -15,7 +15,7 @@ interface GameSettingProps {
     className?: string;
 }
 
-const GameSetting: React.FC<GameSettingProps> = ({ title, options, selected, onChange, className }) => {
+const GameSetting = ({ title, options, selected, onChange, className } : GameSettingProps) => {
     return (
         <div className={`game-setting ${className ?? ''}`.trim()} >
             <div className="game-setting__title">

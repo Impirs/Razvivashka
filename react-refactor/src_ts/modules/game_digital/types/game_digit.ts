@@ -1,6 +1,6 @@
 export interface DigitGameSettings {
-    target: number;
     size: number;
+    target: number;
 }
 
 export type DigitCell = number | null;

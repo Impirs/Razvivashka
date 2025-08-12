@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/i18n';
 import { GameControllerProvider, useGameController } from '@/contexts/gameController';
-import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/button/button';
 import ScoreList from '@/components/scorelist/scorelist';
 
-import DigitMenu from '../modules/game_digital/DigitMenu';
-import DigitGame from '../modules/game_digital/DigitGame';
+import DigitMenu from '@/modules/game_digital/DigitMenu';
+import DigitGame from '@/modules/game_digital/DigitGame';
 import ShulteGame from '@/modules/game_shulte/ShulteGame';
 import ShulteMenu from '@/modules/game_shulte/ShulteMenu';
 
 import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
-import type { DigitGameSettings } from '../modules/game_digital/types/game_digital';
+import type { DigitGameSettings } from '@/modules/game_digital/types/game_digit';
+import { generateRecordProps } from '@/utils/pt';
 
 interface GameLayoutProps {
     gameId: string;
@@ -22,27 +24,50 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     const { startGame, setGameContext } = useGameController();
     const navigate = useNavigate();
     // store chosen settings per game
-    const [digitSettings, setDigitSettings] = useState<DigitGameSettings | null>(null);
-    const [shulteSettings, setShulteSettings] = useState<ShulteSettings | null>(null);
+    // Always have defaults so game-main renders immediately
+    const [digitSettings, setDigitSettings] = useState<DigitGameSettings>({ target: 6, size: 7 });
+    const [shulteSettings, setShulteSettings] = useState<ShulteSettings>({ size: 4 });
+
+    // Stable callbacks so child effects don't loop on function identity changes
+    const handleDigitSettingsChange = useCallback((s: DigitGameSettings) => {
+        setDigitSettings(prev => (prev.target === s.target && prev.size === s.size ? prev : s));
+    }, []);
+    const handleShulteSettingsChange = useCallback((s: ShulteSettings) => {
+        setShulteSettings(prev => (prev.size === s.size ? prev : s));
+    }, []);
 
     const handleStartDigit = (settings: DigitGameSettings) => {
         setDigitSettings(settings);
-        setGameContext('digit', JSON.stringify(settings));
+        // console.log('Digit settings:', JSON.stringify(settings));
+    // At start, we don't know isPerfect yet; default false. Game may update via controller later.
+    setGameContext('digit', generateRecordProps('digit', settings), false);
         startGame();
     };
 
     const handleStartShulte = (settings: ShulteSettings) => {
         setShulteSettings(settings);
-        setGameContext('shulte', JSON.stringify(settings));
+        // console.log('Shulte settings:', JSON.stringify(settings));
+    setGameContext('shulte', generateRecordProps('shulte', settings), false);
         startGame();
     };
 
     const renderMenu = () => {
         switch (gameId) {
             case 'digit':
-                return <DigitMenu onStart={handleStartDigit} initialSettings={digitSettings ?? undefined} />;
+                return (
+                    <DigitMenu
+                        onStart={handleStartDigit}
+                        initialSettings={digitSettings ?? undefined}
+                        onChangeSettings={handleDigitSettingsChange}
+                    />
+                );
             case 'shulte':
-                return <ShulteMenu onStart={handleStartShulte} />;
+                return (
+                    <ShulteMenu
+                        onStart={handleStartShulte}
+                        onChangeSettings={handleShulteSettingsChange}
+                    />
+                );
             default:
                 return null;
         }
@@ -51,9 +76,9 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     const renderGame = () => {
         switch (gameId) {
             case 'digit':
-                return digitSettings ? <DigitGame settings={digitSettings} /> : null;
+                return <DigitGame settings={digitSettings} />;
             case 'shulte':
-                return shulteSettings ? <ShulteGame settings={shulteSettings} /> : null;
+                return <ShulteGame settings={shulteSettings} />;
             default:
                 return null;
         }
@@ -66,12 +91,12 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
             case 'digit':
                 return <ScoreList 
                             gameId={gameId} 
-                            gameProps={`${digitSettings?.size}x${digitSettings?.target}`} 
+                            gameProps={generateRecordProps('digit', digitSettings)} 
                         />;
             case 'shulte':
                 return <ScoreList 
                             gameId={gameId} 
-                            gameProps={`${shulteSettings?.size}x${shulteSettings?.size}`} 
+                            gameProps={generateRecordProps('shulte', shulteSettings)} 
                         />;
             default:
                 return null;

@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useGameController } from "../../contexts/gameController";
-import { useNotification } from "../../contexts/notification";
-import { useSettings } from "../../contexts/pref";
+import { useState, useEffect, useRef } from "react";
 import { ShulteSettings, ShulteBoard } from "./types/game_shulte";
+import { generateRecordProps } from '@/utils/pt';
+
+import { useGameController } from "../../contexts/gameController";
+import { useSettings } from "../../contexts/pref";
+
+import Icon from "@/components/icon/icon";
 
 function generateShulteBoard(size: number): ShulteBoard {
     const arr = Array.from({ length: size * size }, (_, i) => i + 1);
@@ -16,22 +19,56 @@ function generateShulteBoard(size: number): ShulteBoard {
 }
 
 function ShulteGame({ settings }: { settings: ShulteSettings }) {
-    const { endGame } = useGameController();
-    const { addNotification } = useNotification();
+    const { status, startGame, endGame, setGameContext, gameId, gameProps } = useGameController();
     const { get } = useSettings();
 
     const [board, setBoard] = useState<ShulteBoard>([]);
     const [current, setCurrent] = useState(1);
-    const [phase, setPhase] = useState<"playing" | "win" | "lose">("playing");
+    const [mistakes, setMistakes] = useState(0);
+    const [seconds, setSeconds] = useState(0);
+    const timerRef = useRef<number | null>(null);
+    const runInitRef = useRef(false);
+    const [boardReady, setBoardReady] = useState(false);
+
+    // Start/reset when controller enters playing
+    useEffect(() => {
+        if (status === 'playing') {
+            if (!runInitRef.current) {
+                runInitRef.current = true;
+                setBoard([]);
+                setBoardReady(false);
+                setBoard(generateShulteBoard(settings.size));
+                setCurrent(1);
+                setMistakes(0);
+                setSeconds(0);
+                // Assume perfect at the start of a run
+                setGameContext('shulte', generateRecordProps('shulte', settings), true);
+                if (timerRef.current) window.clearInterval(timerRef.current);
+                timerRef.current = window.setInterval(() => setSeconds(s => s + 1), 1000);
+            }
+        } else {
+            runInitRef.current = false;
+            setBoardReady(false);
+            if (timerRef.current) {
+                window.clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+            setSeconds(0);
+        }
+        return () => {
+            if (timerRef.current) {
+                window.clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        };
+    }, [status, settings.size]);
 
     useEffect(() => {
-        setBoard(generateShulteBoard(settings.size));
-        setCurrent(1);
-        setPhase("playing");
-    }, [settings.size]);
+        if (status === 'playing' && board.length > 0) setBoardReady(true);
+    }, [board, status]);
 
     const handleCellClick = (row: number, col: number) => {
-        if (phase !== "playing") return;
+    if (status !== 'playing') return;
 
         const cell = board[row][col];
         if (cell.value === current) {
@@ -43,39 +80,57 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
             setCurrent(c => c + 1);
 
             if (current === settings.size * settings.size) {
-                setPhase("win");
-                const score = 100; // TODO: Replace with actual timer logic
-                endGame('win', score);
-                addNotification({
-                    title: "Victory!",
-                    message: "You won the Shulte game!",
-                    type: "achievement",
-                    link: "/achievements"
-                });
+                if (timerRef.current) {
+                    window.clearInterval(timerRef.current);
+                    timerRef.current = null;
+                }
+                endGame('win', seconds);
             }
         } else {
-            addNotification({
-                title: "Mistake!",
-                message: "You clicked the wrong cell.",
-                type: "warning",
-                link: ""
-            });
+            // On first mistake, mark run as not perfect
+            if (mistakes === 0 && gameId === 'shulte' && gameProps) {
+                setGameContext('shulte', generateRecordProps('shulte', settings), false);
+            }
+            setMistakes(m => m + 1);
         }
     };
+
+    // lose on 3 mistakes
+    useEffect(() => {
+        if (status === 'playing' && mistakes >= 3) {
+            if (timerRef.current) {
+                window.clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+            endGame('lose', seconds);
+        }
+    }, [mistakes, status, seconds]);
 
     return (
         <section className="game-main-panel">
             <header className="game-header-panel">
-                <div />
-                <div style={{ textAlign: 'center', fontSize: 18 }}>Shulte {settings.size}x{settings.size}</div>
+                <div className="mistakes_counter" aria-label="mistakes">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                        <Icon key={i} name={i < mistakes ? 'heart-broken' : 'heart'} />
+                    ))}
+                </div>
                 <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-                    {/* Placeholder for timer/actions */}
+                    <div aria-label="timer" style={{ minWidth: 60, textAlign: 'right' }}>{seconds}s</div>
                 </div>
             </header>
             <div className="game-space">
-                {phase === "win" ? (
-                    <div>Congratulations! You won!</div>
-                ) : (
+                {status === 'idle' && (
+                    <>
+                        <h3>Найдите числа по порядку от 1 до {settings.size * settings.size}</h3>
+                    </>
+                )}
+                {status === 'win' && (
+                    <div>Congratulations! Time: {seconds}s</div>
+                )}
+                {status === 'lose' && (
+                    <div>Defeat! Mistakes: {mistakes}. Time: {seconds}s</div>
+                )}
+                {status === 'playing' && (
                     <div
                         className="shulte-board"
                         style={{

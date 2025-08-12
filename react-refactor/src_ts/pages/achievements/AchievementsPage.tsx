@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
 import Select from '@/components/select/select';
 import Icon from '@/components/icon/icon';
-import { useGameStore } from '@/contexts/gamestore';
+import { useGameStore } from '@/contexts/gameStore';
 
 interface AchRow {
   gameId: string;
