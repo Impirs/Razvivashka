@@ -24,7 +24,11 @@ function Icon({ name, size = 24, color = 'currentColor', className, style, maske
 			<span
 				id={name}
 				className={className}
-				style={{ width: sizeStyle, height: sizeStyle, display: 'inline-block', verticalAlign: 'middle', ...style }}
+				style={{ width: sizeStyle, 
+						height: sizeStyle, 
+						display: 'inline-block', 
+						verticalAlign: 'middle', 
+						...style }}
 				aria-hidden={true}
 			/>
 		);
@@ -35,7 +39,12 @@ function Icon({ name, size = 24, color = 'currentColor', className, style, maske
 		return (
 			<Svg
 				className={className}
-				style={{ width: sizeStyle, height: sizeStyle, color, display: 'inline-block', verticalAlign: 'middle', ...style }}
+				style={{ width: sizeStyle, 
+						height: sizeStyle, 
+						color, 
+						display: 'inline-block', 
+						verticalAlign: 'middle', 
+						...style }}
 				focusable={rest.focusable ?? false}
 				aria-hidden={rest['aria-label'] ? undefined : (rest['aria-hidden'] ?? true)}
 				{...rest}
@@ -50,7 +59,11 @@ function Icon({ name, size = 24, color = 'currentColor', className, style, maske
 				src={url}
 				alt=""
 				className={className}
-				style={{ width: sizeStyle, height: sizeStyle, display: 'inline-block', verticalAlign: 'middle', ...style }}
+				style={{ width: sizeStyle, 
+						height: sizeStyle, 
+						display: 'inline-block', 
+						verticalAlign: 'middle', 
+						...style }}
 				aria-hidden={rest['aria-label'] ? undefined : true}
 			/>
 		);

@@ -9,10 +9,10 @@ export interface AppSettings {
     currentUser: string;
     games: {
         digit: {
-            show_available: boolean;
+            view_modification: boolean;
         },
         shulte: {
-            check_all_letters_tested: boolean;
+            view_modification: boolean;
         }
     },
 }

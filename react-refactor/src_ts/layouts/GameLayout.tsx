@@ -14,6 +14,7 @@ import ShulteMenu from '@/modules/game_shulte/ShulteMenu';
 import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
 import type { DigitGameSettings } from '@/modules/game_digital/types/game_digit';
 import { generateRecordProps } from '@/utils/pt';
+import { directions } from '@/modules/game_digital/digitGameLogic';
 
 interface GameLayoutProps {
     gameId: string;
@@ -23,21 +24,24 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     const { t } = useLanguage();
     const { startGame, setGameContext } = useGameController();
     const navigate = useNavigate();
-    // store chosen settings per game
+    // Pending settings (from menu) and Active settings (used by running game)
     // Always have defaults so game-main renders immediately
-    const [digitSettings, setDigitSettings] = useState<DigitGameSettings>({ target: 6, size: 7 });
-    const [shulteSettings, setShulteSettings] = useState<ShulteSettings>({ size: 4 });
+    const [pendingDigit, setPendingDigit] = useState<DigitGameSettings>({ target: 6, size: 7 });
+    const [activeDigit, setActiveDigit] = useState<DigitGameSettings>({ target: 6, size: 7 });
+    const [pendingShulte, setPendingShulte] = useState<ShulteSettings>({ size: 4 });
+    const [activeShulte, setActiveShulte] = useState<ShulteSettings>({ size: 4 });
 
     // Stable callbacks so child effects don't loop on function identity changes
     const handleDigitSettingsChange = useCallback((s: DigitGameSettings) => {
-        setDigitSettings(prev => (prev.target === s.target && prev.size === s.size ? prev : s));
+        setPendingDigit(prev => (prev.target === s.target && prev.size === s.size ? prev : s));
     }, []);
     const handleShulteSettingsChange = useCallback((s: ShulteSettings) => {
-        setShulteSettings(prev => (prev.size === s.size ? prev : s));
+        setPendingShulte(prev => (prev.size === s.size ? prev : s));
     }, []);
 
     const handleStartDigit = (settings: DigitGameSettings) => {
-        setDigitSettings(settings);
+        // Promote pending settings to active and start the game
+        setActiveDigit(settings);
         // console.log('Digit settings:', JSON.stringify(settings));
     // At start, we don't know isPerfect yet; default false. Game may update via controller later.
     setGameContext('digit', generateRecordProps('digit', settings), false);
@@ -45,7 +49,8 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     };
 
     const handleStartShulte = (settings: ShulteSettings) => {
-        setShulteSettings(settings);
+        // Promote pending settings to active and start the game
+        setActiveShulte(settings);
         // console.log('Shulte settings:', JSON.stringify(settings));
     setGameContext('shulte', generateRecordProps('shulte', settings), false);
         startGame();
@@ -57,7 +62,7 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                 return (
                     <DigitMenu
                         onStart={handleStartDigit}
-                        initialSettings={digitSettings ?? undefined}
+                        initialSettings={pendingDigit ?? undefined}
                         onChangeSettings={handleDigitSettingsChange}
                     />
                 );
@@ -76,9 +81,9 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     const renderGame = () => {
         switch (gameId) {
             case 'digit':
-                return <DigitGame settings={digitSettings} />;
+                return <DigitGame settings={activeDigit} />;
             case 'shulte':
-                return <ShulteGame settings={shulteSettings} />;
+                return <ShulteGame settings={activeShulte} />;
             default:
                 return null;
         }
@@ -91,12 +96,12 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
             case 'digit':
                 return <ScoreList 
                             gameId={gameId} 
-                            gameProps={generateRecordProps('digit', digitSettings)} 
+                            gameProps={generateRecordProps('digit', pendingDigit)} 
                         />;
             case 'shulte':
                 return <ScoreList 
                             gameId={gameId} 
-                            gameProps={generateRecordProps('shulte', shulteSettings)} 
+                            gameProps={generateRecordProps('shulte', pendingShulte)} 
                         />;
             default:
                 return null;
@@ -105,33 +110,53 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
 
     return (
         <div className="game-layout">
-            <div className="game-header">
-                <Button aria-label="nav-back" 
-                        size="small" 
-                        leftIcon="left" 
-                        className='nav-button' 
-                        onClick={() => navigate(-1)} 
-                />
-                <h1>{t(`games.${gameId}` as any)}</h1>
-                <Button aria-label="nav-settings" 
-                        size="small" 
-                        leftIcon="settings" 
-                        className='nav-button' 
-                        onClick={() => navigate('/settings')} 
-                />
-            </div>
-            <div className="game-content">
-                <aside className="game-side left">
-                    {renderMenu()}
-                </aside>
-                <main className="game-main">
+            <aside className="game-side left">
+                {renderMenu()}
+            </aside>
+            <div className="game-main">
+                <div className="game-header">
+                    <div/>
+                    <h1 style={{justifySelf:'center'}}>
+                        { t(`games.${gameId}` as any) }
+                    </h1>
+                    <div style={{ display: "flex", 
+                                flexDirection: "row", 
+                                justifySelf: 'end', 
+                                gap: '8px', 
+                                padding: '0 12px' 
+                                }}
+                    >
+                        <Button
+                            aria-label="nav-back"
+                            size="small"
+                            leftIcon="left"
+                            className='nav-button'
+                            onClick={() => navigate(-1)}
+                        />
+                        <Button
+                            aria-label="nav-settings"
+                            size="small"
+                            leftIcon="settings"
+                            className='nav-button'
+                            onClick={() => navigate('/settings')}
+                        />
+                        <Button
+                            aria-label="nav-home"
+                            size="small"
+                            leftIcon="home"
+                            className='nav-button'
+                            onClick={() => navigate('/')}
+                        />
+                    </div>
+                </div>
+                <main className="game-main-panel">
                     {renderGame()}
                 </main>
-                <aside className="game-side score_section">
-                    <h2>{t("game-menu.records" as any)}</h2>
-                    {renderScoreSection()}
-                </aside>
             </div>
+            <aside className="game-side score_section">
+                <h2>{t("game-menu.records" as any)}</h2>
+                {renderScoreSection()}
+            </aside>
         </div>
     );
 }

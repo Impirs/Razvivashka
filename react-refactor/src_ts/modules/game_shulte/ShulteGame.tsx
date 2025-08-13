@@ -6,6 +6,7 @@ import { useGameController } from "../../contexts/gameController";
 import { useSettings } from "../../contexts/pref";
 
 import Icon from "@/components/icon/icon";
+import { formatTime } from "@/utils/ft";
 
 function generateShulteBoard(size: number): ShulteBoard {
     const arr = Array.from({ length: size * size }, (_, i) => i + 1);
@@ -19,22 +20,24 @@ function generateShulteBoard(size: number): ShulteBoard {
 }
 
 function ShulteGame({ settings }: { settings: ShulteSettings }) {
-    const { status, startGame, endGame, setGameContext, gameId, gameProps } = useGameController();
-    const { get } = useSettings();
+    const { status, startGame, endGame, setGameContext, gameId, gameProps, startedAt } = useGameController();
+    const { useSetting } = useSettings();
+    const [gamesSettings] = useSetting('games');
+    const hideFoundNumber = gamesSettings?.shulte?.view_modification ?? false;
 
     const [board, setBoard] = useState<ShulteBoard>([]);
     const [current, setCurrent] = useState(1);
     const [mistakes, setMistakes] = useState(0);
     const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<number | null>(null);
-    const runInitRef = useRef(false);
+    const lastStartRef = useRef<number | null>(null);
     const [boardReady, setBoardReady] = useState(false);
 
-    // Start/reset when controller enters playing
+    // Start/reset when controller enters playing; re-init on every Start via startedAt
     useEffect(() => {
-        if (status === 'playing') {
-            if (!runInitRef.current) {
-                runInitRef.current = true;
+        if (status === 'playing' && startedAt) {
+            if (lastStartRef.current !== startedAt) {
+                lastStartRef.current = startedAt;
                 setBoard([]);
                 setBoardReady(false);
                 setBoard(generateShulteBoard(settings.size));
@@ -47,13 +50,15 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                 timerRef.current = window.setInterval(() => setSeconds(s => s + 1), 1000);
             }
         } else {
-            runInitRef.current = false;
-            setBoardReady(false);
             if (timerRef.current) {
                 window.clearInterval(timerRef.current);
                 timerRef.current = null;
             }
-            setSeconds(0);
+            if (status === 'idle') {
+                lastStartRef.current = null;
+                setBoardReady(false);
+                setSeconds(0);
+            }
         }
         return () => {
             if (timerRef.current) {
@@ -61,7 +66,7 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                 timerRef.current = null;
             }
         };
-    }, [status, settings.size]);
+    }, [status, startedAt, settings.size]);
 
     useEffect(() => {
         if (status === 'playing' && board.length > 0) setBoardReady(true);
@@ -108,31 +113,37 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
 
     return (
         <section className="game-main-panel">
-            <header className="game-header-panel">
-                <div className="mistakes_counter" aria-label="mistakes">
+            <header className="game-utils-panel">
+                <div className="mistakes-counter" aria-label="mistakes">
                     {Array.from({ length: 3 }).map((_, i) => (
-                        <Icon key={i} name={i < mistakes ? 'heart-broken' : 'heart'} />
+                        <Icon key={i} 
+                            name={i < mistakes ? 'heart-broken' : 'heart'} 
+                            color={ i < mistakes ? '#eb92be' : '#232323' }
+                            size={32}
+                        />
                     ))}
                 </div>
-                <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-                    <div aria-label="timer" style={{ minWidth: 60, textAlign: 'right' }}>{seconds}s</div>
+                <div/>
+                <div className="game-timer">
+                    <div aria-label="timer">{formatTime(seconds)}</div>
                 </div>
             </header>
             <div className="game-space">
                 {status === 'idle' && (
                     <>
-                        <h3>Найдите числа по порядку от 1 до {settings.size * settings.size}</h3>
+                        <h3>{/*TODO: add instruction text */}</h3>
                     </>
                 )}
                 {status === 'win' && (
-                    <div>Congratulations! Time: {seconds}s</div>
+                    <div>Congratulations! Time: {formatTime(seconds)}</div>
                 )}
                 {status === 'lose' && (
-                    <div>Defeat! Mistakes: {mistakes}. Time: {seconds}s</div>
+                    <div>Defeat! Mistakes: {mistakes}. Time: {formatTime(seconds)}</div>
                 )}
-                {status === 'playing' && (
+        {status === 'playing' && (
                     <div
-                        className="shulte-board"
+            key={`${settings.size}-${startedAt ?? 'na'}`}
+            className="shulte-board"
                         style={{
                             display: "grid",
                             gap: 8,
@@ -153,12 +164,14 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                                         justifyContent: 'center',
                                         borderRadius: 8,
                                         border: '1px solid #9aa3ff',
-                                        background: cell.isFound ? "#d6f8d6" : "white",
+                                        background: hideFoundNumber ? 'white' : (cell.isFound ? "#d6f8d6" : "white"),
                                         cursor: "pointer",
                                         userSelect: "none"
                                     }}
                                 >
-                                    {cell.value}
+                                    <span style={{ visibility: (hideFoundNumber && cell.isFound) ? 'hidden' : 'visible' }}>
+                                        {cell.value}
+                                    </span>
                                 </div>
                             ))
                         )}

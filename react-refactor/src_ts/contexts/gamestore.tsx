@@ -71,11 +71,17 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
                     ...state.currentUser!,
                     achievements: [
                         ...state.currentUser!.achievements,
-                        {
-                            gameId: action.payload.gameId,
-                            gameProps: action.payload.gameProps,
-                            unlockedTiers: [false, false, false],
-                        }
+                        (() => {
+                            // Determine required tiers count based on definitions
+                            const defs = state.allAchievements[action.payload.gameId] || [];
+                            const def = defs.find((d) => d.gameProps === action.payload.gameProps);
+                            const tiers = new Array(def?.requirements?.length || 0).fill(false);
+                            return {
+                                gameId: action.payload.gameId,
+                                gameProps: action.payload.gameProps,
+                                unlockedTiers: tiers,
+                            };
+                        })()
                     ],
                 },
             };
@@ -117,11 +123,15 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
     const login = async (username: string) => {
         try {
             const userData: User = await window.gameStoreAPI.loadUserData(username);
-            
-            // Initialize achievements if missing
-            const initializedUser = initializeUserAchievements(userData, state.allAchievements);
-            
-            dispatch({ type: 'LOGIN_SUCCESS', payload: initializedUser });
+
+            // If achievements definitions aren't loaded yet, don't normalize now to avoid wiping progress.
+            // We'll normalize once allAchievements are available (see effect below).
+            if (Object.keys(state.allAchievements).length === 0) {
+                dispatch({ type: 'LOGIN_SUCCESS', payload: userData });
+            } else {
+                const initializedUser = initializeUserAchievements(userData, state.allAchievements);
+                dispatch({ type: 'LOGIN_SUCCESS', payload: initializedUser });
+            }
         } catch (error) {
             console.error('Login failed:', error);
         }
@@ -232,50 +242,49 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
     const unlockAchievementCheck = (gameId: string, gameProps: string, score: number, isPerfect: boolean = false) => {
         if (!state.currentUser) return;
 
-        // Map record props to achievement props (consider perfect flag)
-        const achievementProps = generateAchievementProps(gameId, gameProps, isPerfect);
+        // Build list of achievement props to check. If perfect run, check both normal and x100 variants.
+        const toCheck = new Set<string>();
+        const normalProps = generateAchievementProps(gameId, gameProps, false);
+        if (normalProps) toCheck.add(normalProps);
+        if (isPerfect) {
+            const perfectProps = generateAchievementProps(gameId, gameProps, true);
+            if (perfectProps) toCheck.add(perfectProps);
+        }
 
-        const gameAchievements = state.allAchievements[gameId]?.filter(
-            a => a.gameProps === achievementProps
-        ) || [];
+        toCheck.forEach((achievementProps) => {
+            const gameAchievements = state.allAchievements[gameId]?.filter(
+                a => a.gameProps === achievementProps
+            ) || [];
 
-        gameAchievements.forEach(achievement => {
-            const userAchievement = state.currentUser!.achievements.find(
-                a => a.gameId === gameId && a.gameProps === achievementProps
-            );
+            gameAchievements.forEach(achievement => {
+                const userAchievement = state.currentUser!.achievements.find(
+                    a => a.gameId === gameId && a.gameProps === achievementProps
+                );
 
-            if (!userAchievement) return;
+                if (!userAchievement) return;
 
-            // requirements are ordered [gold, silver, bronze]
-            // unlockedTiers is [gold, silver, bronze]
-            // Note: For our games, lower score (time) is better, so unlock when score <= requested
-            const reqGold = achievement.requirements[0];
-            const reqSilver = achievement.requirements[1];
-            const reqBronze = achievement.requirements[2];
-            const newUnlockedTiers = [
-                // gold (requirements[0])
-                userAchievement.unlockedTiers[0] || (reqGold != null && score <= reqGold) || false,
-                // silver (requirements[1])
-                userAchievement.unlockedTiers[1] || (reqSilver != null && score <= reqSilver) || false,
-                // bronze (requirements[2])
-                userAchievement.unlockedTiers[2] || (reqBronze != null && score <= reqBronze) || false,
-            ];
-
-            // If any tier was unlocked, update the achievement
-            if (newUnlockedTiers.some((unlocked, i) => unlocked !== userAchievement.unlockedTiers[i])) {
-                dispatch({
-                    type: 'UPDATE_ACHIEVEMENT',
-                    payload: {
-                        gameId,
-                        gameProps: achievementProps,
-                        unlockedTiers: newUnlockedTiers,
-                    }
+                // requirements are ordered from highest tier down (gold, silver, bronze)
+                // For our games, lower score (time) is better, so unlock when score <= required
+                const newUnlockedTiers = achievement.requirements.map((req, idx) => {
+                    const prev = userAchievement.unlockedTiers[idx] || false;
+                    return prev || (typeof req === 'number' && score <= req);
                 });
 
-                // TODO:
-                // Call notification context to show the unlocked achievement
-                console.log(`Unlocked achievement: ${achievement.gameId} - ${achievement.gameProps}`, newUnlockedTiers);
-            }
+                // If any tier was unlocked, update the achievement
+                if (newUnlockedTiers.some((unlocked, i) => unlocked !== userAchievement.unlockedTiers[i])) {
+                    dispatch({
+                        type: 'UPDATE_ACHIEVEMENT',
+                        payload: {
+                            gameId,
+                            gameProps: achievementProps,
+                            unlockedTiers: newUnlockedTiers,
+                        }
+                    });
+
+                    // TODO: notify about unlocked achievement
+                    console.log(`Unlocked achievement: ${achievement.gameId} - ${achievement.gameProps}`, newUnlockedTiers);
+                }
+            });
         });
     };
 
@@ -283,7 +292,14 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
     useEffect(() => {
         if (state.currentUser && Object.keys(state.allAchievements).length > 0) {
             const initializedUser = initializeUserAchievements(state.currentUser, state.allAchievements);
-            if (initializedUser.achievements.length !== state.currentUser.achievements.length) {
+            const needsUpdate =
+                initializedUser.achievements.length !== state.currentUser.achievements.length ||
+                // also update if any tiers length mismatches
+                initializedUser.achievements.some((ua) => {
+                    const existing = state.currentUser!.achievements.find(a => a.gameId === ua.gameId && a.gameProps === ua.gameProps);
+                    return !existing || existing.unlockedTiers.length !== ua.unlockedTiers.length;
+                });
+            if (needsUpdate) {
                 dispatch({ type: 'LOGIN_SUCCESS', payload: initializedUser });
             }
         }
@@ -330,33 +346,47 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
 
 // Helper function to initialize user achievements
 function initializeUserAchievements(user: User, allAchievements: Record<string, GameAchievement[]>): User {
+    // Helper to find requirements for a given achievement
+    const getReqs = (gameId: string, props: string): number[] => {
+        const defs = allAchievements[gameId] || [];
+        const def = defs.find(d => d.gameProps === props);
+        return def?.requirements ?? [];
+    };
+
     // Get all unique gameId + gameProps combinations from achievements
-    const allAchievementKeys = Object.values(allAchievements)
-        .flat()
-        .map(a => `${a.gameId}|${a.gameProps}`);
-    const uniqueKeys = [...new Set(allAchievementKeys)];
+    const allDefs = Object.values(allAchievements).flat();
+    const uniqueKeys = [...new Set(allDefs.map(a => `${a.gameId}|${a.gameProps}`))];
 
-    // Filter out achievements that no longer exist
-    const filteredAchievements = user.achievements.filter(a => 
-        uniqueKeys.includes(`${a.gameId}|${a.gameProps}`)
-    );
+    // Normalize existing and keep only those that still exist, fixing tiers length
+    const normalizedExisting = user.achievements
+        .filter(a => uniqueKeys.includes(`${a.gameId}|${a.gameProps}`))
+        .map(a => {
+            const reqs = getReqs(a.gameId, a.gameProps);
+            let tiers = Array.isArray(a.unlockedTiers) ? a.unlockedTiers.slice(0, reqs.length) : [];
+            if (tiers.length < reqs.length) {
+                tiers = tiers.concat(new Array(reqs.length - tiers.length).fill(false));
+            }
+            return { ...a, unlockedTiers: tiers };
+        });
 
-    // Add missing achievements
-    const userAchievementKeys = user.achievements.map(a => `${a.gameId}|${a.gameProps}`);
-    const missingAchievements = uniqueKeys
-        .filter(key => !userAchievementKeys.includes(key))
+    const existingKeySet = new Set(normalizedExisting.map(a => `${a.gameId}|${a.gameProps}`));
+
+    // Add missing achievements with proper tiers length
+    const missing = uniqueKeys
+        .filter(key => !existingKeySet.has(key))
         .map(key => {
             const [gameId, gameProps] = key.split('|');
+            const reqs = getReqs(gameId, gameProps);
             return {
                 gameId,
                 gameProps,
-                unlockedTiers: [false, false, false],
+                unlockedTiers: new Array(reqs.length).fill(false),
             };
         });
 
     return {
         ...user,
-        achievements: [...filteredAchievements, ...missingAchievements],
+        achievements: [...normalizedExisting, ...missing],
     };
 }
 

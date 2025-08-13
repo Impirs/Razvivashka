@@ -95,16 +95,25 @@ function AchievementsPage() {
     const userAchByKey = useMemo(() => {
         const map = new Map<string, boolean[]>();
         const list = currentUser?.achievements ?? [];
-        for (const a of list) map.set(`${a.gameId}|${a.gameProps}`, a.unlockedTiers ?? [false, false, false]);
+        for (const a of list) map.set(`${a.gameId}|${a.gameProps}`, Array.isArray(a.unlockedTiers) ? a.unlockedTiers : []);
         return map;
     }, [currentUser?.achievements]);
 
+    // Ensure unlocked array matches the requirements length for a row
+    const normalizeUnlocked = (key: string, reqCount: number): boolean[] => {
+        const src = userAchByKey.get(key) ?? [];
+        const trimmed = src.slice(0, reqCount);
+        return trimmed.length < reqCount
+            ? trimmed.concat(new Array(reqCount - trimmed.length).fill(false))
+            : trimmed;
+    };
+
     // Map how many medals to show and in which visual order; we display highest tier first
     const visualOrderForCount = (count: number): { variants: Array<'gold' | 'silver' | 'bronze'>; idxMap: number[] } => {
-        // requirements are [gold, silver, bronze]; unlockedTiers is [bronze, silver, gold]
-        if (count >= 3) return { variants: ['gold', 'silver', 'bronze'], idxMap: [2, 1, 0] };
-        if (count === 2) return { variants: ['gold', 'silver'], idxMap: [2, 1] };
-        return { variants: ['gold'], idxMap: [2] };
+        // requirements and unlockedTiers are both [gold, silver, bronze] in this app
+        if (count >= 3) return { variants: ['gold', 'silver', 'bronze'], idxMap: [0, 1, 2] };
+        if (count === 2) return { variants: ['gold', 'silver'], idxMap: [0, 1] };
+        return { variants: ['gold'], idxMap: [0] };
     };
 
     const navigate = useNavigate();
@@ -141,7 +150,7 @@ function AchievementsPage() {
                     <ul className="achievement-list">
                         {rows.map((r, idx) => {
                             const key = `${r.gameId}|${r.gameProps}`;
-                            const unlocked = userAchByKey.get(key) ?? [false, false, false];
+                            const unlocked = normalizeUnlocked(key, r.requirements?.length ?? 0);
                             const { variants, idxMap } = visualOrderForCount(r.requirements?.length ?? 0);
                             return (
                                 <li key={`${r.gameId}-${r.gameProps}-${idx}`} className="achievement">
