@@ -5,12 +5,33 @@ import { MemoryRouter } from 'react-router-dom';
 
 import GameBadge from './badge';
 import { LanguageProvider } from '@/contexts/i18n';
+import { SettingsProvider } from '@/contexts/pref';
+
+// Settings shim for tests
+(() => {
+    if ((window as any).settingsAPI) return;
+    const store: any = {
+        volume: { notifications: 0.25, effects: 0.25 },
+        language: 'ru',
+        currentUser: 'user',
+        games: { digit: { view_modification: true }, shulte: { view_modification: true } },
+    };
+    const listeners = new Set<(k: string, v: any) => void>();
+    (window as any).settingsAPI = {
+        getAll: () => JSON.parse(JSON.stringify(store)),
+        get: (k: string) => store[k],
+        set: (k: string, v: any) => { store[k] = v; listeners.forEach(cb => cb(k, v)); },
+        subscribe: (cb: any) => { listeners.add(cb); return () => listeners.delete(cb); },
+    };
+})();
 
 const renderWithProviders = (ui: React.ReactElement) => {
     return render(
-        <LanguageProvider>
-            <MemoryRouter>{ui}</MemoryRouter>
-        </LanguageProvider>
+        <SettingsProvider>
+            <LanguageProvider>
+                <MemoryRouter>{ui}</MemoryRouter>
+            </LanguageProvider>
+        </SettingsProvider>
     );
 };
 

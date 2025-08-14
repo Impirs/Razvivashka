@@ -13,12 +13,12 @@ function ensureDirs() {
 }
 
 const defaultSettings = {
-    volume: { notifications: 0.5, effects: 0.5 },
+    volume: { notifications: 0.25, effects: 0.25 },
     language: 'ru',
     currentUser: 'user',
     games: {
-        digit: { show_available: true },
-        shulte: { check_all_letters_tested: false },
+        digit: { view_modification: true },
+        shulte: { view_modification: true },
     },
 };
 

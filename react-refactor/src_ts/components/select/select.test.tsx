@@ -4,10 +4,33 @@ import '@testing-library/jest-dom';
 
 import Select from './select';
 import { LanguageProvider } from '@/contexts/i18n';
+import { SettingsProvider } from '@/contexts/pref';
 
 const renderWithI18n = (ui: React.ReactElement) => {
-  return render(<LanguageProvider>{ui}</LanguageProvider>);
+  return render(
+    <SettingsProvider>
+      <LanguageProvider>{ui}</LanguageProvider>
+    </SettingsProvider>
+  );
 };
+
+// Provide settingsAPI shim for SettingsProvider
+(() => {
+  if ((window as any).settingsAPI) return;
+  const store: any = {
+    volume: { notifications: 0.25, effects: 0.25 },
+    language: 'ru',
+    currentUser: 'user',
+    games: { digit: { view_modification: true }, shulte: { view_modification: true } },
+  };
+  const listeners = new Set<(k: string, v: any) => void>();
+  (window as any).settingsAPI = {
+    getAll: () => JSON.parse(JSON.stringify(store)),
+    get: (k: string) => store[k],
+    set: (k: string, v: any) => { store[k] = v; listeners.forEach(cb => cb(k, v)); },
+    subscribe: (cb: any) => { listeners.add(cb); return () => listeners.delete(cb); },
+  };
+})();
 
 describe('Select', () => {
   const options = ['all', 'math', 'logic'];
@@ -17,14 +40,13 @@ describe('Select', () => {
       <Select ariaLabel="catalog-filter" options={options} value={options[0]} />
     );
 
-    const select = screen.getByRole('combobox', { name: /catalog-filter/i });
-    expect(select).toBeInTheDocument();
+    const combo = screen.getByRole('combobox', { name: /catalog-filter/i });
+    expect(combo).toBeInTheDocument();
 
-    const optEls = within(select).getAllByRole('option');
-    // Expect three options rendered
+    // Open dropdown and assert options
+    fireEvent.click(combo);
+    const optEls = screen.getAllByRole('option');
     expect(optEls).toHaveLength(3);
-
-    // Based on ru.json: types.all => "Все категории", math => "Счет", logic => "Логика"
     expect(optEls[0]).toHaveTextContent('Все категории');
     expect(optEls[1]).toHaveTextContent('Счет');
     expect(optEls[2]).toHaveTextContent('Логика');
@@ -44,12 +66,12 @@ describe('Select', () => {
       />
     );
 
-    const select = screen.getByRole('combobox', { name: /catalog-filter/i });
+  const combo = screen.getByRole('combobox', { name: /catalog-filter/i });
+  fireEvent.click(combo);
+  fireEvent.click(screen.getByRole('option', { name: 'Счет' }));
 
-    fireEvent.change(select, { target: { value: 'math' } });
-
-    expect(handleChange).toHaveBeenCalledTimes(1);
-    expect(handleValueChange).toHaveBeenCalledWith('math');
+  expect(handleChange).toHaveBeenCalledTimes(1);
+  expect(handleValueChange).toHaveBeenCalledWith('math');
   });
 
   it('supports custom option label renderer', () => {
@@ -62,8 +84,10 @@ describe('Select', () => {
       />
     );
 
-    const option = screen.getByRole('option', { name: 'Label-math' });
-    expect(option).toBeInTheDocument();
-    expect(option).toHaveValue('math');
+  const button = screen.getByRole('combobox', { name: 'catalog-filter' });
+  expect(button).toHaveTextContent('Label-math');
+  fireEvent.click(button);
+  const option = screen.getByRole('option', { name: 'Label-math' });
+  expect(option).toBeInTheDocument();
   });
 });

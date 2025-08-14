@@ -2,12 +2,13 @@
 
 .text-input {
     font-family: inherit;
-    width: 300px;
-    padding: 6px 9px;
+    width: 218px;
+    padding: 9px 9px;
     font-size: 18px;
+    line-height: 24px;
     color: colors.$text_secondary;
     background-color: colors.$fourth;
-    border: 1px solid colors.$primary;
+    border: 2px solid colors.$primary;
     border-radius: 10px;
     outline: none;
     box-shadow: 0 2px 4px colors.$shadow;

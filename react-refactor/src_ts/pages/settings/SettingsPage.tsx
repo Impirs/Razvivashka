@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
 import Select from '@/components/select/select';
 import Checkbox from '@/components/checkbox/checkbox';
+import Slider from '@/components/slider/slider';
 
 function SettingsPage() {
     const { get, set, useSetting } = useSettings();
@@ -73,6 +74,7 @@ function SettingsPage() {
                                     aria-label="current-user-name"
                                     type="text"
                                     value={username}
+                                    className='text-input'
                                     placeholder={t('settings.player.placeholder' as any)}
                                     onChange={(e) => setUsername(e.target.value)}
                                     onBlur={commitRename}
@@ -91,26 +93,24 @@ function SettingsPage() {
                             </div>
                             <div className="settings-line-parameter">
                                 <h3>{t('settings.volume.notifications' as any)}</h3>
-                                <input
-                                    aria-label="volume-notifications"
-                                    type="range"
+                                <Slider
+                                    ariaLabel="volume-notifications"
                                     min={0}
                                     max={1}
-                                    step={0.01}
+                                    step={0.05}
                                     value={notif.notifications}
-                                    onChange={(e) => set('volume', { ...notif, notifications: Number(e.target.value) })}
+                                    onChange={(value) => set('volume', { ...notif, notifications: value })}
                                 />
                             </div>
                             <div className="settings-line-parameter">
                                 <h3>{t('settings.volume.effects' as any)}</h3>
-                                <input
-                                    aria-label="volume-effects"
-                                    type="range"
+                                <Slider
+                                    ariaLabel="volume-effects"
                                     min={0}
                                     max={1}
-                                    step={0.01}
+                                    step={0.05}
                                     value={notif.effects}
-                                    onChange={(e) => set('volume', { ...notif, effects: Number(e.target.value) })}
+                                    onChange={(value) => set('volume', { ...notif, effects: value })}
                                 />
                             </div>
                         </div>

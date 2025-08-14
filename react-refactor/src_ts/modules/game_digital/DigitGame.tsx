@@ -2,11 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import { generateBoard, isBoardCleared, isNextToEmpty } from './digitGameLogic';
 import type { DigitGameSettings } from './types/game_digit';
 import { generateRecordProps } from '@/utils/pt';
-
-import { useSettings } from '@/contexts/pref';
-import { useGameController } from '../../contexts/gameController';
-import Icon from '@/components/icon/icon';
 import { formatTime } from '@/utils/ft';
+
+import { useGameController } from '../../contexts/gameController';
+import { useSettings } from '@/contexts/pref';
+import { useLanguage } from '@/contexts/i18n';
+
+import Icon from '@/components/icon/icon';
+
+import fireworksGif from "@/assets/animations/fireworks.gif";
+import unluckyGif from "@/assets/animations/unlucky.gif";
+
 
 interface DigitGameProps {
     settings: DigitGameSettings;
@@ -15,6 +21,7 @@ interface DigitGameProps {
 function DigitGame({ settings }: DigitGameProps) {
     const { status, score, startGame, endGame, updateScore, setGameContext, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
+    const { t } = useLanguage();
     const [gamesSettings] = useSetting('games');
     const assistHighlight = gamesSettings?.digit?.view_modification ?? true;
 
@@ -120,7 +127,12 @@ function DigitGame({ settings }: DigitGameProps) {
     };
 
     useEffect(() => {
-        if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isBoardCleared(board)) {
+        if (status === 'playing' && 
+            boardReady && 
+            startedAt && 
+            boardReadyRunId === startedAt && 
+            isBoardCleared(board)) 
+        {
             // stop timer and submit time as score (in seconds)
             if (timerRef.current) {
                 window.clearInterval(timerRef.current);
@@ -128,17 +140,22 @@ function DigitGame({ settings }: DigitGameProps) {
             }
             endGame('win', seconds);
         }
-    }, [board, status, seconds, boardReady, startedAt, boardReadyRunId]);
+    }, [board, status]);
 
     useEffect(() => {
-        if (status === 'playing' && mistakes >= 3) {
+        if (status === 'playing' && 
+            boardReady && 
+            startedAt && 
+            boardReadyRunId === startedAt && 
+            mistakes >= 3) 
+        {
             if (timerRef.current) {
                 window.clearInterval(timerRef.current);
                 timerRef.current = null;
             }
             endGame('lose', seconds);
         }
-    }, [mistakes, status, seconds]);
+    }, [mistakes, status]);
 
     return (
         <section className="game-main-panel">
@@ -159,22 +176,35 @@ function DigitGame({ settings }: DigitGameProps) {
             </header>
             <div className="game-space">
                 {status === 'idle' && (
-                    <>
-                        <h3>{/*TODO: add instruction text */}</h3>
-                    </>
+                    <div style={{ textAlign: 'center', width: '60%' }}>
+                        <h3>{t('game-info.digit.instruction')}</h3>
+                        <h3>{t('game-info.time_rules')}</h3>
+                        <h3>{t('game-info.mistakes_rules')}</h3>
+                    </div>
                 )}
                 {status === 'win' && (
-                    <div className="digit-game-win">Победа! Время: {formatTime(seconds)}</div>
+                    <div style={{ textAlign: 'center', width: '60%' }}>
+                        <img src={fireworksGif} 
+                            alt="fireworks-animation" />
+                        <h3>{t('game-info.win')}</h3>
+                        <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
+                    </div>
                 )}
                 {status === 'lose' && (
-                    <div className="digit-game-lose">Поражение! Ошибки: {mistakes}. Время: {formatTime(seconds)}</div>
+                    <div style={{ textAlign: 'center', width: '60%' }}>
+                        <img src={unluckyGif} 
+                            alt="unlucky-animation" />
+                        <h3>{t('game-info.lose')}</h3>
+                        <h3>{t('game-info.your_mistakes')} {mistakes}</h3>
+                        <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
+                    </div>
                 )}
                 {status === 'playing' && (
                     <div key={`${settings.size}-${startedAt ?? 'na'}`} className="digit-board" style={{
                         display: 'grid',
-                        gap: 8,
+                        gap: 10,
                         gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
-                        width: '100%',
+                        // width: '100%',
                         maxWidth: 620
                     }}>
                         {board.map((rowArr, row) =>
@@ -193,18 +223,22 @@ function DigitGame({ settings }: DigitGameProps) {
                                 const cursor = num === null ? 'default' : 'pointer';
                                 const color = num === null ? '#9aa3ff' : (assistHighlight ? (selectable ? 'inherit' : '#8b91a8') : 'inherit');
                                 const title = num === null
-                                    ? 'Пустая ячейка'
+                                    ? t('game-info.digit.empty')
                                     : (assistHighlight
-                                        ? (selectable ? 'Доступно для выбора' : 'Недоступно для выбора — нет рядом пустой ячейки')
+                                        ? (selectable ? t('game-info.digit.available') : t('game-info.digit.unavailable'))
                                         : '');
                                 return (
                                     <div
                                         key={`${row}-${col}`}
                                         className="cell"
                                         aria-disabled={assistHighlight ? (num !== null && !selectable) : false}
+                                        aria-label={title}
+                                        data-tooltip={title}
                                         title={title}
                                         style={{
-                                            height: 60,
+                                            fontSize: '22px',
+                                            height: `calc(480px / ${settings.size})`,
+                                            width: `calc(480px / ${settings.size})`,
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
@@ -214,7 +248,7 @@ function DigitGame({ settings }: DigitGameProps) {
                                             cursor,
                                             userSelect: 'none',
                                             fontWeight: isSelected ? 700 : 500,
-                                            boxShadow: isSelected ? '0 0 0 2px rgba(154,163,255,0.5) inset' : 'none',
+                                            boxShadow: isSelected ? '0 0 0 4px rgba(154,163,255,0.5) inset' : 'none',
                                             transition: 'background 0.15s ease, box-shadow 0.15s ease'
                                         }}
                                         onClick={() => handleCellClick(row, col)}

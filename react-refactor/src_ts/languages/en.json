@@ -1,130 +1,149 @@
 {
     "games": {
-        "all": "Все игры",
-        "digit": "Состав числа",
-        "shulte": "Таблица Шульте",
-        "syllable": "По сло-гам",
-        "sum": "Сумма чисел"
+        "all": "All games",
+        "digit": "Number Composition",
+        "shulte": "Schulte Table",
+        "syllable": "Syllables",
+        "sum": "Sum of Numbers"
     },
 
     "types": {
-        "all": "Все категории",
-        "logic": "Логика",
-        "math": "Счет",
-        "reading": "Чтение",
-        "attention": "Внимательность"
+        "all": "All categories",
+        "logic": "Logic",
+        "math": "Math",
+        "reading": "Reading",
+        "attention": "Attention"
     },
 
     "routes": {
-        "home": "Развивашка",
-        "catalog": "Каталог",
-        "settings": "Настройки",
-        "achievements": "Достижения"
+        "home": "Razvivashka",
+        "catalog": "Catalog",
+        "settings": "Settings",
+        "achievements": "Achievements"
     },
 
     "buttons" : {
-        "play": "Играть",
-        "back": "Назад",
-        "next": "Далее",
-        "start": "Начать",
-        "continue": "Продолжить",
-        "settings": "Настройки",
-        "close": "Закрыть",
-        "ok": "ОК",
-        "filter": "Выберите...",
-        "cancel": "Отмена",
-        "apply": "Применить"
+        "play": "Play",
+        "back": "Back",
+        "next": "Next",
+        "start": "Start",
+        "continue": "Continue",
+        "settings": "Settings",
+        "close": "Close",
+        "ok": "OK",
+        "filter": "Select...",
+        "cancel": "Cancel",
+        "apply": "Apply"
     },
 
     "game-menu": {
-        "setup": "Настройки игры",
-        "records": "Таблица результатов",
+        "setup": "Game settings",
+        "records": "Leaderboard",
         "bsize": {
-            "standard": "Стандарт",
-            "large": "Большой"
+            "standard": "Standard",
+            "large": "Large"
         },
 
         "digit": {
-            "target": "Найти составы числа:",
-            "size": "Размер игрового поля:",
-            "task": "Очисти поле от чисел, которые в сумме дают"
+            "target": "Find pairs that sum to:",
+            "size": "Board size:",
+            "task": "Clear the board of numbers that sum to"
         },
         "shulte": {
-            "size": "Размер игрового поля:",
-            "task": "Очисти поле от чисел, которые в сумме дают"
+            "size": "Board size:",
+            "task": "Clear the board of numbers that sum to"
         }        
     },
 
+    "game-info": {
+        "win": "Victory!",
+        "lose": "Defeat!",
+        "your_time": "Time spent: ",
+        "your_mistakes": "Mistakes: ",
+        "time_rules": "Time attack. The faster you finish, the better.",
+        "timer_rules": "Timed game. When time runs out, the game ends.",
+        "mistakes_rules": "The number of mistakes must not exceed 3.",
+        "digit": {
+            "instruction": "Clear the board by selecting pairs of cells that add up to the number you chose.",
+            "empty": "Empty cell",
+            "available": "Available for selection",
+            "unavailable": "Unavailable — no empty adjacent cell"
+        },
+        "shulte": {
+            "instruction": "Tap the cells in order from 1 to 16 or 25, depending on the selected board size."
+        }
+    },
+
     "achievements": {
-        "notification": "Вы получили новое достижение!",
+        "notification": "You've earned a new achievement!",
         "digit": {
             "7x6": {
-                "title": "Отличное начало",
-                "description": "Закончить игру на стандартном поле для числа 6 за "
+                "title": "Great Start",
+                "description": "Finish the game on the standard board for number 6 in "
             },
             "7x7": {
-                "title": "Семь+Я",
-                "description": "Закончить игру на стандартном поле для числа 7 за "
+                "title": "Seven+Me",
+                "description": "Finish the game on the standard board for number 7 in "
             },
             "7x8": {
-                "title": "Знаток основ",
-                "description": "Закончить игру на стандартном поле для числа 8 за "
+                "title": "Basics Expert",
+                "description": "Finish the game on the standard board for number 8 in "
             },
             "9x8": {
-                "title": "Высшая лига",
-                "description": "Закончить игру на большом поле для числа 8 за "
+                "title": "Premier League",
+                "description": "Finish the game on the large board for number 8 in "
             },
             "9x9": {
-                "title": "Юный математик",
-                "description": "Закончить игру на большом поле для числа 9 за "
+                "title": "Young Mathematician",
+                "description": "Finish the game on the large board for number 9 in "
             },
             "9x10": {
-                "title": "Профессионал",
-                "description": "Закончить игру на большом поле для числа 10 за "
+                "title": "Professional",
+                "description": "Finish the game on the large board for number 10 in "
             },
             "7x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на стандартном поле, не допустив ни единой ошибки."
+                "title": "Flawless Run",
+                "description": "Finish the game on the standard board without making a single mistake."
             },
             "9x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на большом поле, не допустив ни единой ошибки."
+                "title": "Flawless Run",
+                "description": "Finish the game on the large board without making a single mistake."
             }
         },
         "shulte": {
             "4x4": {
-                "title": "Зоркий глаз",
-                "description": "Закончить игру на стандартном поле за "
+                "title": "Sharp Eye",
+                "description": "Finish the game on the standard board in "
             },
             "5x5": {
-                "title": "Сама внимательность",
-                "description": "Закончить игру на большом поле за "
+                "title": "Pure Focus",
+                "description": "Finish the game on the large board in "
             },
             "4x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на стандартном поле, не допустив ни единой ошибки."
+                "title": "Flawless Run",
+                "description": "Finish the game on the standard board without making a single mistake."
             },
             "5x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на большом поле, не допустив ни единой ошибки."
+                "title": "Flawless Run",
+                "description": "Finish the game on the large board without making a single mistake."
             }
         },
         "syllable": {
             "1x1": {
-                "title": "Секреты букваря",
-                "description": "Закончить упражнение с базовыми наборами букв "
+                "title": "Primer Secrets",
+                "description": "Complete the exercise with basic letter sets "
             },
             "1x2": {
-                "title": "Веселый буквоед",
-                "description": "Закончить упражнение с продвинутым набором гласных "
+                "title": "Happy Bookworm",
+                "description": "Complete the exercise with the advanced vowel set "
             },
             "2x1": {
-                "title": "На шаг ближе к книгам",
-                "description": "Закончить упражнение с продвинутым набором согласных "
+                "title": "One Step Closer to Books",
+                "description": "Complete the exercise with the advanced consonant set "
             },
             "2x2": {
-                "title": "Читающий герой",
-                "description": "Закончить упражнение с продвинутыми наборами букв "
+                "title": "Reading Hero",
+                "description": "Complete the exercise with advanced letter sets "
             }
         }
     },
@@ -134,41 +153,45 @@
         "gameplay": {
             "label": "Gameplay",
             "digit": {
-                "label": "Состав числа",
-                "description": "Подсвечивать доступные к нажатию клетки другим цветом"
+                "label": "Number Composition",
+                "description": "Highlight cells available to press with a different color"
             },
             "syllable": {
-                "label": "По сло-гам",
-                "description": "Засчитывать упражнения только когда все буквы были прочитаны"
+                "label": "Syllables",
+                "description": "Count the exercise only when all letters have been read"
             },
             "shulte": {
-                "label": "Таблица Шульте",
-                "description": "Скрывать цифры после нажатия"
+                "label": "Schulte Table",
+                "description": "Hide numbers after clicking"
             }
         },
         "language": {
             "label": "Language",
             "options": {
-                "ru": "Русский",
+                "ru": "Russian",
                 "en": "English",
-                "sb_lat": "Srpski (Latinica)",
-                "sb_cy": "Српски (Cyrillic)"
+                "sb_lat": "Serbian (Latin)",
+                "sb_cy": "Serbian (Cyrillic)"
             }
         },
         "player": {
-            "name": "Имя",
-            "placeholder": "Как тебя зовут?"
+            "name": "Name",
+            "placeholder": "What's your name?"
         },
         "volume": {
-            "label": "Звук",
-            "notifications": "Громкость уведомлений",
-            "effects": "Громкость эффектов"
+            "label": "Sound",
+            "notifications": "Notification volume",
+            "effects": "Effects volume"
         }
     },
 
     "record": {
-        "minutes": "минут",
-        "seconds": "секунд",
-        "count": "раз"
+        "minutes": "minutes",
+        "seconds": "seconds",
+        "count": "times"
+    },
+
+    "tooltips": {
+        "perfect": "Perfect run — no mistakes"
     }
 }

@@ -3,6 +3,7 @@ import type { UserGameRecord } from "@/types/gamestore";
 
 import Icon from "../icon/icon";
 import { toTime } from "@/utils/tt";
+import { useLanguage } from "@/contexts/i18n";
 
 type Props = {
     gameId?: string;
@@ -17,55 +18,63 @@ TODO:
     the score has gold color and a star icon cuz it's a perfect score and so on.
 */
 
-const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord?: UserGameRecord }) => (
-    <article 
-        className={`record-container ${
-            latestRecord &&
-            record.gameId === latestRecord.gameId &&
-            record.gameProps === latestRecord.gameProps &&
-            toTime(record.played) === toTime(latestRecord.played)
-                ? 'new-score'
-                : ''
-        }`
-    }>
-        <span className={`score ${record.isperfect ? 'perfect' : ''}`}>
-            {record.score}
-        </span>
-        <section className="record-details">
-                {(() => {
-                    const d = new Date(record.played as any);
-                    const dateTimeISO = isNaN(d.getTime()) ? undefined : d.toISOString();
-                    const hhmm = isNaN(d.getTime())
-                        ? ''
-                        : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-                    const dd = String(d.getDate()).padStart(2, '0');
-                    const mm = String(d.getMonth() + 1).padStart(2, '0');
-                    const yy = String(d.getFullYear()).slice(-2);
-                    const ddmmyy = isNaN(d.getTime()) ? '' : `${dd}/${mm}/${yy}`;
-                    return (
-                        <time className="record-datetime" dateTime={dateTimeISO}>
-                            <span className="time-line">{hhmm}</span>
-                            <span className="date-line">{ddmmyy}</span>
-                        </time>
-                    );
-                })()}
-            <div>
-                {record.isperfect && (
-                    <span className="perfect-icon" aria-hidden>
-                        <Icon name="star" size={22} masked />
-                    </span>
-                )}
-                {/* {record.modification.map((mod, index) => (
-                    <Icon 
-                        key={index}
-                        name={`${mod}`}
-                    />
-                ))} 
-                */}
-            </div>
-        </section>
-    </article>
-);
+const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord?: UserGameRecord }) => {
+    const { t } = useLanguage();
+    return (
+        <article 
+            className={`record-container ${
+                latestRecord &&
+                record.gameId === latestRecord.gameId &&
+                record.gameProps === latestRecord.gameProps &&
+                toTime(record.played) === toTime(latestRecord.played)
+                    ? 'new-score'
+                    : ''
+            }`
+        }>
+            <span className={`score ${record.isperfect ? 'perfect' : ''}`}>
+                {record.score}
+            </span>
+            <section className="record-details">
+                    {(() => {
+                        const d = new Date(record.played as any);
+                        const dateTimeISO = isNaN(d.getTime()) ? undefined : d.toISOString();
+                        const hhmm = isNaN(d.getTime())
+                            ? ''
+                            : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                        const dd = String(d.getDate()).padStart(2, '0');
+                        const mm = String(d.getMonth() + 1).padStart(2, '0');
+                        const yy = String(d.getFullYear()).slice(-2);
+                        const ddmmyy = isNaN(d.getTime()) ? '' : `${dd}/${mm}/${yy}`;
+                        return (
+                            <time className="record-datetime" dateTime={dateTimeISO}>
+                                <span className="time-line">{hhmm}</span>
+                                <span className="date-line">{ddmmyy}</span>
+                            </time>
+                        );
+                    })()}
+                <div>
+                    {record.isperfect && (
+                        <span 
+                            className="perfect-icon"
+                            aria-label={t('tooltips.perfect')}
+                            data-tooltip={t('tooltips.perfect')}
+                            title={t('tooltips.perfect')}
+                        >
+                            <Icon name="star" size={22} masked />
+                        </span>
+                    )}
+                    {/* {record.modification.map((mod, index) => (
+                        <Icon 
+                            key={index}
+                            name={`${mod}`}
+                        />
+                    ))} 
+                    */}
+                </div>
+            </section>
+        </article>
+    );
+};
 
 const ScoreList = ({ gameId, gameProps }: Props) => {
     const { currentUser } = useGameStore();

@@ -95,12 +95,13 @@
             justify-content: center;
             flex-shrink: 0;
             position: relative;
-            overflow: hidden;
+            overflow: hidden; // set visible to allow tooltip to overflow (tooltips)
 
             .perfect-icon {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
+                position: relative;
                 line-height: 0;
 
                 > span[id] {

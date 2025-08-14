@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { ShulteSettings, ShulteBoard } from "./types/game_shulte";
 import { generateRecordProps } from '@/utils/pt';
+import { formatTime } from "@/utils/ft";
 
 import { useGameController } from "../../contexts/gameController";
 import { useSettings } from "../../contexts/pref";
+import { useLanguage } from "@/contexts/i18n";
 
 import Icon from "@/components/icon/icon";
-import { formatTime } from "@/utils/ft";
+
+import fireworksGif from "@/assets/animations/fireworks.gif";
+import unluckyGif from "@/assets/animations/unlucky.gif";
 
 function generateShulteBoard(size: number): ShulteBoard {
     const arr = Array.from({ length: size * size }, (_, i) => i + 1);
@@ -22,6 +26,7 @@ function generateShulteBoard(size: number): ShulteBoard {
 function ShulteGame({ settings }: { settings: ShulteSettings }) {
     const { status, startGame, endGame, setGameContext, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
+    const { t } = useLanguage();
     const [gamesSettings] = useSetting('games');
     const hideFoundNumber = gamesSettings?.shulte?.view_modification ?? false;
 
@@ -66,7 +71,7 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                 timerRef.current = null;
             }
         };
-    }, [status, startedAt, settings.size]);
+    }, [status, settings.size]);
 
     useEffect(() => {
         if (status === 'playing' && board.length > 0) setBoardReady(true);
@@ -130,15 +135,28 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
             </header>
             <div className="game-space">
                 {status === 'idle' && (
-                    <>
-                        <h3>{/*TODO: add instruction text */}</h3>
-                    </>
+                    <div style={{ textAlign: 'center', width: '60%' }}>
+                        <h3>{t('game-info.shulte.instruction')}</h3>
+                        <h3>{t('game-info.time_rules')}</h3>
+                        <h3>{t('game-info.mistakes_rules')}</h3>
+                    </div>
                 )}
                 {status === 'win' && (
-                    <div>Congratulations! Time: {formatTime(seconds)}</div>
+                    <div style={{ textAlign: 'center', width: '60%' }}>
+                        <img src={fireworksGif} 
+                            alt="fireworks-animation" />
+                        <h3>{t('game-info.win')}</h3>
+                        <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
+                    </div>
                 )}
                 {status === 'lose' && (
-                    <div>Defeat! Mistakes: {mistakes}. Time: {formatTime(seconds)}</div>
+                    <div style={{ textAlign: 'center', width: '60%' }}>
+                        <img src={unluckyGif} 
+                            alt="unlucky-animation" />
+                        <h3>{t('game-info.lose')}</h3>
+                        <h3>{t('game-info.your_mistakes')} {mistakes}</h3>
+                        <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
+                    </div>
                 )}
         {status === 'playing' && (
                     <div
@@ -146,9 +164,9 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
             className="shulte-board"
                         style={{
                             display: "grid",
-                            gap: 8,
+                            gap: 10,
                             gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
-                            width: '100%',
+                            // width: '100%',
                             maxWidth: 620
                         }}
                     >
@@ -158,7 +176,9 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                                     key={`${rowIndex}-${colIndex}`}
                                     onClick={() => handleCellClick(rowIndex, colIndex)}
                                     style={{
-                                        height: 60,
+                                        fontSize: '22px',
+                                        height: `calc(480px / ${settings.size})`,
+                                        width: `calc(480px / ${settings.size})`,
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',

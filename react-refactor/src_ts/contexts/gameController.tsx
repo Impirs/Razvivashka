@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
+import winSfx from '@/assets/sounds/win.mp3';
+import defeatSfx from '@/assets/sounds/defeat.mp3';
 import { useGameStore } from './gameStore';
+import { useSettings } from './pref';
 
 // Define game states
 export type GameStatus = 'idle' | 'playing' | 'win' | 'lose';
@@ -50,6 +53,9 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
     const [state, dispatch] = useReducer(gameControllerReducer, initialState);
     const { addGameRecord, unlockAchievementCheck } = useGameStore();
     const lastReportedRef = useRef<number | null>(null);
+    const { get } = useSettings();
+
+    const volume = get('volume');
 
     const startGame = () => {
         dispatch({ type: 'START_GAME' });
@@ -78,6 +84,17 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
         if (state.status === 'win') {
             addGameRecord(state.gameId, state.gameProps, state.score, state.isPerfect);
             unlockAchievementCheck(state.gameId, state.gameProps, state.score, state.isPerfect);
+            try {
+                const audio = new Audio(winSfx);
+                audio.volume = volume.effects;
+                audio.play().catch(() => {});
+            } catch {}
+        } else if (state.status === 'lose') {
+            try {
+                const audio = new Audio(defeatSfx);
+                audio.volume = volume.effects;
+                audio.play().catch(() => {});
+            } catch {}
         }
         lastReportedRef.current = state.startedAt;
     }, [state.status, state.score, state.gameId, state.gameProps, state.startedAt, addGameRecord, unlockAchievementCheck]);

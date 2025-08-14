@@ -7,6 +7,7 @@
 @use './components/layouts';
 @use './components/button';
 @use './components/inputs';
+@use './components/slider';
 @use './components/checkbox';
 @use './components/select';
 @use './components/scorelist';
@@ -20,42 +21,88 @@
 @use './modules/settings.scss';
 
 :root {
-  --brand-primary: #eb92be;
-  --brand-secondary: #ffef79;
-  --brand-third: #63c9b4;
+  	--brand-primary: #eb92be;
+  	--brand-secondary: #ffef79;
+  	--brand-third: #63c9b4;
 }
 
 body {
-  font-family: 'Snide hand';
-  margin: 0px;
-  background: linear-gradient(320deg,
-                              colors.$primary, 
-                              colors.$secondary, 
-                              colors.$third);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+  	font-family: 'Snide hand';
+  	margin: 0px;
+  	background: linear-gradient(320deg,
+  	                            colors.$primary, 
+  	                            colors.$secondary, 
+  	                            colors.$third);
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	height: 100vh;
+  	margin: 0;
 }
 
 .page-content { width: 100%; height: 100%; }
 .menu-card {
-  background-color: colors.$background;
-  border: 1px solid colors.$primary;
-  border-radius: 16px;
-  box-shadow: 0 4px 30px colors.$shadow;
-  padding: 28px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  	background-color: colors.$background;
+  	border: 1px solid colors.$primary;
+  	border-radius: 16px;
+  	box-shadow: 0 4px 30px colors.$shadow;
+  	padding: 28px 40px;
+  	display: flex;
+  	flex-direction: column;
+  	align-items: center;
 }
 
 ::-webkit-scrollbar { width: 16px; }
 ::-webkit-scrollbar-thumb {
-  background-color: #eb92be;
-  border-radius: 8px;
-  border: 4px solid transparent;
-  background-clip: padding-box;
+  	background-color: #eb92be;
+  	border-radius: 8px;
+  	border: 4px solid transparent;
+  	background-clip: padding-box;
 }
 ::-webkit-scrollbar-track { background-color: transparent; }
+
+
+// [data-tooltip]::after {
+//     content: attr(data-tooltip);
+//     position: absolute;
+//     bottom: 100%;
+//     left: 50%;
+//     transform: translate(-50%, -8px);
+//     background: colors.$background;
+//     color: colors.$text;
+//     border: 1px solid colors.$primary;
+//     border-radius: 10px;
+//     padding: 6px 10px;
+//     font-family: "Playball";
+//     font-size: 12px;
+//     white-space: nowrap;
+//     box-shadow: 0 4px 18px colors.$shadow;
+//     opacity: 0;
+//     visibility: hidden;
+//     transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+//     pointer-events: none;
+//     z-index: 5;
+// }
+// [data-tooltip]::before {
+//     content: "";
+//     position: absolute;
+//     bottom: calc(100% - 6px);
+//     left: 50%;
+//     transform: translateX(-50%) rotate(45deg);
+//     width: 10px;
+//     height: 10px;
+//     background: colors.$background;
+//     border-left: 1px solid colors.$primary;
+//     border-top: 1px solid colors.$primary;
+//     box-shadow: -2px -2px 8px colors.$shadow;
+//     opacity: 0;
+//     visibility: hidden;
+//     transition: opacity 0.15s ease, visibility 0.15s ease;
+//     pointer-events: none;
+//     z-index: 4;
+// }
+// :hover[data-tooltip]::after,
+// :hover[data-tooltip]::before {
+//     opacity: 1;
+//     visibility: visible;
+// }
