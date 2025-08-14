@@ -1,9 +1,10 @@
+@use '../colors';
+
 .scorelist-container {
-    height: 320px;
     width: 250px;
+    justify-items: center;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-left: 8px;
 
     &::-webkit-scrollbar {
         width: 8px;
@@ -19,19 +20,23 @@
 
 .score-list {
     height: max-content;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
 }
 
 .record-container {
+    display: grid;
     position: relative;
-    display: flex;
-    width: 210px;
+    grid-template-columns: 56px 1fr;
+    width: 198px;
     height: 70px;
-    flex-direction: row;
-    padding-inline: 15px;
     background-color: colors.$fourth;
     border-radius: 10px;
     box-shadow: 0 2px 15px colors.$shadow;
+    padding-inline: 12px 20px;
     margin-bottom: 6px;
+    align-content: center;
     overflow: hidden;
     z-index: 0;
 
@@ -63,34 +68,64 @@
         border-radius: inherit;
         background: colors.$fourth;
     }
+
+    .score {
+        width: 64px;
+        height: 32px;
+        font-family: "Playball";
+        font-size: 28px;
+        justify-self: center;
+        text-align: center;
+
+        // &.perfect {
+        //     color: colors.$gold;
+        // }
+    }
+
+    .record-details {
+        display: flex;
+        flex-direction: row;
+        width: 150px;
+
+        > div {
+            padding: 8px 0;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+
+            .perfect-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                line-height: 0;
+
+                > span[id] {
+                    display: inline-block;
+                    width: 1em; 
+                    height: 1em;
+                    background-color: colors.$gold;
+                }
+            }
+        }
+        
+        .record-datetime {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100px;
+            padding-inline: 10px;
+            font-family: "Playball";
+            font-size: 14px;
+            line-height: 1.15;
+        }
+    }
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg);} 
     100% { transform: rotate(360deg);} 
-}
-
-.score-info-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 130px;
-
-    h3 {
-        font-size: 20px;
-        margin: 0;
-        margin-top: 12px;
-    }
-    span {
-        font-family: "Playball";
-        font-size: 14px;
-    }
-}
-
-.score-container-score {
-    width: 80px;
-    font-family: "Playball";
-    font-size: 28px;
-    text-align: center;
-    padding-top: 15px;
 }

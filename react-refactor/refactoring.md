@@ -114,17 +114,17 @@ List all updated technologies and why each was chosen:
 │                 <Routes>                      │
 │                                               │
 │  SettingsProvider                             │
-│  LanguageProvider                              │
-│  GameStoreProvider                             │
-│    └─ GameControllerProvider                   │  ← (idle, playing, win, lose)
-│        └─ GameLayout (by gameId)               │
-│            ├─ Menu (collect settings)          │ → startGame + setGameContext
-│            └─ Game (play round)                │ → endGame(status, score)
+│  LanguageProvider                             │
+│  GameStoreProvider                            │
+│    └─ GameControllerProvider                  │  ← (idle, playing, win, lose)
+│        └─ GameLayout (by gameId)              │
+│            ├─ Menu (collect settings)         │ → startGame + setGameContext
+│            └─ Game (play round)               │ → endGame(status, score)
 │                                               │
-│  On win: GameController → addGameRecord →      │
-│          unlockAchievementCheck → (notify TBD) │
+│  On win: GameController → addGameRecord →     │
+│          unlockAchievementCheck → (notify TBD)│
 │                                               │
-│  Achievement/Notification UI renders higher    │
+│  Achievement/Notification UI renders higher   │
 └───────────────────────────────────────────────┘
 
 ```

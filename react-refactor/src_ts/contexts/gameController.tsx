@@ -75,8 +75,8 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
         if (state.status !== 'win' && state.status !== 'lose') return;
         if (lastReportedRef.current === state.startedAt) return;
 
-        addGameRecord(state.gameId, state.gameProps, state.score, state.isPerfect);
         if (state.status === 'win') {
+            addGameRecord(state.gameId, state.gameProps, state.score, state.isPerfect);
             unlockAchievementCheck(state.gameId, state.gameProps, state.score, state.isPerfect);
         }
         lastReportedRef.current = state.startedAt;

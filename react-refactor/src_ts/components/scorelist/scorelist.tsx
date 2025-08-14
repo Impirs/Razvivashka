@@ -32,17 +32,37 @@ const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord
             {record.score}
         </span>
         <section className="record-details">
+                {(() => {
+                    const d = new Date(record.played as any);
+                    const dateTimeISO = isNaN(d.getTime()) ? undefined : d.toISOString();
+                    const hhmm = isNaN(d.getTime())
+                        ? ''
+                        : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const yy = String(d.getFullYear()).slice(-2);
+                    const ddmmyy = isNaN(d.getTime()) ? '' : `${dd}/${mm}/${yy}`;
+                    return (
+                        <time className="record-datetime" dateTime={dateTimeISO}>
+                            <span className="time-line">{hhmm}</span>
+                            <span className="date-line">{ddmmyy}</span>
+                        </time>
+                    );
+                })()}
             <div>
+                {record.isperfect && (
+                    <span className="perfect-icon" aria-hidden>
+                        <Icon name="star" size={22} masked />
+                    </span>
+                )}
                 {/* {record.modification.map((mod, index) => (
                     <Icon 
                         key={index}
                         name={`${mod}`}
                     />
-                ))} */}
+                ))} 
+                */}
             </div>
-            <time dateTime={record.played as any}>
-                {new Date(record.played as any).toLocaleString()}
-            </time>
         </section>
     </article>
 );

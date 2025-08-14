@@ -12,7 +12,7 @@ export type IconProps = React.SVGProps<SVGSVGElement> & {
 	masked?: boolean;
 };
 
-function Icon({ name, size = 24, color = 'currentColor', className, style, masked = false, ...rest }: IconProps) {
+function Icon({ name, size = 24, color = '#111111', className, style, masked = false, ...rest }: IconProps) {
 	const Svg = iconComponents[name];
 	const url = iconUrls[name];
 
@@ -41,7 +41,7 @@ function Icon({ name, size = 24, color = 'currentColor', className, style, maske
 				className={className}
 				style={{ width: sizeStyle, 
 						height: sizeStyle, 
-						color, 
+						color: color, 
 						display: 'inline-block', 
 						verticalAlign: 'middle', 
 						...style }}

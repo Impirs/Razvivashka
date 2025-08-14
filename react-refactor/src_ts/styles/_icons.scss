@@ -100,6 +100,28 @@
     mask-size: contain;
 }
 
+/* Commonly used masked icons */
+#star {
+    -webkit-mask: url('@/assets/icons/star.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/star.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#heart {
+    -webkit-mask: url('@/assets/icons/heart.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/heart.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#heart-broken {
+    -webkit-mask: url('@/assets/icons/heart-broken.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/heart-broken.svg') no-repeat center;
+    mask-size: contain;
+}
+
 .mistake {
     background: #4b4b4b;
 

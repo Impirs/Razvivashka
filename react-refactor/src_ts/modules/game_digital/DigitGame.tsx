@@ -29,6 +29,8 @@ function DigitGame({ settings }: DigitGameProps) {
     const lastStartRef = useRef<number | null>(null);
     // board readiness guard to avoid checking cleared-state before board is generated
     const [boardReady, setBoardReady] = useState(false);
+    // which run (startedAt) the board is ready for; prevents cross-run stale wins
+    const [boardReadyRunId, setBoardReadyRunId] = useState<number | null>(null);
 
     // setup board and start timer when playing begins, and re-init on each Start press (startedAt changes)
     useEffect(() => {
@@ -37,6 +39,7 @@ function DigitGame({ settings }: DigitGameProps) {
                 lastStartRef.current = startedAt;
                 setBoard([]); // reset immediately to prevent stale checks
                 setBoardReady(false);
+                setBoardReadyRunId(null);
                 setBoard(generateBoard(settings.target, settings.size));
                 setSelected([]);
                 setMistakes(0);
@@ -56,6 +59,7 @@ function DigitGame({ settings }: DigitGameProps) {
             if (status === 'idle') {
                 lastStartRef.current = null;
                 setBoardReady(false);
+                setBoardReadyRunId(null);
                 setSeconds(0);
             }
         }
@@ -71,10 +75,11 @@ function DigitGame({ settings }: DigitGameProps) {
 
     // mark board as ready once generated for a playing run
     useEffect(() => {
-        if (status === 'playing' && board.length > 0) {
+        if (status === 'playing' && board.length > 0 && startedAt) {
             setBoardReady(true);
+            setBoardReadyRunId(startedAt);
         }
-    }, [board, status]);
+    }, [board, status, startedAt]);
 
     const handleCellClick = (row: number, col: number) => {
         if (status !== 'playing') return;
@@ -115,7 +120,7 @@ function DigitGame({ settings }: DigitGameProps) {
     };
 
     useEffect(() => {
-        if (status === 'playing' && boardReady && isBoardCleared(board)) {
+        if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isBoardCleared(board)) {
             // stop timer and submit time as score (in seconds)
             if (timerRef.current) {
                 window.clearInterval(timerRef.current);
@@ -123,7 +128,7 @@ function DigitGame({ settings }: DigitGameProps) {
             }
             endGame('win', seconds);
         }
-    }, [board, status, seconds, boardReady]);
+    }, [board, status, seconds, boardReady, startedAt, boardReadyRunId]);
 
     useEffect(() => {
         if (status === 'playing' && mistakes >= 3) {
