@@ -1,0 +1,55 @@
+@use '../colors';
+
+$volume-track-height: 32px;
+$volume-thumb-size: 24px;
+$volume-control-height: 48px;
+$volume-border-width: 2px;
+$volume-border-color: colors.$primary;
+$volume-track-bg: colors.$background;
+
+.ui-slider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: $volume-control-height;
+
+    &__input {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: $volume-control-height;
+        background: transparent;
+        outline: none;
+        cursor: pointer;
+    }
+
+    &__input::-webkit-slider-runnable-track {
+        height: $volume-track-height;
+        background: $volume-track-bg;
+        border: $volume-border-width solid $volume-border-color;
+        border-radius: 8px;
+    }
+
+    &__input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: $volume-thumb-size;
+        height: $volume-thumb-size;
+        background: colors.$third;
+        border: 0;
+        border-radius: 6px;
+        margin-top: calc((#{$volume-track-height} - #{$volume-thumb-size}) / 4);
+        box-shadow: 0 0 0 0 rgba(0,0,0,0);
+    }
+
+    &__input:hover::-webkit-slider-runnable-track { 
+        border-color: colors.$third;
+    }
+    &__input:active::-webkit-slider-runnable-track { 
+        border-color: colors.$third;
+    }
+    &__input:active::-webkit-slider-thumb { 
+        background: colors.$primary;
+    }
+}

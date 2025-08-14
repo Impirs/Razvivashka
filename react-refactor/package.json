@@ -1,0 +1,117 @@
+{
+  "name": "play_and_learn",
+  "version": "2.0.0",
+  "description": "An educational application with games for kids",
+  "main": "./electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && npm run start\"",
+    "build:react": "vite build",
+    "build": "npm run build:react && electron-builder",
+    "start": "electron .",
+    "test": "jest --config ./jest.config.js --passWithNoTests --silent --verbose=false"
+  },
+  "build": {
+    "appId": "com.impirs.razvivashka",
+    "productName": "Развивашка",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "artifactName": "play_and_learn-Setup-${version}.${ext}",
+      "icon": "../shared/assets/icon",
+      "signtoolOptions": {
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
+        "certificateFile": "D:/Test_1/certificate.pfx",
+        "certificatePassword": "jdi5l92lplx0seq390"
+      }
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "electron_ts/**/*",
+      "src/**/*",
+      "src_ts/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "../shared/**/*"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Impirs",
+        "repo": "Razvivashka"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Impirs/Razvivashka.git"
+  },
+  "keywords": [
+    "games",
+    "for kids",
+    "learning"
+  ],
+  "author": "Artem Mamitov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Impirs/Razvivashka/issues"
+  },
+  "homepage": "https://github.com/Impirs/Razvivashka#readme",
+  "dependencies": {
+    "electron-log": "^5.3.3",
+    "electron-updater": "^6.6.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.5.1",
+    "sass": "^1.86.3",
+    "scss": "^0.2.4",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^35.1.5",
+    "electron-builder": "^26.0.12",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-checker": "^0.10.1",
+    "vite-plugin-svgr": "^4.3.0",
+    "wait-on": "^8.0.3"
+  },
+  "extraResources": [],
+  "asar": true
+}

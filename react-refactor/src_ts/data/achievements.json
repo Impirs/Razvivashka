@@ -1,0 +1,62 @@
+[
+    {
+        "gameId": "digit",
+        "gameProps": "7x6",
+        "requirements": [60, 90]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "7x7",
+        "requirements": [75, 105]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "7x8",
+        "requirements": [90, 120]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "9x8",
+        "requirements": [120, 150, 180]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "9x9",
+        "requirements": [135, 165, 195]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "9x10",
+        "requirements": [150, 180, 210]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "7x100",
+        "requirements": [100000]
+    },
+    {
+        "gameId": "digit",
+        "gameProps": "9x100",
+        "requirements": [100000]
+    },
+    {
+        "gameId": "shulte",
+        "gameProps": "4x4",
+        "requirements": [45, 60, 90]
+    },
+    {
+        "gameId": "shulte",
+        "gameProps": "5x5",
+        "requirements": [60, 90, 120]
+    },
+    {
+        "gameId": "shulte",
+        "gameProps": "4x100",
+        "requirements": [100000]
+    },
+    {
+        "gameId": "shulte",
+        "gameProps": "5x100",
+        "requirements": [100000]
+    }
+]

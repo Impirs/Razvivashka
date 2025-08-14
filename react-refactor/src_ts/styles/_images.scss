@@ -1,0 +1,35 @@
+// Image tokens or helper classes if needed
+fireworks-animation {
+    background-image: url('@/assets/animations/fireworks.gif');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+unlucky-animation {
+    background-image: url('@/assets/animations/unlucky.gif');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#welcome {
+    background-image: url('@/assets/images/welcome.png');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#digit_preview {
+    background-image: url('@/assets/images/digit_preview.png');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#shulte_preview {
+    background-image: url('@/assets/images/shulte_preview.png');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}

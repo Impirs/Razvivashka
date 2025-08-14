@@ -1,0 +1,183 @@
+@use '../colors';
+
+.game-layout {
+    width: 1510px;
+    height: 840px;
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    .game-side {
+        width: 300px;
+        min-width: 220px;
+        // margin-top: 64px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .game-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 860px;
+        width: 920px;
+        background-color: colors.$background;
+        border: 1px solid colors.$primary;
+        border-radius: 16px;
+        box-shadow: 0 4px 30px colors.$shadow;
+        color: colors.$text;
+
+        .game-header {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            width: 100%;
+
+            border-top-right-radius: 14px;
+            border-top-left-radius: 14px;
+            border-bottom: 1px solid colors.$primary;
+
+            background-color: colors.$header;
+
+            h1 {
+                flex: 1 1 auto;
+                text-align: center;
+                font-size: 38px;
+                padding: 0 40px;
+                color: colors.$text;
+                margin: 0;
+                font-weight: 700;
+            }
+        }
+
+        .game-main-panel {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            // border-radius: 16px;
+            color: colors.$text;
+            // gap: 30px;
+
+            .game-utils-panel {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                align-items: center;
+                top: 0px;
+                width: calc(100% - 44px);
+                height: 60px;
+                content: '';
+                padding:  12px 22px 0 22px;
+   
+                > * {
+                    display: flex;
+                    align-items: center;
+                    justify-self: center;
+                }
+            }
+
+            .game-space {
+                width: 100%;
+                height: calc(100% - 120px);
+                // padding: 20px 35px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .game-restart-btn {
+                margin-top: 32px;
+                font-size: 22px;
+                background: colors.$primary;
+                color: colors.$text_rev;
+                border: 2px solid colors.$primary;
+                border-radius: 12px;
+                padding: 12px 32px;
+                cursor: pointer;
+                transition: background 0.2s, color 0.2s;
+   
+                &:hover {
+                    background: colors.$fourth;
+                    color: colors.$primary;
+                    border-color: colors.$primary;
+                }
+            }
+        }
+    }
+
+}
+
+.game-menu, .score_section {
+    background-color: colors.$background;
+    border: 1px solid colors.$primary;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px colors.$shadow;
+    color: colors.$text;
+    width: 300px;
+    height: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px 0;
+}
+
+.game-menu h2, .score_section h2 {
+    color: colors.$text;
+    font-size: 22px;
+    margin: 15px 0 5px 0;
+    cursor: default;
+}
+
+.game-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.mistakes-counter {
+    border: 1px solid colors.$primary;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px colors.$shadow;
+    width: 160px;
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: colors.$fourth;
+}
+
+.mistake {
+    width: 40px;
+    height: 40px;
+}
+
+.game-timer {
+    font-family: 'PlayBall';
+    border: 1px solid colors.$primary;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px colors.$shadow;
+    width: 160px;
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: colors.$fourth;
+    font-size: 28px;
+    color: colors.$text_secondary;
+}

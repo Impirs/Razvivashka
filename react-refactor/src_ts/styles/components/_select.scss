@@ -1,0 +1,55 @@
+@use '../colors';
+
+.ui-selectbox {
+    position: relative;
+    width: 240px;
+
+    &__button {
+        width: 100%;
+        font-family: inherit;
+        background: colors.$fourth;
+        border: 2px solid colors.$primary;
+        border-radius: 10px;
+        padding: 9px 36px 9px 9px;
+        color: colors.$text_secondary;
+        font-size: 18px;
+        line-height: 24px;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 2px 8px colors.$shadow;
+        transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, background 0.2s;
+
+        &:hover { border-color: colors.$third; color: colors.$third; }
+        &:focus { outline: none; border-color: colors.$third; box-shadow: 0 0 0 3px colors.$hover; }
+        &.is-disabled { opacity: 0.6; cursor: not-allowed; }
+    }
+
+    &__list {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        z-index: 1000;
+        min-width: 100%;
+        max-height: 260px;
+        overflow: auto;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        background: colors.$fourth;
+        border: 2px solid colors.$primary;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px colors.$shadow;
+    }
+
+    &__option {
+        padding: 8px 12px;
+        color: colors.$text_secondary;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover,
+        &.is-active { background: colors.$third; color: colors.$text_rev; }
+
+        &.is-selected { font-weight: 700; }
+    }
+}

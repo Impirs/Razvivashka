@@ -1,0 +1,132 @@
+@use '../colors';
+
+.scorelist-container {
+    width: 250px;
+    justify-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: colors.$primary;
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: colors.$background;
+    }
+}
+
+.score-list {
+    height: max-content;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.record-container {
+    display: grid;
+    position: relative;
+    grid-template-columns: 56px 1fr;
+    width: 198px;
+    height: 70px;
+    background-color: colors.$fourth;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px colors.$shadow;
+    padding-inline: 12px 20px;
+    margin-bottom: 6px;
+    align-content: center;
+    overflow: hidden;
+    z-index: 0;
+
+    &.new-score::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        width: 400%;
+        height: 400%;
+        top: -150%;
+        left: -150%;
+        background: conic-gradient(
+            from 0deg,
+            colors.$primary,
+            colors.$third,
+            colors.$secondary,
+            colors.$primary
+        );
+        animation: spin 2s linear infinite;
+    }
+    &.new-score::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 2px;
+        left: 2px;
+        right: 2px;
+        bottom: 2px;
+        border-radius: inherit;
+        background: colors.$fourth;
+    }
+
+    .score {
+        width: 64px;
+        height: 32px;
+        font-family: "Playball";
+        font-size: 28px;
+        justify-self: center;
+        text-align: center;
+
+        // &.perfect {
+        //     color: colors.$gold;
+        // }
+    }
+
+    .record-details {
+        display: flex;
+        flex-direction: row;
+        width: 150px;
+
+        > div {
+            padding: 8px 0;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden; // set visible to allow tooltip to overflow (tooltips)
+
+            .perfect-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                line-height: 0;
+
+                > span[id] {
+                    display: inline-block;
+                    width: 1em; 
+                    height: 1em;
+                    background-color: colors.$gold;
+                }
+            }
+        }
+        
+        .record-datetime {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100px;
+            padding-inline: 10px;
+            font-family: "Playball";
+            font-size: 14px;
+            line-height: 1.15;
+        }
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg);} 
+    100% { transform: rotate(360deg);} 
+}

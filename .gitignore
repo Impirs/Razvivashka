@@ -8,7 +8,9 @@ vanilla-app/dist/v1.2.4
 vanilla-app/dist/v1.2.3
 vanilla-app/dist/v1.2.2
 vanilla-app/dist/v1.2.1
-    
+
+react-refactor/dist/*
+
 local_data/
 *.log
 test/

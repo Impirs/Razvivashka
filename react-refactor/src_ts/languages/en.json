@@ -1,0 +1,197 @@
+{
+    "games": {
+        "all": "All games",
+        "digit": "Number Composition",
+        "shulte": "Schulte Table",
+        "syllable": "Syllables",
+        "sum": "Sum of Numbers"
+    },
+
+    "types": {
+        "all": "All categories",
+        "logic": "Logic",
+        "math": "Math",
+        "reading": "Reading",
+        "attention": "Attention"
+    },
+
+    "routes": {
+        "home": "Razvivashka",
+        "catalog": "Catalog",
+        "settings": "Settings",
+        "achievements": "Achievements"
+    },
+
+    "buttons" : {
+        "play": "Play",
+        "back": "Back",
+        "next": "Next",
+        "start": "Start",
+        "continue": "Continue",
+        "settings": "Settings",
+        "close": "Close",
+        "ok": "OK",
+        "filter": "Select...",
+        "cancel": "Cancel",
+        "apply": "Apply"
+    },
+
+    "game-menu": {
+        "setup": "Game settings",
+        "records": "Leaderboard",
+        "bsize": {
+            "standard": "Standard",
+            "large": "Large"
+        },
+
+        "digit": {
+            "target": "Find pairs that sum to:",
+            "size": "Board size:",
+            "task": "Clear the board of numbers that sum to"
+        },
+        "shulte": {
+            "size": "Board size:",
+            "task": "Clear the board of numbers that sum to"
+        }        
+    },
+
+    "game-info": {
+        "win": "Victory!",
+        "lose": "Defeat!",
+        "your_time": "Time spent: ",
+        "your_mistakes": "Mistakes: ",
+        "time_rules": "Time attack. The faster you finish, the better.",
+        "timer_rules": "Timed game. When time runs out, the game ends.",
+        "mistakes_rules": "The number of mistakes must not exceed 3.",
+        "digit": {
+            "instruction": "Clear the board by selecting pairs of cells that add up to the number you chose.",
+            "empty": "Empty cell",
+            "available": "Available for selection",
+            "unavailable": "Unavailable — no empty adjacent cell"
+        },
+        "shulte": {
+            "instruction": "Tap the cells in order from 1 to 16 or 25, depending on the selected board size."
+        }
+    },
+
+    "achievements": {
+        "notification": "You've earned a new achievement!",
+        "digit": {
+            "7x6": {
+                "title": "Great Start",
+                "description": "Finish the game on the standard board for number 6 in "
+            },
+            "7x7": {
+                "title": "Seven+Me",
+                "description": "Finish the game on the standard board for number 7 in "
+            },
+            "7x8": {
+                "title": "Basics Expert",
+                "description": "Finish the game on the standard board for number 8 in "
+            },
+            "9x8": {
+                "title": "Premier League",
+                "description": "Finish the game on the large board for number 8 in "
+            },
+            "9x9": {
+                "title": "Young Mathematician",
+                "description": "Finish the game on the large board for number 9 in "
+            },
+            "9x10": {
+                "title": "Professional",
+                "description": "Finish the game on the large board for number 10 in "
+            },
+            "7x100": {
+                "title": "Flawless Run",
+                "description": "Finish the game on the standard board without making a single mistake."
+            },
+            "9x100": {
+                "title": "Flawless Run",
+                "description": "Finish the game on the large board without making a single mistake."
+            }
+        },
+        "shulte": {
+            "4x4": {
+                "title": "Sharp Eye",
+                "description": "Finish the game on the standard board in "
+            },
+            "5x5": {
+                "title": "Pure Focus",
+                "description": "Finish the game on the large board in "
+            },
+            "4x100": {
+                "title": "Flawless Run",
+                "description": "Finish the game on the standard board without making a single mistake."
+            },
+            "5x100": {
+                "title": "Flawless Run",
+                "description": "Finish the game on the large board without making a single mistake."
+            }
+        },
+        "syllable": {
+            "1x1": {
+                "title": "Primer Secrets",
+                "description": "Complete the exercise with basic letter sets "
+            },
+            "1x2": {
+                "title": "Happy Bookworm",
+                "description": "Complete the exercise with the advanced vowel set "
+            },
+            "2x1": {
+                "title": "One Step Closer to Books",
+                "description": "Complete the exercise with the advanced consonant set "
+            },
+            "2x2": {
+                "title": "Reading Hero",
+                "description": "Complete the exercise with advanced letter sets "
+            }
+        }
+    },
+
+    "settings": {
+        "general": "General",
+        "gameplay": {
+            "label": "Gameplay",
+            "digit": {
+                "label": "Number Composition",
+                "description": "Highlight cells available to press with a different color"
+            },
+            "syllable": {
+                "label": "Syllables",
+                "description": "Count the exercise only when all letters have been read"
+            },
+            "shulte": {
+                "label": "Schulte Table",
+                "description": "Hide numbers after clicking"
+            }
+        },
+        "language": {
+            "label": "Language",
+            "options": {
+                "ru": "Russian",
+                "en": "English",
+                "sb_lat": "Serbian (Latin)",
+                "sb_cy": "Serbian (Cyrillic)"
+            }
+        },
+        "player": {
+            "name": "Name",
+            "placeholder": "What's your name?"
+        },
+        "volume": {
+            "label": "Sound",
+            "notifications": "Notification volume",
+            "effects": "Effects volume"
+        }
+    },
+
+    "record": {
+        "minutes": "minutes",
+        "seconds": "seconds",
+        "count": "times"
+    },
+
+    "tooltips": {
+        "perfect": "Perfect run — no mistakes"
+    }
+}
