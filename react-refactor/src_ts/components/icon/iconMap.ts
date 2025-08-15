@@ -16,7 +16,7 @@ for (const path in componentMods) {
 }
 
 // Raw URLs fallback in case SVGR fails
-const urlMods = (import.meta as any).glob('/src_ts/assets/icons/*.svg', { eager: true, as: 'url' }) as Record<string, string>;
+const urlMods = (import.meta as any).glob('/src_ts/assets/icons/*.svg', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 export const iconUrls: Record<string, string> = {};
 for (const path in urlMods) {
   const name = path.split('/').pop()?.replace('.svg', '') ?? path;

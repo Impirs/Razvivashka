@@ -4,6 +4,6 @@
         "vanilla:build": "cd vanilla-app && npm run build",
         "react:start": "cd react-refactor && npm run dev",
         "react:build": "cd react-refactor && npm run build",
-        "react:test": "cd react-refactor && npm run test", 
+        "react:test": "cd react-refactor && npm run test"
     }
 }

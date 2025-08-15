@@ -5,12 +5,8 @@ import { useSettings } from './pref';
 
 const defaultLanguage: Language = 'ru';
 
-import ruTranslations from '../languages/ru.json';
-import sbLatTranslations from '../languages/sb_lat.json';
-import sbCyTranslations from '../languages/sb_cy.json'; 
-import enTranslations from '../languages/en.json'; 
-
-type AppLanguage = typeof ruTranslations; // translations structure type
+// Type for our translations (we'll load this dynamically)
+type AppLanguage = Record<string, any>;
 
 const LanguageContext = createContext<LanguageContextType<AppLanguage> | undefined>(undefined);
 type LanguageProviderProps = {
@@ -24,10 +20,10 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
     const [loading, setLoading] = React.useState(false);
 
     const [translations, setTranslations] = React.useState<Record<Language, AppLanguage>>({
-        ru: ruTranslations,
-        sb_lat: sbLatTranslations,
-        sb_cy: sbCyTranslations,
-        en: enTranslations
+        ru: {},
+        sb_lat: {}, // Will be loaded dynamically
+        sb_cy: {},  // Will be loaded dynamically
+        en: {}      // Will be loaded dynamically
     });
 
     // Load other languages as needed
@@ -60,6 +56,28 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
 
         return typeof value === 'string' ? value : key;
     };
+
+    // Load all languages on initialization
+    useEffect(() => {
+        const loadAllLanguages = async () => {
+            const languages: Language[] = ['ru', 'sb_lat', 'sb_cy', 'en'];
+            const loadedTranslations: Record<Language, AppLanguage> = {} as Record<Language, AppLanguage>;
+            
+            for (const lang of languages) {
+                try {
+                    const module = await import(`../languages/${lang}.json`);
+                    loadedTranslations[lang] = module.default;
+                } catch (error) {
+                    console.error(`Failed to load ${lang} translations:`, error);
+                    loadedTranslations[lang] = {};
+                }
+            }
+            
+            setTranslations(loadedTranslations);
+        };
+        
+        loadAllLanguages();
+    }, []);
 
     // Ensure translations are loaded when language changes
     useEffect(() => {

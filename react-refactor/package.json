@@ -13,6 +13,7 @@
   "build": {
     "appId": "com.impirs.razvivashka",
     "productName": "Развивашка",
+    "forceCodeSigning": false,
     "win": {
       "target": [
         {
@@ -24,31 +25,24 @@
         },
         {
           "target": "zip",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "arch": "x64"
+        },
+        {
+          "target": "zip",
+          "arch": "ia32"
         }
       ],
-      "artifactName": "play_and_learn-Setup-${version}.${ext}",
-      "icon": "../shared/assets/icon",
-      "signtoolOptions": {
-        "signingHashAlgorithms": [
-          "sha256"
-        ],
-        "certificateFile": "D:/Test_1/certificate.pfx",
-        "certificatePassword": "jdi5l92lplx0seq390"
-      }
+      "artifactName": "play_and_learn-Setup-${version}-${arch}.${ext}",
+      "icon": "src_ts/assets/icon",
+      "forceCodeSigning": false,
+      "signAndEditExecutable": false
     },
     "files": [
       "dist/**/*",
       "electron/**/*",
-      "electron_ts/**/*",
-      "src/**/*",
       "src_ts/**/*",
       "node_modules/**/*",
-      "package.json",
-      "../shared/**/*"
+      "package.json"
     ],
     "nsis": {
       "oneClick": false,

@@ -9,7 +9,9 @@ const isDev = !app.isPackaged;
 function createWindow() {
     const win = new BrowserWindow({
         show: false,
-        icon: path.join(__dirname, '../src_ts/assets/icon.ico'),
+        icon: isDev 
+            ? path.join(__dirname, '../src_ts/assets/icon.ico')
+            : path.join(__dirname, '../shared/assets/icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -27,7 +29,7 @@ function createWindow() {
         win.loadURL('http://localhost:5173');
         // win.webContents.openDevTools();
     } else {
-        win.loadFile(path.join(__dirname, '../../dist/index.html'));
+        win.loadFile(path.join(__dirname, '../dist/index.html'));
     }
 
     win.once('ready-to-show', () => {
