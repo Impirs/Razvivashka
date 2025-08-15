@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import winSfx from '@/assets/sounds/win.mp3';
 import defeatSfx from '@/assets/sounds/defeat.mp3';
-import { useGameStore } from './gameStore';
+import { useGameStore } from './gamestore';
 import { useSettings } from './pref';
 
 // Define game states

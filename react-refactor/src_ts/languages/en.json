@@ -193,5 +193,11 @@
 
     "tooltips": {
         "perfect": "Perfect run — no mistakes"
+    },
+
+    "updates": {
+        "update_available_title": "Update Available",
+        "update_available_message": "A new version is available",
+        "click_to_download": "Click to go to the download page."
     }
 }

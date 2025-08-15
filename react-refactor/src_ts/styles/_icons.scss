@@ -100,7 +100,6 @@
     mask-size: contain;
 }
 
-/* Commonly used masked icons */
 #star {
     -webkit-mask: url('@/assets/icons/star.svg') no-repeat center;
     -webkit-mask-size: contain;
@@ -119,33 +118,5 @@
     -webkit-mask: url('@/assets/icons/heart-broken.svg') no-repeat center;
     -webkit-mask-size: contain;
     mask: url('@/assets/icons/heart-broken.svg') no-repeat center;
-    mask-size: contain;
-}
-
-.mistake {
-    background: #4b4b4b;
-
-    -webkit-mask-image: url('@/assets/icons/heart.svg');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    -webkit-mask-size: contain;
-
-    mask-image: url('@/assets/icons/heart.svg');
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: contain;
-}
-
-.mistake.cross {
-    background: #eb5252;
-
-    -webkit-mask-image: url('@/assets/icons/heart-broken.svg');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    -webkit-mask-size: contain;
-
-    mask-image: url('@/assets/icons/heart-broken.svg');
-    mask-repeat: no-repeat;
-    mask-position: center;
     mask-size: contain;
 }

@@ -18,18 +18,11 @@
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        {
-          "target": "zip",
           "arch": "x64"
         },
         {
           "target": "zip",
-          "arch": "ia32"
+          "arch": "x64"
         }
       ],
       "artifactName": "play_and_learn-Setup-${version}-${arch}.${ext}",
@@ -72,6 +65,7 @@
   },
   "homepage": "https://github.com/Impirs/Razvivashka#readme",
   "dependencies": {
+    "axios": "^1.11.0",
     "electron-log": "^5.3.3",
     "electron-updater": "^6.6.2",
     "react": "^19.1.0",

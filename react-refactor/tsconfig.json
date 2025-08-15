@@ -23,7 +23,7 @@
   "include": [
     "src_ts",
     "types/global.d.ts"
-  ],
+, "src_ts/components/notification/.tsx"  ],
   "exclude": [
     "node_modules",
     "dist"

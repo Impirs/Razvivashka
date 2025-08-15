@@ -5,8 +5,8 @@ import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom
 
 // TS providers
 import { LanguageProvider } from './contexts/i18n';
-import { NotificationProvider } from './contexts/notification';
-import { GameStoreProvider } from './contexts/gameStore';
+import { NotificationProvider } from './contexts/notifProvider';
+import { GameStoreProvider } from './contexts/gamestore';
 import { SettingsProvider } from './contexts/pref';
 
 // TS pages
@@ -18,30 +18,48 @@ import HomePage from './pages/home/HomePage';
 // Layout with game hub
 import GameLayout from './layouts/GameLayout';
 
+// Notification component
+import NotificationDisplay from './components/notification/notification';
+
+// Update handler hook
+import { useUpdateHandler } from './utils/useUpdateHandler';
+
+
 function GameCentralWrapper() {
 	const { gameId } = useParams();
 	if (!gameId) return null;
 	return <GameLayout gameId={gameId} />;
 }
 
+function AppContent() {
+	// Initialize update handler
+	useUpdateHandler();
+	
+	return (
+		<>
+			<Routes>
+				<Route path="/" element={<HomePage />} />
+				<Route path="/catalog" element={<CatalogPage />} />
+				<Route path="/catalog/:gameId" element={<GameCentralWrapper />} />
+				<Route path="/settings" element={<SettingsPage />} />
+				<Route path="/achievements" element={<AchievementPage />} />
+			</Routes>
+			<NotificationDisplay />
+		</>
+	);
+}
+
 function App() {
 	return (
 		<SettingsProvider>
 		<LanguageProvider>
-		<GameStoreProvider>
 			<Router>
 				<NotificationProvider>
-				<Routes>
-					<Route path="/" element={<HomePage />} />
-					<Route path="/catalog" element={<CatalogPage />} />
-					<Route path="/catalog/:gameId" element={<GameCentralWrapper />} />
-					<Route path="/settings" element={<SettingsPage />} />
-					<Route path="/achievements" element={<AchievementPage />} />
-				</Routes>
-					{/* Notification component */}
+				<GameStoreProvider>
+					<AppContent />
+				</GameStoreProvider>
 				</NotificationProvider>
 			</Router>
-		</GameStoreProvider>
 		</LanguageProvider>
 		</SettingsProvider>
 	);

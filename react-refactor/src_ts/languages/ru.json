@@ -193,5 +193,11 @@
 
     "tooltips": {
         "perfect": "Идеальный забег — без ошибок"
+    },
+
+    "updates": {
+        "update_available_title": "Доступно обновление",
+        "update_available_message": "Доступна новая версия",
+        "click_to_download": "Нажмите для перехода на страницу загрузки."
     }
 }

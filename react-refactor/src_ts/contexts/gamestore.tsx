@@ -9,6 +9,8 @@ import {
     UserGameRecord
 } from '../types/gamestore';
 import { generateAchievementProps } from '@/utils/pt';
+import { useNotification } from './notifProvider';
+import { useLanguage } from './i18n';
 
 // Initial state
 const initialState: GameStoreState = {
@@ -92,6 +94,9 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
 
 export const GameStoreProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(gameStoreReducer, initialState);
+    const { addNotification } = useNotification();
+    const { t } = useLanguage();
+
     // Load achievements definitions at startup so unlocks work even if Achievements page wasn't opened
     useEffect(() => {
         if (Object.keys(state.allAchievements).length > 0) return;
@@ -239,7 +244,12 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
         });
     };
 
-    const unlockAchievementCheck = (gameId: string, gameProps: string, score: number, isPerfect: boolean = false) => {
+    const unlockAchievementCheck = (
+        gameId: string, 
+        gameProps: string, 
+        score: number, 
+        isPerfect: boolean = false
+    ) => {
         if (!state.currentUser) return;
 
         // Build list of achievement props to check. If perfect run, check both normal and x100 variants.
@@ -261,17 +271,24 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
                     a => a.gameId === gameId && a.gameProps === achievementProps
                 );
 
-                if (!userAchievement) return;
+                if (!userAchievement) {
+                    // console.log(`No user achievement found for ${gameId}/${achievementProps}`);
+                    return;
+                }
 
                 // requirements are ordered from highest tier down (gold, silver, bronze)
                 // For our games, lower score (time) is better, so unlock when score <= required
                 const newUnlockedTiers = achievement.requirements.map((req, idx) => {
                     const prev = userAchievement.unlockedTiers[idx] || false;
-                    return prev || (typeof req === 'number' && score <= req);
+                    const unlocked = prev || (typeof req === 'number' && score <= req);
+                    // console.log(`Tier ${idx}: prev=${prev}, req=${req}, score=${score}, unlocked=${unlocked}`);
+                    return unlocked;
                 });
 
                 // If any tier was unlocked, update the achievement
                 if (newUnlockedTiers.some((unlocked, i) => unlocked !== userAchievement.unlockedTiers[i])) {
+                    // console.log(`Achievement unlocked! Updating and showing notification`);
+
                     dispatch({
                         type: 'UPDATE_ACHIEVEMENT',
                         payload: {
@@ -280,9 +297,37 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
                             unlockedTiers: newUnlockedTiers,
                         }
                     });
+                    
+                    const titleKey = t(`achievements.${achievement.gameId}.${achievement.gameProps}.title`);
+                    const baseDescKey = t(`achievements.${achievement.gameId}.${achievement.gameProps}.description`);
+                    
+                    // Find which tier was just unlocked (highest tier that was just unlocked)
+                    const newlyUnlockedTierIndex = newUnlockedTiers.findIndex((unlocked, i) => 
+                        unlocked && !userAchievement.unlockedTiers[i]
+                    );
+                    
+                    // Create enhanced description with requirements info
+                    let enhancedTitle = titleKey;
+                    let enhancedDesc = baseDescKey;
+                    if (newlyUnlockedTierIndex !== -1 && achievement.requirements[newlyUnlockedTierIndex]) {
+                        const requiredTime = achievement.requirements[newlyUnlockedTierIndex];
+                        const tierNames = ['🥇', '🥈', '🥉'];
+                        const tierName = tierNames[newlyUnlockedTierIndex] || '🏆';
 
-                    // TODO: notify about unlocked achievement
-                    console.log(`Unlocked achievement: ${achievement.gameId} - ${achievement.gameProps}`, newUnlockedTiers);
+                        enhancedTitle += ` ${tierName}`;
+
+                        if (!enhancedDesc.trim().endsWith('.')) {
+                            enhancedDesc += `${requiredTime} ${t('record.seconds')}.`;
+                        }
+
+                        // Add actual time achieved if better than requirement
+                        // if (score < requiredTime) {
+                        //     enhancedDesc += ` (${score} ${t('record.seconds')}!)`;
+                        // }
+                    }
+                    
+                    // Add Notification with enhanced text
+                    addNotification("achievement", enhancedTitle, enhancedDesc);
                 }
             });
         });
@@ -296,7 +341,9 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
                 initializedUser.achievements.length !== state.currentUser.achievements.length ||
                 // also update if any tiers length mismatches
                 initializedUser.achievements.some((ua) => {
-                    const existing = state.currentUser!.achievements.find(a => a.gameId === ua.gameId && a.gameProps === ua.gameProps);
+                    const existing = state.currentUser!.achievements.find(
+                        a => a.gameId === ua.gameId && a.gameProps === ua.gameProps
+                    );
                     return !existing || existing.unlockedTiers.length !== ua.unlockedTiers.length;
                 });
             if (needsUpdate) {
@@ -345,7 +392,10 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
 };
 
 // Helper function to initialize user achievements
-function initializeUserAchievements(user: User, allAchievements: Record<string, GameAchievement[]>): User {
+function initializeUserAchievements(
+    user: User, 
+    allAchievements: Record<string, GameAchievement[]>
+): User {
     // Helper to find requirements for a given achievement
     const getReqs = (gameId: string, props: string): number[] => {
         const defs = allAchievements[gameId] || [];

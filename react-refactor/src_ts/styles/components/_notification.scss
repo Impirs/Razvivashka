@@ -1,0 +1,125 @@
+@use '../colors';
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 400px;
+    min-width: 300px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px colors.$shadow;
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    cursor: pointer;
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+
+    &-content {
+        display: flex;
+        align-items: flex-start;
+        flex: 1;
+        cursor: pointer;
+        gap: 12px;
+    }
+
+    &-icon {
+        width: 48px;
+        height: 48px;
+        background: transparent;
+        display: block;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+
+        > span {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &-text {
+        flex: 1;
+    }
+
+    &-title {
+        margin: 0 0 4px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: colors.$text;
+    }
+
+    &-message {
+        margin: 0;
+        font-size: 14px;
+        color: colors.$text-secondary;
+        line-height: 1.4;
+    }
+
+    &-close {
+        background: none;
+        border: none;
+        font-size: 16px;
+        color: colors.$text-secondary;
+        cursor: pointer;
+        padding: 4px;
+        margin-left: 8px;
+        flex-shrink: 0;
+        
+        &:hover {
+            color: colors.$error;
+        }
+    }
+
+    // Type-specific styles
+    &-achievement {
+        border-left: 4px solid colors.$third;
+
+        .notification-icon {
+            > span {background: colors.$third;}
+        }
+    }
+
+    &-update {
+        border-left: 4px solid colors.$info;
+
+        .notification-icon {
+            > span {background: colors.$info;}
+        }
+    }
+
+    &-warning {
+        border-left: 4px solid colors.$warning;
+
+        .notification-icon {
+            > span {background: colors.$warning;}
+        }
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        min-width: 0;
+    }
+}

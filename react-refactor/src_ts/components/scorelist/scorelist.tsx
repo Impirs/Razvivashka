@@ -1,4 +1,4 @@
-import { useGameStore } from "@/contexts/gameStore";
+import { useGameStore } from "@/contexts/gamestore";
 import type { UserGameRecord } from "@/types/gamestore";
 
 import Icon from "../icon/icon";

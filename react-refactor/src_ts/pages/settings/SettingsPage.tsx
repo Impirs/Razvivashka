@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSettings } from '@/contexts/pref';
 import { useLanguage } from '@/contexts/i18n';
-import { useGameStore } from '@/contexts/gameStore';
+import { useGameStore } from '@/contexts/gamestore';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/button/button';
@@ -36,10 +36,8 @@ function SettingsPage() {
     };
 
     // TODO:
-    // 1. Update the input line for players name. It should have button to open dropdown for
+    //    Update the input line for players name. It should have button to open dropdown for
     //    change the active player + add and delete buttons
-    // 2. Change the the volume slider make it more user-friendly (e.g. show current value, add labels)
-    //    and add the input box for manual value entry
 
     const navigate = useNavigate();
     return (

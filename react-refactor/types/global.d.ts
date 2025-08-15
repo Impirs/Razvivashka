@@ -16,10 +16,19 @@ interface GamestoreAPI {
   renameUser(oldUsername: string, newUsername: string): boolean;
 }
 
+interface ElectronAPI {
+  quitApp(): void;
+  openExternal(url: string): void;
+  openReleasePage(url: string): void;
+  onUpdateAvailable(callback: (event: any, updateInfo: any) => void): void;
+  removeUpdateListeners(): void;
+}
+
 declare global {
   interface Window {
     settingsAPI: SettingsAPI;
     gameStoreAPI: GamestoreAPI;
+    electronAPI: ElectronAPI;
   }
 }
 

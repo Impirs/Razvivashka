@@ -197,4 +197,7 @@ contextBridge.exposeInMainWorld('gameStoreAPI', {
 contextBridge.exposeInMainWorld('electronAPI', {
     quitApp: () => ipcRenderer.send('app-quit'),
     openExternal: (url) => ipcRenderer.send('open-external', url),
+    openReleasePage: (url) => ipcRenderer.send('open-release-page', url),
+    onUpdateAvailable: (callback) => ipcRenderer.on('update-available', callback),
+    removeUpdateListeners: () => ipcRenderer.removeAllListeners('update-available'),
 });
