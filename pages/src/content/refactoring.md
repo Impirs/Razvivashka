@@ -1,34 +1,5 @@
 # Project Refactoring Documentation
 
-## Table of Contents
-
-- [Project Refactoring Documentation](#project-refactoring-documentation)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Motivation for Refactoring](#motivation-for-refactoring)
-  - [Technology Stack](#technology-stack)
-    - [Previous Stack](#previous-stack)
-    - [Current Stack](#current-stack)
-  - [New Architecture](#new-architecture)
-    - [Bridge Layer architecture overview](#bridge-layer-architecture-overview)
-    - [Business Logic Layer architecture overview](#business-logic-layer-architecture-overview)
-    - [Core Modules](#core-modules)
-    - [Data Flow](#data-flow)
-    - [File Structure](#file-structure)
-  - [Refactoring Process](#refactoring-process)
-    - [Migration Strategy](#migration-strategy)
-    - [Breaking Changes](#breaking-changes)
-    - [Backward Compatibility](#backward-compatibility)
-  - [Key Decisions](#key-decisions)
-  - [Tooling \& Infrastructure](#tooling--infrastructure)
-  - [Testing \& Quality Assurance](#testing--quality-assurance)
-  - [Known Issues \& Limitations](#known-issues--limitations)
-  - [Future Improvements](#future-improvements)
-  - [Appendix](#appendix)
-    - [Note on Tailwind CSS](#note-on-tailwind-css)
-
----
-
 ## Overview
 
 This document reflects the ongoing refactor from the legacy vanilla Electron app to a modern Electron + React + TypeScript stack. It summarizes the current architecture (Electron main + preload bridge + React renderer), state management via typed React contexts (settings, language, game store, game controller, notifications), persistence through JSON files accessed from the preload bridge. 
