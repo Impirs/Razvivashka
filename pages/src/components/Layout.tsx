@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
 import { useLanguage } from '../contexts/LanguageContext'
@@ -7,10 +7,12 @@ interface LayoutProps {
     children: React.ReactNode
 }
 
-const Layout    = ({ children } : LayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
     const location = useLocation()
     const { theme, toggleTheme } = useTheme()
     const { language, setLanguage, t } = useLanguage()
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isClosing, setIsClosing] = useState(false)
 
     const navItems = [
         { path: '/welcome', label: t('nav.welcome'), icon: '🎯' },
@@ -22,45 +24,56 @@ const Layout    = ({ children } : LayoutProps) => {
         setLanguage(language === 'en' ? 'ru' : 'en')
     }
 
+    const toggleMobileMenu = () => {
+        if (isMobileMenuOpen) {
+            closeMobileMenu()
+        } else {
+            setIsMobileMenuOpen(true)
+            setIsClosing(false)
+        }
+    }
+
+    const closeMobileMenu = () => {
+        setIsClosing(true)
+        setTimeout(() => {
+            setIsMobileMenuOpen(false)
+            setIsClosing(false)
+        }, 300) // Duration should match CSS animation
+    }
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false)
+    }, [location.pathname])
+
     return (
-        <div className="min-h-screen transition-colors duration-300" 
-            style={{ background: 'linear-gradient(to bottom right, var(--bg-gradient-from), var(--bg-gradient-to))' }}
-        >
-            <header className="shadow-lg" style={{ backgroundColor: 'var(--bg-primary)', borderBottom: '1px solid var(--border-color)' }}>
-                <div className="max-w-6xl mx-auto px-4 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                            <div className="text-3xl">🧠</div>
-                            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Razvivashka</h1>
+        <div className="layout-container">
+            <header className="header">
+                <div className="header-content">
+                    <div className="header-container">
+                        <div className="header-logo">
+                            <div className="header-logo-icon">🧠</div>
+                            <h1 className="header-logo-text">Razvivashka</h1>
                         </div>
                         
-                        <div className="flex items-center space-x-4">
-                            <nav className="flex space-x-6">
+                        <div className="header-nav">
+                            <nav className="nav-links">
                                 {navItems.map((item) => (
                                     <Link
                                         key={item.path}
                                         to={item.path}
-                                        className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                                            location.pathname === item.path
-                                                ? 'text-white'
-                                                : 'hover:opacity-80'
-                                        }`}
-                                        style={{
-                                            backgroundColor: location.pathname === item.path ? 'var(--accent)' : 'transparent',
-                                            color: location.pathname === item.path ? '#ffffff' : 'var(--text-secondary)'
-                                        }}
+                                        className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
                                     >
                                         <span>{item.icon}</span>
-                                        <span className="font-medium">{item.label}</span>
+                                        <span>{item.label}</span>
                                     </Link>
                                 ))}
                             </nav>
                             
-                            <div className="flex items-center space-x-2">
+                            <div className="header-controls">
                                 <button
                                     onClick={toggleTheme}
-                                    className="p-2 rounded-lg transition-colors duration-200 hover:opacity-80"
-                                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+                                    className="control-button"
                                     title={t('theme.toggle')}
                                 >
                                     {theme === 'light' ? '🌙' : '☀️'}
@@ -68,31 +81,97 @@ const Layout    = ({ children } : LayoutProps) => {
                                 
                                 <button
                                     onClick={toggleLanguage}
-                                    className="px-3 py-2 rounded-lg transition-colors duration-200 hover:opacity-80 text-sm font-medium"
-                                    style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+                                    className="control-button language-button"
                                 >
                                     {t('language.toggle')}
+                                </button>
+                                
+                                <button
+                                    onClick={toggleMobileMenu}
+                                    className="mobile-nav-toggle"
+                                >
+                                    ☰
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
-            
-            <main className="max-w-6xl mx-auto px-4 py-8">
-                {children}
-            </main>
-            
-            <footer className="py-8 mt-16" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)' }}>
-                <div className="max-w-6xl mx-auto px-4 text-center">
-                    <p style={{ color: 'var(--text-secondary)' }}>
-                        {t('footer.description')}
-                    </p>
-                    <p className="mt-2" style={{ color: 'var(--text-muted)' }}>
-                        {t('footer.copyright')}
-                    </p>
+
+            {/* Mobile Navigation */}
+            {isMobileMenuOpen && (
+                <div 
+                    className={`mobile-nav ${isClosing ? 'closing' : 'open'}`}
+                    onClick={closeMobileMenu}
+                >
+                    <div 
+                        className={`mobile-nav-content ${isClosing ? 'closing' : 'open'}`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="mobile-nav-header">
+                            <div className="header-logo">
+                                <div className="header-logo-icon">🧠</div>
+                                <h2 className="header-logo-text">Razvivashka</h2>
+                            </div>
+                            <button
+                                onClick={closeMobileMenu}
+                                className="mobile-nav-close"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        
+                        <nav className="mobile-nav-links">
+                            {navItems.map((item) => (
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    className={`mobile-nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                                    onClick={closeMobileMenu}
+                                >
+                                    <span>{item.icon}</span>
+                                    <span>{item.label}</span>
+                                </Link>
+                            ))}
+                        </nav>
+                        
+                        <div className="mobile-nav-controls">
+                            <button
+                                onClick={toggleTheme}
+                                className="control-button"
+                                title={t('theme.toggle')}
+                            >
+                                {theme === 'light' ? '🌙' : '☀️'} {t('theme.toggle')}
+                            </button>
+                            
+                            <button
+                                onClick={toggleLanguage}
+                                className="control-button language-button"
+                            >
+                                🌐 {t('language.toggle')}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </footer>
+            )}
+            
+            <main className="main-content">
+                <div className="main-content-inner">
+                    <div className="content-wrapper">
+                        {children}
+                    </div>
+                </div>
+                <footer className="footer">
+                    <div className="footer-content">
+                        <p className="footer-description">
+                            {t('footer.description')}
+                        </p>
+                        <p className="footer-copyright">
+                            {t('footer.copyright')}
+                        </p>
+                    </div>
+                </footer>
+            </main>
         </div>
     )
 }

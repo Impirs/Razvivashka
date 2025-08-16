@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { useTheme } from '../contexts/ThemeContext'
 
 interface MarkdownRendererProps {
   content: string
@@ -8,6 +11,49 @@ interface MarkdownRendererProps {
 }
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className = '' }) => {
+  const { theme } = useTheme()
+  
+  // Custom syntax highlighting themes with better comment colors
+  const customLightTheme = {
+    ...vs,
+    'comment': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    },
+    'prolog': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    },
+    'doctype': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    },
+    'cdata': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    }
+  }
+
+  const customDarkTheme = {
+    ...vscDarkPlus,
+    'comment': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    },
+    'prolog': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    },
+    'doctype': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    },
+    'cdata': {
+      color: 'var(--text-muted)',
+      fontStyle: 'italic'
+    }
+  }
+  
   return (
     <div className={`prose prose-lg max-w-none ${className}`}>
       <ReactMarkdown
@@ -46,26 +92,69 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           li: ({ children }) => (
             <li className="ml-4">{children}</li>
           ),
+          input: ({ type, checked, ...props }) => {
+            if (type === 'checkbox') {
+              return (
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  readOnly
+                  className="markdown-checkbox"
+                  {...props}
+                />
+              )
+            }
+            return <input type={type} {...props} />
+          },
           code: ({ children, className }) => {
+            const match = /language-(\w+)/.exec(className || '')
+            const language = match ? match[1] : ''
             const isInline = !className
+            
             if (isInline) {
               return (
-                <code className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                <code 
+                  className="px-2 py-1 rounded text-sm"
+                  style={{ 
+                    backgroundColor: 'var(--bg-tertiary)', 
+                    color: 'var(--text-primary)',
+                    border: '1px solid var(--border-light)'
+                  }}
+                >
                   {children}
                 </code>
               )
             }
+
             return (
-              <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
-                {children}
-              </code>
+              <SyntaxHighlighter
+                style={theme === 'dark' ? customDarkTheme : customLightTheme}
+                language={language}
+                PreTag="div"
+                customStyle={{
+                  margin: '1rem 0',
+                  borderRadius: '0.5rem',
+                  border: '1px solid var(--border-color)',
+                  backgroundColor: 'var(--bg-secondary)',
+                  padding: '1rem',
+                  fontSize: '0.875rem',
+                  lineHeight: '1.5'
+                }}
+                codeTagProps={{
+                  style: {
+                    backgroundColor: 'transparent',
+                    color: 'var(--text-primary)'
+                  }
+                }}
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
             )
           },
-          pre: ({ children }) => (
-            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
-              {children}
-            </pre>
-          ),
+          pre: ({ children }) => {
+            // Prevent double wrapping with SyntaxHighlighter
+            return <>{children}</>
+          },
           blockquote: ({ children }) => (
             <blockquote className="border-l-4 border-indigo-300 pl-4 italic text-gray-600 my-4">
               {children}
