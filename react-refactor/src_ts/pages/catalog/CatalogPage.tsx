@@ -8,15 +8,14 @@ import GameBadge from '@/components/badge/badge';
 
 type GameMeta = {
     id: string;
-    title: string;
     type: string[];
 };
 
 // Catalog of games with metadata
 const GAMES: GameMeta[] = [
-    { id: 'digit', title: 'Digit', type: ['math', 'attention'] },
-    { id: 'shulte', title: 'Shulte', type: ['attention'] },
-    { id: 'queens', title: 'Queens', type: ['logic', 'attention'] },
+    { id: 'digit', type: ['math', 'attention'] },
+    { id: 'shulte', type: ['attention'] },
+    { id: 'queens', type: ['logic'] },
 ];
 
 const TYPES = ['all', 'math', 'attention', 'logic', 'reading'] as const;

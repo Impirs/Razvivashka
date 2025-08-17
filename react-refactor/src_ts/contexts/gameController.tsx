@@ -14,6 +14,7 @@ interface GameControllerState {
     gameProps?: string; // record props string to identify the game variant (e.g., '7x6', '4x4')
     isPerfect?: boolean; // whether the run qualifies as "perfect" for achievements
     startedAt?: number; // timestamp to identify a run session
+    modifications?: string[]; // list of modifiers applied for this run (e.g., ['view_modification'])
 }
 
 interface GameControllerContextType extends GameControllerState {
@@ -25,6 +26,8 @@ interface GameControllerContextType extends GameControllerState {
     updateScore: (newScore: number) => void;
     // set the current game context so controller knows what to record on win
     setGameContext: (gameId: string, gameProps: string, isPerfect?: boolean) => void;
+    // set/replace modifications for the current run
+    setModifications: (mods: string[]) => void;
 }
 
 const initialState: GameControllerState = {
@@ -44,6 +47,8 @@ function gameControllerReducer(state: GameControllerState, action: any): GameCon
             return { ...state, score: action.payload };
         case 'SET_GAME_CONTEXT':
             return { ...state, gameId: action.payload.gameId, gameProps: action.payload.gameProps, isPerfect: action.payload.isPerfect };
+        case 'SET_MODIFICATIONS':
+            return { ...state, modifications: Array.isArray(action.payload) ? action.payload : [] };
         default:
             return state;
     }
@@ -75,6 +80,10 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
         dispatch({ type: 'SET_GAME_CONTEXT', payload: { gameId, gameProps, isPerfect: !!isPerfect } });
     };
 
+    const setModifications = (mods: string[]) => {
+        dispatch({ type: 'SET_MODIFICATIONS', payload: mods });
+    };
+
     // When game ends (win or lose), record the result once per session; achievements only on win
     useEffect(() => {
         if (!state.startedAt || !state.gameId || !state.gameProps) return;
@@ -82,7 +91,7 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
         if (lastReportedRef.current === state.startedAt) return;
 
         if (state.status === 'win') {
-            addGameRecord(state.gameId, state.gameProps, state.score, state.isPerfect);
+            addGameRecord(state.gameId, state.gameProps, state.score, state.isPerfect, state.modifications);
             unlockAchievementCheck(state.gameId, state.gameProps, state.score, state.isPerfect);
             try {
                 const audio = new Audio(winSfx);
@@ -107,6 +116,7 @@ export const GameControllerProvider = ({ children }: { children: React.ReactNode
                 endGame,
                 updateScore,
                 setGameContext,
+                setModifications,
             }}
         >
             {children}

@@ -19,7 +19,9 @@ interface DigitGameProps {
 }
 
 function DigitGame({ settings }: DigitGameProps) {
-    const { status, score, startGame, endGame, updateScore, setGameContext, gameId, gameProps, startedAt } = useGameController();
+    const { status, score, startGame, 
+            endGame, updateScore, setGameContext, setModifications, 
+            gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
     const { t } = useLanguage();
     const [gamesSettings] = useSetting('games');
@@ -54,6 +56,10 @@ function DigitGame({ settings }: DigitGameProps) {
                 setSeconds(0);
                 // Assume perfect at the start of a run
                 setGameContext('digit', generateRecordProps('digit', settings), true);
+                // Set modifications based on gameplay settings
+                const mods: string[] = [];
+                if (!assistHighlight) mods.push('view_modification');
+                setModifications(mods);
                 if (timerRef.current) window.clearInterval(timerRef.current);
                 timerRef.current = window.setInterval(() => setSeconds(prev => prev + 1), 1000);
             }

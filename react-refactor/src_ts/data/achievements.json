@@ -62,7 +62,7 @@
     {
         "gameId": "queens",
         "gameProps":"4x4",
-        "requirements": [60, 90, 120]
+        "requirements": [45, 60]
     },
     {
         "gameId": "queens",
@@ -77,11 +77,11 @@
     {
         "gameId": "queens",
         "gameProps": "7x7",
-        "requirements": [180, 210, 240]
+        "requirements": [150, 180, 210]
     },
     {
         "gameId": "queens",
         "gameProps": "8x8",
-        "requirements": [240, 270, 300]
+        "requirements": [180, 210, 240]
     }
 ]

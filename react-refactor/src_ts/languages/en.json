@@ -4,7 +4,8 @@
         "digit": "Number Composition",
         "shulte": "Schulte Table",
         "syllable": "Syllables",
-        "sum": "Sum of Numbers"
+        "sum": "Sum of Numbers",
+        "queens": "Queens"
     },
 
     "types": {
@@ -46,13 +47,14 @@
 
         "digit": {
             "target": "Find pairs that sum to:",
-            "size": "Board size:",
-            "task": "Clear the board of numbers that sum to"
+            "size": "Board size:"
         },
         "shulte": {
-            "size": "Board size:",
-            "task": "Clear the board of numbers that sum to"
-        }        
+            "size": "Board size:"
+        },
+        "queens": {
+            "size": "Board size:"
+        }
     },
 
     "game-info": {
@@ -63,6 +65,8 @@
         "time_rules": "Time attack. The faster you finish, the better.",
         "timer_rules": "Timed game. When time runs out, the game ends.",
         "mistakes_rules": "The number of mistakes must not exceed 3.",
+        "double_click": "Double click",
+        "drag": "Drag",
         "digit": {
             "instruction": "Clear the board by selecting pairs of cells that add up to the number you chose.",
             "empty": "Empty cell",
@@ -71,7 +75,14 @@
         },
         "shulte": {
             "instruction": "Tap the cells in order from 1 to 16 or 25, depending on the selected board size."
+        },
+        "queens": {
+            "instruction": "Place the queens on the board so that there is exactly one queen in each row, column, and surrounding area.",
+            "instruction_place": "to place/remove a queen.",
+            "instruction_drag": "to move.",
+            "tutorial": "Board size 4 is a tutorial level. It is recommended to play it only a few times."
         }
+
     },
 
     "achievements": {
@@ -156,13 +167,13 @@
                 "label": "Number Composition",
                 "description": "Highlight cells available to press with a different color"
             },
-            "syllable": {
-                "label": "Syllables",
-                "description": "Count the exercise only when all letters have been read"
-            },
             "shulte": {
                 "label": "Schulte Table",
                 "description": "Hide numbers after clicking"
+            },
+            "queens": {
+                "label": "Queens",
+                "description": "Show hints for blocked cells for pieces"
             }
         },
         "language": {
@@ -192,7 +203,8 @@
     },
 
     "tooltips": {
-        "perfect": "Perfect run — no mistakes"
+        "perfect": "Perfect run — no mistakes",
+        "view_modification": "View assistance disabled"
     },
 
     "updates": {

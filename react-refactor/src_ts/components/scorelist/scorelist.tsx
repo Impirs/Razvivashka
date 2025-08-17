@@ -63,13 +63,30 @@ const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord
                             <Icon name="star" size={22} masked />
                         </span>
                     )}
-                    {/* {record.modification.map((mod, index) => (
-                        <Icon 
-                            key={index}
-                            name={`${mod}`}
-                        />
-                    ))} 
-                    */}
+                    {Array.isArray(record.modification) && record.modification.filter(Boolean).length > 0 && (
+                        <span className="mod-icons" style={{ marginLeft: 6, display:'inline-flex', gap:4 }}>
+                            {record.modification.filter(Boolean).map((mod, index) => {
+                                const iconName = mod === 
+                                    'view_modification' ? 
+                                    'eye-closed' : mod;
+                                const label = mod === 
+                                    'view_modification' ? 
+                                    (t('tooltips.view_modification' as any) 
+                                        || 'View assistance disabled'
+                                    ) : mod;
+                                return (
+                                    <span key={`${mod}-${index}`} 
+                                        className="mod-icon" 
+                                        aria-label={label} 
+                                        data-tooltip={label} 
+                                        title={label}
+                                    >
+                                        <Icon name={iconName} size={24} masked />
+                                    </span>
+                                );
+                            })}
+                        </span>
+                    )}
                 </div>
             </section>
         </article>

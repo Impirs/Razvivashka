@@ -17,7 +17,6 @@ import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
 import type { QueensSettings } from '@/modules/game_queens/types/game_queens';
 import type { DigitGameSettings } from '@/modules/game_digital/types/game_digit';
 import { generateRecordProps } from '@/utils/pt';
-import { directions } from '@/modules/game_digital/digitGameLogic';
 
 interface GameLayoutProps {
     gameId: string;
@@ -51,8 +50,8 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
         // Promote pending settings to active and start the game
         setActiveDigit(settings);
         // console.log('Digit settings:', JSON.stringify(settings));
-    // At start, we don't know isPerfect yet; default false. Game may update via controller later.
-    setGameContext('digit', generateRecordProps('digit', settings), false);
+        // At start, we don't know isPerfect yet; default false. Game may update via controller later.
+        setGameContext('digit', generateRecordProps('digit', settings), false);
         startGame();
     };
 
@@ -60,7 +59,7 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
         // Promote pending settings to active and start the game
         setActiveShulte(settings);
         // console.log('Shulte settings:', JSON.stringify(settings));
-    setGameContext('shulte', generateRecordProps('shulte', settings), false);
+        setGameContext('shulte', generateRecordProps('shulte', settings), false);
         startGame();
     };
     const handleStartQueens = (settings: QueensSettings) => {

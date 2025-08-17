@@ -35,7 +35,7 @@
 
     h3 {
         font-size: 28px;
-        color: colors.$text_secondary;
+        color: colors.$text;
         margin: 0;
         text-align: center;
         font-weight: 600;
@@ -78,10 +78,5 @@
 
 @media (max-width: 1400px) {
     .games-container { grid-template-columns: repeat(2, 1fr); }
-    .game-badge { width: 90%; }
-}
-
-@media (max-width: 900px) {
-    .games-container { grid-template-columns: 1fr; }
-    .game-badge { width: 100%; }
+    .game-badge { width: 75%; }
 }

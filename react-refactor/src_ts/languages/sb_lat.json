@@ -192,6 +192,7 @@
     },
 
     "tooltips": {
-        "perfect": "Savršena partija — bez grešaka"
+        "perfect": "Savršena partija — bez grešaka",
+        "view_modification": "Pomoć pri prikazu isključena"
     }
 }

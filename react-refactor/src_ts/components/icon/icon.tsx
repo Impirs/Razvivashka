@@ -26,6 +26,7 @@ function Icon({ name, size = 24, color = '#111111', className, style, masked = f
 				className={className}
 				style={{ width: sizeStyle, 
 						height: sizeStyle, 
+						// backgroundColor: color,
 						display: 'inline-block', 
 						verticalAlign: 'middle', 
 						...style }}
@@ -41,10 +42,12 @@ function Icon({ name, size = 24, color = '#111111', className, style, masked = f
 				className={className}
 				style={{ width: sizeStyle, 
 						height: sizeStyle, 
-						color: color, 
+						backgroundColor: color, 
 						display: 'inline-block', 
 						verticalAlign: 'middle', 
 						...style }}
+				fill={color as any}
+				stroke={color as any}
 				focusable={rest.focusable ?? false}
 				aria-hidden={rest['aria-label'] ? undefined : (rest['aria-hidden'] ?? true)}
 				{...rest}

@@ -24,7 +24,7 @@ function generateShulteBoard(size: number): ShulteBoard {
 }
 
 function ShulteGame({ settings }: { settings: ShulteSettings }) {
-    const { status, startGame, endGame, setGameContext, gameId, gameProps, startedAt } = useGameController();
+    const { status, startGame, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
     const { t } = useLanguage();
     const [gamesSettings] = useSetting('games');
@@ -51,6 +51,13 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                 setSeconds(0);
                 // Assume perfect at the start of a run
                 setGameContext('shulte', generateRecordProps('shulte', settings), true);
+                // Set modifications for the run
+                const mods: string[] = [];
+                if (hideFoundNumber === false) {
+                    // when assistance (hiding found numbers) is OFF, we record the modifier
+                    mods.push('view_modification');
+                }
+                setModifications(mods);
                 if (timerRef.current) window.clearInterval(timerRef.current);
                 timerRef.current = window.setInterval(() => setSeconds(s => s + 1), 1000);
             }
@@ -184,7 +191,8 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                                         justifyContent: 'center',
                                         borderRadius: 8,
                                         border: '1px solid #9aa3ff',
-                                        background: hideFoundNumber ? 'white' : (cell.isFound ? "#d6f8d6" : "white"),
+                                        background: hideFoundNumber ? 'white' 
+                                                    : (cell.isFound ? "#d6f8d63f" : "white"),
                                         cursor: "pointer",
                                         userSelect: "none"
                                     }}

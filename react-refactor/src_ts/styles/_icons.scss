@@ -127,3 +127,17 @@
     mask: url('@/assets/icons/heart-broken.svg') no-repeat center;
     mask-size: contain;
 }
+
+#eye {
+    -webkit-mask: url('@/assets/icons/eye.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/eye.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#eye-closed {
+    -webkit-mask: url('@/assets/icons/eye-closed.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/eye-closed.svg') no-repeat center;
+    mask-size: contain;
+}

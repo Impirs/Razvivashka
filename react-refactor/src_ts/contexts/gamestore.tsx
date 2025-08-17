@@ -46,7 +46,7 @@ function gameStoreReducer(state: GameStoreState, action: any): GameStoreState {
                         {
                             gameId: action.payload.gameId,
                             gameProps: action.payload.gameProps,
-                            modification: [''], // default placeholder to satisfy [string]
+                            modification: Array.isArray(action.payload.modifications) ? action.payload.modifications : [],
                             isperfect: !!action.payload.isPerfect,
                             score: action.payload.score,
                             played: new Date(),
@@ -234,13 +234,13 @@ export const GameStoreProvider = ({ children }: { children: React.ReactNode }) =
         }
     };
 
-    const addGameRecord = (gameId: string, gameProps: string, score: number, isPerfect: boolean = false) => {
+    const addGameRecord = (gameId: string, gameProps: string, score: number, isPerfect: boolean = false, modifications?: string[]) => {
         if (!state.currentUser) return;
 
         // Add the new game record
         dispatch({
             type: 'ADD_GAME_RECORD',
-            payload: { gameId, gameProps, score, isPerfect }
+            payload: { gameId, gameProps, score, isPerfect, modifications }
         });
     };
 
