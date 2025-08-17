@@ -107,6 +107,13 @@
     mask-size: contain;
 }
 
+#queen {
+    -webkit-mask: url('@/assets/icons/queen.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/queen.svg') no-repeat center;
+    mask-size: contain;
+}
+
 #heart {
     -webkit-mask: url('@/assets/icons/heart.svg') no-repeat center;
     -webkit-mask-size: contain;

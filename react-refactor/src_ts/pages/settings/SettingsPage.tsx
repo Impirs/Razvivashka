@@ -129,7 +129,8 @@ function SettingsPage() {
                                     onChange={(checked) => {
                                         const g = games ?? { 
                                             digit: { view_modification: false }, 
-                                            shulte: { view_modification: false }
+                                            shulte: { view_modification: false },
+                                            queens: { view_modification: false }
                                         } as typeof games;
                                         set('games', {
                                             ...g,
@@ -151,11 +152,35 @@ function SettingsPage() {
                                     onChange={(checked) => {
                                         const g = games ?? { 
                                             digit: { view_modification: true }, 
-                                            shulte: { view_modification: true } 
+                                            shulte: { view_modification: true },
+                                            queens: { view_modification: true }
                                         } as typeof games;
                                         set('games', {
                                             ...g,
                                             shulte: { ...g?.shulte, view_modification: checked },
+                                        });
+                                    }}
+                                />
+                            </div>
+
+                            {/* Queens settings */}
+                            <div className="settings-line-parameter">
+                                <div>
+                                    <h3>{t('settings.gameplay.queens.label' as any)}</h3>
+                                    <p>{t('settings.gameplay.queens.description' as any)}</p>
+                                </div>
+                                <Checkbox
+                                    ariaLabel="game-queens-view-modification"
+                                    checked={Boolean(games?.queens?.view_modification)}
+                                    onChange={(checked) => {
+                                        const g = games ?? { 
+                                            digit: { view_modification: true }, 
+                                            shulte: { view_modification: true },
+                                            queens: { view_modification: true }
+                                        } as typeof games;
+                                        set('games', {
+                                            ...g,
+                                            queens: { ...g?.queens, view_modification: checked },
                                         });
                                     }}
                                 />

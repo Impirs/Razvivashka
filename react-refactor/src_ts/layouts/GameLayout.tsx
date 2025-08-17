@@ -10,8 +10,11 @@ import DigitMenu from '@/modules/game_digital/DigitMenu';
 import DigitGame from '@/modules/game_digital/DigitGame';
 import ShulteGame from '@/modules/game_shulte/ShulteGame';
 import ShulteMenu from '@/modules/game_shulte/ShulteMenu';
+import QueensGame from '@/modules/game_queens/QueensGame';
+import QueensMenu from '@/modules/game_queens/QueensMenu';
 
 import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
+import type { QueensSettings } from '@/modules/game_queens/types/game_queens';
 import type { DigitGameSettings } from '@/modules/game_digital/types/game_digit';
 import { generateRecordProps } from '@/utils/pt';
 import { directions } from '@/modules/game_digital/digitGameLogic';
@@ -30,6 +33,8 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     const [activeDigit, setActiveDigit] = useState<DigitGameSettings>({ target: 6, size: 7 });
     const [pendingShulte, setPendingShulte] = useState<ShulteSettings>({ size: 4 });
     const [activeShulte, setActiveShulte] = useState<ShulteSettings>({ size: 4 });
+    const [pendingQueens, setPendingQueens] = useState<QueensSettings>({ size: 4 });
+    const [activeQueens, setActiveQueens] = useState<QueensSettings>({ size: 4 });
 
     // Stable callbacks so child effects don't loop on function identity changes
     const handleDigitSettingsChange = useCallback((s: DigitGameSettings) => {
@@ -37,6 +42,9 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
     }, []);
     const handleShulteSettingsChange = useCallback((s: ShulteSettings) => {
         setPendingShulte(prev => (prev.size === s.size ? prev : s));
+    }, []);
+    const handleQueensSettingsChange = useCallback((s: QueensSettings) => {
+        setPendingQueens(prev => (prev.size === s.size ? prev : s));
     }, []);
 
     const handleStartDigit = (settings: DigitGameSettings) => {
@@ -53,6 +61,11 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
         setActiveShulte(settings);
         // console.log('Shulte settings:', JSON.stringify(settings));
     setGameContext('shulte', generateRecordProps('shulte', settings), false);
+        startGame();
+    };
+    const handleStartQueens = (settings: QueensSettings) => {
+        setActiveQueens(settings);
+        setGameContext('queens', generateRecordProps('queens', settings), false);
         startGame();
     };
 
@@ -73,6 +86,14 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                         onChangeSettings={handleShulteSettingsChange}
                     />
                 );
+            case 'queens':
+                return (
+                    <QueensMenu
+                        onStart={handleStartQueens}
+                        initialSettings={pendingQueens ?? undefined}
+                        onChangeSettings={handleQueensSettingsChange}
+                    />
+                );
             default:
                 return null;
         }
@@ -84,6 +105,8 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                 return <DigitGame settings={activeDigit} />;
             case 'shulte':
                 return <ShulteGame settings={activeShulte} />;
+            case 'queens':
+                return <QueensGame settings={activeQueens} />;
             default:
                 return null;
         }
@@ -102,6 +125,11 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                 return <ScoreList 
                             gameId={gameId} 
                             gameProps={generateRecordProps('shulte', pendingShulte)} 
+                        />;
+            case 'queens':
+                return <ScoreList 
+                            gameId={gameId} 
+                            gameProps={generateRecordProps('queens', pendingQueens)} 
                         />;
             default:
                 return null;

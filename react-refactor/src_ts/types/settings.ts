@@ -13,6 +13,9 @@ export interface AppSettings {
         },
         shulte: {
             view_modification: boolean;
+        },
+        queens: {
+            view_modification: boolean;
         }
     },
 }

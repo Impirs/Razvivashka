@@ -1,0 +1,68 @@
+@use '../colors';
+@use 'sass:list';
+
+.queens-panel {
+	.queens-remaining {
+		border: 1px solid colors.$primary;
+		border-radius: 12px;
+		box-shadow: 0 4px 30px colors.$shadow;
+		width: 160px;
+		height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		background: colors.$fourth;
+		font-size: 22px;
+		color: colors.$text_secondary;
+	}
+
+	.queens-board {
+		user-select: none;
+		display: grid;
+		gap: 2px;
+		max-width: 620px;
+
+		&.size-4 { grid-template-columns: repeat(4, calc(480px / 4)); }
+		&.size-5 { grid-template-columns: repeat(5, calc(480px / 5)); }
+		&.size-6 { grid-template-columns: repeat(6, calc(480px / 6)); }
+		&.size-7 { grid-template-columns: repeat(7, calc(480px / 7)); }
+		&.size-8 { grid-template-columns: repeat(8, calc(480px / 8)); }
+	}
+
+	.q-cell {
+		position: relative;
+		border: 1px solid #9aa3ff;
+		border-radius: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1 / 1;
+		transition: box-shadow 0.12s ease, transform 0.06s ease;
+		cursor: pointer;
+
+		&.has-queen { box-shadow: 0 0 0 3px rgba(154,163,255,0.35) inset; }
+		&.row-bad { box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.7) inset; }
+		&.col-bad { outline: 2px solid rgba(255,71,87,0.6); }
+		&.region-bad { border-color: #ff4757; }
+
+		&:active { transform: scale(0.98); }
+
+		.q-piece {
+				width: 26px;
+				height: 26px;
+				color: #232323;
+			pointer-events: none;
+			user-select: none;
+		}
+	}
+
+		// region colors (8 palette entries)
+			$region-colors: (#f7d6e0, #d6f8d6, #d6e4ff, #fff1b3, #ffd6a5, #e0d6ff, #cdeef7, #f7d6f0);
+			@for $i from 0 through 7 {
+				.q-cell.region-#{$i} {
+					background: list.nth($region-colors, $i + 1);
+				}
+			}
+}
+
