@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@types/react-transition-group": "^4.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.15.0",
     "react-syntax-highlighter": "^15.6.1",
+    "react-transition-group": "^4.4.5",
     "remark-gfm": "^4.0.1",
     "remark-slug": "^6.1.0"
   },

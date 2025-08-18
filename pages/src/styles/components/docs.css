@@ -3,7 +3,6 @@
     display: flex;
     min-height: 100%;
     position: relative;
-    gap: 1rem;
     flex: 1;
 }
 
@@ -26,6 +25,7 @@
     /* Custom scrollbar styles for sidebar */
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) transparent;
+    margin-right: 1rem;
 }
 
 /* Webkit scrollbar styles for sidebar */
@@ -61,6 +61,7 @@
 
 .docs-sidebar-title {
     font-size: 1rem;
+    width: max-content;
     font-weight: 600;
     color: var(--text-primary);
     margin: 0;
@@ -238,7 +239,8 @@
     right: 0;
     bottom: 0;
     background-color: var(--overlay);
-    z-index: 45;
+    /* Place overlay above the site header but below the sidebar so header isn't visible over it */
+    z-index: 1100;
 }
 
 .docs-sidebar-mobile-overlay.open {
@@ -254,29 +256,28 @@
     height: 100vh;
     background-color: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
-    z-index: 50;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    /* Ensure sidebar stacks above header and overlay when open */
+    z-index: 1200;
+    /* Move slightly more than -100% to avoid subpixel peeking on some devices */
+    transform: translateX(-120%);
+    transition: transform 0.3s ease, visibility 0.3s ease;
     overflow-y: auto;
+    /* When closed, make it non-interactive and hidden to avoid any visual peek */
+    pointer-events: none;
+    visibility: hidden;
+    will-change: transform;
 }
 
 .docs-sidebar-mobile.open {
     transform: translateX(0);
-}
-
-.docs-sidebar-mobile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--bg-primary);
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 1200;
 }
 
 .docs-sidebar-mobile-close {
+    min-width: 2.5rem;
+    min-height: 2.5rem;
     background: none;
     border: none;
     font-size: 1.25rem;
@@ -289,6 +290,34 @@
 
 .docs-sidebar-mobile-close:hover {
     background-color: var(--bg-secondary);
+}
+
+/* Mobile sidebar header styling (separate from desktop .docs-sidebar-header) */
+.docs-sidebar-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 2; /* stay above sidebar content but below overlay/sidebar z-index */
+}
+
+.docs-sidebar-mobile .docs-sidebar-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.docs-sidebar-mobile-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Responsive behavior */
@@ -309,7 +338,11 @@
 
 @media (max-width: 768px) {
     .docs-content {
-        padding: 1rem;
+        padding: 2rem;
+    }
+
+    .docs-sidebar-mobile-toggle {
+        display: block;
     }
     
     .docs-sidebar-mobile {
@@ -319,7 +352,7 @@
 
 @media (max-width: 640px) {
     .docs-content {
-        padding: 0.75rem;
+        padding: 1.5rem;
     }
     
     .docs-sidebar-mobile {

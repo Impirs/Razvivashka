@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkSlug from 'remark-slug'
@@ -42,9 +43,9 @@ const TableOfContents = ({ content, onHeadingClick, activeHeading }: TableOfCont
                 .trim()
             
             // Debug logging for problematic headings
-            if (text.includes('Performance') || text.includes('Game Logic') || text.includes('Testing')) {
-                console.log(`Heading: "${text}" -> ID: "${id}"`)
-            }
+            // if (text.includes('Performance') || text.includes('Game Logic') || text.includes('Testing')) {
+            //     console.log(`Heading: "${text}" -> ID: "${id}"`)
+            // }
             
             return { id, text, level }
         })
@@ -372,6 +373,7 @@ const Docs = () => {
     const [loading, setLoading] = useState(true)
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
     const [activeHeading, setActiveHeading] = useState<string>('')
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
         const loadContent = async () => {
@@ -388,6 +390,13 @@ const Docs = () => {
 
         loadContent()
     }, [])
+
+    // Ensure portal target exists on client
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    // no client-only gating here; CSS controls visibility
 
     // Track active heading based on scroll position
     useEffect(() => {
@@ -470,41 +479,44 @@ const Docs = () => {
                 </div>
             </div>
 
-            {/* Mobile Sidebar Toggle */}
-            <button
-                onClick={toggleMobileSidebar}
-                className="docs-sidebar-mobile-toggle"
-                title="Open documentation navigation"
-            >
-                📚
-            </button>
+            {/* Portal mobile controls: toggle, overlay, sidebar */}
+            {mounted && createPortal(
+                <>
+                    <button
+                        onClick={toggleMobileSidebar}
+                        className="docs-sidebar-mobile-toggle"
+                        title="Open documentation navigation"
+                    >
+                        📚
+                    </button>
 
-            {/* Mobile Sidebar Overlay */}
-            {isMobileSidebarOpen && (
-                <div 
-                    className="docs-sidebar-mobile-overlay open"
-                    onClick={() => setIsMobileSidebarOpen(false)}
-                />
+                    {isMobileSidebarOpen && (
+                        <div 
+                            className="docs-sidebar-mobile-overlay open"
+                            onClick={() => setIsMobileSidebarOpen(false)}
+                        />
+                    )}
+
+                    <div className={`docs-sidebar-mobile ${isMobileSidebarOpen ? 'open' : ''}`}>
+                        <div className="docs-sidebar-mobile-header">
+                            <h3 className="docs-sidebar-title">📚 Navigation</h3>
+                            <button
+                                onClick={() => setIsMobileSidebarOpen(false)}
+                                className="docs-sidebar-mobile-close"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <TableOfContents 
+                            content={content} 
+                            onHeadingClick={handleHeadingClick}
+                            activeHeading={activeHeading}
+                        />
+                    </div>
+                </>,
+                document.body
             )}
 
-            {/* Mobile Sidebar */}
-            <div className={`docs-sidebar-mobile ${isMobileSidebarOpen ? 'open' : ''}`}>
-                <div className="docs-sidebar-mobile-header">
-                    <h3 className="docs-sidebar-title">📚 Navigation</h3>
-                    <button
-                        onClick={() => setIsMobileSidebarOpen(false)}
-                        className="docs-sidebar-mobile-close"
-                    >
-                        ✕
-                    </button>
-                </div>
-                <TableOfContents 
-                    content={content} 
-                    onHeadingClick={handleHeadingClick}
-                    activeHeading={activeHeading}
-                />
-            </div>
-            
             {/* Main content */}
             <div className="docs-content"
                 style={{borderRadius: '1rem'}}

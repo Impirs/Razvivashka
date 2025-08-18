@@ -1,4 +1,4 @@
-# 🧠 Razvivashka
+# 🧠 Play and Learn
 
 **Educational brain-training games collection**
 

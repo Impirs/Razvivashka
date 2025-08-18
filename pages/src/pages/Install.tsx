@@ -29,13 +29,20 @@ const Install = () => {
         )
     }
 
-    const installText = language === 'ru' ? 'Установка Play and Learn 📦' : 'Installing Play and Learn 📦'
-    const quickInstallText = language === 'ru' ? '🚀 Быстрая установка' : '🚀 Quick Installation'
-    const windowsText = language === 'ru' ? 'Скачать .exe' : 'Download .exe'
-    const macText = language === 'ru' ? 'Не доступно в данный момент' : 'Currently unavailable'
-    // const macText = language === 'ru' ? 'Скачать .dmg' : 'Download .dmg'
-    const linuxText = language === 'ru' ? 'Не доступно в данный момент' : 'Currently unavailable'
-    // const linuxText = language === 'ru' ? 'Скачать .AppImage' : 'Download .AppImage'
+    const installText = language === 'ru' ?
+        '📦 Установка Play and Learn' : 
+        '📦 Installing Play and Learn'
+    
+    const windowsText = language === 'ru' ? 
+        'Скачать v2.0.0' : 
+        'Download v2.0.0'
+    const winZIPtext = language === 'ru' ? 
+        'Скачать v2.0.0' : 
+        'Download v2.0.0'
+
+    const macText = language === 'ru' ?
+        'Скачать v2.0.0' :
+        'Download v2.0.0'
 
     return (
         <div className="rounded-xl shadow-lg p-8" 
@@ -62,19 +69,31 @@ const Install = () => {
                 {/* <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
                     {quickInstallText}
                 </h3> */}
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-4 gap-4">
                     <a 
-                        href="https://github.com/Impirs/Razvivashka/releases" 
+                        href="https://github.com/Impirs/Razvivashka/releases/download/v1.2.5/play_and_learn-Setup-1.2.5.exe" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
                         style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
                     >
                         <div className="text-3xl mb-2">💻</div>
-                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows</h4>
+                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .exe</h4>
                         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{windowsText}</p>
                     </a>
                     
+                    <a 
+                        href="https://github.com/Impirs/Razvivashka/releases/download/v1.2.5/play_and_learn-Setup-1.2.5.zip" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
+                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
+                    >
+                        <div className="text-3xl mb-2">💻</div>
+                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .zip</h4>
+                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{winZIPtext}</p>
+                    </a>
+
                     <a 
                         // href="https://github.com/Impirs/Razvivashka/releases" 
                         target="_blank" 
@@ -83,20 +102,8 @@ const Install = () => {
                         style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
                     >
                         <div className="text-3xl mb-2">🍎</div>
-                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>macOS</h4>
+                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>macOS .dmg</h4>
                         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{macText}</p>
-                    </a>
-                    
-                    <a 
-                        // href="https://github.com/Impirs/Razvivashka/releases" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
-                    >
-                        <div className="text-3xl mb-2">🐧</div>
-                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Linux</h4>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{linuxText}</p>
                     </a>
                 </div>
             </div>
