@@ -335,7 +335,7 @@ The development setup provides:
 - **Mock Strategy**: Window API mocking for Electron-specific features
 - **Type Testing**: Compile-time verification of TypeScript contracts
 
-## Adding New Games - Developer Guide
+## Developer Guide
 
 This section provides a comprehensive guide for developers who want to add new games to the project. The modular architecture makes adding new games straightforward by following established patterns.
 
