@@ -412,9 +412,14 @@ function initializeUserAchievements(
         .filter(a => uniqueKeys.includes(`${a.gameId}|${a.gameProps}`))
         .map(a => {
             const reqs = getReqs(a.gameId, a.gameProps);
-            let tiers = Array.isArray(a.unlockedTiers) ? a.unlockedTiers.slice(0, reqs.length) : [];
-            if (tiers.length < reqs.length) {
-                tiers = tiers.concat(new Array(reqs.length - tiers.length).fill(false));
+            const targetLen = reqs.length;
+            let tiers = Array.isArray(a.unlockedTiers) ? a.unlockedTiers.slice() : [];
+            // Truncate if legacy had more tiers than current
+            if (tiers.length > targetLen) tiers = tiers.slice(0, targetLen);
+            // If legacy had fewer tiers, extend by copying the last known value (or false if none)
+            if (tiers.length < targetLen) {
+                const lastVal = tiers.length > 0 ? tiers[tiers.length - 1] : false;
+                while (tiers.length < targetLen) tiers.push(lastVal);
             }
             return { ...a, unlockedTiers: tiers };
         });

@@ -8,36 +8,20 @@ import Button from '@/components/button/button';
 import Select from '@/components/select/select';
 import Checkbox from '@/components/checkbox/checkbox';
 import Slider from '@/components/slider/slider';
+import UserManager from '@/components/usermanager/usermanager';
 
 function SettingsPage() {
     const { get, set, useSetting } = useSettings();
     const { language, setLanguage, t } = useLanguage();
-    const { currentUser, renameCurrentUser } = useGameStore();
 
     const [notif] = useSetting('volume');
     const [games] = useSetting('games');
-
-    const [username, setUsername] = React.useState<string>(currentUser?.username ?? 'user');
-
-    React.useEffect(() => {
-        setUsername(currentUser?.username ?? 'user');
-    }, [currentUser?.username]);
-
-    const commitRename = async () => {
-        const trimmed = username.trim();
-        if (!currentUser || !trimmed || trimmed === currentUser.username) return;
-        await renameCurrentUser(trimmed);
-    };
 
     const langOptionLabel = (code: string) => {
         const optKey = code;
         const res = t(`settings.language.options.${optKey}` as any);
         return res.startsWith('settings.language.options.') ? code : res;
     };
-
-    // TODO:
-    //    Update the input line for players name. It should have button to open dropdown for
-    //    change the active player + add and delete buttons
 
     const navigate = useNavigate();
     return (
@@ -64,20 +48,14 @@ function SettingsPage() {
                 </div>
                 <div className="container-content">
                     <section className="general">
-                        <div className="section-header"><h2>{t('settings.general' as any)}</h2><hr /></div>
+                        <div className="section-header">
+                            <h2>{t('settings.general' as any)}</h2>
+                            <hr />
+                        </div>
                         <div className="section-content">
                             <div className="settings-line-parameter">
                                 <h3>{t('settings.player.name' as any)}</h3>
-                                <input
-                                    aria-label="current-user-name"
-                                    type="text"
-                                    value={username}
-                                    className='text-input'
-                                    placeholder={t('settings.player.placeholder' as any)}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    onBlur={commitRename}
-                                    onKeyDown={(e) => { if (e.key === 'Enter') commitRename(); }}
-                                />
+                                <UserManager />
                             </div>
                             <div className="settings-line-parameter">
                                 <h3>{t('settings.language.label' as any)}</h3>

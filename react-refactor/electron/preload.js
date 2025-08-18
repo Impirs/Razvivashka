@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 const { readFileSync, writeFileSync, existsSync, mkdirSync } = require('fs');
 const path = require('path');
 const os = require('os');
+const { migrateIfNeeded } = require('./migration');
 
 // Storage locations
 const appDir = path.join(os.homedir(), 'AppData/Roaming/play_and_learn', 'data');
@@ -89,6 +90,18 @@ function ensureDefaultUser() {
     writeJson(gameStoragePath, gameStorage);
 }
 ensureDefaultUser();
+
+// Run migration once on startup (before exposing APIs)
+try {
+    migrateIfNeeded({
+        appDir,
+        settingsPath,
+        gameStoragePath,
+        settings,
+        gameStorage,
+        writeJson,
+    });
+} catch {}
 
 const listeners = [];
 function notify(key, value) {

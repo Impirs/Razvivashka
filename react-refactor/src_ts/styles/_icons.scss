@@ -100,6 +100,13 @@
     mask-size: contain;
 }
 
+#delete {
+    -webkit-mask: url('@/assets/icons/garbage.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/garbage.svg') no-repeat center;
+    mask-size: contain;
+}
+
 #star {
     -webkit-mask: url('@/assets/icons/star.svg') no-repeat center;
     -webkit-mask-size: contain;
@@ -139,5 +146,33 @@
     -webkit-mask: url('@/assets/icons/eye-closed.svg') no-repeat center;
     -webkit-mask-size: contain;
     mask: url('@/assets/icons/eye-closed.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#left-arrow {
+    -webkit-mask: url('@/assets/icons/chevron-left.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/chevron-left.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#right-arrow {
+    -webkit-mask: url('@/assets/icons/chevron-right.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/chevron-right.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#up-arrow {
+    -webkit-mask: url('@/assets/icons/up-arrow.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/up-arrow.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#down-arrow {
+    -webkit-mask: url('@/assets/icons/down-arrow.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/down-arrow.svg') no-repeat center;
     mask-size: contain;
 }

@@ -34,6 +34,7 @@
         "ok": "OK",
         "filter": "Select...",
         "cancel": "Cancel",
+        "create": "Create",
         "apply": "Apply"
     },
 
@@ -78,8 +79,8 @@
         },
         "queens": {
             "instruction": "Place the queens on the board so that there is exactly one queen in each row, column, and surrounding area.",
-            "instruction_place": "to place/remove a queen.",
-            "instruction_drag": "to move.",
+            "instruction_place": " to place/remove a queen.",
+            "instruction_drag": " to move.",
             "tutorial": "Board size 4 is a tutorial level. It is recommended to play it only a few times."
         }
 
@@ -156,7 +157,30 @@
                 "title": "Reading Hero",
                 "description": "Complete the exercise with advanced letter sets "
             }
+        },
+        "queens": {
+            "4x4": {
+                "title": "Royal Debut",
+                "description": "Complete the tutorial on 4x4 board for queens in "
+            },
+            "5x5": {
+                "title": "Royal Game",
+                "description": "Finish the game on 5x5 board for queens in "
+            },
+            "6x6": {
+                "title": "Royal Challenge",
+                "description": "Finish the game on 6x6 board for queens in "
+            },
+            "7x7": {
+                "title": "Royal Battle",
+                "description": "Finish the game on 7x7 board for queens in "
+            },
+            "8x8": {
+                "title": "Queen Grandmaster",
+                "description": "Finish the game on 8x8 board for queens in "
+            }
         }
+
     },
 
     "settings": {
@@ -187,7 +211,16 @@
         },
         "player": {
             "name": "Name",
-            "placeholder": "What's your name?"
+            "placeholder": "What's your name?",
+            "createNew": "Create new user",
+            "newUserPlaceholder": "Enter new user name",
+            "deleteConfirm": {
+                "title": "Delete User",
+                "message": "Are you sure you want to delete user",
+                "warning": "Attention! All their records and achievements will be permanently deleted.",
+                "confirm": "Delete",
+                "cancel": "Cancel"
+            }
         },
         "volume": {
             "label": "Sound",

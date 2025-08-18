@@ -13,6 +13,11 @@ log.info('App starting...');
 
 autoUpdater.allowPrerelease = true;
 
+// On Windows ensure AUMID is set so taskbar uses the correct icon
+try {
+    app.setAppUserModelId('com.impirs.razvivashka');
+} catch {}
+
 // Function to check for updates in development mode using GitHub API
 async function checkForUpdatesDev(win) {
     try {
@@ -73,7 +78,7 @@ function createWindow() {
         show: false,
         icon: isDev 
             ? path.join(__dirname, '../src_ts/assets/icon.ico')
-            : path.join(__dirname, '../shared/assets/icon.ico'),
+            : path.join(process.resourcesPath || path.join(__dirname, '..'), 'icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
