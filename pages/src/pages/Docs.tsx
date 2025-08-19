@@ -378,7 +378,15 @@ const Docs = () => {
     useEffect(() => {
         const loadContent = async () => {
             try {
-                const response = await fetch('/public/content/refactoring.md')
+                // Use the same pattern as useMarkdownContent hook for consistent path handling
+                const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
+                const url = `${baseUrl}content/refactoring.md`
+                const response = await fetch(url)
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load refactoring.md from ${url}`)
+                }
+                
                 const text = await response.text()
                 setContent(text)
             } catch (error) {
