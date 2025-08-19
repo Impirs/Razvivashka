@@ -1,6 +1,6 @@
-# 🧠 Welcome to Razvivashka!
+# 🧠 Welcome to Play&Learn!
 
-**Razvivashka** is a collection of educational games designed to train and improve cognitive skills.
+**Play and Learn** is a collection of educational games designed to train and improve cognitive skills.
 
 ## 💡 Why this helps your child
 
@@ -16,7 +16,7 @@ Our games are built to help children develop abilities useful at school and in e
 
 This way the app becomes more than a "screen game" — it becomes a real **assistant for parents**, suggesting exercises you can do with your child for balanced development.
 
-## 🎲 What Razvivashka trains
+## 🎲 What Play&Learn trains
 
 - **Memory** — exercises for short-term and long-term memory
 - **Attention** — tasks for concentration and switching attention
