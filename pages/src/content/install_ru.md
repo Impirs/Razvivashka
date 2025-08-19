@@ -61,7 +61,6 @@ npm run electron:build
 
 1. Проверьте [известные проблемы](https://github.com/Impirs/Razvivashka/issues)
 2. Создайте новый [issue на GitHub](https://github.com/Impirs/Razvivashka/issues/new)
-3. Обратитесь к [документации](/docs)
 
 ## 🔄 Обновления
 

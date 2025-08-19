@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useTheme } from '../contexts/ThemeContext'
@@ -118,13 +118,18 @@ const Layout = ({ children }: LayoutProps) => {
         }
     }, [location.pathname])
 
+    // Map of node refs for CSSTransition instances (keyed by navigation key/path)
+    const nodeRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>())
+
     return (
         <div className="layout-container">
             <header className="header">
                 <div className="header-content">
                     <div className="header-container">
                         <div className="header-logo">
-                            <div className="header-logo-icon">🧠</div>
+                            <img className="header-logo-icon" 
+                                src="../../public/brain-svgrepo-com.svg" 
+                                alt="web_icon" />
                             <h1 className="header-logo-text">Razvivashka</h1>
                         </div>
                         
@@ -184,7 +189,9 @@ const Layout = ({ children }: LayoutProps) => {
                     >
                         <div className="mobile-nav-header">
                             <div className="header-logo">
-                                <div className="header-logo-icon">🧠</div>
+                                <img className="mobile-header-logo-icon" 
+                                    src="../../public/brain-svgrepo-com.svg" 
+                                    alt="web_icon" />
                                 <h2 className="header-logo-text">Razvivashka</h2>
                             </div>
                             <button
@@ -232,15 +239,24 @@ const Layout = ({ children }: LayoutProps) => {
             <main className="main-content">
                 <div className="main-content-inner">
                     <TransitionGroup>
-                        <CSSTransition
-                            key={location.pathname}
-                            timeout={window.innerWidth <= 768 ? 300 : 600}
-                            classNames="page"
-                        >
-                            <div className="content-wrapper">
-                                {children}
-                            </div>
-                        </CSSTransition>
+                            <CSSTransition
+                                key={location.key ?? location.pathname}
+                                timeout={window.innerWidth <= 768 ? 300 : 600}
+                                classNames="page"
+                                nodeRef={(() => {
+                                    const k = location.key ?? location.pathname
+                                    let r = nodeRefs.current.get(k)
+                                    if (!r) {
+                                        r = React.createRef<HTMLDivElement>()
+                                        nodeRefs.current.set(k, r)
+                                    }
+                                    return r
+                                })()}
+                            >
+                                <div className="content-wrapper" ref={nodeRefs.current.get(location.key ?? location.pathname) ?? undefined}>
+                                    {children}
+                                </div>
+                            </CSSTransition>
                     </TransitionGroup>
                 </div>
                 <footer className="footer">

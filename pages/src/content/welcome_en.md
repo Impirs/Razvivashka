@@ -1,34 +1,36 @@
-# 🧠 Play and Learn
+# 🧠 Welcome to Play&Learn!
 
-**Educational brain-training games collection**
+**Play and Learn** is a collection of educational games designed to train and improve cognitive skills.
 
-## 🎮 Available Games
+## 💡 Why this helps your child
 
-### 🔢 Number Composition
-Master mental arithmetic through interactive number combination exercises. Train your ability to quickly decompose and compose numbers.
+Our games are built to help children develop abilities useful at school and in everyday life:
 
-### 🔢 Shulte Tables
-Classic attention and concentration training. Find numbers in sequential order to improve focus and peripheral vision.
+1. 📖 Make learning easier — trained memory and attention help kids remember letters, numbers, words, and rules faster.
+2. 🎲 Make play more meaningful — logic games teach problem solving and seeing relationships, which builds independence.
+3. ⚡️ Faster reactions — exercises for reaction speed help children respond quickly to new situations.
 
-### ⚙️ In development
+> **Most importantly:**
+>
+> � Even if you don't give your child a phone or tablet, you can use the app's ideas as tabletop, verbal, or active games. All exercises are easy to adapt for family play — in the car, at home, or on a walk.
 
-#### ✖️ **Multiplication Table**  
-Practice multiplication tables with engaging visual exercises. Perfect for mastering basic arithmetic operations.
+This way the app becomes more than a "screen game" — it becomes a real **assistant for parents**, suggesting exercises you can do with your child for balanced development.
 
-#### ♜ **Rooks**
-Strategic thinking game where you place rooks on a chessboard. Develop logical reasoning and spatial visualization skills.
+## 🎲 What Play&Learn trains
 
-#### 🎵 **Tango**
-Dynamic rhythm and memory challenge that combines auditory and visual elements. Enhance coordination and reaction time.
+- **Memory** — exercises for short-term and long-term memory
+- **Attention** — tasks for concentration and switching attention
+- **Logical thinking** — problems that train analysis and decision making
+- **Reaction speed** — games for faster decision making
 
-## 🌟 Key Features
+## 🌟 Join, play, and contribute
 
-- **🎨 Clean Interface**: Colorful and distraction-free environment
-- **🎯 Focused Learning**: Each game targets specific cognitive skills
-- **📈 Progress Tracking**: Monitor your improvement over time  
-- **🏆 Achievement System**: Unlock rewards as you advance
-- **⚙️ Adaptive Difficulty**: Games adjust to your skill level
+- 🎨 **Modern interface** — bright and intuitive design for children
+- 📊 **Progress tracking** — achievements and statistics
+- ✍️ **Feedback** — tell us your impressions and suggest new content or improvements
+- 🌍 **Multilanguage** — support for Russian, English, and more
+- ⚡️ **High performance** — optimized for smooth experience
 
-## ⚙️ Platform Availability
+## 🚀 Start training now!
 
-Currently available for **Windows** desktop systems. Mobile and other platform versions are planned for future releases.
+Download the app and begin improving cognitive skills today.

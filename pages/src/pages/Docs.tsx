@@ -530,13 +530,19 @@ const Docs = () => {
                     <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>
                         Can't find what you're looking for? We're here to help!
                     </p>
-                    <div className="flex flex-wrap gap-3">
+                    <div className="grid md:grid-cols-3 gap-3">
                         <a 
                             href="https://github.com/Impirs/Razvivashka/issues" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="px-4 py-2 rounded-lg font-medium transition-colors hover:opacity-80"
-                            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
+                            style={{ backgroundColor: 'var(--bg-primary)', 
+                                    color: 'var(--text-primary)', 
+                                    border: '1px solid var(--border-color)',
+                                    minHeight: '4rem',
+                                    padding: '1.25rem',
+                                    textAlign: 'center',
+                                }}
                         >
                             🐛 Report Bug
                         </a>
@@ -545,7 +551,13 @@ const Docs = () => {
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="px-4 py-2 rounded-lg font-medium transition-colors hover:opacity-80"
-                            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
+                            style={{ backgroundColor: 'var(--bg-primary)', 
+                                    color: 'var(--text-primary)',
+                                    border: '1px solid var(--border-color)',
+                                    minHeight: '4rem',
+                                    padding: '1.25rem',
+                                    textAlign: 'center',                                
+                                }}
                         >
                             💬 Ask Question
                         </a>
@@ -554,7 +566,13 @@ const Docs = () => {
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="px-4 py-2 rounded-lg font-medium transition-colors hover:opacity-80"
-                            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
+                            style={{ backgroundColor: 'var(--bg-primary)',
+                                    color: 'var(--text-primary)',
+                                    border: '1px solid var(--border-color)',
+                                    minHeight: '4rem',
+                                    padding: '1.25rem',
+                                    textAlign: 'center',                                
+                                }}
                         >
                             📝 Contribute
                         </a>

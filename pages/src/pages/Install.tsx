@@ -29,6 +29,10 @@ const Install = () => {
         )
     }
 
+    const desktopText = language === 'ru' ?
+        '💻 Десктопное приложение' :
+        '💻 Desktop Application'
+
     const installText = language === 'ru' ?
         '📦 Установка Play and Learn' : 
         '📦 Installing Play and Learn'
@@ -43,6 +47,10 @@ const Install = () => {
     const macText = language === 'ru' ?
         'Скачать v2.0.0' :
         'Download v2.0.0'
+
+    const soonAvailable = language === 'ru' ?
+        'Скоро будет доступно' :
+        'Coming Soon'
 
     return (
         <div className="rounded-xl shadow-lg p-8" 
@@ -60,36 +68,45 @@ const Install = () => {
                 {installText}
             </h1>
             <hr />
+            <h2 className="text-3xl font-semibold text-gray-700 mt-8 mb-4"
+                style={{
+                        fontSize: '1.875rem',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)',
+                        marginTop: '2rem',
+                        marginBottom: '1rem',
+                        lineHeight: '1.2',
+                    }}
+            >
+                {desktopText}
+            </h2>
             <div className="mt-8 p-6 rounded-lg" 
                 style={{ 
                     backgroundColor: 'var(--bg-secondary)', 
                     border: '1px solid var(--border-color)' 
                 }}
             >
-                {/* <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
-                    {quickInstallText}
-                </h3> */}
                 <div className="grid md:grid-cols-4 gap-4">
                     <a 
-                        href="https://github.com/Impirs/Razvivashka/releases/download/v1.2.5/play_and_learn-Setup-1.2.5.exe" 
+                        href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
                         style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
                     >
-                        <div className="text-3xl mb-2">💻</div>
+                        <div className="text-3xl mb-2">💠</div>
                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .exe</h4>
                         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{windowsText}</p>
                     </a>
                     
                     <a 
-                        href="https://github.com/Impirs/Razvivashka/releases/download/v1.2.5/play_and_learn-Setup-1.2.5.zip" 
+                        href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
                         style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
                     >
-                        <div className="text-3xl mb-2">💻</div>
+                        <div className="text-3xl mb-2">💠</div>
                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .zip</h4>
                         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{winZIPtext}</p>
                     </a>
@@ -103,7 +120,8 @@ const Install = () => {
                     >
                         <div className="text-3xl mb-2">🍎</div>
                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>macOS .dmg</h4>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{macText}</p>
+                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}> {soonAvailable}</p>
+                        {/* <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{macText}</p> */}
                     </a>
                 </div>
             </div>

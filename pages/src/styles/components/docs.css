@@ -17,7 +17,7 @@
     border: 1px solid var(--border-light);
     border-radius: 1rem;
     height: fit-content;
-    max-height: calc(100vh - 112px); /* Account for header and padding */
+    max-height: calc(100vh - 112px);
     overflow-y: auto;
     position: sticky;
     top: 1rem; /* Small offset from top of scrollable area */
@@ -28,9 +28,8 @@
     margin-right: 1rem;
 }
 
-/* Webkit scrollbar styles for sidebar */
 .docs-sidebar::-webkit-scrollbar {
-    width: 6px;
+    width: 1rem;
 }
 
 .docs-sidebar::-webkit-scrollbar-track {
@@ -40,7 +39,7 @@
 
 .docs-sidebar::-webkit-scrollbar-thumb {
     background-color: var(--border-color);
-    border-radius: 3px;
+    border-radius: 0.5rem;
     transition: background-color 0.2s;
 }
 
@@ -252,7 +251,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 280px;
+    width: 340px;
     height: 100vh;
     background-color: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
@@ -302,7 +301,7 @@
     background-color: var(--bg-primary);
     position: sticky;
     top: 0;
-    z-index: 2; /* stay above sidebar content but below overlay/sidebar z-index */
+    z-index: 1300; /* place header above slider and most other UI when sidebar is open */
 }
 
 .docs-sidebar-mobile .docs-sidebar-title {
@@ -319,6 +318,10 @@
     align-items: center;
     justify-content: center;
 }
+
+/* When the mobile sidebar is open, pin the header to viewport so it overlays any floating slider on the right.
+   Also add top padding to the sidebar to avoid content being covered by the fixed header. */
+/* (mobile header open rules are defined further below) */
 
 /* Responsive behavior */
 @media (max-width: 1024px) {
@@ -345,8 +348,26 @@
         display: block;
     }
     
+    /* Make the opened mobile sidebar cover the full viewport to avoid any right-side gaps
+       (this overlays floating sliders and ensures the header spans the entire width) */
     .docs-sidebar-mobile {
         width: 280px;
+    }
+
+    .docs-sidebar-mobile.open {
+        width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        border-right: none !important;
+        z-index: 10001 !important;
+        box-shadow: none !important;
+    }
+
+    .docs-sidebar-mobile.open .docs-sidebar-mobile-header {
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 10002;
     }
 }
 
