@@ -1,0 +1,11 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Import our custom styles */
+@import './variables.css';
+@import './base.css';
+@import './prose.css';
+@import './components/header.css';
+@import './components/docs.css';
+@import './components/footer.css';
