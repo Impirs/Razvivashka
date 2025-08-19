@@ -378,7 +378,7 @@ const Docs = () => {
     useEffect(() => {
         const loadContent = async () => {
             try {
-                const response = await fetch('/src/content/refactoring.md')
+                const response = await fetch('/public/content/refactoring.md')
                 const text = await response.text()
                 setContent(text)
             } catch (error) {
