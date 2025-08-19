@@ -18,7 +18,9 @@ export const useMarkdownContent = (baseName: string) => {
         // Build an absolute URL using the configured BASE_URL so paths match
         // the Vite configuration both in dev and production (e.g. /Razvivashka/)
         const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
-        const url = `${baseUrl}public/content/${fileName}`
+        // In production, Vite copies public folder contents to the root of dist,
+        // so we access content directly without 'public/' prefix
+        const url = `${baseUrl}content/${fileName}`
         const response = await fetch(url)
 
         if (!response.ok) {
