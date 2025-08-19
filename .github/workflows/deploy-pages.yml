@@ -1,9 +1,9 @@
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches: [ "pages" ]
-    paths: [ "pages/**" ]
+  pull_request:
+    types: [closed]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -17,10 +17,14 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.pull_request != null && github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'pages') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: refs/heads/main
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
