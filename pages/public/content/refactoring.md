@@ -43,40 +43,42 @@ List all updated technologies and why each was chosen:
 ### Bridge Layer architecture overview
 
 ``` bash
-
-  ┌─────────────────────────────┐
-  │         OS + Files          │
-  │  ┌───────────────────────┐  │
-  │  │ settings.json         │◄─┤  AppData/Roaming/play_and_learn/data
-  │  │ gamestorage.json      │◄─┘
-  └─────────────────────────────┘
-        ▲
-        │ (fs.readFileSync / writeFileSync)
-        ▼
-  ┌─────────────────────────────┐
-  │         preload.js          │ ◄─ (contextBridge)
-  │                             │
-  │  window.settingsAPI:        │
-  │    get(key), getAll(), set, │
-  │    subscribe(cb)            │
-  │                             │
-  │  window.gameStoreAPI:       │
-  │    load/save user data,     │
-  │    list/create/delete/rename│
-  │                             │
-  │  window.electronAPI:        │
-  │    quitApp, openExternal    │
-  └─────────────────────────────┘
-        ▲
-        │ contextIsolation: true
-        ▼
+               < Bridge Layer >
+        ┌─────────────────────────────┐
+        │         OS + Files          │
+        │  ┌───────────────────────┐  │
+        │  │ settings.json         │◄─┤  AppData/Roaming/play_and_learn/data
+        │  │ gamestorage.json      │◄─┘
+        └─────────────────────────────┘
+                      ▲
+                      │ (fs.readFileSync / writeFileSync)
+                      ▼
+        ┌─────────────────────────────┐
+        │         preload.js          │ ◄─ (contextBridge)
+        │                             │
+        │  window.settingsAPI:        │
+        │    get(key), getAll(), set, │
+        │    subscribe(cb)            │
+        │                             │
+        │  window.gameStoreAPI:       │
+        │    load/save user data,     │
+        │    list/create/delete/rename│
+        │                             │
+        │  window.electronAPI:        │
+        │    quitApp, openExternal    │
+        └─────────────────────────────┘
+                      ▲
+                      │ contextIsolation: true
+                      ▼
+                  React (UI)
 ┌─────────────────────────────────────────────┐
-│                  React (UI)                 │
 │                                             │
 │  LanguageProvider.t(key)                    │
 │  SettingsProvider.useSetting('language')    │ → calls settingsAPI
-│  GameStoreProvider.login/records/users      │ → calls gameStoreAPI
+│  GameStoreDataProvider.currentUser          │ → calls gameStoreAPI  
+│  GameStoreActionsProvider.login/records     │ → coordinates data + actions
 │  GameControllerProvider.start/endGame       │ → coordinates records + unlocks
+│  useSelectiveContext hooks for performance  │ → granular data access
 │                                             │
 │  UI rerenders when contexts update          │
 └─────────────────────────────────────────────┘
@@ -86,21 +88,23 @@ List all updated technologies and why each was chosen:
 ### Business Logic Layer architecture overview
 
 ```bash
-
+                    <Routes> 
 ┌───────────────────────────────────────────────┐
-│                 <Routes>                      │
-│                                               │
 │  SettingsProvider                             │
 │  LanguageProvider                             │
-│  GameStoreProvider                            │
+│    ├─ LanguageContext (state)                 │
+│    └─ TranslationsContext (data)              │
+│  GameStoreDataProvider                        │
+│  GameStoreActionsProvider                     │
 │    └─ GameControllerProvider                  │  ← (idle, playing, win, lose)
 │        └─ GameLayout (by gameId)              │
 │            ├─ Menu (collect settings)         │ → startGame + setGameContext
 │            └─ Game (play round)               │ → endGame(status, score)
 │                                               │
 │  On win: GameController → addGameRecord →     │
-│          unlockAchievementCheck → (notify TBD)│
+│          unlockAchievementCheck → (notify)    │
 │                                               │
+│  useSelectiveContext hooks prevent rerenders  │
 │  Achievement/Notification UI renders higher   │
 └───────────────────────────────────────────────┘
 
@@ -122,13 +126,15 @@ List and describe main architectural modules or layers:
   - Pages: Home, Catalog, Settings, Achievements with HashRouter navigation.
   - Layout: GameLayout with side panels/main for game integration.
   - Reusable component system: button, select, slider, icon, badge, checkbox, gamesetting, scorelist.
-  - Modules: game_digital, game_shulte provide self-contained game logic and UI.
+  - Modules: game_digital, game_shulte, game_queens provide self-contained game logic and UI.
 - **State/Context Layer** (src_ts/contexts)
-  - SettingsProvider: wraps bridge settings with React hooks and cross-window subscriptions.
-  - LanguageProvider: typed translations and runtime language switching.
-  - GameStoreProvider: current user, achievements registry, records, and user management with reducer pattern.
-  - GameControllerProvider: session lifecycle (idle/playing/win/lose) and result reporting with audio feedback.
-  - NotificationProvider: in-app toast/navigation notifications with update handling.
+  - SettingsProvider: bridge integration with reactive subscriptions and type-safe settings management.
+  - LanguageProvider: split into LanguageContext (state) and TranslationsContext (data) for performance optimization.
+  - GameStoreDataProvider: user data, achievements, and records with reducer-based state management.
+  - GameStoreActionsProvider: user management and game actions separated from data for performance.
+  - GameControllerProvider: centralized game session lifecycle with audio feedback and score coordination.
+  - NotificationProvider: queue-based notification system with routing integration and update handling.
+  - Selective Context Hooks: granular access hooks in `useSelectiveContext.ts` to prevent unnecessary re-renders.
 - **Types/Contracts** (src_ts/types, types/global.d.ts): shared strict types for settings, language, game store, and global window APIs.
 - **Build & Development**
   - Vite configuration with path aliases (@/ → src_ts, @shared → ../shared).
@@ -137,51 +143,63 @@ List and describe main architectural modules or layers:
 
 ### Data Flow
 
-Unidirectional UI → Contexts → Bridge → Persistence, with pub-sub for settings updates:
+Unidirectional UI → Contexts → Bridge → Persistence, with performance-optimized subscriptions:
 
-- UI events call context methods (e.g., set language, start/end game).
+- UI events call context methods via selective hooks (e.g., `useCurrentUser()`, `useGameActions()`).
 - SettingsProvider uses settingsAPI.subscribe to react to external changes and update consumers.
-- GameController triggers addGameRecord/unlockAchievementCheck on win; GameStore updates user state via reducer and pushes notifications.
-- LanguageProvider reads JSON translation bundles and exposes typed t(key) function.
+- GameController triggers addGameRecord/unlockAchievementCheck on win; GameStoreActions updates user state via reducer and pushes notifications.
+- LanguageProvider manages dynamic translation loading through split contexts (LanguageContext + TranslationsContext).
 - Auto-update notifications flow through electronAPI → useUpdateHandler → NotificationProvider.
-- Game modules maintain isolated logic with pure functions (e.g., generateBoard, getDistribution in digitGameLogic.ts).
+- Game modules maintain isolated logic with pure functions and use selective context hooks to prevent unnecessary re-renders.
+- Selective context hooks (`useSelectiveContext.ts`) provide granular access to prevent components from re-rendering on unrelated context changes.
 
 ### File Structure
 
 ```bash
 react-refactor/
-├── electron/                   # Electron main process
-│   ├── main.js                 # BrowserWindow creation, IPC handlers
-│   ├── preload.js              # Context bridge APIs
-│   └── README.md
-├── src_ts/                     # React TypeScript application
-│   ├── App.tsx                 # Router and provider setup
-│   ├── main.ts                 # React entry point
-│   ├── assets/                 # Icons, sounds, images, fonts
-│   ├── components/             # Reusable UI components
-│   ├── contexts/               # React context providers
-│   ├── data/                   # Static data files
-│   ├── languages/              # Translation files
-│   ├── layouts/                # Page layouts
-│   ├── modules/                # Self-contained game modules
-│   │   ├── game_digital/
-│   │   └── game_shulte/
-│   ├── pages/                  # Route components
+├── electron/                       # Electron main process
+│   ├── main.js                     # BrowserWindow creation, IPC handlers
+│   ├── preload.js                  # Context bridge APIs
+│   └── README.md  
+├── src_ts/                         # React TypeScript application
+│   ├── App.tsx                     # Router and provider setup
+│   ├── main.ts                     # React entry point
+│   ├── assets/                     # Icons, sounds, images, fonts
+│   ├── components/                 # Reusable UI components
+│   ├── contexts/                   # React context providers
+│   │   ├── gameStoreData.tsx       # Game data state management
+│   │   ├── gameStoreActions.tsx    # Game actions and user management
+│   │   ├── i18n.tsx                # Split language contexts
+│   │   ├── pref.tsx                # Settings bridge integration
+│   │   ├── gameController.tsx      # Game session lifecycle
+│   │   └── notifProvider.tsx       # Notification queue system
+│   ├── hooks/                      # Custom hooks
+│   │   ├── useSelectiveContext.ts  # Performance-optimized context hooks
+│   │   ├── useGameTimer.ts         # Game timing utilities
+│   │   └── useUpdateHandler.ts     # Update notification handling
+│   ├── data/                       # Static data files
+│   ├── languages/                  # Translation files
+│   ├── layouts/                    # Page layouts
+│   ├── modules/                    # Self-contained game modules
+│   │   ├── game_digit/             # Number composition game
+│   │   ├── game_shulte/            # Schulte table game
+│   │   └── game_queens/            # N-Queens puzzle game
+│   ├── pages/                      # Route components
 │   │   ├── home/
 │   │   ├── catalog/
 │   │   ├── settings/
 │   │   └── achievements/
-│   ├── styles/                 # SCSS stylesheets
-│   │   └── components/         # Component-specific styles
-│   ├── types/                  # TypeScript type definitions
-│   └── utils/                  # Utility functions
-├── types/                      # Global type declarations
-│   └── global.d.ts             # Window API interfaces
-├── jest.config.js              # Jest testing configuration
-├── jest.setup.js               # Test environment setup
-├── tsconfig.json               # TypeScript configuration
-├── vite.config.js              # Vite build configuration
-└── package.json                # Dependencies and scripts
+│   ├── styles/                     # SCSS stylesheets
+│   │   └── components/             # Component-specific styles
+│   ├── types/                      # TypeScript type definitions
+│   └── utils/                      # Utility functions
+├── types/                          # Global type declarations
+│   └── global.d.ts                 # Window API interfaces
+├── jest.config.js                  # Jest testing configuration
+├── jest.setup.js                   # Test environment setup
+├── tsconfig.json                   # TypeScript configuration
+├── vite.config.js                  # Vite build configuration
+└── package.json                    # Dependencies and scripts
 ```
 
 ## Refactoring Process
@@ -213,18 +231,259 @@ Notes:
 - Preload bootstraps defaults (ensures currentUser, creates default 'user').
 - Migrators can be added to read and transform previous storage formats into the new settings.json/gamestorage.json schemas.
 
-## Key Decisions
+## Context Architecture and State Management
 
-| Decision                         | Alternatives Considered     | Reason for Choice                    |
-|----------------------------------|-----------------------------|--------------------------------------|
-| Adopted Vite                     | Webpack, Parcel             | Faster development builds, better DX |
-| Migrated to TypeScript           | Continue with JavaScript    | Improved type safety, better tooling |
-| Modularized components by domain | Flat structure              | Scalability and isolation            |
-| React Context over Redux         | Redux Toolkit, Zustand      | Simpler setup, adequate for app size |
-| SCSS Modules over Tailwind       | Tailwind CSS, Styled Components | Existing CSS migration, component isolation |
-| HashRouter over BrowserRouter    | Browser Router, Memory Router | Electron file:// protocol compatibility |
-| JSON files over Database         | SQLite, IndexedDB           | Simplicity, easy backup/restore      |
-| Reducer pattern for complex state | useState hooks             | Predictable state updates, easier testing |
+The refactored application implements a sophisticated context architecture designed for optimal performance and maintainability. The context system has been split into specialized providers to minimize unnecessary re-renders and provide granular access to different aspects of the application state.
+
+### Context Split Strategy
+
+The original monolithic contexts have been split into separate data and action contexts, following the principle of separation of concerns:
+
+#### 1. Data vs Actions Separation
+
+**Problem Solved**: Components consuming entire contexts would re-render whenever any part of the context changed, even if they only needed specific pieces of data or actions.
+
+**Solution**: Split contexts into:
+- **Data contexts**: Provide read-only access to state
+- **Action contexts**: Provide functions that modify state
+- **Combined hooks**: Maintain backward compatibility
+
+Example structure:
+```typescript
+// Before: Single context causing unnecessary re-renders
+const GameStoreContext = { ...state, ...actions };
+
+// After: Separated contexts for optimal performance
+const GameStoreDataContext = { ...state, dispatch };
+const GameStoreActionsContext = { ...actions };
+```
+
+#### 2. Language Context Optimization
+
+The language system has been split into two specialized contexts:
+
+**LanguageContext**: 
+- Manages language state (`language`, `setLanguage`)
+- Only re-renders when the active language changes
+
+**TranslationsContext**: 
+- Provides translation function (`t`) and loaded translations
+- Only re-renders when translation data loads or changes
+
+This separation prevents components from re-rendering when:
+- Only language state changes (no need to reload translations)
+- Only translation data changes (language preference unchanged)
+
+#### 3. Selective Context Hooks
+
+A new hook system provides granular access to context data:
+
+**Location**: `src_ts/hooks/useSelectiveContext.ts`
+
+**Purpose**: Prevent components from subscribing to entire contexts when they only need specific pieces of data.
+
+**Examples**:
+```typescript
+// Instead of: const { currentUser, allAchievements, loading, actions } = useGameStore();
+// Use specific hooks:
+const currentUser = useCurrentUser();           // Only re-renders on user changes
+const loading = useGameStoreLoading();          // Only re-renders on loading state
+const { addGameRecord } = useGameActions();     // Only actions, no data subscription
+```
+
+### Context Provider Hierarchy
+
+The application uses a carefully orchestrated provider hierarchy in `App.tsx`:
+
+```typescript
+<SettingsProvider>                          // Foundation: Settings and bridge integration
+  <LanguageProvider>                        // Language state and translation loading
+	<Router>                                // Route definitions and navigation
+
+	<GameStoreDataProvider>                 // Game data: users, achievements, records
+	  <GameStoreActionsProvider>            // Game actions: login, records, achievements
+	    <NotificationProvider>              // Global notification system
+	      <Routes>
+               <GameControllerProvider>     // Game session lifecycle (when in game context)
+                 {/* Game-specific UI */}
+               </GameControllerProvider>
+             </Routes>
+	      <NotificationDisplay />
+	    </NotificationProvider>
+	  </GameStoreActionsProvider>
+	</GameStoreDataProvider>
+
+	</Router>
+  </LanguageProvider>
+</SettingsProvider>
+```
+
+### Key Context Implementations
+
+#### 1. SettingsProvider
+
+**Purpose**: Bridge integration with reactive settings management
+
+**Key Features**:
+- **Type-safe bridge integration**: Full TypeScript integration with `window.settingsAPI`
+- **Reactive subscriptions**: Automatic UI updates when settings change externally
+- **Custom hook**: `useSetting(key)` provides `[value, setter]` tuple similar to `useState`
+- **Cross-window sync**: Settings changes in one window update all other windows
+
+**Architecture Decisions**:
+- **Bridge-first approach**: All settings flow through the preload bridge for security and persistence
+- **Subscription pattern**: Uses `settingsAPI.subscribe()` for reactive updates
+- **Memory efficiency**: Uses refs to store settings data and prevent unnecessary re-renders
+
+#### 2. Language System
+
+**Purpose**: Dynamic translation loading with performance optimization
+
+**Key Features**:
+- **Split contexts**: Separate language state from translation data
+- **Lazy loading**: Translation files loaded on-demand via dynamic imports
+- **Type safety**: Fully typed translation keys with TypeScript
+- **Fallback support**: Graceful degradation when translations fail to load
+
+**Architecture Decisions**:
+- **Settings integration**: Language preference persisted via SettingsProvider
+- **Dynamic imports**: `import('../languages/${lang}.json')` for bundle optimization
+- **Performance split**: Separate contexts prevent unnecessary re-renders
+- **Memoization**: Translation function memoized to prevent callback recreation
+
+#### 3. Game Store System
+
+**Purpose**: User management and game data with high-performance architecture
+
+**Split Architecture**:
+
+**GameStoreDataProvider**:
+- **State management**: User data, achievements, game records
+- **Reducer pattern**: Predictable state updates with `gameStoreDataReducer`
+- **Data normalization**: Ensures all user data has required properties
+- **Loading states**: Provides loading indicators for async operations
+
+**GameStoreActionsProvider**:
+- **Action creators**: Login, logout, user management, record creation
+- **Achievement processing**: Automated achievement unlock checking
+- **Notification integration**: Triggers notifications for achievements
+- **Bridge integration**: All persistence flows through `gameStoreAPI`
+
+**Architecture Decisions**:
+- **Separation of concerns**: Data and actions in separate contexts for performance
+- **Memoized actions**: All action creators wrapped in `useCallback` for stable references
+- **Reducer pattern**: Complex state changes handled through reducers for predictability
+- **Combined hook**: `useGameStore()` provides backward compatibility
+
+#### 4. Game Controller
+
+**Purpose**: Centralized game session lifecycle management
+
+**Key Features**:
+- **State machine**: `idle` → `playing` → `win`/`lose` status progression
+- **Audio integration**: Automatic win/lose sound effects with volume control
+- **Score coordination**: Centralized score management and recording
+- **Game context**: Tracks game type, settings, and session metadata
+
+**Architecture Decisions**:
+- **Reducer pattern**: Game state changes handled through `gameControllerReducer`
+- **Selective hooks**: Game controller split into selective hooks via `useSelectiveContext`
+- **Action integration**: Automatically calls `addGameRecord` and `unlockAchievementCheck`
+- **Audio management**: Uses volume settings from SettingsProvider
+
+#### 5. Notification System
+
+**Purpose**: Queue-based notification system with routing integration
+
+**Key Features**:
+- **Queue management**: Sequential notification display with timing control
+- **Type-specific behavior**: Different notification types with custom settings
+- **Routing integration**: Navigation notifications for deep-linking
+- **Update handling**: Special handling for app update notifications
+
+**Architecture Decisions**:
+- **Queue pattern**: Prevents notification overlap and ensures sequential display
+- **Router integration**: Uses `useNavigate` for in-app navigation notifications
+- **Reducer pattern**: Notification state managed through `notificationReducer`
+- **Type system**: Strongly typed notification types for consistency
+
+### Performance Optimizations
+
+#### 1. Selective Context Consumption
+
+**Problem**: Components re-rendering on unrelated context changes
+**Solution**: Granular hooks that subscribe only to needed data
+
+```typescript
+// Before: Full context subscription
+const { currentUser, allAchievements, loading, ...actions } = useGameStore();
+
+// After: Selective subscriptions
+const currentUser = useCurrentUser();         // Only user changes
+const { addGameRecord } = useGameActions();   // Only action references
+```
+
+#### 2. Context Splitting
+
+**Problem**: Large contexts causing widespread re-renders
+**Solution**: Split by responsibility and change frequency
+
+**Examples**:
+- Language state vs translation data
+- Game store data vs actions
+- Settings data vs bridge operations
+
+#### 3. Memoization Strategy
+
+**Key patterns**:
+- **Action creators**: All wrapped in `useCallback` with proper dependencies
+- **Context values**: Complex context values memoized with `useMemo`
+- **Component optimization**: Game components use `React.memo` where appropriate
+
+### Migration Benefits
+
+#### 1. Performance Improvements
+
+- **Reduced re-renders**: Components only update when relevant data changes
+- **Faster rendering**: Selective hooks prevent unnecessary context consumption
+- **Better memory usage**: Proper cleanup and memoization strategies
+
+#### 2. Developer Experience
+
+- **Type safety**: Full TypeScript integration across all contexts
+- **Debugging**: Easier to track state changes with separated concerns
+- **Testing**: Contexts can be tested independently with selective mocks
+
+#### 3. Maintainability
+
+- **Clear boundaries**: Each context has a single responsibility
+- **Backward compatibility**: Combined hooks maintain existing API
+- **Extensibility**: New contexts can be added without affecting existing ones
+
+### Context Testing Strategy
+
+**Mock System**: `src_ts/hooks/__mocks__/useSelectiveContext.ts`
+
+**Approach**:
+- **Selective mocking**: Each hook mocked independently
+- **Realistic data**: Mock implementations return realistic test data
+- **Jest integration**: Proper Jest mock functions for action testing
+- **Isolation**: Tests can mock only the hooks they need
+
+This context architecture represents a significant evolution from simple React contexts to a sophisticated, performance-optimized state management system that scales with application complexity while maintaining developer productivity.
+
+| Decision                          | Alternatives Considered         | Reason for Choice                                                    |
+|-----------------------------------|---------------------------------|----------------------------------------------------------------------|
+| Adopted Vite                      | Webpack, Parcel                 | Faster development builds, better DX                                 |
+| Migrated to TypeScript            | Continue with JavaScript        | Improved type safety, better tooling                                 |
+| Modularized components by domain  | Flat structure                  | Scalability and isolation                                            |
+| React Context over Redux          | Redux Toolkit, Zustand          | Simpler setup, adequate for app size; split contexts for performance |
+| SCSS Modules over Tailwind        | Tailwind CSS, Styled Components | Existing CSS migration, component isolation                          |
+| HashRouter over BrowserRouter     | Browser Router, Memory Router   | Electron file:// protocol compatibility                              |
+| JSON files over Database          | SQLite, IndexedDB               | Simplicity, easy backup/restore                                      |
+| Reducer pattern for complex state | useState hooks                  | Predictable state updates, easier testing                            |
+| Context splitting strategy        | Monolithic contexts             | Performance optimization, granular subscriptions                     |
+| Selective context hooks           | Full context consumption        | Prevent unnecessary re-renders, better performance                   |
 
 ## Advanced Implementation Details
 
@@ -246,18 +505,21 @@ type ButtonProps = {
 
 ### State Management Patterns
 
-- **Settings**: Reactive subscription pattern with bridge sync
-- **Game Store**: Reducer pattern with immutable updates
-- **Game Controller**: State machine with audio feedback integration
-- **Notifications**: Queue-based system with automatic cleanup
+- **Settings**: Reactive subscription pattern with bridge sync and type-safe `useSetting()` hook
+- **Game Store**: Split into data and actions contexts with reducer pattern for immutable updates
+- **Game Controller**: State machine with audio feedback integration and selective context hooks
+- **Notifications**: Queue-based system with automatic cleanup and routing integration
+- **Language**: Split contexts for performance (LanguageContext + TranslationsContext)
+- **Selective Hooks**: Performance-optimized hooks in `useSelectiveContext.ts` for granular data access
 
 ### Game Module Architecture
 
 Each game is implemented as a self-contained module with:
-- Pure logic functions (e.g., `generateBoard`, `getDistribution`)
-- React components for UI (`DigitGame.tsx`, `DigitMenu.tsx`)
+- Pure logic functions (e.g., `generateBoard`, `getDistribution`, `computeConflicts`)
+- React components for UI (`DigitGame.tsx`, `DigitMenu.tsx`, `QueensGame.tsx`, `QueensMenu.tsx`)
 - TypeScript types for complete type safety
 - Isolated test suites
+- Performance optimizations with React.memo and selective context hooks
 
 ```typescript
 // Example: Digital game board generation
@@ -265,7 +527,17 @@ export function generateBoard(target: number, size: number): DigitBoard {
     const numbers = getDistribution(target, size);
     // Pure function implementation...
 }
+
+// Example: Queens game conflict computation
+export function computeConflicts(board: QueensBoard): ConflictData {
+    // Pure function for conflict detection...
+}
 ```
+
+**Current Game Modules**:
+- **game_digit**: Number composition game with arithmetic challenges
+- **game_shulte**: Schulte table attention training game  
+- **game_queens**: N-Queens puzzle game with conflict visualization
 
 ### Bridge API Design
 
@@ -314,7 +586,6 @@ Current bundle includes:
 ### Development Commands
 
 ```bash
-
 npm run react:dev        # Start Vite dev server + Electron
 npm run react:build      # Build React app + Electron distribution
 npm run react:test       # Run Jest test suite
@@ -347,10 +618,10 @@ Each game should be implemented as a self-contained module in `src_ts/modules/ga
 src_ts/modules/game_myGame/
 ├── MyGameGame.tsx           # Main game component
 ├── MyGameMenu.tsx           # Settings/menu component
-├── myGameLogic.ts          # Pure game logic functions
+├── myGameLogic.ts           # Pure game logic functions
 ├── types/
-│   └── game_myGame.ts      # TypeScript interfaces
-└── __tests__/              # Optional test files
+│   └── game_myGame.ts       # TypeScript interfaces
+└── __tests__/               # Optional test files
     ├── MyGameGame.test.tsx
     └── myGameLogic.test.ts
 ```
@@ -407,7 +678,7 @@ Settings interface for the game:
 
 ```typescript
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from '@/contexts/i18n';
+import { useTranslationFunction } from '@/hooks/useSelectiveContext';
 import GameSetting from '@/components/gamesetting/gamesetting';
 import Button from '@/components/button/button';
 
@@ -419,7 +690,7 @@ interface MyGameMenuProps {
 
 function MyGameMenu({ onStart, initialSettings, onChangeSettings }: MyGameMenuProps) {
     const [difficulty, setDifficulty] = useState(initialSettings?.difficulty || 1);
-    const { t } = useLanguage();
+    const t = useTranslationFunction(); // Use selective hook for better performance
 
     // Notify parent of settings changes for ScoreList updates
     useEffect(() => {
@@ -456,9 +727,9 @@ The core game interface with controller integration:
 
 ```typescript
 import { useEffect, useRef, useState } from 'react';
-import { useGameController } from '@/contexts/gameController';
+import { useGameControllerActions, useGameSession } from '@/hooks/useSelectiveContext';
 import { useSettings } from '@/contexts/pref';
-import { useLanguage } from '@/contexts/i18n';
+import { useTranslationFunction } from '@/hooks/useSelectiveContext';
 import { generateRecordProps } from '@/utils/pt';
 import { formatTime } from '@/utils/ft';
 
@@ -467,18 +738,16 @@ interface MyGameGameProps {
 }
 
 function MyGameGame({ settings }: MyGameGameProps) {
-    // Essential hooks for game integration
+    // Essential hooks for game integration - using selective hooks for performance
     const { 
-        status, 
-        score, 
         startGame, 
         endGame, 
         updateScore, 
         setGameContext, 
-        gameId, 
-        startedAt 
-    } = useGameController();
-    const { t } = useLanguage();
+        setModifications 
+    } = useGameControllerActions();
+    const { status, startedAt, gameId } = useGameSession();
+    const t = useTranslationFunction();
 
     // Game state
     const [board, setBoard] = useState<MyGameBoard | null>(null);
@@ -648,6 +917,9 @@ Ensure your game is accessible via `/catalog/myGame` by adding it to the catalog
 - Keep game logic pure and separate from React components
 - Use `useCallback` for event handlers to prevent unnecessary re-renders
 - Implement proper cleanup in `useEffect` hooks
+- **Use selective context hooks** from `useSelectiveContext.ts` instead of full context consumption
+- **Memoize expensive computations** with `useMemo` and `React.memo` for components
+- **Minimize context dependencies** by using only the specific hooks you need
 
 #### Type Safety
 - Define comprehensive TypeScript interfaces
@@ -690,6 +962,23 @@ const playSound = (audioFile: string) => {
     audio.volume = volume.effects;
     audio.play();
 };
+```
+
+#### Context Usage Optimization
+Use selective hooks for better performance:
+
+```typescript
+// Instead of: const { currentUser, allAchievements, ...actions } = useGameStore();
+// Use selective hooks:
+import { 
+    useCurrentUser, 
+    useGameActions, 
+    useTranslationFunction 
+} from '@/hooks/useSelectiveContext';
+
+const currentUser = useCurrentUser();           // Only re-renders on user changes
+const { addGameRecord } = useGameActions();     // Only actions, no data subscription
+const t = useTranslationFunction();             // Only translation function
 ```
 
 #### Error Handling
@@ -741,10 +1030,13 @@ Outline of testing approach and tools:
 - [x] **Translation Import**: Translation lazy import path aligned with languages folder structure
 - [ ] **Performance**: Build size and asset optimization pending; large asset bundles not yet optimized
 - [x] **Notifications**: Notification UX/toasts implemented with update integration
-- [ ] **Migration**: Achievement threshold reduction function needed for legacy user data updates
+- [x] **Context Performance**: Context splitting and selective hooks implemented for optimal performance
+- [x] **Migration**: Achievement threshold reduction function needed for legacy user data updates
 - [ ] **Feature Flags**: Temporary feature disable controller needed for gradual rollouts across patches
 - [ ] **Testing Coverage**: E2E tests and comprehensive component test coverage pending
-- [ ] **Documentation**: API documentation and component storybook missing
+- [x] **Documentation**: API documentation and component storybook missing
+- [x] **Context Architecture**: Split contexts implemented for data/actions separation and performance optimization
+- [x] **Game Timer Hook**: Centralized timer logic could be extracted to a shared hook for consistency across games
 
 ## Future Improvements
 
@@ -757,11 +1049,8 @@ Outline of testing approach and tools:
 - **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
 - **CI/CD Pipeline**: GitHub Actions for automated testing, building, and releases
 - **Feature Management**: Temporary feature toggle system for gradual rollouts
-- **Data Migration**: Robust migration system for user data format changes
-
-## Appendix
-
-### Note on Tailwind CSS
-
-Although Tailwind CSS was initially considered and planned for this project, the idea was abandoned during development. The main reason: rewriting the already completed migration from CSS to SCSS once again seemed unreasonable and, in practice, would not be a skill-building exercise but a waste of time, especially considering that the React part of the project was already being rewritten for the second time.
+- **Context Optimization**: Further context splitting based on usage patterns and performance monitoring
+- **Game Timer System**: Centralized timer hook for consistent timing across all games
+- **Advanced Game Analytics**: Detailed performance metrics and user behavior tracking
+- **Context Documentation**: Comprehensive documentation for the selective context hook system
 
