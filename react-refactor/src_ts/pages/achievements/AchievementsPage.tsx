@@ -146,7 +146,12 @@ function AchievementsPage() {
                                 onClick={() => navigate('/')} />
                     </div>
                 </div>
-                <div className="container-content" style={{marginTop: '18px', padding: '0 35px'}}>
+                <div className="container-content" 
+                     style={{
+                        padding: '0 35px',
+                        margin: '20px 0',
+                        height: 'calc(100% - 112px)'
+                     }}>
                     <ul className="achievement-list">
                         {rows.map((r, idx) => {
                             const key = `${r.gameId}|${r.gameProps}`;
@@ -158,7 +163,6 @@ function AchievementsPage() {
                                         {variants.map((variant, i) => {
                                             const achieved = unlocked[idxMap[i]] ?? false;
                                             const cls = `trophy ${variant}${achieved ? '' : ' locked'}`;
-                                            const size = variant === 'gold' ? 80 : variant === 'silver' ? 70 : 60;
                                             // Use masked Icon so color/background comes from CSS class
                                             return (
                                                 <Icon
@@ -166,7 +170,6 @@ function AchievementsPage() {
                                                     name="medal"
                                                     masked
                                                     className={cls}
-                                                    size={size}
                                                     aria-hidden={true}
                                                 />
                                             );

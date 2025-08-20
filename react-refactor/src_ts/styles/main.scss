@@ -2,6 +2,7 @@
 @use './fonts';
 @use './colors';
 @use './images';
+@use './responsive';
 
 // components
 @use './components/layouts';
@@ -22,6 +23,8 @@
 @use './modules/catalog.scss';
 @use './modules/settings.scss';
 @use './games/queens.scss';
+@use './games/shulte.scss';
+@use './games/digit.scss';
 
 :root {
   	--brand-primary: #eb92be;
@@ -39,11 +42,20 @@ body {
   	display: flex;
   	justify-content: center;
   	align-items: center;
-  	height: 100vh;
+  	min-height: 100vh;
   	margin: 0;
+  	padding: 10px;
+  	box-sizing: border-box;
 }
 
-.page-content { width: 100%; height: 100%; }
+.page-content { 
+	width: 100%; 
+	height: 100%;
+	max-height: 100vh; 
+	max-width: 100vw;
+	overflow: hidden;
+	box-sizing: border-box;
+}
 .menu-card {
   	background-color: colors.$background;
   	border: 1px solid colors.$primary;
@@ -109,3 +121,64 @@ body {
 //     opacity: 1;
 //     visibility: visible;
 // }
+
+/* Адаптивные стили для различных разрешений экрана */
+* {
+	box-sizing: border-box;
+}
+
+/* Большие экраны (от 1920px) */
+@media screen and (min-width: 1920px) {
+	html {
+		font-size: 110%;
+	}
+}
+
+/* Средние экраны (1366px - 1919px) */
+@media screen and (max-width: 1919px) and (min-width: 1366px) {
+	html {
+		font-size: 100%;
+	}
+}
+
+/* Малые экраны (1280px - 1365px) */
+@media screen and (max-width: 1365px) and (min-width: 1280px) {
+	html {
+		font-size: 90%;
+	}
+}
+
+/* Очень малые экраны (1024px - 1279px) */
+@media screen and (max-width: 1279px) and (min-width: 1024px) {
+	html {
+		font-size: 80%;
+	}
+	
+	body {
+		padding: 5px;
+	}
+}
+
+/* Планшеты (768px - 1023px) */
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+	html {
+		font-size: 70%;
+	}
+	
+	body {
+		padding: 2px;
+	}
+}
+
+/* Мобильные устройства (до 767px) */
+@media screen and (max-width: 767px) {
+	html {
+		font-size: 60%;
+	}
+	
+	body {
+		padding: 1px;
+		min-height: 100vh;
+		align-items: flex-start;
+	}
+}

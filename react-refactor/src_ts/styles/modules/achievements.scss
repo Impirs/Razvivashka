@@ -22,6 +22,7 @@
     border-radius: 8px;
     background-color: colors.$fourth;
     box-sizing: border-box;
+    max-width: 100%;
 }
 
 .trophies {
@@ -57,5 +58,126 @@
         color: colors.$text_secondary;
         margin: 0;
         text-align: left;
+    }
+}
+
+/* Адаптивные стили для достижений */
+@media screen and (max-width: 1440px) {
+    .trophies .trophy {
+        &.gold { width: 75px; height: 75px; }
+        &.silver { width: 65px; height: 65px; }
+        &.bronze { width: 55px; height: 55px; }
+    }
+}
+
+@media screen and (max-width: 1365px) {
+    .achievement {
+        width: 900px;
+        height: 86px;
+        gap: 14px;
+        padding: 8px 16px;
+    }
+
+    .trophies .trophy {
+        &.gold { width: 70px; height: 70px; }
+        &.silver { width: 60px; height: 60px; }
+        &.bronze { width: 50px; height: 50px; }
+    }
+
+    .achievement-text h3 {
+        font-size: 22px;
+    }
+}
+
+@media screen and (max-width: 1279px) {
+    .achievement {
+        width: 700px;
+        height: 76px;
+        gap: 12px;
+        padding: 6px 14px;
+    }
+
+    .trophies .trophy {
+        &.gold { width: 65px; height: 65px; }
+        &.silver { width: 55px; height: 55px; }
+        &.bronze { width: 45px; height: 45px; }
+    }
+
+    .achievement-text h3 {
+        font-size: 18px;
+    }
+    
+    .achievement-text p {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .trophies .trophy {
+        &.gold { width: 60px; height: 60px; }
+        &.silver { width: 50px; height: 50px; }
+        &.bronze { width: 40px; height: 40px; }
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .achievement {
+        width: 100%;
+        height: 70px;
+        gap: 10px;
+        padding: 5px 12px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .trophies {
+        grid-gap: 6px;
+        
+        .trophy {
+            &.gold { width: 50px; height: 50px; }
+            &.silver { width: 42px; height: 42px; }
+            &.bronze { width: 34px; height: 34px; }
+        }
+    }
+
+    .achievement-text h3 {
+        font-size: 16px;
+    }
+    
+    .achievement-text p {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .achievement {
+        height: 60px;
+        gap: 8px;
+        padding: 4px 8px;
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .trophies {
+        grid-gap: 4px;
+        
+        .trophy {
+            &.gold { width: 40px; height: 40px; }
+            &.silver { width: 34px; height: 34px; }
+            &.bronze { width: 28px; height: 28px; }
+        }
+    }
+
+    .achievement-text {
+        text-align: center;
+        
+        h3 {
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        p {
+            font-size: 10px;
+            text-align: center;
+        }
     }
 }

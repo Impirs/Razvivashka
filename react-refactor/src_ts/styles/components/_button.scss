@@ -1,5 +1,220 @@
 @use '../colors';
 
+.ui-button {
+    font-family: 'Snide hand';
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid colors.$primary;
+    font-size: 25px;
+    background-color: colors.$fourth;
+    color: colors.$text_secondary;
+    cursor: pointer;
+    transition: 
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s;
+
+    .ui-button__icon,
+    .nav-btn-icon {
+        width: 48px;
+        height: 48px;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+
+        > span {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    /* Базовые адаптивные стили для ui-button */
+    @media screen and (max-width: 1279px) {
+        font-size: 22px;
+        
+        .ui-button__icon,
+        .nav-btn-icon {
+            width: 42px;
+            height: 42px;
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        font-size: 18px;
+        
+        .ui-button__icon,
+        .nav-btn-icon {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        font-size: 16px;
+        
+        .ui-button__icon,
+        .nav-btn-icon {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    &.small {
+        height: 58px;
+        width: 58px;
+        border-radius: 16px;
+        justify-content: center;
+        
+        .ui-button__icon,
+        .nav-btn-icon {
+            margin: 0;
+
+            > span {
+                background: colors.$primary;
+            }
+        }
+        
+        h2, .ui-button__label {
+            display: none;
+        }
+
+        &:hover {
+            border: 1px solid colors.$third;
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                > span {
+                    background: colors.$third;
+                }
+            }
+        }
+
+        /* Адаптивные стили для малых навигационных кнопок */
+        @media screen and (max-width: 1279px) {
+            height: 52px;
+            width: 52px;
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                width: 42px;
+                height: 42px;
+            }
+        }
+
+        @media screen and (max-width: 1023px) {
+            height: 46px;
+            width: 46px;
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            height: 40px;
+            width: 40px;
+            border-radius: 12px;
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+
+    &.large {
+        height: 84px;
+        padding: 10px 24px;
+        border-radius: 16px;
+        width: 340px;
+        justify-content: flex-start;
+        
+        .ui-button__icon,
+        .nav-btn-icon {
+            margin-right: 20px;
+
+            > span {
+                background: linear-gradient(320deg, colors.$primary, 
+                                                    colors.$secondary, 
+                                                    colors.$third);
+            }
+        }
+        
+        h2, .ui-button__label {
+            margin: 0;
+            width: auto;
+            font-size: 25px;
+            color: colors.$text_secondary;
+        }
+
+        &:hover {
+            color: colors.$third;
+            background-color: colors.$hover;
+            border: 2px solid colors.$third;
+
+            h2, .ui-button__label {
+                color: colors.$third;
+            }
+        }
+
+        /* Адаптивные стили для больших навигационных кнопок */
+        @media screen and (max-width: 1279px) {
+            width: 300px;
+            height: 75px;
+            padding: 8px 20px;
+            
+            h2, .ui-button__label {
+                font-size: 22px;
+            }
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                margin-right: 16px;
+            }
+        }
+
+        @media screen and (max-width: 1023px) {
+            width: 260px;
+            height: 68px;
+            padding: 6px 16px;
+            
+            h2, .ui-button__label {
+                font-size: 18px;
+            }
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                margin-right: 12px;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            width: 240px;
+            height: 60px;
+            padding: 5px 12px;
+            
+            h2, .ui-button__label {
+                font-size: 16px;
+            }
+            
+            .ui-button__icon,
+            .nav-btn-icon {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
 .nav-button {
     font-family: 'Snide hand';
     position: relative;
@@ -34,6 +249,34 @@
         }
     }
 
+    /* Базовые адаптивные стили для nav-button */
+    @media screen and (max-width: 1279px) {
+        font-size: 22px;
+        
+        .nav-btn-icon {
+            width: 42px;
+            height: 42px;
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        font-size: 18px;
+        
+        .nav-btn-icon {
+            width: 36px;
+            height: 36px;
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        font-size: 16px;
+        
+        .nav-btn-icon {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
     &.small {
         height: 58px;
         width: 58px;
@@ -56,6 +299,38 @@
                 > span {
                     background: colors.$third;
                 }
+            }
+        }
+
+        /* Адаптивные стили для малых навигационных кнопок */
+        @media screen and (max-width: 1279px) {
+            height: 52px;
+            width: 52px;
+            
+            .nav-btn-icon {
+                width: 42px;
+                height: 42px;
+            }
+        }
+
+        @media screen and (max-width: 1023px) {
+            height: 46px;
+            width: 46px;
+            
+            .nav-btn-icon {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            height: 40px;
+            width: 40px;
+            border-radius: 12px;
+            
+            .nav-btn-icon {
+                width: 30px;
+                height: 30px;
             }
         }
     }
@@ -97,7 +372,10 @@
     border-radius: 16px;
 	background: colors.$fourth;
 	padding: 6px;
-	width: 272px;	
+    text-align: center !important;
+    justify-content: center !important;
+    height: 64px !important;
+	width: 272px !important;
 	cursor: pointer;
 	box-shadow: 0 2px 8px colors.$shadow;
 	transition: transform 0.05s ease, background 0.15s ease, box-shadow 0.15s ease;
@@ -120,5 +398,82 @@
     
     &:active {
         background: rgba(colors.$primary, 0.5);
+    }
+}
+
+    /* Адаптивные стили для кнопок */
+@media screen and (max-width: 1599px) {
+
+    .nav-button {
+        width: 300px;
+        height: 75px;
+        padding: 8px 20px;
+        
+        h2, .ui-button__label {
+            font-size: 22px;
+        }
+        
+        .nav-btn-icon {
+            margin-right: 16px;
+        }
+    }
+
+    .game-button {
+        width: 224px !important;
+        padding: 5px;
+        
+        h2, .ui-button__label {
+            font-size: 22px;
+        }
+    }
+}
+@media screen and (max-width: 1365px) {
+    
+    .nav-button {
+        width: 260px;
+        height: 68px;
+        padding: 6px 16px;
+        
+        h2, .ui-button__label {
+            font-size: 18px;
+        }
+        
+        .nav-btn-icon {
+            margin-right: 12px;
+        }
+    }
+
+    .game-button {
+        width: 180px !important;
+        padding: 4px;
+        
+        h2, .ui-button__label {
+            font-size: 18px;
+        }
+    }
+}
+@media screen and (max-width: 1023px) {
+
+    .nav-button {
+        width: 240px;
+        height: 60px;
+        padding: 5px 12px;
+        
+        h2, .ui-button__label {
+            font-size: 16px;
+        }
+        
+        .nav-btn-icon {
+            margin-right: 10px;
+        }
+    }
+    
+    .game-button {
+        width: 180px !important;
+        padding: 3px;
+
+        h2, .ui-button__label {
+            font-size: 16px;
+        }
     }
 }

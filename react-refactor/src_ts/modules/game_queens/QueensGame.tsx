@@ -120,14 +120,11 @@ function QueensGame({ settings }: QueensGameProps) {
 		}
 	};
 
-	const size = settings.size;
-	const cellPx = 480 / size;
-
 	return (
 		<section className="game-main-panel queens-panel">
 			<header className="game-utils-panel">
 				<div className="queens-remaining" aria-label="remaining">
-					<Icon name="queen" size={32} color='#1c274c'/>
+					<Icon name="queen" color='#1c274c'/>
 					<span style={{ marginLeft: 8, fontFamily:"PlayBall" }}>{remaining}</span>
 				</div>
 				<div/>
@@ -150,7 +147,7 @@ function QueensGame({ settings }: QueensGameProps) {
                         <h3>
                             {t('game-info.queens.instruction')}
                         </h3>
-							<hr className="q-sep" />
+						<hr className="q-sep" />
                         <p>{t('game-info.queens.tutorial')}</p>
 					</div>
 				)}
@@ -164,7 +161,7 @@ function QueensGame({ settings }: QueensGameProps) {
 				{status === 'playing' && (
 					<div
 						key={`${settings.size}-${startedAt ?? 'na'}`}
-						className={`queens-board size-${size}`}
+						className={`queens-board size-${settings.size}`}
 						onMouseLeave={() => setDragFrom(null)}
 					>
 						{board.map((rowArr, r) =>
@@ -192,7 +189,6 @@ function QueensGame({ settings }: QueensGameProps) {
 									>
 										{cell.hasQueen && <Icon name="queen" 
                                                                 className="q-piece" 
-                                                                size={cellPx / 2}
                                                                 color='#1c274c'
                                                             />}
 										{!cell.hasQueen && isBlocked && (

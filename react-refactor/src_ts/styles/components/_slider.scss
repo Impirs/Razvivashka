@@ -52,4 +52,32 @@ $volume-track-bg: colors.$background;
     &__input:active::-webkit-slider-thumb { 
         background: colors.$primary;
     }
+
+    /* Адаптивные стили для слайдера */
+    @media screen and (max-width: 1279px) {
+        gap: 10px;
+        height: 42px;
+        
+        &__input {
+            height: 42px;
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        gap: 8px;
+        height: 36px;
+        
+        &__input {
+            height: 36px;
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        gap: 6px;
+        height: 30px;
+        
+        &__input {
+            height: 30px;
+        }
+    }
 }

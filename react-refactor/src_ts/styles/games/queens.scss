@@ -17,6 +17,11 @@
 		background: colors.$fourth;
 		font-size: 22px;
 		color: colors.$text_secondary;
+
+		> img {
+			width: 32px;
+			height: 32px;
+		}
 	}
 
 	.queens-board {
@@ -25,11 +30,11 @@
 		gap: 2px;
 		max-width: 620px;
 
-		&.size-4 { grid-template-columns: repeat(4, calc(480px / 4)); }
-		&.size-5 { grid-template-columns: repeat(5, calc(480px / 5)); }
-		&.size-6 { grid-template-columns: repeat(6, calc(480px / 6)); }
-		&.size-7 { grid-template-columns: repeat(7, calc(480px / 7)); }
-		&.size-8 { grid-template-columns: repeat(8, calc(480px / 8)); }
+		&.size-4 { grid-template-columns: repeat(4, calc(520px / 4)); }
+		&.size-5 { grid-template-columns: repeat(5, calc(520px / 5)); }
+		&.size-6 { grid-template-columns: repeat(6, calc(520px / 6)); }
+		&.size-7 { grid-template-columns: repeat(7, calc(520px / 7)); }
+		&.size-8 { grid-template-columns: repeat(8, calc(520px / 8)); }
 	}
 
 	.q-cell {
@@ -84,6 +89,65 @@
 	@for $i from 0 through 7 {
 		.q-cell.region-#{$i} {
 			background: list.nth($region-colors, $i + 1);
+		}
+	}
+
+}
+
+@media screen and (max-width: 1599px) {
+	.queens-panel {
+		.queens-remaining {
+			width: 140px;
+			height: 42px;
+			font-size: 20px;
+		}
+	
+		.queens-board {
+			max-width: 520px;
+		
+			&.size-4 { grid-template-columns: repeat(4, calc(440px / 4)); }
+			&.size-5 { grid-template-columns: repeat(5, calc(440px / 5)); }
+			&.size-6 { grid-template-columns: repeat(6, calc(440px / 6)); }
+			&.size-7 { grid-template-columns: repeat(7, calc(440px / 7)); }
+			&.size-8 { grid-template-columns: repeat(8, calc(440px / 8)); }
+		}
+	
+		.q-cell .q-piece {
+			width: 22px;
+			height: 22px;
+		}
+	
+		.q-cell .q-blocked {
+			font-size: 18px;
+		}
+	}
+}
+
+@media screen and (max-width: 1365px) {
+	.queens-panel {
+		.queens-remaining {
+			width: 120px;
+			height: 36px;
+			font-size: 16px;
+		}
+
+		.queens-board {
+			max-width: 420px;
+
+			&.size-4 { grid-template-columns: repeat(4, calc(420px / 4)); }
+			&.size-5 { grid-template-columns: repeat(5, calc(420px / 5)); }
+			&.size-6 { grid-template-columns: repeat(6, calc(420px / 6)); }
+			&.size-7 { grid-template-columns: repeat(7, calc(420px / 7)); }
+			&.size-8 { grid-template-columns: repeat(8, calc(420px / 8)); }
+		}
+
+		.q-cell .q-piece {
+			width: 18px;
+			height: 18px;
+		}
+
+		.q-cell .q-blocked {
+			font-size: 14px;
 		}
 	}
 }

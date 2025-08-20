@@ -61,6 +61,8 @@
             }
 
             .ui-button__icon > span {
+                width: 32px;
+                height: 32px;
                 background: colors.$primary;
             }
 
@@ -78,6 +80,8 @@
         border: 2px solid colors.$error;
 
         .ui-button__icon > span {
+            width: 32px;
+            height: 32px;
             background: colors.$error;
         }
 
@@ -86,6 +90,8 @@
             border-color: #d32f2f;
             
             .ui-button__icon > span {
+                width: 32px;
+                height: 32px;
                 background: #d32f2f;
             }
         }
@@ -96,6 +102,8 @@
             border-color: colors.$locked;
             
             .ui-button__icon > span {
+                width: 32px;
+                height: 32px;
                 background: colors.$locked;
             }
         }

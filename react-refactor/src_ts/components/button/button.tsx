@@ -24,7 +24,7 @@ function Button({ children, size = 'large', leftIcon, iconOnly = false, classNam
          <button className={classes} {...props}>
             {leftIcon && (
                 <span className={cn('nav-btn-icon', 'ui-button__icon')} aria-hidden>
-                    <Icon name={leftIcon} masked size={48} />
+                    <Icon name={leftIcon} masked />
                 </span>
             )}
             {showLabel && <h2 className={cn('ui-button__label')}>{children}</h2>}

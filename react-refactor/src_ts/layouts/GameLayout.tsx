@@ -181,7 +181,9 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                 </main>
             </div>
             <aside className="game-side score_section">
-                <h2>{t("game-menu.records" as any)}</h2>
+                <h2 style={{ margin: '0 0 8px 0' }}>
+                    {t("game-menu.records" as any)}
+                </h2>
                 <div className='scorelist-container'>
                     {renderScoreSection()}
                 </div>

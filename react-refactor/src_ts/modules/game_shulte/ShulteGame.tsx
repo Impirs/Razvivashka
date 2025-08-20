@@ -124,14 +124,13 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
     }, [mistakes, status, seconds]);
 
     return (
-        <section className="game-main-panel">
+        <section className="game-main-panel shulte-panel">
             <header className="game-utils-panel">
                 <div className="mistakes-counter" aria-label="mistakes">
                     {Array.from({ length: 3 }).map((_, i) => (
                         <Icon key={i} 
                             name={i < mistakes ? 'heart-broken' : 'heart'} 
                             color={ i < mistakes ? '#eb92be' : '#232323' }
-                            size={32}
                         />
                     ))}
                 </div>
@@ -168,36 +167,17 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
         {status === 'playing' && (
                     <div
             key={`${settings.size}-${startedAt ?? 'na'}`}
-            className="shulte-board"
-                        style={{
-                            display: "grid",
-                            gap: 10,
-                            gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
-                            // width: '100%',
-                            maxWidth: 620
-                        }}
+            className={`shulte-board size-${settings.size}`}
                     >
                         {board.map((row, rowIndex) =>
                             row.map((cell, colIndex) => (
                                 <div
                                     key={`${rowIndex}-${colIndex}`}
                                     onClick={() => handleCellClick(rowIndex, colIndex)}
-                                    style={{
-                                        fontSize: '22px',
-                                        height: `calc(480px / ${settings.size})`,
-                                        width: `calc(480px / ${settings.size})`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        borderRadius: 8,
-                                        border: '1px solid #9aa3ff',
-                                        background: hideFoundNumber ? 'white' 
-                                                    : (cell.isFound ? "#d6f8d63f" : "white"),
-                                        cursor: "pointer",
-                                        userSelect: "none"
-                                    }}
+                                    className={`shulte-cell ${cell.isFound ? 'found' : ''} 
+                                                ${hideFoundNumber && cell.isFound ? 'hidden' : ''}`}
                                 >
-                                    <span style={{ visibility: (hideFoundNumber && cell.isFound) ? 'hidden' : 'visible' }}>
+                                    <span className="cell-number">
                                         {cell.value}
                                     </span>
                                 </div>

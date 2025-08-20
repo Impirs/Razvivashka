@@ -1,0 +1,94 @@
+@use '../colors';
+
+.shulte-panel {
+	.shulte-board {
+		user-select: none;
+		display: grid;
+		gap: 10px;
+		max-width: 620px;
+
+		&.size-3 { grid-template-columns: repeat(3, calc(480px / 3)); }
+		&.size-4 { grid-template-columns: repeat(4, calc(480px / 4)); }
+		&.size-5 { grid-template-columns: repeat(5, calc(480px / 5)); }
+		&.size-6 { grid-template-columns: repeat(6, calc(480px / 6)); }
+		&.size-7 { grid-template-columns: repeat(7, calc(480px / 7)); }
+		&.size-8 { grid-template-columns: repeat(8, calc(480px / 8)); }
+	}
+
+	.shulte-cell {
+		position: relative;
+		border: 1px solid #9aa3ff;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1 / 1;
+		background: white;
+		cursor: pointer;
+		user-select: none;
+		font-size: 22px;
+		transition: background 0.15s ease, box-shadow 0.15s ease;
+
+		&.found {
+			background: #f4f6ff;
+		}
+
+		&:hover {
+			background: #f4f6ff;
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+
+		.cell-number {
+			transition: visibility 0.2s ease;
+		}
+
+		&.hidden .cell-number {
+			visibility: hidden;
+		}
+	}
+}
+
+@media screen and (max-width: 1599px) {
+	.shulte-panel {
+		.shulte-board {
+			max-width: 520px;
+			gap: 8px;
+
+			&.size-3 { grid-template-columns: repeat(3, calc(440px / 3)); }
+			&.size-4 { grid-template-columns: repeat(4, calc(440px / 4)); }
+			&.size-5 { grid-template-columns: repeat(5, calc(440px / 5)); }
+			&.size-6 { grid-template-columns: repeat(6, calc(440px / 6)); }
+			&.size-7 { grid-template-columns: repeat(7, calc(440px / 7)); }
+			&.size-8 { grid-template-columns: repeat(8, calc(440px / 8)); }
+		}
+
+		.shulte-cell {
+			font-size: 20px;
+			border-radius: 6px;
+		}
+	}
+}
+
+@media screen and (max-width: 1365px) {
+	.shulte-panel {
+		.shulte-board {
+			max-width: 400px;
+			gap: 6px;
+
+			&.size-3 { grid-template-columns: repeat(3, calc(400px / 3)); }
+			&.size-4 { grid-template-columns: repeat(4, calc(400px / 4)); }
+			&.size-5 { grid-template-columns: repeat(5, calc(400px / 5)); }
+			&.size-6 { grid-template-columns: repeat(6, calc(400px / 6)); }
+			&.size-7 { grid-template-columns: repeat(7, calc(400px / 7)); }
+			&.size-8 { grid-template-columns: repeat(8, calc(400px / 8)); }
+		}
+
+		.shulte-cell {
+			font-size: 18px;
+			border-radius: 4px;
+		}
+	}
+}

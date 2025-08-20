@@ -164,14 +164,13 @@ function DigitGame({ settings }: DigitGameProps) {
     }, [mistakes, status]);
 
     return (
-        <section className="game-main-panel">
+        <section className="game-main-panel digit-panel">
             <header className="game-utils-panel">
                 <div className="mistakes-counter" aria-label="mistakes">
                     {Array.from({ length: 3 }).map((_, i) => (
                         <Icon key={i} 
                             name={i < mistakes ? 'heart-broken' : 'heart'} 
                             color={ i < mistakes ? '#eb92be' : '#232323' }
-                            size={32}
                         />
                     ))}
                 </div>
@@ -206,27 +205,20 @@ function DigitGame({ settings }: DigitGameProps) {
                     </div>
                 )}
                 {status === 'playing' && (
-                    <div key={`${settings.size}-${startedAt ?? 'na'}`} className="digit-board" style={{
-                        display: 'grid',
-                        gap: 10,
-                        gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
-                        // width: '100%',
-                        maxWidth: 620
-                    }}>
+                    <div key={`${settings.size}-${startedAt ?? 'na'}`} className={`digit-board size-${settings.size}`}>
                         {board.map((rowArr, row) =>
                             rowArr.map((num, col) => {
                                 const selectable = num !== null && isNextToEmpty(board, row, col);
                                 const isSelected = selected.some(s => s.row === row && s.col === col);
-                                const background = num === null
-                                    ? '#f4f6ff'
-                                    : assistHighlight
-                                        ? (isSelected
-                                            ? '#e8f2ff'
-                                            : selectable
-                                                ? 'white'
-                                                : '#eef1ff')
-                                        : 'white';
-                                const cursor = num === null ? 'default' : 'pointer';
+                                
+                                let cellClass = 'digit-cell';
+                                if (num === null) cellClass += ' empty';
+                                else if (isSelected) cellClass += ' selected';
+                                else if (assistHighlight) {
+                                    if (selectable) cellClass += ' selectable';
+                                    else cellClass += ' unavailable';
+                                }
+                                
                                 const color = num === null ? '#9aa3ff' : (assistHighlight ? (selectable ? 'inherit' : '#8b91a8') : 'inherit');
                                 const title = num === null
                                     ? t('game-info.digit.empty')
@@ -236,30 +228,14 @@ function DigitGame({ settings }: DigitGameProps) {
                                 return (
                                     <div
                                         key={`${row}-${col}`}
-                                        className="cell"
+                                        className={cellClass}
                                         aria-disabled={assistHighlight ? (num !== null && !selectable) : false}
                                         aria-label={title}
                                         data-tooltip={title}
                                         title={title}
-                                        style={{
-                                            fontSize: '22px',
-                                            height: `calc(480px / ${settings.size})`,
-                                            width: `calc(480px / ${settings.size})`,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: 8,
-                                            border: '1px solid #9aa3ff',
-                                            background,
-                                            cursor,
-                                            userSelect: 'none',
-                                            fontWeight: isSelected ? 700 : 500,
-                                            boxShadow: isSelected ? '0 0 0 4px rgba(154,163,255,0.5) inset' : 'none',
-                                            transition: 'background 0.15s ease, box-shadow 0.15s ease'
-                                        }}
                                         onClick={() => handleCellClick(row, col)}
                                     >
-                                        <span style={{ color }}>{num}</span>
+                                        <span className="cell-number" style={{ color }}>{num}</span>
                                     </div>
                                 );
                             })

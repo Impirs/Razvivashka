@@ -101,7 +101,9 @@ const UserManager= ({ className } : UserManagerProps ) => {
                     aria-label="toggle-user-list"
                 >
                     <span className='ui-button__icon' aria-hidden>
-                        <Icon name={isDropdownOpen ? "up-arrow" : "down-arrow"} masked size={32} />
+                        <Icon name={isDropdownOpen ? "up-arrow" : "down-arrow"} 
+                            masked
+                        />
                     </span>
                 </button>
             </div>
@@ -112,7 +114,7 @@ const UserManager= ({ className } : UserManagerProps ) => {
                     aria-label="delete-current-user"
             >
                 <span className='ui-button__icon' aria-hidden>
-                    <Icon name="delete" masked size={32} />
+                    <Icon name="delete" masked/>
                 </span>
             </button>
 
