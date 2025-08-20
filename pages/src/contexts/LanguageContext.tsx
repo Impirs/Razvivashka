@@ -27,7 +27,19 @@ const translations = {
     'theme.toggle': 'Toggle theme',
     'language.toggle': 'Русский',
     'footer.description': 'Brain training games to improve memory, attention and cognitive skills',
-    'footer.copyright': '© 2025 Razvivashka. Made with ❤️ for brain training'
+    'footer.copyright': '© 2025 Razvivashka. Made with ❤️ for brain training',
+    'update.title': 'Update Play and Learn',
+    'update.loading': 'Loading update information...',
+    'update.error': 'Error loading update information',
+    'update.noReleases': 'No releases available',
+    'update.downloadExe': 'Download .exe',
+    'update.downloadZip': 'Download .zip',
+    'update.backToHome': 'Back to Home',
+    'update.releaseNotes': 'Release Notes',
+    'update.currentVersion': 'Latest Version',
+    'welcome.updateApp': '🔄 Update App',
+    'welcome.updateAppDesc': 'Check for updates and download the latest version.',
+    'welcome.checkUpdates': 'Check for Updates'
   },
   ru: {
     'nav.welcome': 'Главная',
@@ -36,7 +48,19 @@ const translations = {
     'theme.toggle': 'Переключить тему',
     'language.toggle': 'English',
     'footer.description': 'Развивающие игры для тренировки мозга и улучшения когнитивных способностей',
-    'footer.copyright': '© 2025 Razvivashka. Создано с ❤️ для тренировки мозга'
+    'footer.copyright': '© 2025 Razvivashka. Создано с ❤️ для тренировки мозга',
+    'update.title': 'Обновление Play and Learn',
+    'update.loading': 'Загрузка информации об обновлении...',
+    'update.error': 'Ошибка загрузки информации об обновлении',
+    'update.noReleases': 'Нет доступных релизов',
+    'update.downloadExe': 'Скачать .exe',
+    'update.downloadZip': 'Скачать .zip',
+    'update.backToHome': 'Вернуться на главную',
+    'update.releaseNotes': 'Описание изменений',
+    'update.currentVersion': 'Последняя версия',
+    'welcome.updateApp': '🔄 Обновить приложение',
+    'welcome.updateAppDesc': 'Проверьте обновления и скачайте последнюю версию.',
+    'welcome.checkUpdates': 'Проверить обновления'
   }
 }
 

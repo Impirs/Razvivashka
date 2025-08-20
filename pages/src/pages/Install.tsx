@@ -91,8 +91,12 @@ const Install = () => {
                         href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
+                        className="p-4 rounded-lg shadow hover:shadow-md transition-all duration-200 hover:scale-105"
+                        style={{ 
+                            backgroundColor: 'var(--bg-primary)', 
+                            border: '1px solid var(--border-color)',
+                            textDecoration: 'none'
+                        }}
                     >
                         <div className="text-3xl mb-2">💠</div>
                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .exe</h4>
@@ -103,8 +107,12 @@ const Install = () => {
                         href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
+                        className="p-4 rounded-lg shadow hover:shadow-md transition-all duration-200 hover:scale-105"
+                        style={{ 
+                            backgroundColor: 'var(--bg-primary)', 
+                            border: '1px solid var(--border-color)',
+                            textDecoration: 'none'
+                        }}
                     >
                         <div className="text-3xl mb-2">💠</div>
                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .zip</h4>
@@ -115,8 +123,12 @@ const Install = () => {
                         // href="https://github.com/Impirs/Razvivashka/releases" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
+                        className="p-4 rounded-lg shadow hover:shadow-md transition-all duration-200 hover:scale-105"
+                        style={{ 
+                            backgroundColor: 'var(--bg-primary)', 
+                            border: '1px solid var(--border-color)',
+                            textDecoration: 'none'
+                        }}
                     >
                         <div className="text-3xl mb-2">🍎</div>
                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>macOS .dmg</h4>

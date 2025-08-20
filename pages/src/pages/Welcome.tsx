@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Welcome = () => {
     const { content, loading, error } = useMarkdownContent('welcome')
-    const { language } = useLanguage()
+    const { language, t } = useLanguage()
     const navigate = useNavigate()
 
     const handleDownloadClick = () => {
@@ -19,6 +19,10 @@ const Welcome = () => {
 
     const handleDocsClick = () => {
         navigate('/docs')
+    }
+
+    const handleUpdateClick = () => {
+        navigate('/update')
     }
 
     if (loading) {
@@ -63,7 +67,7 @@ const Welcome = () => {
         <div className="rounded-xl shadow-lg p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
             <MarkdownRenderer content={content} />
             
-            <div className="mt-8 grid md:grid-cols-3 gap-6">
+            <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="text-white p-6 rounded-lg" 
                     style={{ background: 'linear-gradient(to right, #10b981, #059669)' }}>
                     <h3 className="text-xl font-bold mb-3">{startTrainingText}</h3>
@@ -72,6 +76,17 @@ const Welcome = () => {
                             style={{ color: '#059669' }}
                             onClick={handleDownloadClick}>
                         {downloadText}
+                    </button>
+                </div>
+
+                <div className="text-white p-6 rounded-lg"
+                    style={{ background: 'linear-gradient(to right, #8b5cf6, #7c3aed)' }}>
+                    <h3 className="text-xl font-bold mb-3">{t('welcome.updateApp')}</h3>
+                    <p className="mb-4">{t('welcome.updateAppDesc')}</p>
+                    <button className="bg-white px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                            style={{ color: '#7c3aed' }}
+                            onClick={handleUpdateClick}>
+                        {t('welcome.checkUpdates')}
                     </button>
                 </div>
 

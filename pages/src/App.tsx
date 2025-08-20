@@ -6,6 +6,7 @@ import Layout from './components/Layout'
 import Welcome from './pages/Welcome'
 import Install from './pages/Install'
 import Docs from './pages/Docs'
+import Update from './pages/Update'
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                         <Route path="/welcome" element={<Welcome />} />
                         <Route path="/install" element={<Install />} />
                         <Route path="/docs" element={<Docs />} />
+                        <Route path="/update" element={<Update />} />
                     </Routes>
                 </Layout>
             </LanguageProvider>
