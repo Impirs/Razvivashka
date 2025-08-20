@@ -6,7 +6,8 @@ import { HashRouter as Router, Routes, Route, useParams } from 'react-router-dom
 // TS providers
 import { LanguageProvider } from './contexts/i18n';
 import { NotificationProvider } from './contexts/notifProvider';
-import { GameStoreProvider } from './contexts/gamestore';
+import { GameStoreDataProvider } from './contexts/gameStoreData';
+import { GameStoreActionsProvider } from './contexts/gameStoreActions';
 import { SettingsProvider } from './contexts/pref';
 
 // TS pages
@@ -44,7 +45,6 @@ function AppContent() {
 				<Route path="/settings" element={<SettingsPage />} />
 				<Route path="/achievements" element={<AchievementPage />} />
 			</Routes>
-			<NotificationDisplay />
 		</>
 	);
 }
@@ -52,15 +52,22 @@ function AppContent() {
 function App() {
 	return (
 		<SettingsProvider>
-		<LanguageProvider>
-			<Router>
-				<NotificationProvider>
-				<GameStoreProvider>
-					<AppContent />
-				</GameStoreProvider>
-				</NotificationProvider>
-			</Router>
-		</LanguageProvider>
+			<LanguageProvider>
+				<Router>
+					<div style={{ display: 'contents' }}>
+						{/* Game data and actions - separated for better performance */}
+						<GameStoreDataProvider>
+							<GameStoreActionsProvider>
+								{/* Notification system - isolated from game data */}
+								<NotificationProvider>
+									<AppContent />
+									<NotificationDisplay />
+								</NotificationProvider>
+							</GameStoreActionsProvider>
+						</GameStoreDataProvider>
+					</div>
+				</Router>
+			</LanguageProvider>
 		</SettingsProvider>
 	);
 }

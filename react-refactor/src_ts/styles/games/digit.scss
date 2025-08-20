@@ -1,0 +1,100 @@
+@use '../colors';
+
+.digit-panel {
+
+	.digit-board {
+		user-select: none;
+		display: grid;
+		gap: 10px;
+		max-width: 620px;
+
+		&.size-7 { grid-template-columns: repeat(7, calc(480px / 7)); }
+		&.size-9 { grid-template-columns: repeat(9, calc(480px / 9)); }
+	}
+
+	.digit-cell {
+		font-family: 'Snide hand';
+		position: relative;
+		border: 1px solid #9aa3ff;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1 / 1;
+		background: white;
+		cursor: pointer;
+		user-select: none;
+		font-size: 22px;
+		font-weight: 500;
+		transition: background 0.15s ease, box-shadow 0.15s ease;
+
+		&.empty {
+			background: #f4f6ff;
+			cursor: default;
+			
+			.cell-number {
+				color: #9aa3ff;
+			}
+		}
+
+		&.selected {
+			background: #e8f2ff;
+			font-weight: 700;
+			box-shadow: 0 0 0 4px rgba(154, 163, 255, 0.5) inset;
+		}
+
+		&.selectable {
+			background: white;
+			
+			&:hover {
+				background: #f8faff;
+			}
+		}
+
+		&.unavailable {
+			background: #eef1ff;
+			
+			.cell-number {
+				color: #8b91a8;
+			}
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+	}
+}
+
+@media screen and (max-width: 1599px) {
+	.digit-panel {
+		.digit-board {
+			max-width: 520px;
+			gap: 8px;
+
+		    &.size-7 { grid-template-columns: repeat(7, calc(400px / 7)); }
+		    &.size-9 { grid-template-columns: repeat(9, calc(400px / 9)); }
+		}
+
+		.digit-cell {
+			font-size: 20px;
+			border-radius: 6px;
+		}
+	}
+}
+
+@media screen and (max-width: 1365px) {
+	.digit-panel {
+		.digit-board {
+			max-width: 440px;
+			gap: 6px;
+
+		    &.size-7 { grid-template-columns: repeat(7, calc(400px / 7)); }
+		    &.size-9 { grid-template-columns: repeat(9, calc(400px / 9)); }
+		}
+
+		.digit-cell {
+			font-size: 18px;
+			border-radius: 4px;
+		}
+	}
+}

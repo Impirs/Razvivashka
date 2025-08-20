@@ -1,8 +1,8 @@
+import React from 'react';
 import { useNotification } from '../../contexts/notifProvider';
 import Icon from '@/components/icon/icon';
-// import { Notification } from '@/types/notification';
 
-const NotificationDisplay = () => {
+const NotificationDisplay = React.memo(() => {
     const { notifications, openNotification, removeNotification } = useNotification();
 
     if (notifications.length === 0) return null;
@@ -18,7 +18,6 @@ const NotificationDisplay = () => {
                 <span className={`notification-icon`}>
                     <Icon
                         name={`${notification.icon}`}
-                        size={48}
                         masked
                     />
                 </span>
@@ -40,6 +39,8 @@ const NotificationDisplay = () => {
             </button>
         </article>
     );
-};
+});
+
+NotificationDisplay.displayName = 'NotificationDisplay';
 
 export default NotificationDisplay;

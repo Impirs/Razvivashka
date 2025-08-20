@@ -1,197 +1,246 @@
 {
     "games": {
-        "all": "Все игры",
-        "digit": "Состав числа",
-        "shulte": "Таблица Шульте",
-        "syllable": "По сло-гам",
-        "sum": "Сумма чисел"
+        "all": "Sve igre",
+        "digit": "Sastav broja",
+        "shulte": "Tabela Šulte",
+        "syllable": "Po slo-govima",
+        "sum": "Zbir brojeva",
+        "queens": "Kraljice"
     },
 
     "types": {
-        "all": "Все категории",
-        "logic": "Логика",
-        "math": "Счет",
-        "reading": "Чтение",
-        "attention": "Внимательность"
+        "all": "Sve kategorije",
+        "logic": "Logika",
+        "math": "Računanje",
+        "reading": "Čitanje",
+        "attention": "Pažnja"
     },
 
     "routes": {
-        "home": "Развивашка",
-        "catalog": "Каталог",
-        "settings": "Настройки",
-        "achievements": "Достижения"
+        "home": "Razvivashka",
+        "catalog": "Katalog",
+        "settings": "Podešavanja",
+        "achievements": "Dostignuća"
     },
 
     "buttons" : {
-        "play": "Играть",
-        "back": "Назад",
-        "next": "Далее",
-        "start": "Начать",
-        "continue": "Продолжить",
-        "settings": "Настройки",
-        "close": "Закрыть",
-        "ok": "ОК",
-        "filter": "Выберите...",
-        "cancel": "Отмена",
-        "apply": "Применить"
+        "play": "Igraj",
+        "back": "Nazad",
+        "next": "Dalje",
+        "start": "Počni",
+        "continue": "Nastavi",
+        "settings": "Podešavanja",
+        "close": "Zatvori",
+        "ok": "OK",
+        "filter": "Izaberite...",
+        "cancel": "Otkaži",
+        "create": "Napravi",
+        "apply": "Primeni"
     },
 
     "game-menu": {
-        "setup": "Настройки игры",
-        "records": "Таблица результатов",
+        "setup": "Podešavanja igre",
+        "records": "Tabela rezultata",
         "bsize": {
-            "standard": "Стандарт",
-            "large": "Большой"
+            "standard": "Standard",
+            "large": "Veliki"
         },
 
         "digit": {
-            "target": "Найти составы числа:",
-            "size": "Размер игрового поля:",
-            "task": "Очисти поле от чисел, которые в сумме дают"
+            "target": "Pronađi sastave broja:",
+            "size": "Veličina igrališta:"
         },
         "shulte": {
-            "size": "Размер игрового поля:",
-            "task": "Очисти поле от чисел, которые в сумме дают"
-        }        
+            "size": "Veličina igrališta:"
+        },
+        "queens": {
+            "size": "Veličina igrališta:"
+        }
     },
 
     "game-info": {
-        "win": "Победа!",
-        "lose": "Неудача!",
-        "your_time": "Затраченное время: ",
-        "your_mistakes": "Количество ошибок: ",
-        "time_rules": "Игра на время. Чем быстрее вы закончите, тем лучше.",
-        "timer_rules": "Игра на время. Когда истечет время, игра закончится.",
-        "mistakes_rules": "Количество ошибок не должно превышать 3-х.",
+        "win": "Pobeda!",
+        "lose": "Neuspeh!",
+        "your_time": "Potrošeno vreme: ",
+        "your_mistakes": "Broj grešaka: ",
+        "time_rules": "Igra na vreme. Što brže završite, to bolje!",
+        "timer_rules": "Igra na vreme. Kada istekne vreme, igra se završava!",
+        "mistakes_rules": "Broj grešaka ne sme da prekorači 3.",
+        "double_click": "Kliknite dvaput ",
+        "drag": "Pritisnite ",
         "digit": {
-            "instruction": "Очистите поле, попарно выбрая ячейки, которые в сумме дают выбранное вами число.",
-            "empty": "Пустая ячейка",
-            "available": "Доступно для выбора",
-            "unavailable": "Недоступно для выбора — рядом нет пустой ячейки"
+            "instruction": "Očistite polje, birajući u parovima ćelije koje u zbiru daju izabrani broj.",
+            "empty": "Prazna ćelija",
+            "available": "Dostupno za izbor",
+            "unavailable": "Nedostupno za izbor — pored nema prazne ćelije"
         },
         "shulte": {
-            "instruction": "Очистите поле, поочередно выбирая ячейки от 1 до 16 или 25, в зависимости от выбранного размера поля."
+            "instruction": "Očistite polje, redom birajući ćelije od 1 do 16 ili 25, u zavisnosti od izabrane veličine polja."
+        },
+        "queens": {
+            "instruction": "Postavite kraljice na polje tako da u svakoj vrsti, koloni i oblasti oko njih bude tačno jedna figura.",
+            "instruction_place": "za postavljanje/uklanjanje kraljice.",
+            "instruction_drag": "za pomeranje.",
+            "tutorial": "Veličina polja 4 je obučavajući nivo. Preporučuje se igrati ga samo nekoliko puta."
         }
     },
 
     "achievements": {
-        "notification": "Вы получили новое достижение!",
+        "notification": "Dobili ste novo dostignuće!",
         "digit": {
             "7x6": {
-                "title": "Отличное начало",
-                "description": "Закончить игру на стандартном поле для числа 6 за "
+                "title": "Odličan početak",
+                "description": "Završiti igru na standardnom polju za broj 6 za "
             },
             "7x7": {
-                "title": "Семь+Я",
-                "description": "Закончить игру на стандартном поле для числа 7 за "
+                "title": "Sedam+Ja",
+                "description": "Završiti igru na standardnom polju za broj 7 za "
             },
             "7x8": {
-                "title": "Знаток основ",
-                "description": "Закончить игру на стандартном поле для числа 8 за "
+                "title": "Poznavalac osnova",
+                "description": "Završiti igru na standardnom polju za broj 8 za "
             },
             "9x8": {
-                "title": "Высшая лига",
-                "description": "Закончить игру на большом поле для числа 8 за "
+                "title": "Viša liga",
+                "description": "Završiti igru na velikom polju za broj 8 za "
             },
             "9x9": {
-                "title": "Юный математик",
-                "description": "Закончить игру на большом поле для числа 9 за "
+                "title": "Mladi matematičar",
+                "description": "Završiti igru na velikom polju za broj 9 za "
             },
             "9x10": {
-                "title": "Профессионал",
-                "description": "Закончить игру на большом поле для числа 10 за "
+                "title": "Profesionalac",
+                "description": "Završiti igru na velikom polju za broj 10 za "
             },
             "7x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на стандартном поле, не допустив ни единой ошибки."
+                "title": "Savršen pristup",
+                "description": "Završiti igru na standardnom polju, ne napravivši nijednu grešku."
             },
             "9x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на большом поле, не допустив ни единой ошибки."
+                "title": "Savršen pristup",
+                "description": "Završiti igru na velikom polju, ne napravivši nijednu grešku."
             }
         },
         "shulte": {
             "4x4": {
-                "title": "Зоркий глаз",
-                "description": "Закончить игру на стандартном поле за "
+                "title": "Oštro oko",
+                "description": "Završiti igru na standardnom polju za "
             },
             "5x5": {
-                "title": "Сама внимательность",
-                "description": "Закончить игру на большом поле за "
+                "title": "Sama pažnja",
+                "description": "Završiti igru na velikom polju za "
             },
             "4x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на стандартном поле, не допустив ни единой ошибки."
+                "title": "Savršen pristup",
+                "description": "Završiti igru na standardnom polju, ne napravivši nijednu grešku."
             },
             "5x100": {
-                "title": "Идеальный подход",
-                "description": "Закончить игру на большом поле, не допустив ни единой ошибки."
+                "title": "Savršen pristup",
+                "description": "Završiti igru na velikom polju, ne napravivši nijednu grešku."
             }
         },
         "syllable": {
             "1x1": {
-                "title": "Секреты букваря",
-                "description": "Закончить упражнение с базовыми наборами букв "
+                "title": "Tajne bukvara",
+                "description": "Završiti vežbu sa osnovnim skupovima slova "
             },
             "1x2": {
-                "title": "Веселый буквоед",
-                "description": "Закончить упражнение с продвинутым набором гласных "
+                "title": "Veseli slovoed",
+                "description": "Završiti vežbu sa naprednim skupom samoglasnika "
             },
             "2x1": {
-                "title": "На шаг ближе к книгам",
-                "description": "Закончить упражнение с продвинутым набором согласных "
+                "title": "Korak bliže knjigama",
+                "description": "Završiti vežbu sa naprednim skupom suglasnika "
             },
             "2x2": {
-                "title": "Читающий герой",
-                "description": "Закончить упражнение с продвинутыми наборами букв "
+                "title": "Heroj koji čita",
+                "description": "Završiti vežbu sa naprednim skupovima slova "
+            }
+        },
+        "queens": {
+            "4x4": {
+                "title": "Kraljevski debi",
+                "description": "Proći obuku na polju 4x4 za kraljice za "
+            },
+            "5x5": {
+                "title": "Kraljevska igra",
+                "description": "Završiti igru na polju 5x5 za kraljice za "
+            },
+            "6x6": {
+                "title": "Kraljevski izazov",
+                "description": "Završiti igru na polju 6x6 za kraljice za "
+            },
+            "7x7": {
+                "title": "Kraljevska bitka",
+                "description": "Završiti igru na polju 7x7 za kraljice za "
+            },
+            "8x8": {
+                "title": "Kraljičin velemajstor",
+                "description": "Završiti igru na polju 8x8 za kraljice za "
             }
         }
     },
 
     "settings": {
-        "general": "Общие",
+        "general": "Opšte",
         "gameplay": {
-            "label": "Игровой процесс",
+            "label": "Tok igre",
             "digit": {
-                "label": "Состав числа",
-                "description": "Подсвечивать доступные к нажатию клетки другим цветом"
-            },
-            "syllable": {
-                "label": "По сло-гам",
-                "description": "Засчитывать упражнения только когда все буквы были прочитаны"
+                "label": "Sastav broja",
+                "description": "Isticati ćelije dostupne za pritisak drugom bojom"
             },
             "shulte": {
-                "label": "Таблица Шульте",
-                "description": "Скрывать цифры после нажатия"
+                "label": "Tabela Šulte",
+                "description": "Sakrivati brojeve nakon pritiskanja"
+            },
+            "queens": {
+                "label": "Kraljice",
+                "description": "Prikazivati savete za blokirane ćelije za figure"
             }
         },
         "language": {
-            "label": "Язык",
+            "label": "Jezik",
             "options": {
-                "ru": "Русский",
-                "en": "English",
+                "ru": "Ruski",
+                "en": "Engleski",
                 "sb_lat": "Srpski (Latinica)",
-                "sb_cy": "Српски (Cyrillic)"
+                "sb_cy": "Srpski (Ćirilica)"
             }
         },
         "player": {
-            "name": "Имя",
-            "placeholder": "Как тебя зовут?"
+            "name": "Ime",
+            "placeholder": "Kako se zoveš?",
+            "createNew": "Napravi novog korisnika",
+            "newUserPlaceholder": "Unesi ime novog korisnika",
+            "deleteConfirm": {
+                "title": "Obriši korisnika",
+                "message": "Da li ste sigurni da želite da obrišete korisnika",
+                "warning": "Pažnja! Svi njegovi rekordi i dostignuća će biti trajno obrisani.",
+                "confirm": "Obriši",
+                "cancel": "Otkaži"
+            }
         },
         "volume": {
-            "label": "Звук",
-            "notifications": "Громкость уведомлений",
-            "effects": "Громкость эффектов"
+            "label": "Zvuk",
+            "notifications": "Jačina obaveštenja",
+            "effects": "Jačina efekata"
         }
     },
 
     "record": {
-        "minutes": "минут",
-        "seconds": "секунд",
-        "count": "раз"
+        "minutes": "minuta",
+        "seconds": "sekundi",
+        "count": "puta"
     },
 
     "tooltips": {
-        "perfect": "Savršena partija — bez grešaka"
+        "perfect": "Savršena partija — bez grešaka",
+        "view_modification": "Pomoć pri prikazu isključena"
+    },
+
+    "updates": {
+        "update_available_title": "Dostupno je ažuriranje",
+        "update_available_message": "Dostupna je nova verzija",
+        "click_to_download": "Kliknite za odlazak na stranicu za preuzimanje."
     }
 }

@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { useState, useEffect } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
@@ -14,12 +15,18 @@ export const useMarkdownContent = (baseName: string) => {
       
       try {
         const fileName = `${baseName}_${language}.md`
-        const response = await fetch(`/src/content/${fileName}`)
-        
+        // Build an absolute URL using the configured BASE_URL so paths match
+        // the Vite configuration both in dev and production (e.g. /Razvivashka/)
+        const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
+        // In production, Vite copies public folder contents to the root of dist,
+        // so we access content directly without 'public/' prefix
+        const url = `${baseUrl}content/${fileName}`
+        const response = await fetch(url)
+
         if (!response.ok) {
-          throw new Error(`Failed to load ${fileName}`)
+          throw new Error(`Failed to load ${fileName} from ${url}`)
         }
-        
+
         const text = await response.text()
         setContent(text)
       } catch (err) {

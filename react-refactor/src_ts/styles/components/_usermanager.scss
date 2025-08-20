@@ -1,0 +1,348 @@
+@use '../colors';
+
+.user-manager {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+
+    .user-input-container {
+        display: flex;
+        align-items: center;
+        background: colors.$fourth;
+        border-radius: 10px;
+        border: 2px solid colors.$primary;
+        overflow: hidden;
+        flex: 1;
+        box-shadow: 0 2px 4px colors.$shadow;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &:hover {
+            border-color: colors.$third;
+        }
+
+        &:focus-within {
+            border-color: colors.$third;
+            box-shadow: 0 4px 8px colors.$shadow;
+        }
+
+        .user-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: none;
+            background: transparent;
+            color: colors.$text_secondary;
+            font-size: 18px;
+            line-height: 24px;
+            outline: none;
+            font-family: inherit;
+
+            &::placeholder {
+                color: #a9a9a9;
+                font-style: italic;
+            }
+        }
+
+        .dropdown-toggle {
+            border-radius: 0;
+            border-left: 2px solid colors.$primary;
+            width: 52px;
+            height: 40px;
+            background: colors.$fourth;
+            border-top: none;
+            border-right: none;
+            border-bottom: none;
+            transition: border-color 0.2s, background-color 0.2s;
+
+            &:hover {
+                border-left-color: colors.$third;
+                background-color: colors.$hover;
+            }
+
+            .ui-button__icon > span {
+                width: 32px;
+                height: 32px;
+                background: colors.$primary;
+            }
+
+            &:hover .ui-button__icon > span {
+                background: colors.$third;
+            }
+        }
+    }
+
+    .delete-button {
+        width: 46px;
+        height: 46px;
+        border-radius: 16px;
+        background-color: colors.$fourth;
+        border: 2px solid colors.$error;
+
+        .ui-button__icon > span {
+            width: 32px;
+            height: 32px;
+            background: colors.$error;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: colors.$hover;
+            border-color: #d32f2f;
+            
+            .ui-button__icon > span {
+                width: 32px;
+                height: 32px;
+                background: #d32f2f;
+            }
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: colors.$locked;
+            
+            .ui-button__icon > span {
+                width: 32px;
+                height: 32px;
+                background: colors.$locked;
+            }
+        }
+    }
+
+    .user-dropdown {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 74px; // Account for delete button + gap
+        z-index: 1000;
+        background: colors.$fourth;
+        border: 2px solid colors.$primary;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px colors.$shadow;
+        max-height: 260px;
+        width: 326px;
+        overflow-y: auto;
+
+        .user-list {
+            padding: 0;
+
+            .user-item {
+                padding: 8px 12px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                // justify-content: space-between;
+                font-size: 18px;
+                color: colors.$text_secondary;
+                transition: background-color 0.2s, color 0.2s;
+                user-select: none;
+
+                &:hover {
+                    background: colors.$third;
+                    color: colors.$text_rev;
+                }
+
+                &.active {
+                    background: colors.$third;
+                    color: colors.$text_rev;
+                    font-weight: 700;
+
+                    &:hover {
+                        background: colors.$third;
+                    }
+                }
+
+                &.create-user {
+                    color: colors.$primary;
+                    border-top: 2px solid colors.$primary;
+                    margin-top: 4px;
+                    font-weight: 500;
+
+                    .plus-icon {
+                        font-weight: bold;
+                        margin-right: 8px;
+                        font-size: 20px;
+                    }
+
+                    &:hover {
+                        background: colors.$hover;
+                        color: colors.$third;
+                    }
+                }
+
+                .current-indicator {
+                    color: colors.$gold;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+            }
+
+            .create-user-input {
+                padding: 12px;
+                border-top: 2px solid colors.$primary;
+                margin-top: 4px;
+                background: colors.$hover;
+
+                input {
+                    width: calc(100% - 20px);
+                    padding: 6px 8px;
+                    border: 2px solid colors.$primary;
+                    border-radius: 8px;
+                    background: colors.$fourth;
+                    color: colors.$text_secondary;
+                    font-size: 16px;
+                    margin-bottom: 8px;
+                    font-family: inherit;
+                    box-shadow: 0 2px 4px colors.$shadow;
+                    transition: border-color 0.2s, box-shadow 0.2s;
+
+                    &::placeholder {
+                        color: #a9a9a9;
+                        font-style: italic;
+                    }
+
+                    &:focus {
+                        outline: none;
+                        border-color: colors.$third;
+                        box-shadow: 0 4px 8px colors.$shadow;
+                    }
+                }
+
+                .create-user-buttons {
+                    display: flex;
+                    gap: 6px;
+                    justify-content: flex-end;
+
+                    .ui-button {
+                        min-width: 32px;
+                        height: 32px;
+                        border-radius: 8px;
+                        border: 2px solid colors.$primary;
+                        background: colors.$fourth;
+                        color: colors.$text_secondary;
+                        font-family: 'Snide hand';
+
+                        &:hover {
+                            border-color: colors.$third;
+                            color: colors.$third;
+                        }
+
+                        &:disabled {
+                            opacity: 0.5;
+                            cursor: not-allowed;
+                            color: colors.$text_secondary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .delete-confirm-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(28, 39, 76, 0.6);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .delete-confirm-dialog {
+            background: colors.$fourth;
+            border: 2px solid colors.$primary;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            margin: 16px;
+            box-shadow: 0 8px 24px colors.$shadow;
+
+            h3 {
+                margin: 0 0 16px 0;
+                color: colors.$text;
+                font-size: 24px;
+                font-weight: 700;
+                text-align: center;
+            }
+
+            p {
+                margin: 0 0 12px 0;
+                color: colors.$text_secondary;
+                line-height: 1.4;
+                font-size: 18px;
+                text-align: center;
+
+                &.warning {
+                    color: colors.$warning;
+                    font-weight: 500;
+                    margin-bottom: 20px;
+                    font-size: 16px;
+                }
+            }
+
+            .confirm-buttons {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                margin-top: 20px;
+
+                .ui-button {
+                    font-family: 'Snide hand';
+                    min-width: 120px;
+                    height: 48px;
+                    border-radius: 12px;
+                    font-size: 18px;
+                    font-weight: 500;
+                    border: 2px solid;
+                    
+                    .ui-button__label {
+                        margin: 8px 0;
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+
+                .danger-button {
+                    background-color: colors.$fourth;
+                    border-color: colors.$error;
+                    color: colors.$error;
+
+                    .ui-button__label {
+                        color: colors.$error;
+                    }
+
+                    &:hover {
+                        background-color: colors.$error;
+                        color: colors.$text_rev;
+                        
+                        .ui-button__label {
+                            color: colors.$text_rev;
+                        }
+                    }
+                }
+
+                .secondary-button {
+                    background-color: colors.$fourth;
+                    border-color: colors.$primary;
+                    color: colors.$text_secondary;
+
+                    .ui-button__label {
+                        color: colors.$text_secondary;
+                    }
+
+                    &:hover {
+                        background-color: colors.$hover;
+                        border-color: colors.$third;
+                        color: colors.$third;
+                        
+                        .ui-button__label {
+                            color: colors.$third;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

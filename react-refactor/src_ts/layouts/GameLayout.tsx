@@ -1,68 +1,201 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '@/contexts/i18n';
 import { GameControllerProvider, useGameController } from '@/contexts/gameController';
+import { useTranslationFunction } from '@/hooks/useSelectiveContext';
 
 import Button from '@/components/button/button';
 import ScoreList from '@/components/scorelist/scorelist';
 
-import DigitMenu from '@/modules/game_digital/DigitMenu';
-import DigitGame from '@/modules/game_digital/DigitGame';
+import DigitMenu from '@/modules/game_digit/DigitMenu';
+import DigitGame from '@/modules/game_digit/DigitGame';
 import ShulteGame from '@/modules/game_shulte/ShulteGame';
 import ShulteMenu from '@/modules/game_shulte/ShulteMenu';
+import QueensGame from '@/modules/game_queens/QueensGame';
+import QueensMenu from '@/modules/game_queens/QueensMenu';
 
 import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
-import type { DigitGameSettings } from '@/modules/game_digital/types/game_digit';
+import type { QueensSettings } from '@/modules/game_queens/types/game_queens';
+import type { DigitGameSettings } from '@/modules/game_digit/types/game_digit';
 import { generateRecordProps } from '@/utils/pt';
-import { directions } from '@/modules/game_digital/digitGameLogic';
 
 interface GameLayoutProps {
     gameId: string;
 }
 
-function InnerGameLayout({ gameId }: GameLayoutProps) {
-    const { t } = useLanguage();
-    const { startGame, setGameContext } = useGameController();
+type GameSettings = {
+    digit: { pending: DigitGameSettings; active: DigitGameSettings };
+    shulte: { pending: ShulteSettings; active: ShulteSettings };
+    queens: { pending: QueensSettings; active: QueensSettings };
+};
+
+type GameSettingsAction = 
+    | { type: 'SET_PENDING_DIGIT'; payload: DigitGameSettings }
+    | { type: 'SET_ACTIVE_DIGIT'; payload: DigitGameSettings }
+    | { type: 'SET_PENDING_SHULTE'; payload: ShulteSettings }
+    | { type: 'SET_ACTIVE_SHULTE'; payload: ShulteSettings }
+    | { type: 'SET_PENDING_QUEENS'; payload: QueensSettings }
+    | { type: 'SET_ACTIVE_QUEENS'; payload: QueensSettings };
+
+// useReducer is used here instead of multiple useState because:
+// - Complex state with interdependent values (pending vs active settings)
+// - Multiple actions that need to update state atomically
+// - Better performance than multiple setState calls
+
+// Начальное состояние
+const initialGameSettings: GameSettings = {
+    digit: { 
+        pending: { target: 6, size: 7 }, 
+        active: { target: 6, size: 7 } 
+    },
+    shulte: { 
+        pending: { size: 4 }, 
+        active: { size: 4 } 
+    },
+    queens: { 
+        pending: { size: 4 }, 
+        active: { size: 4 } 
+    }
+};
+
+// Reducer for game settings states
+// Reducer pattern provides predictable state updates and better debugging
+// All game settings changes go through this single reducer function
+const gameSettingsReducer = (state: GameSettings, action: GameSettingsAction): GameSettings => {
+    switch (action.type) {
+        case 'SET_PENDING_DIGIT':
+            return {
+                ...state,
+                digit: { ...state.digit, pending: action.payload }
+            };
+        case 'SET_ACTIVE_DIGIT':
+            return {
+                ...state,
+                digit: { ...state.digit, active: action.payload }
+            };
+        case 'SET_PENDING_SHULTE':
+            return {
+                ...state,
+                shulte: { ...state.shulte, pending: action.payload }
+            };
+        case 'SET_ACTIVE_SHULTE':
+            return {
+                ...state,
+                shulte: { ...state.shulte, active: action.payload }
+            };
+        case 'SET_PENDING_QUEENS':
+            return {
+                ...state,
+                queens: { ...state.queens, pending: action.payload }
+            };
+        case 'SET_ACTIVE_QUEENS':
+            return {
+                ...state,
+                queens: { ...state.queens, active: action.payload }
+            };
+        default:
+            return state;
+    }
+};
+
+// Memoized navigation component
+// React.memo prevents re-renders when navigation props haven't changed
+// Navigation is stable and doesn't depend on game state, so this optimization is safe
+const GameNavigation = React.memo(() => {
     const navigate = useNavigate();
-    // Pending settings (from menu) and Active settings (used by running game)
-    // Always have defaults so game-main renders immediately
-    const [pendingDigit, setPendingDigit] = useState<DigitGameSettings>({ target: 6, size: 7 });
-    const [activeDigit, setActiveDigit] = useState<DigitGameSettings>({ target: 6, size: 7 });
-    const [pendingShulte, setPendingShulte] = useState<ShulteSettings>({ size: 4 });
-    const [activeShulte, setActiveShulte] = useState<ShulteSettings>({ size: 4 });
+    
+    const handleBack = React.useCallback(() => navigate(-1), [navigate]);
+    const handleSettings = React.useCallback(() => navigate('/settings'), [navigate]);
+    const handleHome = React.useCallback(() => navigate('/'), [navigate]);
 
-    // Stable callbacks so child effects don't loop on function identity changes
+    const navigationStyle = React.useMemo(() => ({
+        display: "flex",
+        flexDirection: "row" as const,
+        justifySelf: 'end',
+        gap: '8px',
+        padding: '0 12px'
+    }), []);
+
+    return (
+        <div style={navigationStyle}>
+            <Button
+                aria-label="nav-back"
+                size="small"
+                leftIcon="left"
+                className='nav-button'
+                onClick={handleBack}
+            />
+            <Button
+                aria-label="nav-settings"
+                size="small"
+                leftIcon="settings"
+                className='nav-button'
+                onClick={handleSettings}
+            />
+            <Button
+                aria-label="nav-home"
+                size="small"
+                leftIcon="home"
+                className='nav-button'
+                onClick={handleHome}
+            />
+        </div>
+    );
+});
+
+GameNavigation.displayName = 'GameNavigation';
+
+const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
+    const t = useTranslationFunction();
+    const { startGame, setGameContext } = useGameController();
+    
+    const [gameSettings, dispatch] = useReducer(gameSettingsReducer, initialGameSettings);
+
+    // Memoized handlers for settings changes
     const handleDigitSettingsChange = useCallback((s: DigitGameSettings) => {
-        setPendingDigit(prev => (prev.target === s.target && prev.size === s.size ? prev : s));
-    }, []);
+        const current = gameSettings.digit.pending;
+        if (current.target !== s.target || current.size !== s.size) {
+            dispatch({ type: 'SET_PENDING_DIGIT', payload: s });
+        }
+    }, [gameSettings.digit.pending]);
+
     const handleShulteSettingsChange = useCallback((s: ShulteSettings) => {
-        setPendingShulte(prev => (prev.size === s.size ? prev : s));
-    }, []);
+        if (gameSettings.shulte.pending.size !== s.size) {
+            dispatch({ type: 'SET_PENDING_SHULTE', payload: s });
+        }
+    }, [gameSettings.shulte.pending.size]);
 
-    const handleStartDigit = (settings: DigitGameSettings) => {
-        // Promote pending settings to active and start the game
-        setActiveDigit(settings);
-        // console.log('Digit settings:', JSON.stringify(settings));
-    // At start, we don't know isPerfect yet; default false. Game may update via controller later.
-    setGameContext('digit', generateRecordProps('digit', settings), false);
+    const handleQueensSettingsChange = useCallback((s: QueensSettings) => {
+        if (gameSettings.queens.pending.size !== s.size) {
+            dispatch({ type: 'SET_PENDING_QUEENS', payload: s });
+        }
+    }, [gameSettings.queens.pending.size]);
+
+    // Memoized handlers for game start
+    const handleStartDigit = useCallback((settings: DigitGameSettings) => {
+        dispatch({ type: 'SET_ACTIVE_DIGIT', payload: settings });
+        setGameContext('digit', generateRecordProps('digit', settings), false);
         startGame();
-    };
+    }, [setGameContext, startGame]);
 
-    const handleStartShulte = (settings: ShulteSettings) => {
-        // Promote pending settings to active and start the game
-        setActiveShulte(settings);
-        // console.log('Shulte settings:', JSON.stringify(settings));
-    setGameContext('shulte', generateRecordProps('shulte', settings), false);
+    const handleStartShulte = useCallback((settings: ShulteSettings) => {
+        dispatch({ type: 'SET_ACTIVE_SHULTE', payload: settings });
+        setGameContext('shulte', generateRecordProps('shulte', settings), false);
         startGame();
-    };
+    }, [setGameContext, startGame]);
 
-    const renderMenu = () => {
+    const handleStartQueens = useCallback((settings: QueensSettings) => {
+        dispatch({ type: 'SET_ACTIVE_QUEENS', payload: settings });
+        setGameContext('queens', generateRecordProps('queens', settings), false);
+        startGame();
+    }, [setGameContext, startGame]);
+
+    const gameMenu = useMemo(() => {
         switch (gameId) {
             case 'digit':
                 return (
                     <DigitMenu
                         onStart={handleStartDigit}
-                        initialSettings={pendingDigit ?? undefined}
+                        initialSettings={gameSettings.digit.pending}
                         onChangeSettings={handleDigitSettingsChange}
                     />
                 );
@@ -73,102 +206,111 @@ function InnerGameLayout({ gameId }: GameLayoutProps) {
                         onChangeSettings={handleShulteSettingsChange}
                     />
                 );
+            case 'queens':
+                return (
+                    <QueensMenu
+                        onStart={handleStartQueens}
+                        initialSettings={gameSettings.queens.pending}
+                        onChangeSettings={handleQueensSettingsChange}
+                    />
+                );
             default:
                 return null;
         }
-    };
+    }, [gameId, gameSettings.digit.pending, gameSettings.queens.pending, handleStartDigit, handleStartShulte, handleStartQueens, handleDigitSettingsChange, handleShulteSettingsChange, handleQueensSettingsChange]);
 
-    const renderGame = () => {
+    const gameComponent = useMemo(() => {
         switch (gameId) {
             case 'digit':
-                return <DigitGame settings={activeDigit} />;
+                return <DigitGame settings={gameSettings.digit.active} />;
             case 'shulte':
-                return <ShulteGame settings={activeShulte} />;
+                return <ShulteGame settings={gameSettings.shulte.active} />;
+            case 'queens':
+                return <QueensGame settings={gameSettings.queens.active} />;
             default:
                 return null;
         }
-    };
+    }, [gameId, gameSettings.digit.active, gameSettings.shulte.active, gameSettings.queens.active]);
 
-    const renderScoreSection = () => {
-        // Render the score list via switch statement is relevant because each game has different props
-        // so it easier to manage it with cases rather than passing props directly through if statements
+    const scoreSection = useMemo(() => {
         switch (gameId) {
             case 'digit':
-                return <ScoreList 
-                            gameId={gameId} 
-                            gameProps={generateRecordProps('digit', pendingDigit)} 
-                        />;
+                return (
+                    <ScoreList 
+                        gameId={gameId} 
+                        gameProps={generateRecordProps('digit', gameSettings.digit.pending)} 
+                    />
+                );
             case 'shulte':
-                return <ScoreList 
-                            gameId={gameId} 
-                            gameProps={generateRecordProps('shulte', pendingShulte)} 
-                        />;
+                return (
+                    <ScoreList 
+                        gameId={gameId} 
+                        gameProps={generateRecordProps('shulte', gameSettings.shulte.pending)} 
+                    />
+                );
+            case 'queens':
+                return (
+                    <ScoreList 
+                        gameId={gameId} 
+                        gameProps={generateRecordProps('queens', gameSettings.queens.pending)} 
+                    />
+                );
             default:
                 return null;
         }
-    };
+    }, [gameId, gameSettings.digit.pending, gameSettings.shulte.pending, gameSettings.queens.pending]);
+
+    const gameTitle = useMemo(() => 
+        t(`games.${gameId}` as any), [t, gameId]
+    );
+
+    const headerTitleStyle = useMemo(() => ({ 
+        justifySelf: 'center' as const 
+    }), []);
+
+    const scoreContainerStyle = useMemo(() => ({ 
+        margin: '0 0 8px 0' 
+    }), []);
 
     return (
         <div className="game-layout">
             <aside className="game-side left">
-                {renderMenu()}
+                {gameMenu}
             </aside>
             <div className="game-main">
                 <div className="game-header">
                     <div/>
-                    <h1 style={{justifySelf:'center'}}>
-                        { t(`games.${gameId}` as any) }
+                    <h1 style={headerTitleStyle}>
+                        {gameTitle}
                     </h1>
-                    <div style={{ display: "flex", 
-                                flexDirection: "row", 
-                                justifySelf: 'end', 
-                                gap: '8px', 
-                                padding: '0 12px' 
-                                }}
-                    >
-                        <Button
-                            aria-label="nav-back"
-                            size="small"
-                            leftIcon="left"
-                            className='nav-button'
-                            onClick={() => navigate(-1)}
-                        />
-                        <Button
-                            aria-label="nav-settings"
-                            size="small"
-                            leftIcon="settings"
-                            className='nav-button'
-                            onClick={() => navigate('/settings')}
-                        />
-                        <Button
-                            aria-label="nav-home"
-                            size="small"
-                            leftIcon="home"
-                            className='nav-button'
-                            onClick={() => navigate('/')}
-                        />
-                    </div>
+                    <GameNavigation />
                 </div>
                 <main className="game-main-panel">
-                    {renderGame()}
+                    {gameComponent}
                 </main>
             </div>
             <aside className="game-side score_section">
-                <h2>{t("game-menu.records" as any)}</h2>
+                <h2 style={scoreContainerStyle}>
+                    {t("game-menu.records" as any)}
+                </h2>
                 <div className='scorelist-container'>
-                    {renderScoreSection()}
+                    {scoreSection}
                 </div>
             </aside>
         </div>
     );
-}
+});
 
-function GameDigitalLayout({ gameId }: GameLayoutProps) {
+InnerGameLayout.displayName = 'InnerGameLayout';
+
+const GameDigitalLayout = React.memo<GameLayoutProps>(({ gameId }) => {
     return (
         <GameControllerProvider>
             <InnerGameLayout gameId={gameId} />
         </GameControllerProvider>
     );
-}
+});
+
+GameDigitalLayout.displayName = 'GameDigitalLayout';
 
 export default GameDigitalLayout;

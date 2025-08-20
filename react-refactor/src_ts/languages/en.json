@@ -4,7 +4,8 @@
         "digit": "Number Composition",
         "shulte": "Schulte Table",
         "syllable": "Syllables",
-        "sum": "Sum of Numbers"
+        "sum": "Sum of Numbers",
+        "queens": "Queens"
     },
 
     "types": {
@@ -33,6 +34,7 @@
         "ok": "OK",
         "filter": "Select...",
         "cancel": "Cancel",
+        "create": "Create",
         "apply": "Apply"
     },
 
@@ -46,13 +48,14 @@
 
         "digit": {
             "target": "Find pairs that sum to:",
-            "size": "Board size:",
-            "task": "Clear the board of numbers that sum to"
+            "size": "Board size:"
         },
         "shulte": {
-            "size": "Board size:",
-            "task": "Clear the board of numbers that sum to"
-        }        
+            "size": "Board size:"
+        },
+        "queens": {
+            "size": "Board size:"
+        }
     },
 
     "game-info": {
@@ -63,6 +66,8 @@
         "time_rules": "Time attack. The faster you finish, the better.",
         "timer_rules": "Timed game. When time runs out, the game ends.",
         "mistakes_rules": "The number of mistakes must not exceed 3.",
+        "double_click": "Double click",
+        "drag": "Drag",
         "digit": {
             "instruction": "Clear the board by selecting pairs of cells that add up to the number you chose.",
             "empty": "Empty cell",
@@ -71,7 +76,14 @@
         },
         "shulte": {
             "instruction": "Tap the cells in order from 1 to 16 or 25, depending on the selected board size."
+        },
+        "queens": {
+            "instruction": "Place the queens on the board so that there is exactly one queen in each row, column, and surrounding area.",
+            "instruction_place": " to place/remove a queen.",
+            "instruction_drag": " to move.",
+            "tutorial": "Board size 4 is a tutorial level. It is recommended to play it only a few times."
         }
+
     },
 
     "achievements": {
@@ -145,7 +157,30 @@
                 "title": "Reading Hero",
                 "description": "Complete the exercise with advanced letter sets "
             }
+        },
+        "queens": {
+            "4x4": {
+                "title": "Royal Debut",
+                "description": "Complete the tutorial on 4x4 board for queens in "
+            },
+            "5x5": {
+                "title": "Royal Game",
+                "description": "Finish the game on 5x5 board for queens in "
+            },
+            "6x6": {
+                "title": "Royal Challenge",
+                "description": "Finish the game on 6x6 board for queens in "
+            },
+            "7x7": {
+                "title": "Royal Battle",
+                "description": "Finish the game on 7x7 board for queens in "
+            },
+            "8x8": {
+                "title": "Queen Grandmaster",
+                "description": "Finish the game on 8x8 board for queens in "
+            }
         }
+
     },
 
     "settings": {
@@ -156,13 +191,13 @@
                 "label": "Number Composition",
                 "description": "Highlight cells available to press with a different color"
             },
-            "syllable": {
-                "label": "Syllables",
-                "description": "Count the exercise only when all letters have been read"
-            },
             "shulte": {
                 "label": "Schulte Table",
                 "description": "Hide numbers after clicking"
+            },
+            "queens": {
+                "label": "Queens",
+                "description": "Show hints for blocked cells for pieces"
             }
         },
         "language": {
@@ -176,7 +211,16 @@
         },
         "player": {
             "name": "Name",
-            "placeholder": "What's your name?"
+            "placeholder": "What's your name?",
+            "createNew": "Create new user",
+            "newUserPlaceholder": "Enter new user name",
+            "deleteConfirm": {
+                "title": "Delete User",
+                "message": "Are you sure you want to delete user",
+                "warning": "Attention! All their records and achievements will be permanently deleted.",
+                "confirm": "Delete",
+                "cancel": "Cancel"
+            }
         },
         "volume": {
             "label": "Sound",
@@ -192,7 +236,8 @@
     },
 
     "tooltips": {
-        "perfect": "Perfect run — no mistakes"
+        "perfect": "Perfect run — no mistakes",
+        "view_modification": "View assistance disabled"
     },
 
     "updates": {

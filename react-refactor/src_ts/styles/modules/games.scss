@@ -9,16 +9,16 @@
     align-items: center;
     justify-content: center;
     gap: 30px;
+    max-width: 95vw;
+    max-height: 95vh;
+    box-sizing: border-box;
 
     .game-side {
-        width: 300px;
-        min-width: 220px;
         // margin-top: 64px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        gap: 20px;
     }
 
     .game-main {
@@ -32,6 +32,8 @@
         border-radius: 16px;
         box-shadow: 0 4px 30px colors.$shadow;
         color: colors.$text;
+        max-width: 100%;
+        max-height: 100%;
 
         .game-header {
             display: grid;
@@ -129,8 +131,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 24px 0;
+    padding: 16px 0;
 }
 
 .game-menu h2, .score_section h2 {
@@ -138,6 +139,10 @@
     font-size: 22px;
     margin: 15px 0 5px 0;
     cursor: default;
+}
+
+.game-menu {
+    justify-content: space-between;
 }
 
 .game-icon {
@@ -158,6 +163,11 @@
     align-items: center;
     gap: 10px;
     background: colors.$fourth;
+
+    > img {
+        width: 32px;
+        height: 32px;
+    }
 }
 
 .mistake {
@@ -180,4 +190,260 @@
     background: colors.$fourth;
     font-size: 28px;
     color: colors.$text_secondary;
+}
+
+/* Адаптивные стили для игровых макетов */
+@media screen and (max-width: 1600px) {
+    .game-layout {
+        width: 1300px;
+        height: 750px;
+        padding: 30px 40px;
+        gap: 25px;
+
+        .game-main {
+            height: 720px;
+            width: 780px;
+
+            .game-header h1 {
+                font-size: 32px;
+            }
+        }
+    }
+
+    .game-menu, .score_section {
+        width: 250px;
+        height: 400px;
+        gap: 4px;
+
+        h2 {
+            font-size: 20px;
+            margin: 12px 0 6px 0;
+        }
+    }
+}
+
+@media screen and (max-width: 1279px) {
+    .game-layout {
+        width: 1240px;
+        height: 720px;
+        padding: 20px 25px;
+        gap: 15px;
+
+        .game-main {
+            height: 720px;
+            width: 680px;
+
+            .game-header {
+                height: 60px;
+                
+                h1 {
+                    font-size: 24px;
+                    padding: 0 25px;
+                }
+            }
+
+            .game-main-panel {
+                .game-utils-panel {
+                    height: 50px;
+                    width: calc(100% - 32px);
+                    padding: 8px 16px 0 16px;
+                }
+
+                .game-space {
+                    height: calc(100% - 90px);
+                }
+
+                .game-restart-btn {
+                    margin-top: 24px;
+                    font-size: 18px;
+                    padding: 10px 24px;
+                }
+            }
+        }
+    }
+
+    .game-menu, .score_section {
+        width: 240px;
+        height: 400px;
+        padding: 12px 0;
+
+        h2 {
+            font-size: 18px;
+            margin: 10px 0 5px 0;
+        }
+    }
+
+    .game-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .mistakes-counter, .game-timer {
+        width: 120px;
+        height: 38px;
+    }
+
+    .game-timer {
+        font-size: 20px;
+    }
+
+    .mistake {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .game-layout {
+        width: 100%;
+        height: 100vh;
+        padding: 15px 20px;
+        gap: 15px;
+        flex-direction: column;
+
+        .game-side {
+            width: 100%;
+            min-width: auto;
+            flex-direction: row;
+            justify-content: space-around;
+            gap: 10px;
+        }
+
+        .game-main {
+            height: 70vh;
+            width: 100%;
+            max-width: 600px;
+
+            .game-header {
+                height: 55px;
+                
+                h1 {
+                    font-size: 20px;
+                    padding: 0 20px;
+                }
+            }
+
+            .game-main-panel {
+                .game-utils-panel {
+                    height: 45px;
+                    width: calc(100% - 28px);
+                    padding: 6px 14px 0 14px;
+                }
+
+                .game-space {
+                    height: calc(100% - 80px);
+                }
+
+                .game-restart-btn {
+                    margin-top: 20px;
+                    font-size: 16px;
+                    padding: 8px 20px;
+                }
+            }
+        }
+    }
+
+    .game-menu, .score_section {
+        width: 180px;
+        height: 25vh;
+        padding: 10px 0;
+
+        h2 {
+            font-size: 16px;
+            margin: 8px 0 5px 0;
+        }
+    }
+
+    .game-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 5px;
+    }
+
+    .mistakes-counter, .game-timer {
+        width: 100px;
+        height: 32px;
+    }
+
+    .game-timer {
+        font-size: 16px;
+    }
+
+    .mistake {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .game-layout {
+        padding: 10px;
+        gap: 10px;
+
+        .game-side {
+            gap: 8px;
+        }
+
+        .game-main {
+            height: 60vh;
+
+            .game-header {
+                height: 45px;
+                
+                h1 {
+                    font-size: 18px;
+                    padding: 0 15px;
+                }
+            }
+
+            .game-main-panel {
+                .game-utils-panel {
+                    height: 40px;
+                    width: calc(100% - 20px);
+                    padding: 5px 10px 0 10px;
+                }
+
+                .game-space {
+                    height: calc(100% - 70px);
+                }
+
+                .game-restart-btn {
+                    margin-top: 16px;
+                    font-size: 14px;
+                    padding: 6px 16px;
+                }
+            }
+        }
+    }
+
+    .game-menu, .score_section {
+        width: 150px;
+        height: 20vh;
+        padding: 8px 0;
+
+        h2 {
+            font-size: 14px;
+            margin: 6px 0 4px 0;
+        }
+    }
+
+    .game-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 4px;
+    }
+
+    .mistakes-counter, .game-timer {
+        width: 80px;
+        height: 28px;
+    }
+
+    .game-timer {
+        font-size: 14px;
+    }
+
+    .mistake {
+        width: 20px;
+        height: 20px;
+    }
 }

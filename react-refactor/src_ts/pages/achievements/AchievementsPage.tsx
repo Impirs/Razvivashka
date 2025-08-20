@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
 import Select from '@/components/select/select';
 import Icon from '@/components/icon/icon';
-import { useGameStore } from '@/contexts/gamestore';
+import { useCurrentUser, useAchievements, useGameActions } from '@/hooks/useSelectiveContext';
 
 interface AchRow {
   gameId: string;
@@ -17,7 +17,10 @@ interface AchRow {
 // Optional GameStore access (component still works without provider, useful for tests)
 function useOptionalGameStore() {
     try {
-        return useGameStore();
+        const currentUser = useCurrentUser();
+        const { allAchievements, userAchievements } = useAchievements();
+        const { addGameAchievements } = useGameActions();
+        return { currentUser, allAchievements, userAchievements, addGameAchievements };
     } catch {
         return null;
     }
@@ -146,7 +149,12 @@ function AchievementsPage() {
                                 onClick={() => navigate('/')} />
                     </div>
                 </div>
-                <div className="container-content" style={{marginTop: '18px', padding: '0 35px'}}>
+                <div className="container-content" 
+                     style={{
+                        padding: '0 35px',
+                        margin: '20px 0',
+                        height: 'calc(100% - 112px)'
+                     }}>
                     <ul className="achievement-list">
                         {rows.map((r, idx) => {
                             const key = `${r.gameId}|${r.gameProps}`;
@@ -158,7 +166,6 @@ function AchievementsPage() {
                                         {variants.map((variant, i) => {
                                             const achieved = unlocked[idxMap[i]] ?? false;
                                             const cls = `trophy ${variant}${achieved ? '' : ' locked'}`;
-                                            const size = variant === 'gold' ? 80 : variant === 'silver' ? 70 : 60;
                                             // Use masked Icon so color/background comes from CSS class
                                             return (
                                                 <Icon
@@ -166,7 +173,6 @@ function AchievementsPage() {
                                                     name="medal"
                                                     masked
                                                     className={cls}
-                                                    size={size}
                                                     aria-hidden={true}
                                                 />
                                             );

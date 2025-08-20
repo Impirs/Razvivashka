@@ -1,4 +1,4 @@
-import { useGameStore } from "@/contexts/gamestore";
+import { useCurrentUser } from "@/hooks/useSelectiveContext";
 import type { UserGameRecord } from "@/types/gamestore";
 
 import Icon from "../icon/icon";
@@ -12,10 +12,10 @@ type Props = {
 
 /* 
 TODO:
-    I would like to add a feature that displays the player's rank based on their score,
-    but I'm not sure if it's needed.
-    Also, it might be useful to add hints for score span and Icons, so user can see that
-    the score has gold color and a star icon cuz it's a perfect score and so on.
+    - [ ] I would like to add a feature that displays the player's rank based on their score,
+          but I'm not sure if it's needed.
+    - [x] Also, it might be useful to add hints for score span and Icons, so user can see that
+          the score has gold color and a star icon cuz it's a perfect score and so on.
 */
 
 const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord?: UserGameRecord }) => {
@@ -52,24 +52,43 @@ const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord
                             </time>
                         );
                     })()}
-                <div>
+                <div className="record-icons">
                     {record.isperfect && (
-                        <span 
-                            className="perfect-icon"
-                            aria-label={t('tooltips.perfect')}
-                            data-tooltip={t('tooltips.perfect')}
-                            title={t('tooltips.perfect')}
-                        >
-                            <Icon name="star" size={22} masked />
-                        </span>
+                        <div>
+                            <span 
+                                className="perfect-icon"
+                                aria-label={t('tooltips.perfect')}
+                                data-tooltip={t('tooltips.perfect')}
+                                title={t('tooltips.perfect')}
+                            >
+                                <Icon name="star" masked />
+                            </span>
+                        </div>
                     )}
-                    {/* {record.modification.map((mod, index) => (
-                        <Icon 
-                            key={index}
-                            name={`${mod}`}
-                        />
-                    ))} 
-                    */}
+                    {Array.isArray(record.modification) && record.modification.filter(Boolean).length > 0 && (
+                        <div className="modification-icons">
+                            {record.modification.filter(Boolean).map((mod, index) => {
+                                const iconName = mod === 
+                                    'view_modification' ? 
+                                    'eye-closed' : mod;
+                                const label = mod === 
+                                    'view_modification' ? 
+                                    (t('tooltips.view_modification' as any) 
+                                        || 'View assistance disabled'
+                                    ) : mod;
+                                return (
+                                    <span key={`${mod}-${index}`} 
+                                        className="mod-icon" 
+                                        aria-label={label} 
+                                        data-tooltip={label} 
+                                        title={label}
+                                    >
+                                        <Icon name={iconName} masked />
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </section>
         </article>
@@ -77,7 +96,7 @@ const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord
 };
 
 const ScoreList = ({ gameId, gameProps }: Props) => {
-    const { currentUser } = useGameStore();
+    const currentUser = useCurrentUser();
 
     const allRecords: UserGameRecord[] = currentUser?.gameRecords ?? [];
 

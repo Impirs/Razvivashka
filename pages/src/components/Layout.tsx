@@ -128,7 +128,7 @@ const Layout = ({ children }: LayoutProps) => {
                     <div className="header-container">
                         <div className="header-logo">
                             <img className="header-logo-icon" 
-                                src="../../public/brain-svgrepo-com.svg" 
+                                src={`${import.meta.env.BASE_URL}brain-svgrepo-com.svg`}
                                 alt="web_icon" />
                             <h1 className="header-logo-text">Razvivashka</h1>
                         </div>
@@ -190,7 +190,7 @@ const Layout = ({ children }: LayoutProps) => {
                         <div className="mobile-nav-header">
                             <div className="header-logo">
                                 <img className="mobile-header-logo-icon" 
-                                    src="../../public/brain-svgrepo-com.svg" 
+                                    src={`${import.meta.env.BASE_URL}brain-svgrepo-com.svg`}
                                     alt="web_icon" />
                                 <h2 className="header-logo-text">Razvivashka</h2>
                             </div>

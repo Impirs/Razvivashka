@@ -58,5 +58,30 @@
         "gameId": "shulte",
         "gameProps": "5x100",
         "requirements": [100000]
+    },
+    {
+        "gameId": "queens",
+        "gameProps":"4x4",
+        "requirements": [45, 60]
+    },
+    {
+        "gameId": "queens",
+        "gameProps": "5x5",
+        "requirements": [90, 120, 150]
+    },
+    {
+        "gameId": "queens",
+        "gameProps": "6x6",
+        "requirements": [120, 150, 180]
+    },
+    {
+        "gameId": "queens",
+        "gameProps": "7x7",
+        "requirements": [150, 180, 210]
+    },
+    {
+        "gameId": "queens",
+        "gameProps": "8x8",
+        "requirements": [180, 210, 240]
     }
 ]
