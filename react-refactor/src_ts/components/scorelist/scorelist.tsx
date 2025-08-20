@@ -1,4 +1,4 @@
-import { useGameStore } from "@/contexts/gamestore";
+import { useCurrentUser } from "@/hooks/useSelectiveContext";
 import type { UserGameRecord } from "@/types/gamestore";
 
 import Icon from "../icon/icon";
@@ -96,7 +96,7 @@ const Record = ({ record, latestRecord }: { record: UserGameRecord, latestRecord
 };
 
 const ScoreList = ({ gameId, gameProps }: Props) => {
-    const { currentUser } = useGameStore();
+    const currentUser = useCurrentUser();
 
     const allRecords: UserGameRecord[] = currentUser?.gameRecords ?? [];
 

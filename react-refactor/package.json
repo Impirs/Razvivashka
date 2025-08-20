@@ -8,13 +8,13 @@
     "build:react": "vite build",
     "build": "npm run build:react && electron-builder",
     "start": "electron .",
-    "test": "jest --config ./jest.config.js --passWithNoTests --silent --verbose=false"
+    "test": "jest --config ./jest.config.js --passWithNoTests --silent"
   },
   "build": {
     "appId": "com.impirs.razvivashka",
     "productName": "Развивашка",
     "forceCodeSigning": false,
-  "win": {
+    "win": {
       "target": [
         {
           "target": "nsis",
@@ -25,10 +25,11 @@
           "arch": "x64"
         }
       ],
-      "artifactName": "playandlearn_${version}_${arch}.${ext}",
+      "artifactName": "playandlearn_setup_${arch}.${ext}",
       "icon": "./src_ts/assets/icon.ico",
       "forceCodeSigning": false,
-      "signAndEditExecutable": false
+      "signAndEditExecutable": false,
+      "requestedExecutionLevel": "asInvoker"
     },
     "files": [
       "dist/**/*",
@@ -97,6 +98,7 @@
     "electron-builder": "^26.0.12",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
+    "jest-transform-stub": "^2.0.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "ts-jest": "^29.4.1",

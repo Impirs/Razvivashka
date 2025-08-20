@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import { useLanguage } from '@/contexts/i18n';
+import { useTranslationFunction } from '@/hooks/useSelectiveContext';
 
 export type SelectProps = Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'onChange' | 'value' | 'defaultValue' | 'children'> & {
 	// Required list of option values (string ids)
@@ -23,7 +23,7 @@ export type SelectProps = Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'o
 	onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
-function Select({
+const Select = React.memo<SelectProps>(({
 	options,
 	value,
 	defaultValue,
@@ -32,10 +32,10 @@ function Select({
 	translationKeyPrefix = 'types',
 	renderOptionLabel,
 	onValueChange,
-		onChange,
-		disabled,
-}: SelectProps) {
-	const { t } = useLanguage();
+	onChange,
+	disabled,
+}) => {
+	const t = useTranslationFunction();
 
 	const isControlled = value !== undefined;
 	const [open, setOpen] = React.useState(false);
@@ -50,9 +50,11 @@ function Select({
 	const menuId = React.useId();
 	const btnId = React.useId();
 
-	const labelFor = (opt: string) => (renderOptionLabel ? renderOptionLabel(opt) : t(`${translationKeyPrefix}.${opt}` as any));
+	const labelFor = React.useCallback((opt: string) => (
+		renderOptionLabel ? renderOptionLabel(opt) : t(`${translationKeyPrefix}.${opt}` as any)
+	), [renderOptionLabel, t, translationKeyPrefix]);
 
-	const emitChange = (val: string) => {
+	const emitChange = React.useCallback((val: string) => {
 		// call native onChange signature with a fabricated event to preserve API
 		if (onChange) {
 			const fakeEvent = {
@@ -61,27 +63,27 @@ function Select({
 			onChange(fakeEvent);
 		}
 		onValueChange?.(val);
-	};
+	}, [onChange, onValueChange]);
 
-	const commitValue = (val: string) => {
+	const commitValue = React.useCallback((val: string) => {
 		if (!isControlled) setInternalValue(val);
 		emitChange(val);
-	};
+	}, [isControlled, emitChange]);
 
-	const openMenu = () => {
+	const openMenu = React.useCallback(() => {
 		if (disabled) return;
 		setOpen(true);
 		const idx = Math.max(0, options.findIndex((o) => o === (selectedValue ?? options[0])));
 		setActiveIndex(idx >= 0 ? idx : 0);
 		setTimeout(() => listRef.current?.focus(), 0);
-	};
+	}, [disabled, options, selectedValue]);
 
-	const closeMenu = (focusButton = true) => {
+	const closeMenu = React.useCallback((focusButton = true) => {
 		setOpen(false);
 		if (focusButton) setTimeout(() => buttonRef.current?.focus(), 0);
-	};
+	}, []);
 
-	const onButtonKeyDown: React.KeyboardEventHandler = (e) => {
+	const onButtonKeyDown: React.KeyboardEventHandler = React.useCallback((e) => {
 		if (disabled) return;
 		switch (e.key) {
 			case 'ArrowDown':
@@ -91,7 +93,12 @@ function Select({
 				openMenu();
 				break;
 		}
-	};
+	}, [disabled, openMenu]);
+
+	const onOptionClick = React.useCallback((idx: number) => {
+		commitValue(options[idx]);
+		closeMenu();
+	}, [commitValue, options, closeMenu]);
 
 	React.useEffect(() => {
 		if (!open) return;
@@ -103,12 +110,7 @@ function Select({
 		};
 		document.addEventListener('mousedown', onDocClick);
 		return () => document.removeEventListener('mousedown', onDocClick);
-	}, [open]);
-
-	const onOptionClick = (idx: number) => {
-		commitValue(options[idx]);
-		closeMenu();
-	};
+	}, [open, closeMenu]);
 
 	const activeId = `${menuId}-opt-${activeIndex}`;
 
@@ -167,6 +169,8 @@ function Select({
 			)}
 		</div>
 	);
-}
+});
+
+Select.displayName = 'Select';
 
 export default Select;

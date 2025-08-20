@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useGameStore } from '@/contexts/gamestore';
-import { useLanguage } from '@/contexts/i18n';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useCurrentUser, useUserManagement, useTranslationFunction } from '@/hooks/useSelectiveContext';
 import Button from '@/components/button/button';
 import Icon from '../icon/icon';
 
@@ -8,9 +7,34 @@ interface UserManagerProps {
     className?: string;
 }
 
-const UserManager= ({ className } : UserManagerProps ) => {
-    const { currentUser, listUsers, switchUser, createUser, deleteUser, renameCurrentUser } = useGameStore();
-    const { t } = useLanguage();
+// Separate component for user list items to optimize rendering
+// React.memo prevents re-renders when other users in the list change
+// useCallback ensures stable onClick reference for performance
+const UserItem = React.memo<{
+    user: string;
+    isActive: boolean;
+    onUserSwitch: (user: string) => void;
+}>(({ user, isActive, onUserSwitch }) => {
+    const handleClick = useCallback(() => {
+        onUserSwitch(user);
+    }, [user, onUserSwitch]);
+
+    return (
+        <div
+            className={`user-item ${isActive ? 'active' : ''}`}
+            onClick={handleClick}
+        >
+            {user}
+        </div>
+    );
+});
+
+UserItem.displayName = 'UserItem';
+
+const UserManager = React.memo<UserManagerProps>(({ className }) => {
+    const currentUser = useCurrentUser();
+    const { listUsers, switchUser, createUser, deleteUser, renameCurrentUser } = useUserManagement();
+    const t = useTranslationFunction(); // Only translation function, not full language context
     
     const [username, setUsername] = useState<string>(currentUser?.username ?? 'user');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -45,26 +69,28 @@ const UserManager= ({ className } : UserManagerProps ) => {
         };
     }, [isDropdownOpen]);
 
-    const commitRename = async () => {
+    // useCallback for all handlers provides stable references
+    // This prevents child components from re-rendering unnecessarily
+    const commitRename = useCallback(async () => {
         const trimmed = username.trim();
         if (!currentUser || !trimmed || trimmed === currentUser.username) return;
         await renameCurrentUser(trimmed);
-    };
+    }, [username, currentUser, renameCurrentUser]);
 
-    const handleUserSwitch = async (targetUsername: string) => {
+    const handleUserSwitch = useCallback(async (targetUsername: string) => {
         if (targetUsername !== currentUser?.username) {
             await switchUser(targetUsername);
         }
         setIsDropdownOpen(false);
-    };
+    }, [currentUser?.username, switchUser]);
 
-    const handleDeleteUser = async (targetUsername: string) => {
+    const handleDeleteUser = useCallback(async (targetUsername: string) => {
         await deleteUser(targetUsername);
         setShowDeleteConfirm(null);
         setIsDropdownOpen(false);
-    };
+    }, [deleteUser]);
 
-    const handleCreateUser = async () => {
+    const handleCreateUser = useCallback(async () => {
         const trimmed = newUserName.trim();
         if (!trimmed) return;
         
@@ -74,10 +100,62 @@ const UserManager= ({ className } : UserManagerProps ) => {
             setNewUserName('');
             setIsDropdownOpen(false);
         }
-    };
+    }, [newUserName, createUser]);
 
-    const users = listUsers();
-    const canDeleteCurrentUser = users.length > 1;
+    // useMemo for derived values prevents unnecessary recalculations
+    const users = useMemo(() => listUsers(), [listUsers]);
+    const canDeleteCurrentUser = useMemo(() => users.length > 1, [users.length]);
+
+    // All event handlers are memoized to prevent child re-renders
+    const handleUsernameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setUsername(e.target.value);
+    }, []);
+
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            commitRename();
+        }
+    }, [commitRename]);
+
+    const toggleDropdown = useCallback(() => {
+        setIsDropdownOpen(!isDropdownOpen);
+    }, [isDropdownOpen]);
+
+    const handleDeleteConfirm = useCallback(() => {
+        currentUser && setShowDeleteConfirm(currentUser.username);
+    }, [currentUser]);
+
+    const handleNewUserNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewUserName(e.target.value);
+    }, []);
+
+    const handleNewUserKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleCreateUser();
+        } else if (e.key === 'Escape') {
+            setShowCreateInput(false);
+            setNewUserName('');
+        }
+    }, [handleCreateUser]);
+
+    const showCreateInputHandler = useCallback(() => {
+        setShowCreateInput(true);
+    }, []);
+
+    const cancelCreateUser = useCallback(() => {
+        setShowCreateInput(false);
+        setNewUserName('');
+    }, []);
+
+    const handleDeleteConfirmClick = useCallback(() => {
+        if (showDeleteConfirm) {
+            handleDeleteUser(showDeleteConfirm);
+        }
+    }, [showDeleteConfirm, handleDeleteUser]);
+
+    const cancelDeleteConfirm = useCallback(() => {
+        setShowDeleteConfirm(null);
+    }, []);
 
     return (
         <div className={`user-manager ${className || ''}`} ref={containerRef}>
@@ -87,17 +165,14 @@ const UserManager= ({ className } : UserManagerProps ) => {
                     value={username}
                     className="user-input"
                     placeholder={t('settings.player.placeholder' as any)}
-                    onChange={(e) => setUsername(e.target.value)}
+                    aria-label="current-user-name"
+                    onChange={handleUsernameChange}
                     onBlur={commitRename}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            commitRename();
-                        }
-                    }}
+                    onKeyDown={handleKeyDown}
                 />
                 <button
                     className="dropdown-toggle"
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    onClick={toggleDropdown}
                     aria-label="toggle-user-list"
                 >
                     <span className='ui-button__icon' aria-hidden>
@@ -110,7 +185,7 @@ const UserManager= ({ className } : UserManagerProps ) => {
             
             <button className="delete-button" 
                     disabled={!canDeleteCurrentUser}
-                    onClick={() => currentUser && setShowDeleteConfirm(currentUser.username)}
+                    onClick={handleDeleteConfirm}
                     aria-label="delete-current-user"
             >
                 <span className='ui-button__icon' aria-hidden>
@@ -122,22 +197,18 @@ const UserManager= ({ className } : UserManagerProps ) => {
                 <div className="user-dropdown" ref={dropdownRef}>
                     <div className="user-list">
                         {users.map((user) => (
-                            <div
+                            <UserItem
                                 key={user}
-                                className={`user-item ${user === currentUser?.username ? 'active' : ''}`}
-                                onClick={() => handleUserSwitch(user)}
-                            >
-                                {user}
-                                {/* {user === currentUser?.username && (
-                                    <span className="current-indicator">★</span>
-                                )} */}
-                            </div>
+                                user={user}
+                                isActive={user === currentUser?.username}
+                                onUserSwitch={handleUserSwitch}
+                            />
                         ))}
                         
                         {!showCreateInput ? (
                             <div
                                 className="user-item create-user"
-                                onClick={() => setShowCreateInput(true)}
+                                onClick={showCreateInputHandler}
                             >
                                 <span className="plus-icon">+</span>
                                 {t('settings.player.createNew' as any)}
@@ -148,15 +219,8 @@ const UserManager= ({ className } : UserManagerProps ) => {
                                     type="text"
                                     value={newUserName}
                                     placeholder={t('settings.player.newUserPlaceholder' as any)}
-                                    onChange={(e) => setNewUserName(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            handleCreateUser();
-                                        } else if (e.key === 'Escape') {
-                                            setShowCreateInput(false);
-                                            setNewUserName('');
-                                        }
-                                    }}
+                                    onChange={handleNewUserNameChange}
+                                    onKeyDown={handleNewUserKeyDown}
                                     autoFocus
                                 />
                                 <div className="create-user-buttons">
@@ -169,10 +233,7 @@ const UserManager= ({ className } : UserManagerProps ) => {
                                     </button>
                                     <button
                                         className='ui-button'
-                                        onClick={() => {
-                                            setShowCreateInput(false);
-                                            setNewUserName('');
-                                        }}
+                                        onClick={cancelCreateUser}
                                     >
                                         {t('buttons.cancel' as any)}
                                     </button>
@@ -196,13 +257,13 @@ const UserManager= ({ className } : UserManagerProps ) => {
                         <div className="confirm-buttons">
                             <Button
                                 className="danger-button"
-                                onClick={() => handleDeleteUser(showDeleteConfirm)}
+                                onClick={handleDeleteConfirmClick}
                             >
                                 {t('settings.player.deleteConfirm.confirm' as any)}
                             </Button>
                             <Button
                                 className="secondary-button"
-                                onClick={() => setShowDeleteConfirm(null)}
+                                onClick={cancelDeleteConfirm}
                             >
                                 {t('settings.player.deleteConfirm.cancel' as any)}
                             </Button>
@@ -212,6 +273,8 @@ const UserManager= ({ className } : UserManagerProps ) => {
             )}
         </div>
     );
-};
+});
+
+UserManager.displayName = 'UserManager';
 
 export default UserManager;

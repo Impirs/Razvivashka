@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSettings } from '@/contexts/pref';
-import { useLanguage } from '@/contexts/i18n';
-import { useGameStore } from '@/contexts/gamestore';
+import { useLanguageState, useTranslationFunction } from '@/hooks/useSelectiveContext';
+import { useCurrentUser, useUserManagement } from '@/hooks/useSelectiveContext';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/button/button';
@@ -10,12 +10,52 @@ import Checkbox from '@/components/checkbox/checkbox';
 import Slider from '@/components/slider/slider';
 import UserManager from '@/components/usermanager/usermanager';
 
-function SettingsPage() {
+const SettingsPage = React.memo(() => {
     const { get, set, useSetting } = useSettings();
-    const { language, setLanguage, t } = useLanguage();
+    const { language, setLanguage } = useLanguageState(); // Only language state, not translations
+    const t = useTranslationFunction(); // Only translation function, better performance
 
     const [notif] = useSetting('volume');
     const [games] = useSetting('games');
+
+    // All handlers are memoized to prevent unnecessary re-renders of child components
+    const navigate = useNavigate();
+    const handleGoBack = useCallback(() => navigate(-1), [navigate]);
+    const handleGoHome = useCallback(() => navigate('/'), [navigate]);
+
+    const handleLanguageChange = useCallback((value: string) => {
+        setLanguage(value as typeof language);
+    }, [setLanguage]);
+
+    const handleNotificationVolumeChange = useCallback((value: number) => {
+        set('volume', { ...notif, notifications: value });
+    }, [notif, set]);
+
+    const handleEffectsVolumeChange = useCallback((value: number) => {
+        set('volume', { ...notif, effects: value });
+    }, [notif, set]);
+
+    // Factory function to avoid duplicating logic for each game type
+    // Returns memoized handlers that prevent unnecessary re-renders
+    const createGameSettingHandler = useCallback((gameType: 'digit' | 'shulte' | 'queens') => {
+        return (checked: boolean) => {
+            const defaultGames = { 
+                digit: { view_modification: false }, 
+                shulte: { view_modification: false },
+                queens: { view_modification: false }
+            };
+            const g = games ?? defaultGames;
+            set('games', {
+                ...g,
+                [gameType]: { ...g?.[gameType], view_modification: checked },
+            });
+        };
+    }, [games, set]);
+
+    // useMemo ensures game handlers are only recreated when factory function changes
+    const handleDigitSettingChange = useMemo(() => createGameSettingHandler('digit'), [createGameSettingHandler]);
+    const handleShulteSettingChange = useMemo(() => createGameSettingHandler('shulte'), [createGameSettingHandler]);
+    const handleQueensSettingChange = useMemo(() => createGameSettingHandler('queens'), [createGameSettingHandler]);
 
     const langOptionLabel = (code: string) => {
         const optKey = code;
@@ -23,7 +63,6 @@ function SettingsPage() {
         return res.startsWith('settings.language.options.') ? code : res;
     };
 
-    const navigate = useNavigate();
     return (
         <div className="page-layout">
             <div className="page-content">
@@ -38,12 +77,12 @@ function SettingsPage() {
                                 size="small" 
                                 leftIcon="left" 
                                 className='nav-button'
-                                onClick={() => navigate(-1)} />
+                                onClick={handleGoBack} />
                         <Button aria-label="nav-home" 
                                 size="small" 
                                 leftIcon="home" 
                                 className='nav-button'
-                                onClick={() => navigate('/')} />
+                                onClick={handleGoHome} />
                     </div>
                 </div>
                 <div className="container-content">
@@ -64,7 +103,7 @@ function SettingsPage() {
                                     translationKeyPrefix='settings.language.options'
                                     options={['en', 'ru', 'sb_lat', 'sb_cy']}
                                     value={language}
-                                    onValueChange={(value) => setLanguage(value as typeof language)}
+                                    onValueChange={handleLanguageChange}
                                 />
                             </div>
                             <div className="settings-line-parameter">
@@ -75,7 +114,7 @@ function SettingsPage() {
                                     max={1}
                                     step={0.05}
                                     value={notif.notifications}
-                                    onChange={(value) => set('volume', { ...notif, notifications: value })}
+                                    onChange={handleNotificationVolumeChange}
                                 />
                             </div>
                             <div className="settings-line-parameter">
@@ -86,7 +125,7 @@ function SettingsPage() {
                                     max={1}
                                     step={0.05}
                                     value={notif.effects}
-                                    onChange={(value) => set('volume', { ...notif, effects: value })}
+                                    onChange={handleEffectsVolumeChange}
                                 />
                             </div>
                         </div>
@@ -104,17 +143,7 @@ function SettingsPage() {
                                 <Checkbox
                                     ariaLabel="game-digit-view-modification"
                                     checked={Boolean(games?.digit?.view_modification)}
-                                    onChange={(checked) => {
-                                        const g = games ?? { 
-                                            digit: { view_modification: false }, 
-                                            shulte: { view_modification: false },
-                                            queens: { view_modification: false }
-                                        } as typeof games;
-                                        set('games', {
-                                            ...g,
-                                            digit: { ...g?.digit, view_modification: checked },
-                                        });
-                                    }}
+                                    onChange={handleDigitSettingChange}
                                 />
                             </div>
 
@@ -127,17 +156,7 @@ function SettingsPage() {
                                 <Checkbox
                                     ariaLabel="game-shulte-view-modification"
                                     checked={Boolean(games?.shulte?.view_modification)}
-                                    onChange={(checked) => {
-                                        const g = games ?? { 
-                                            digit: { view_modification: true }, 
-                                            shulte: { view_modification: true },
-                                            queens: { view_modification: true }
-                                        } as typeof games;
-                                        set('games', {
-                                            ...g,
-                                            shulte: { ...g?.shulte, view_modification: checked },
-                                        });
-                                    }}
+                                    onChange={handleShulteSettingChange}
                                 />
                             </div>
 
@@ -150,17 +169,7 @@ function SettingsPage() {
                                 <Checkbox
                                     ariaLabel="game-queens-view-modification"
                                     checked={Boolean(games?.queens?.view_modification)}
-                                    onChange={(checked) => {
-                                        const g = games ?? { 
-                                            digit: { view_modification: true }, 
-                                            shulte: { view_modification: true },
-                                            queens: { view_modification: true }
-                                        } as typeof games;
-                                        set('games', {
-                                            ...g,
-                                            queens: { ...g?.queens, view_modification: checked },
-                                        });
-                                    }}
+                                    onChange={handleQueensSettingChange}
                                 />
                             </div>
                         </div>
@@ -169,6 +178,8 @@ function SettingsPage() {
             </div>
         </div>
     );
-};
+});
+
+SettingsPage.displayName = 'SettingsPage';
 
 export default SettingsPage;

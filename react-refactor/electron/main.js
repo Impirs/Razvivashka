@@ -14,8 +14,13 @@ log.info('App starting...');
 autoUpdater.allowPrerelease = true;
 
 // On Windows ensure AUMID is set so taskbar uses the correct icon
+// В dev режиме НЕ устанавливаем AUMID - это позволяет сохранить комбинированную иконку
+// В production устанавливаем наш AUMID для полной замены на вашу иконку
 try {
-    app.setAppUserModelId('com.impirs.razvivashka');
+    if (!isDev) {
+        app.setAppUserModelId('com.impirs.razvivashka');
+    }
+    // В dev режиме оставляем стандартный AUMID для комбинированного эффекта
 } catch {}
 
 // Function to check for updates in development mode using GitHub API
@@ -91,6 +96,15 @@ function createWindow() {
 
     win.setMenuBarVisibility(false);
     win.maximize();
+    
+    // Icon setting for windows (to be sure)
+    if (process.platform === 'win32') {
+        if (!isDev) {
+            const productionIconPath = path.join(process.resourcesPath || path.join(__dirname, '..'), 'icon.ico');
+            win.setIcon(productionIconPath);
+            win.setOverlayIcon(productionIconPath, 'Развивашка');
+        }
+    }
 
     if (isDev) {
         win.loadURL('http://localhost:5173');

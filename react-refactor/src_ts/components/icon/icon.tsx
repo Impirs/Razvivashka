@@ -10,9 +10,16 @@ export type IconProps = React.SVGProps<SVGSVGElement> & {
 	masked?: boolean;
 };
 
-function Icon({ name, color = '#111111', className, style, masked = false, ...rest }: IconProps) {
+const Icon = React.memo<IconProps>(({ name, color = '#111111', className, style, masked = false, ...rest }) => {
 	const Svg = iconComponents[name];
 	const url = iconUrls[name];
+
+	// Мемоизируем стиль для предотвращения создания нового объекта на каждом рендере
+	const baseStyle = React.useMemo(() => ({ 
+		display: 'inline-block' as const, 
+		verticalAlign: 'middle' as const, 
+		...style 
+	}), [style]);
 
 	// Masked variant: rely on `#<name>` mask rules from styles/_icons.scss
 	if (masked) {
@@ -20,11 +27,7 @@ function Icon({ name, color = '#111111', className, style, masked = false, ...re
 			<span
 				id={name}
 				className={className}
-				style={{ 
-					display: 'inline-block', 
-					verticalAlign: 'middle', 
-					...style 
-				}}
+				style={baseStyle}
 				aria-hidden={true}
 			/>
 		);
@@ -35,11 +38,7 @@ function Icon({ name, color = '#111111', className, style, masked = false, ...re
 		return (
 			<Svg
 				className={className}
-				style={{ 
-					display: 'inline-block', 
-					verticalAlign: 'middle', 
-					...style 
-				}}
+				style={baseStyle}
 				fill={color as any}
 				stroke={color as any}
 				focusable={rest.focusable ?? false}
@@ -56,11 +55,7 @@ function Icon({ name, color = '#111111', className, style, masked = false, ...re
 				src={url}
 				alt=""
 				className={className}
-				style={{ 
-					display: 'inline-block', 
-					verticalAlign: 'middle', 
-					...style 
-				}}
+				style={baseStyle}
 				aria-hidden={rest['aria-label'] ? undefined : true}
 			/>
 		);
@@ -75,10 +70,15 @@ function Icon({ name, color = '#111111', className, style, masked = false, ...re
 	}
 
 	return null;
-}
+});
+
+Icon.displayName = 'Icon';
 
 export default Icon;
 
 // Export the list of available icon names at runtime
 export const availableIcons = Object.keys(iconComponents);
+
+// Type for available icon names (useful for TypeScript users)
+export type AvailableIconName = keyof typeof iconComponents;
 

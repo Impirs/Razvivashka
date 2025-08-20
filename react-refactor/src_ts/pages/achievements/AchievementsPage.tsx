@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
 import Select from '@/components/select/select';
 import Icon from '@/components/icon/icon';
-import { useGameStore } from '@/contexts/gamestore';
+import { useCurrentUser, useAchievements, useGameActions } from '@/hooks/useSelectiveContext';
 
 interface AchRow {
   gameId: string;
@@ -17,7 +17,10 @@ interface AchRow {
 // Optional GameStore access (component still works without provider, useful for tests)
 function useOptionalGameStore() {
     try {
-        return useGameStore();
+        const currentUser = useCurrentUser();
+        const { allAchievements, userAchievements } = useAchievements();
+        const { addGameAchievements } = useGameActions();
+        return { currentUser, allAchievements, userAchievements, addGameAchievements };
     } catch {
         return null;
     }

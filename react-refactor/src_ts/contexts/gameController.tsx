@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import winSfx from '@/assets/sounds/win.mp3';
 import defeatSfx from '@/assets/sounds/defeat.mp3';
-import { useGameStore } from './gamestore';
+import { useGameActions } from '@/hooks/useSelectiveContext';
 import { useSettings } from './pref';
 
 // Define game states
@@ -56,7 +56,7 @@ function gameControllerReducer(state: GameControllerState, action: any): GameCon
 
 export const GameControllerProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(gameControllerReducer, initialState);
-    const { addGameRecord, unlockAchievementCheck } = useGameStore();
+    const { addGameRecord, unlockAchievementCheck } = useGameActions();
     const lastReportedRef = useRef<number | null>(null);
     const { get } = useSettings();
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/button/button';
-import { useLanguage } from '@/contexts/i18n';
+import { useTranslationFunction } from '@/hooks/useSelectiveContext';
 
-function HomePage() {
+const HomePage = React.memo(() => {
 	const navigate = useNavigate();
-	const { t } = useLanguage();
+	const t = useTranslationFunction(); // Optimized: only translation function
 
 	const onPlay = () => navigate('/catalog');
 	const onAchievements = () => navigate('/achievements');
@@ -39,7 +39,9 @@ function HomePage() {
 			</div>
 		</div>
 	);
-};
+});
+
+HomePage.displayName = 'HomePage';
 
 export default HomePage;
 
