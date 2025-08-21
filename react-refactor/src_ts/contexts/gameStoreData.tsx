@@ -13,6 +13,7 @@ import {
 interface GameStoreDataContextType {
     currentUser: User | null;
     allAchievements: Record<string, GameAchievement[]>;
+    usersList: string[];
     loading: boolean;
     error: string | null;
     dispatch: React.Dispatch<any>;
@@ -22,6 +23,7 @@ interface GameStoreDataContextType {
 const initialState: GameStoreState = {
     currentUser: null,
     allAchievements: {},
+    usersList: [],
     loading: false,
     error: null,
 };
@@ -41,10 +43,6 @@ function gameStoreDataReducer(state: GameStoreState, action: any): GameStoreStat
         }
         case 'LOGOUT':
             return { ...initialState };
-        case 'SET_LOADING':
-            return { ...state, loading: action.payload };
-        case 'SET_ERROR':
-            return { ...state, error: action.payload, loading: false };
         case 'ADD_GAME_ACHIEVEMENTS':
             return {
                 ...state,
@@ -108,6 +106,9 @@ function gameStoreDataReducer(state: GameStoreState, action: any): GameStoreStat
             return { ...state, loading: action.payload };
         case 'SET_ERROR':
             return { ...state, error: action.payload };
+        case 'UPDATE_USERS_LIST':
+            // console.log('Reducer: Updating users list to:', action.payload);
+            return { ...state, usersList: action.payload };
         default:
             return state;
     }
@@ -121,6 +122,8 @@ export const GameStoreDataProvider = ({ children }: { children: React.ReactNode 
         const loadAchievements = async () => {
             try {
                 const achievements = await import('@/data/achievements.json');
+                console.log('Loaded achievements from file:', achievements.default);
+                
                 const achievementsByGame = achievements.default.reduce((acc: Record<string, GameAchievement[]>, achievement: GameAchievement) => {
                     if (!acc[achievement.gameId]) {
                         acc[achievement.gameId] = [];
@@ -128,6 +131,10 @@ export const GameStoreDataProvider = ({ children }: { children: React.ReactNode 
                     acc[achievement.gameId].push(achievement);
                     return acc;
                 }, {});
+
+                console.log('Grouped achievements by game:', Object.fromEntries(
+                    Object.entries(achievementsByGame).map(([k, v]) => [k, v.length])
+                ));
 
                 // Add all achievement definitions
                 for (const [gameId, gameAchievements] of Object.entries(achievementsByGame)) {
@@ -149,6 +156,10 @@ export const GameStoreDataProvider = ({ children }: { children: React.ReactNode 
         const initUser = async () => {
             dispatch({ type: 'SET_LOADING', payload: true });
             try {
+                // Load users list
+                const usersList = window.gameStoreAPI.listUsers();
+                dispatch({ type: 'UPDATE_USERS_LIST', payload: usersList });
+
                 const currentUserSetting = window.settingsAPI.get('currentUser') as unknown as string;
                 const userData = await window.gameStoreAPI.loadUserData(currentUserSetting || 'user');
                 
@@ -176,10 +187,11 @@ export const GameStoreDataProvider = ({ children }: { children: React.ReactNode 
     const contextValue = useMemo(() => ({
         currentUser: state.currentUser,
         allAchievements: state.allAchievements,
+        usersList: state.usersList,
         loading: state.loading,
         error: state.error,
         dispatch
-    }), [state.currentUser, state.allAchievements, state.loading, state.error]);
+    }), [state.currentUser, state.allAchievements, state.usersList, state.loading, state.error]);
 
     return (
         <GameStoreDataContext.Provider value={contextValue}>
@@ -205,6 +217,8 @@ function normalizeUserAchievements(user: User, allAchievements: Record<string, G
         achievements: Array.isArray(user.achievements) ? user.achievements : [],
         gameRecords: Array.isArray(user.gameRecords) ? user.gameRecords : [],
     };
+
+    console.log('Normalizing user achievements for Queens game');
 
     const getReqs = (gameId: string, props: string): number[] => {
         const defs = allAchievements[gameId] || [];
@@ -247,6 +261,10 @@ function normalizeUserAchievements(user: User, allAchievements: Record<string, G
                 unlockedTiers: new Array(reqs.length).fill(false),
             };
         });
+
+    console.log('Queens achievements after normalization:', { 
+        queensTotal: normalizedExisting.concat(missing).filter(a => a.gameId === 'queens').length
+    });
 
     return {
         ...normalizedUser,

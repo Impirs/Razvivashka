@@ -16,6 +16,7 @@ const HomePage = React.memo(() => {
 		if (api?.quitApp) api.quitApp();
 	};
 
+
 	return (
 		<div className="page-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 			<div className="menu-card">

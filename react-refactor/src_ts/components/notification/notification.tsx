@@ -5,9 +5,19 @@ import Icon from '@/components/icon/icon';
 const NotificationDisplay = React.memo(() => {
     const { notifications, openNotification, removeNotification } = useNotification();
 
-    if (notifications.length === 0) return null;
+    // console.log('NotificationDisplay render:', { 
+    //     notifications: notifications.length,
+    //     notificationsList: notifications.map(n => ({ id: n.id, type: n.type, title: n.title }))
+    // });
+
+    if (notifications.length === 0) {
+        // console.log('NotificationDisplay: No notifications to show');
+        return null;
+    }
 
     const notification = notifications[0]; // Show only the first notification
+
+    // console.log('Showing notification:', notification);
 
     return (
         <article className={`notification notification-${notification.type}`} >

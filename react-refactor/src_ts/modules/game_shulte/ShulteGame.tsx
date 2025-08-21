@@ -112,14 +112,20 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
         // Don't call resetTimer() - useGameTimer handles it automatically
         
         // Start with perfect assumption
-        setGameContext('shulte', generateRecordProps('shulte', settings), true);
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => {
+            setGameContext('shulte', generateRecordProps('shulte', settings), true);
+        }, 0);
         
         // Set game modifications
         const mods: string[] = [];
         if (hideFoundNumber === false) {
             mods.push('view_modification');
         }
-        setModifications(mods);
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => {
+            setModifications(mods);
+        }, 0);
     }, [settings.size, setGameContext, setModifications, hideFoundNumber]);
 
     React.useEffect(() => {
@@ -145,15 +151,36 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
                 return newBoard;
             });
             
-            setCurrent(c => c + 1);
+            setCurrent(c => {
+                const newCurrent = c + 1;
+                const totalCells = settings.size * settings.size;
+                // console.log('ShulteGame current updated:', { 
+                //     previous: c, 
+                //     new: newCurrent, 
+                //     total: totalCells,
+                //     isLastCell: c === totalCells
+                // });
+                
+                // Check win condition: if we just found the last cell
+                if (c === totalCells) {
+                    // console.log('ShulteGame WIN! Last cell found:', { 
+                    //     foundCell: c,
+                    //     total: totalCells, 
+                    //     seconds 
+                    // });
+                    setTimeout(() => endGame('win', seconds), 0);
+                }
+                
+                return newCurrent;
+            });
 
-            if (current === settings.size * settings.size) {
-                endGame('win', seconds);
-            }
         } else {
             // Wrong cell clicked - handle mistake
             if (mistakes === 0 && gameId === 'shulte' && gameProps) {
-                setGameContext('shulte', generateRecordProps('shulte', settings), false);
+                // Use setTimeout to avoid setState during render
+                setTimeout(() => {
+                    setGameContext('shulte', generateRecordProps('shulte', settings), false);
+                }, 0);
             }
             setMistakes(m => m + 1);
         }
@@ -162,7 +189,10 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
     // 3 mistakes = lose
     React.useEffect(() => {
         if (status === 'playing' && mistakes >= 3) {
-            endGame('lose', seconds);
+            // Use setTimeout to avoid setState during render
+            setTimeout(() => {
+                endGame('lose', seconds);
+            }, 0);
         }
     }, [mistakes, status, seconds, endGame]);
 

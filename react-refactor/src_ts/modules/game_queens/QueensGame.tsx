@@ -15,7 +15,6 @@ interface QueensGameProps {
     settings: QueensSettings; 
 }
 
-// Мемоизированный компонент оставшихся ферзей
 const QueensRemaining = React.memo<{ remaining: number }>(({ remaining }) => {
     const remainingStyle = React.useMemo(() => ({ 
         marginLeft: 8, 
@@ -32,7 +31,6 @@ const QueensRemaining = React.memo<{ remaining: number }>(({ remaining }) => {
 
 QueensRemaining.displayName = 'QueensRemaining';
 
-// Мемоизированный компонент таймера
 const GameTimer = React.memo<{ seconds: number }>(({ seconds }) => (
     <div className="game-timer">
         <div aria-label="timer">{formatTime(seconds)}</div>
@@ -41,7 +39,6 @@ const GameTimer = React.memo<{ seconds: number }>(({ seconds }) => (
 
 GameTimer.displayName = 'GameTimer';
 
-// Мемоизированная ячейка доски
 const QueensCell = React.memo<{
     cell: { hasQueen: boolean; region: number };
     row: number;
@@ -143,11 +140,17 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
             setBoardReadyRunId(null);
             // Don't call resetTimer() - useGameTimer handles it automatically
             
-            setGameContext('queens', generateRecordProps('queens', settings), true);
+            // Use setTimeout to avoid setState during render
+            setTimeout(() => {
+                setGameContext('queens', generateRecordProps('queens', settings), true);
+            }, 0);
             
             const mods: string[] = [];
             if (!assistHighlight) mods.push('view_modification');
-            setModifications(mods);
+            // Use setTimeout to avoid setState during render
+            setTimeout(() => {
+                setModifications(mods);
+            }, 0);
             
             // Set board after other state updates to prevent conflicts
             setTimeout(() => {
@@ -202,7 +205,10 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
     // Check for win condition and end game with timer value
     React.useEffect(() => {
         if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isSolved(board)) {
-            endGame('win', seconds);
+            // Use setTimeout to avoid setState during render
+            setTimeout(() => {
+                endGame('win', seconds);
+            }, 0);
         }
     }, [board, boardReady, boardReadyRunId, startedAt, status, seconds, endGame]);
 

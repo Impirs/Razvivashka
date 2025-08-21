@@ -12,7 +12,8 @@
   },
   "build": {
     "appId": "com.impirs.razvivashka",
-    "productName": "Развивашка",
+  "productName": "Развивашка",
+  "executableName": "playandlearn",
     "forceCodeSigning": false,
     "win": {
       "target": [

@@ -23,7 +23,7 @@ import GameLayout from './layouts/GameLayout';
 import NotificationDisplay from './components/notification/notification';
 
 // Update handler hook
-import { useUpdateHandler } from './utils/useUpdateHandler';
+import { useUpdateHandler } from './hooks/useUpdateHandler';
 
 
 function GameCentralWrapper() {
@@ -55,16 +55,16 @@ function App() {
 			<LanguageProvider>
 				<Router>
 					<div style={{ display: 'contents' }}>
-						{/* Game data and actions - separated for better performance */}
-						<GameStoreDataProvider>
-							<GameStoreActionsProvider>
-								{/* Notification system - isolated from game data */}
-								<NotificationProvider>
+						{/* Notification system - needs to be high up for other contexts to use */}
+						<NotificationProvider>
+							{/* Game data and actions - separated for better performance */}
+							<GameStoreDataProvider>
+								<GameStoreActionsProvider>
 									<AppContent />
 									<NotificationDisplay />
-								</NotificationProvider>
-							</GameStoreActionsProvider>
-						</GameStoreDataProvider>
+								</GameStoreActionsProvider>
+							</GameStoreDataProvider>
+						</NotificationProvider>
 					</div>
 				</Router>
 			</LanguageProvider>

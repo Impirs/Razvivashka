@@ -180,7 +180,7 @@ function AchievementsPage() {
                                     </div>
                                     <div className="achievement-text">
                                         <h3>{getTitle(r)}</h3>
-                                        <p>{getDescription(r)}</p>
+                                        <p><strong>{t(`games.${r.gameId}`)}:</strong> {getDescription(r)}</p>
                                     </div>
                                 </li>
                             );

@@ -2,6 +2,7 @@ import React from "react";
 import { DigitGameSettings } from "./types/game_digit";
 import { generateRecordProps } from '@/utils/pt';
 import { formatTime } from "@/utils/ft";
+import { generateBoard, isNextToEmpty } from './digitGameLogic';
 
 import { useGameController } from "../../contexts/gameController";
 import { useGameTimer } from "@/hooks/useGameTimer";
@@ -51,17 +52,18 @@ const DigitButton = React.memo<{
     cellIndex: number;
     isSelected: boolean;
     isFound: boolean;
+    isAvailable: boolean;
     onClick: (digit: number, cellIndex: number) => void;
-}>(({ digit, cellIndex, isSelected, isFound, onClick }) => {
+}>(({ digit, cellIndex, isSelected, isFound, isAvailable, onClick }) => {
     const handleClick = React.useCallback(() => {
         onClick(digit, cellIndex);
     }, [digit, cellIndex, onClick]);
 
     return (
         <button
-            className={`digit-cell ${isSelected ? 'selected' : ''} ${isFound ? 'found' : ''}`}
+            className={`digit-cell ${isSelected ? 'selected' : ''} ${isFound ? 'found' : ''} ${!isAvailable ? 'unavailable' : ''}`}
             onClick={handleClick}
-            disabled={isFound}
+            disabled={isFound || !isAvailable}
         >
             {digit}
         </button>
@@ -74,6 +76,15 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
     const { status, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
     const t = useTranslationFunction();
+
+    // console.log('DigitGame render:', { 
+    //     status, 
+    //     gameId, 
+    //     gameProps, 
+    //     startedAt,
+    //     settingsSize: settings.size,
+    //     settingsTarget: settings.target 
+    // });
     
     const [gamesSettings] = useSetting('games');
     const hideCorrectNumbers = gamesSettings?.digit?.view_modification ?? false;
@@ -82,6 +93,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
     const [selectedCells, setSelectedCells] = React.useState<number[]>([]);
     const [mistakes, setMistakes] = React.useState(0);
     const [foundCells, setFoundCells] = React.useState<Set<number>>(new Set());
+    const [availableCells, setAvailableCells] = React.useState<Set<number>>(new Set());
     const lastStartRef = React.useRef<number | null>(null);
     const lastMistakeRef = React.useRef<string | null>(null);
 
@@ -91,87 +103,73 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         startedAt: startedAt 
     });
 
-    // Optimized board generation function based on original game logic
-    const generateBoard = React.useCallback(() => {
-        // Number distribution based on target and board size (from original logic)
-        const numberDistribution: Record<number, any> = {
-            6: { 1:8, 2:8, 3:16, 4:8, 5:8 },
-            7: { 1:8, 2:8, 3:8, 4:8, 5:8, 6:8 },
-            8: {
-                7: { 1:6, 2:6, 3:6, 4:12, 5:6, 6:6, 7:6 },
-                9: { 1:10, 2:10, 3:10, 4:20, 5:10, 6:10, 7:10 }
-            },
-            9: { 1:10, 2:10, 3:10, 4:10, 5:10, 6:10, 7:10, 8:10 },
-            10: { 1:8, 2:8, 3:8, 4:8, 5:16, 6:8, 7:8, 8:8, 9:8 }
-        };
-
-        // Get the correct distribution
-        let numbers = numberDistribution[settings.target];
-        if (settings.target === 8) {
-            numbers = numbers[settings.size] || numbers[7]; // fallback to size 7 if not found
-        }
-        if (!numbers) {
-            numbers = numberDistribution[6]; // fallback
-        }
-
-        let cells: number[] = [];
-
-        // Fill cells array based on distribution
-        for (let num in numbers) {
-            for (let i = 0; i < numbers[num]; i++) {
-                cells.push(Number(num));
-            }
-        }
-
-        // Shuffle the array
-        for (let i = cells.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [cells[i], cells[j]] = [cells[j], cells[i]];
-        }
-
-        // Create board with center cell as null, but return it in the structure
-        const newBoard: (number | null)[][] = [];
-        const center = Math.floor(settings.size / 2);
-        let index = 0;
-
-        for (let i = 0; i < settings.size; i++) {
+    // Function to check if a cell is available for selection (adjacent to empty cells)
+    const getAvailableCells = React.useCallback((currentBoard: (number | null)[], foundSet: Set<number>) => {
+        const size = settings.size;
+        const availableCells = new Set<number>();
+        
+        // Convert flat board back to 2D for isNextToEmpty function
+        const board2D: (number | null)[][] = [];
+        for (let i = 0; i < size; i++) {
             const row: (number | null)[] = [];
-            for (let j = 0; j < settings.size; j++) {
-                if (i === center && j === center) {
-                    row.push(null); // Center cell is empty
-                } else {
-                    row.push(cells[index++] || 0); // Fallback to 0 if not enough cells
-                }
+            for (let j = 0; j < size; j++) {
+                const flatIndex = i * size + j;
+                // If cell is found (cleared), treat it as null
+                row.push(foundSet.has(flatIndex) ? null : currentBoard[flatIndex]);
             }
-            newBoard.push(row);
+            board2D.push(row);
         }
-
-        // Return flattened board keeping null for center cell
-        return newBoard.flat();
-    }, [settings.target, settings.size]);
+        
+        // Check each cell if it's available for selection
+        for (let i = 0; i < currentBoard.length; i++) {
+            // Skip if cell is already found/cleared or is center cell
+            if (foundSet.has(i) || currentBoard[i] === null) continue;
+            
+            const row = Math.floor(i / size);
+            const col = i % size;
+            
+            // Use existing isNextToEmpty function
+            if (isNextToEmpty(board2D, row, col)) {
+                availableCells.add(i);
+            }
+        }
+        
+        return availableCells;
+    }, [settings.size]);
 
     // Optimized game reset function - timer resets automatically via useGameTimer
     const resetGame = React.useCallback(() => {
-        const newBoard = generateBoard();
+        // Use existing digitGameLogic function and flatten the result
+        const board2D = generateBoard(settings.target, settings.size);
+        const newBoard = board2D.flat();
         setBoard(newBoard);
         setSelectedCells([]);
         setMistakes(0);
         setFoundCells(new Set());
+        setAvailableCells(new Set());
         lastMistakeRef.current = null; // Reset mistake tracking
         // Don't call resetTimer() - useGameTimer handles it automatically
         
         // Start with perfect assumption
-        setGameContext('digital', generateRecordProps('digital', settings), true);
+        const recordProps = generateRecordProps('digit', settings);
+        // console.log('DigitGame setGameContext:', { gameId: 'digit', recordProps, isPerfect: true });
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => {
+            setGameContext('digit', recordProps, true);
+        }, 0);
         
         // Set game modifications
         const mods: string[] = [];
-        if (hideCorrectNumbers === false) {
+        if (hideCorrectNumbers === true) {
             mods.push('view_modification');
         }
-        setModifications(mods);
-    }, [generateBoard, setGameContext, setModifications, settings, hideCorrectNumbers]);
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => {
+            setModifications(mods);
+        }, 0);
+    }, [setGameContext, setModifications, settings, hideCorrectNumbers]);
 
-    // Инициализация игры при старте
+    // Game initialization
     React.useEffect(() => {
         if (status === 'playing' && startedAt && lastStartRef.current !== startedAt) {
             lastStartRef.current = startedAt;
@@ -181,10 +179,21 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         }
     }, [status, startedAt, resetGame]);
 
+    // Update available cells when board or found cells change
+    React.useEffect(() => {
+        if (hideCorrectNumbers && board.length > 0) {
+            const available = getAvailableCells(board, foundCells);
+            setAvailableCells(available);
+        }
+    }, [board, foundCells, hideCorrectNumbers, getAvailableCells]);
+
     // Handle cell selection logic for sum-based gameplay
     const handleDigitClick = React.useCallback((digit: number, cellIndex: number) => {
         if (status !== 'playing') return;
         if (foundCells.has(cellIndex)) return; // Can't select already found cells
+        
+        // If modification is enabled, only allow selecting available cells
+        if (hideCorrectNumbers && !availableCells.has(cellIndex)) return;
 
         setSelectedCells(prev => {
             const isSelected = prev.includes(cellIndex);
@@ -206,14 +215,20 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
                     const sum = firstValue + secondValue;
                     
                     if (sum === settings.target) {
+                        // console.log('Correct sum found!', { firstIdx, secondIdx, sum, target: settings.target });
                         // Correct sum - mark cells as found
                         setFoundCells(prevFound => {
                             const newFound = new Set([...prevFound, firstIdx, secondIdx]);
                             
-                            // Check for win condition (all non-null cells found)
+                            // Check win condition immediately
                             const totalCells = board.filter(cell => cell !== null).length;
-                            if (newFound.size >= totalCells) {
-                                endGame('win', seconds);
+                            if (newFound.size >= totalCells && totalCells > 0) {
+                                // console.log('DigitGame WIN! All cells found:', { 
+                                //     foundCells: newFound.size, 
+                                //     totalCells, 
+                                //     seconds 
+                                // });
+                                setTimeout(() => endGame('win', seconds), 0);
                             }
                             
                             return newFound;
@@ -226,8 +241,11 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
                         if (lastMistakeRef.current !== mistakeKey) {
                             lastMistakeRef.current = mistakeKey;
                             
-                            if (mistakes === 0 && gameId === 'digital' && gameProps) {
-                                setGameContext('digital', generateRecordProps('digital', settings), false);
+                            if (mistakes === 0 && gameId === 'digit' && gameProps) {
+                                // Use setTimeout to avoid setState during render
+                                setTimeout(() => {
+                                    setGameContext('digit', generateRecordProps('digit', settings), false);
+                                }, 0);
                             }
                             setMistakes(m => m + 1);
                         }
@@ -239,16 +257,18 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
                 }
             }
         });
-    }, [status, board, foundCells, settings.target, mistakes, gameId, gameProps, endGame, seconds, setGameContext]);
+    }, [status, board, foundCells, availableCells, hideCorrectNumbers, settings.target, mistakes, gameId, gameProps, endGame, seconds, setGameContext]);
 
     // Проигрыш при 3 ошибках
     React.useEffect(() => {
         if (status === 'playing' && mistakes >= 3) {
-            endGame('lose', seconds);
+            // Use setTimeout to avoid setState during render
+            setTimeout(() => {
+                endGame('lose', seconds);
+            }, 0);
         }
     }, [mistakes, status, seconds, endGame]);
 
-    // Мемоизированная игровая доска
     const gameBoard = React.useMemo(() => {
         if (status !== 'playing') return null;
 
@@ -272,15 +292,16 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
 
                     const isFound = foundCells.has(index);
                     const isSelected = selectedCells.includes(index);
-                    const shouldHide = hideCorrectNumbers && isFound;
+                    const isAvailable = !hideCorrectNumbers || availableCells.has(index);
                     
-                    if (shouldHide) {
+                    // If cell is found, show empty cell
+                    if (isFound) {
                         return (
                             <div 
-                                key={`hidden-${index}`} 
-                                className="digit-cell hidden-cell"
+                                key={`found-${index}`} 
+                                className="digit-cell found"
                             >
-                                {/* Hidden found number */}
+                                {/* Empty cell - number was found and cleared */}
                             </div>
                         );
                     }
@@ -292,23 +313,20 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
                             cellIndex={index}
                             isSelected={isSelected}
                             isFound={isFound}
+                            isAvailable={isAvailable}
                             onClick={handleDigitClick}
                         />
                     );
                 })}
             </div>
         );
-    }, [status, board, foundCells, selectedCells, hideCorrectNumbers, settings.size, settings.target, startedAt, handleDigitClick]);
+    }, [status, board, foundCells, selectedCells, availableCells, hideCorrectNumbers, settings.size, settings.target, startedAt, handleDigitClick]);
 
     return (
         <section className="game-main-panel digit-panel">
             <header className="game-utils-panel">
                 <MistakesCounter mistakes={mistakes} />
-                <div className="current-number">
-                    {status === 'playing' && (
-                        <span>Найдите сумму: {settings.target}</span>
-                    )}
-                </div>
+                <div></div>
                 <GameTimer seconds={seconds} />
             </header>
             <div className="game-space">

@@ -27,9 +27,16 @@ interface GameStoreActionsContextType {
 const GameStoreActionsContext = createContext<GameStoreActionsContextType | undefined>(undefined);
 
 export const GameStoreActionsProvider = ({ children }: { children: React.ReactNode }) => {
-    const { dispatch, currentUser, allAchievements } = useGameStoreData();
+    const { dispatch, currentUser, allAchievements, usersList } = useGameStoreData();
     const { addNotification } = useNotification();
     const { t } = useTranslations();
+
+    // Helper function to update users list
+    const updateUsersList = useCallback(() => {
+        const usersList = window.gameStoreAPI.listUsers();
+        // console.log('Updating users list:', usersList);
+        dispatch({ type: 'UPDATE_USERS_LIST', payload: usersList });
+    }, [dispatch]);
 
     const login = useCallback(async (username: string): Promise<void> => {
         dispatch({ type: 'SET_LOADING', payload: true });
@@ -66,40 +73,48 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
         // Persist selection and login
         window.settingsAPI.set('currentUser', username as any);
         await login(username);
+        
+        // Update users list after switch (in case new user was created)
+        updateUsersList();
+        
         return true;
-    }, [currentUser, login]);
+    }, [currentUser, login, updateUsersList]);
 
     const listUsers = useCallback((): string[] => {
-        try {
-            return window.gameStoreAPI.listUsers();
-        } catch {
-            return [];
-        }
-    }, []);
+        return usersList || [];
+    }, [usersList]);
 
     const createUser = useCallback(async (username: string, switchTo: boolean = true): Promise<boolean> => {
         if (!username) return false;
         const ok = window.gameStoreAPI.createUser(username);
         if (!ok) return false;
+        
+        // Update users list immediately
+        updateUsersList();
+        
         if (switchTo) {
             window.settingsAPI.set('currentUser', username as any);
             await login(username);
         }
         return true;
-    }, [login]);
+    }, [login, updateUsersList]);
 
     const deleteUser = useCallback(async (username: string): Promise<boolean> => {
         if (!username) return false;
         const isCurrent = currentUser?.username === username;
         const ok = window.gameStoreAPI.deleteUser(username);
         if (!ok) return false;
+        
+        // Update users list immediately
+        updateUsersList();
+        
         if (isCurrent) {
             // Preload resets currentUser to 'user' in settings when deleting current
             const nextUser = window.settingsAPI.get('currentUser') as unknown as string;
             await login(nextUser || 'user');
         }
         return true;
-    }, [currentUser, login]);
+    }, [currentUser, login, updateUsersList]);
 
     const renameCurrentUser = useCallback(async (newUsername: string): Promise<boolean> => {
         if (!currentUser || !newUsername) return false;
@@ -110,6 +125,9 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
         const ok = window.gameStoreAPI.renameUser(oldUsername, newUsername);
         if (!ok) return false;
         
+        // Update users list immediately
+        updateUsersList();
+        
         // Update user data and persist
         window.settingsAPI.set('currentUser', newUsername as any);
         dispatch({ type: 'LOGIN_SUCCESS', payload: renamedUser });
@@ -118,7 +136,7 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
         window.gameStoreAPI.saveUserData(newUsername, renamedUser);
         
         return true;
-    }, [currentUser, dispatch]);
+    }, [currentUser, dispatch, updateUsersList]);
 
     const addGameAchievements = useCallback((gameId: string, achievements: GameAchievement[]) => {
         dispatch({
@@ -134,6 +152,7 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
         isPerfect: boolean = false,
         modifications: string[] = []
     ) => {
+        // console.log('addGameRecord called:', { gameId, gameProps, score, isPerfect, modifications, currentUser: !!currentUser });
         if (!currentUser) return;
 
         dispatch({
@@ -171,21 +190,32 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
         score: number, 
         isPerfect: boolean = false
     ) => {
+        console.log('unlockAchievementCheck called:', { gameId, gameProps, score, isPerfect, currentUser: !!currentUser });
         if (!currentUser) return;
 
-        // Build list of achievement props to check. If perfect run, check both normal and x100 variants.
+        // Build list of achievement props to check. 
+        // For queens game, perfect results should still check normal achievements only (not x100 variants)
         const toCheck = new Set<string>();
         const normalProps = generateAchievementProps(gameId, gameProps, false);
         if (normalProps) toCheck.add(normalProps);
-        if (isPerfect) {
+        
+        // Only add perfect props for games other than queens (digit/shulte have x100 achievements)
+        if (isPerfect && gameId !== 'queens') {
             const perfectProps = generateAchievementProps(gameId, gameProps, true);
             if (perfectProps) toCheck.add(perfectProps);
         }
+
+        console.log('Checking achievements for props:', Array.from(toCheck));
 
         toCheck.forEach((achievementProps) => {
             const gameAchievements = allAchievements[gameId]?.filter(
                 a => a.gameProps === achievementProps
             ) || [];
+
+            if (gameAchievements.length === 0) {
+                console.log('No achievements found for props:', achievementProps);
+                return;
+            }
 
             gameAchievements.forEach(achievement => {
                 const userAchievement = currentUser.achievements.find(
@@ -193,6 +223,7 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
                 );
 
                 if (!userAchievement) {
+                    console.log('No user achievement found for:', { gameId, achievementProps });
                     return;
                 }
 
@@ -201,7 +232,23 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
                 const newUnlockedTiers = achievement.requirements.map((req, idx) => {
                     const prev = userAchievement.unlockedTiers[idx] || false;
                     const unlocked = prev || (typeof req === 'number' && score <= req);
+                    console.log('Tier check:', { 
+                        tier: idx, 
+                        requirement: req, 
+                        score, 
+                        prev, 
+                        unlocked: unlocked,
+                        scoreCheck: score <= req 
+                    });
                     return unlocked;
+                });
+
+                console.log('Achievement tier update:', { 
+                    gameId, 
+                    achievementProps, 
+                    oldTiers: userAchievement.unlockedTiers, 
+                    newTiers: newUnlockedTiers,
+                    hasChanges: newUnlockedTiers.some((unlocked, i) => unlocked !== userAchievement.unlockedTiers[i])
                 });
 
                 // If any tier was unlocked, update the achievement
@@ -221,13 +268,17 @@ export const GameStoreActionsProvider = ({ children }: { children: React.ReactNo
                     );
                     
                     if (newlyUnlocked.length > 0) {
-                        const tierNames = ['золотой', 'серебряный', 'бронзовый'];
+                        const tierNames = ['🥇', '🥈', '🥉'];
                         const unlockedTierName = tierNames[newUnlockedTiers.findIndex(tier => tier)] || 'достижение';
-                        
+                        const notificationtext = t('achievements.notification')
+                        const title = t(`achievements.${gameId}.${achievementProps}.title`)
+                        const description = t(`achievements.${gameId}.${achievementProps}.description`)
+
+                        console.log('Showing achievement notification:', { unlockedTierName });
                         addNotification(
                             'achievement',
-                            t('achievement.unlocked_title') || 'Достижение разблокировано!',
-                            `${t('achievement.unlocked_message') || 'Вы получили'} ${unlockedTierName} ${t('achievement.achievement') || 'достижение'}!`
+                            `${unlockedTierName} ${notificationtext}`,
+                            `${title}: ${description}`
                         );
                     }
                 }

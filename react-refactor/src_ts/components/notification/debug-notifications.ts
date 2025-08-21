@@ -1,7 +1,7 @@
 // Debug functions for testing notifications
 // These functions will be available in the browser console for testing
 
-import { NotificationType } from '../types/notification';
+import { NotificationType } from '../../types/notification';
 
 // Global notification testing function
 (window as any).testNotification = (type: NotificationType = 'achievement', title?: string, message?: string) => {
@@ -27,7 +27,7 @@ import { NotificationType } from '../types/notification';
     });
     
     window.dispatchEvent(event);
-    console.log(`🔔 Test notification sent: ${type} - ${title || defaultTitles[type]}`);
+    console.log(`Test notification sent: ${type} - ${title || defaultTitles[type]}`);
 };
 
 // Convenience functions for each notification type
@@ -75,7 +75,7 @@ import { NotificationType } from '../types/notification';
     setTimeout(() => (window as any).testUpdate('Обновление 1.0.1', 'Доступна новая версия'), 200);
     setTimeout(() => (window as any).testWarning('Внимание!', 'Тестовое предупреждение'), 300);
     setTimeout(() => (window as any).testAchievement('Второе достижение', 'Это второе тестовое достижение'), 400);
-    console.log('🔔 Sent 4 test notifications to queue');
+    console.log('Sent 4 test notifications to queue');
 };
 
 // Function to test real achievement notifications
@@ -96,11 +96,11 @@ import { NotificationType } from '../types/notification';
         `Поздравляем! Вы прошли игру за ${randomTime} секунд или быстрее!`
     );
     
-    console.log(`🏆 Sent real achievement notification: ${randomTier} in ${gameName}`);
+    console.log(`Sent real achievement notification: ${randomTier} in ${gameName}`);
 };
 
 console.log(`
-🔔 Notification Debug Functions Available:
+Notification Debug Functions Available:
 - testNotification(type, title?, message?) - Send custom notification
 - testAchievement(title?, message?) - Send achievement notification  
 - testRealisticAchievement(gameProps?, tier?, actualTime?) - Test realistic achievement with timing

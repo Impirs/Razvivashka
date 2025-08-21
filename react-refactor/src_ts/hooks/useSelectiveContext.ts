@@ -13,6 +13,13 @@ export const useCurrentUser = () => {
     return currentUser;
 };
 
+// Only users list
+export const useUsersList = () => {
+    const { usersList } = useGameStoreData();
+    // console.log('useUsersList hook returning:', usersList);
+    return usersList;
+};
+
 // Only loading state
 export const useGameStoreLoading = () => {
     const { loading } = useGameStoreData();

@@ -72,7 +72,7 @@ describe('UserManager', () => {
             return translations[key] || key;
         });
 
-        mockUserManagement.listUsers.mockReturnValue(['testuser', 'user2']);
+        mockUserManagement.listUsers.mockResolvedValue(['testuser', 'user2']);
         mockUserManagement.switchUser.mockResolvedValue(true);
         mockUserManagement.createUser.mockResolvedValue(true);
         mockUserManagement.deleteUser.mockResolvedValue(true);
@@ -174,33 +174,41 @@ describe('UserManager', () => {
             
             const toggleButton = screen.getByLabelText('toggle-user-list');
             
-            // Initially closed
-            expect(screen.queryByText('user2')).not.toBeInTheDocument();
+            // Wait for users to load and initially closed
+            await waitFor(() => {
+                expect(screen.queryByText('user2')).not.toBeInTheDocument();
+            });
             expect(screen.getByTestId('icon-down-arrow')).toBeInTheDocument();
             
             // Open dropdown
             fireEvent.click(toggleButton);
             
-            expect(screen.getByText('user2')).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.getByText('user2')).toBeInTheDocument();
+            });
             expect(screen.getByTestId('icon-up-arrow')).toBeInTheDocument();
             
             // Close dropdown
             fireEvent.click(toggleButton);
             
-            expect(screen.queryByText('user2')).not.toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.queryByText('user2')).not.toBeInTheDocument();
+            });
             expect(screen.getByTestId('icon-down-arrow')).toBeInTheDocument();
         });
 
         it('displays all users in dropdown', async () => {
-            mockUserManagement.listUsers.mockReturnValue(['user1', 'user2', 'user3']);
+            mockUserManagement.listUsers.mockResolvedValue(['user1', 'user2', 'user3']);
             
             render(<UserManager />);
             
             fireEvent.click(screen.getByLabelText('toggle-user-list'));
             
-            expect(screen.getByText('user1')).toBeInTheDocument();
-            expect(screen.getByText('user2')).toBeInTheDocument();
-            expect(screen.getByText('user3')).toBeInTheDocument();
+            await waitFor(() => {
+                expect(screen.getByText('user1')).toBeInTheDocument();
+                expect(screen.getByText('user2')).toBeInTheDocument();
+                expect(screen.getByText('user3')).toBeInTheDocument();
+            });
         });
 
         it('highlights active user in dropdown', async () => {

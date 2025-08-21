@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
-import { NotificationContextType, Notification, NotificationType } from '../types/notification';
+import React, { createContext, 
+                useContext, 
+                useReducer, 
+                useEffect, 
+                useCallback } from 'react';
+import { NotificationContextType, 
+         Notification, 
+         NotificationType } from '../types/notification';
 import { useNavigate } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
@@ -27,14 +33,22 @@ function notificationReducer(
                 queue: [...state.queue, action.payload],
             };
             // console.log(`Added to queue. New queue length:`, newState.queue.length);
+            // console.log(`Current state after ADD_TO_QUEUE:`, { isShowing: newState.isShowing, queueLength: newState.queue.length });
             return newState;
         case 'SHOW_NOTIFICATION':
-            return {
+            // console.log(`SHOW_NOTIFICATION: moving from queue to notifications`);
+            const showState = {
                 ...state,
                 notifications: [action.payload],
                 isShowing: true,
                 queue: state.queue.filter(n => n.id !== action.payload.id),
             };
+            // console.log(`State after SHOW_NOTIFICATION:`, { 
+            //     isShowing: showState.isShowing, 
+            //     notificationsLength: showState.notifications.length,
+            //     queueLength: showState.queue.length 
+            // });
+            return showState;
         case 'OPEN_NOTIFICATION':
             return {
                 ...state,
@@ -43,11 +57,17 @@ function notificationReducer(
                 ),
             };
         case 'REMOVE_NOTIFICATION':
-            return {
+            // console.log(`REMOVE_NOTIFICATION:`, action.payload.id);
+            const removeState = {
                 ...state,
                 notifications: state.notifications.filter(n => n.id !== action.payload.id),
                 isShowing: false,
             };
+            // console.log(`State after REMOVE_NOTIFICATION:`, { 
+            //     isShowing: removeState.isShowing, 
+            //     notificationsLength: removeState.notifications.length 
+            // });
+            return removeState;
         default:
             return state;
     }
@@ -60,6 +80,16 @@ type NotificationProviderProps = {
 export const NotificationProvider = ({ children }: NotificationProviderProps) => {
     const [state, dispatch] = useReducer(notificationReducer, initialState);
     const navigate = useNavigate();
+
+    // Debug logging for state changes
+    useEffect(() => {
+        // console.log(`NotificationProvider state changed:`, {
+        //     isShowing: state.isShowing,
+        //     notificationsLength: state.notifications.length,
+        //     queueLength: state.queue.length,
+        //     queue: state.queue.map(n => ({ id: n.id, type: n.type, title: n.title }))
+        // });
+    }, [state.isShowing, state.notifications.length, state.queue.length]);
 
     const getNotificationSettings = (type: NotificationType) => {
         switch (type) {
@@ -91,7 +121,7 @@ export const NotificationProvider = ({ children }: NotificationProviderProps) =>
     };
 
     const addNotification = useCallback((type: NotificationType, title: string, message: string, link?: string) => {
-        // console.log(`🔔 addNotification called with:`, { type, title, message });
+        // console.log(`addNotification called with:`, { type, title, message });
         
         const settings = getNotificationSettings(type);
         const newNotification: Notification = {
@@ -103,11 +133,11 @@ export const NotificationProvider = ({ children }: NotificationProviderProps) =>
             link: link || settings.link, // Use provided link or default
         };
 
-        // console.log(`🔔 Created notification:`, newNotification);
+        // console.log(`Created notification:`, newNotification);
         
         dispatch({ type: 'ADD_TO_QUEUE', payload: newNotification });
         
-        // console.log(`🔔 Notification dispatched to queue`);
+        // console.log(`Notification dispatched to queue`);
     }, []);
 
     // Add event listener for debug notifications
@@ -126,18 +156,29 @@ export const NotificationProvider = ({ children }: NotificationProviderProps) =>
 
     // Process queue - show next notification when current one is done
     useEffect(() => {
+        // console.log(`Queue processor effect triggered:`, {
+        //     isShowing: state.isShowing,
+        //     queueLength: state.queue.length,
+        //     notificationsLength: state.notifications.length
+        // });
+        
         if (!state.isShowing && state.queue.length > 0) {
+            // console.log(`Processing queue, will show notification...`);
             const timer = setTimeout(() => {
                 const nextNotification = state.queue[0];
+                // console.log(`Dispatching SHOW_NOTIFICATION for:`, nextNotification);
                 dispatch({ type: 'SHOW_NOTIFICATION', payload: nextNotification });
 
                 // Auto-remove after showtime
                 setTimeout(() => {
+                    // console.log(`Auto-removing notification after ${nextNotification.showtime}ms:`, nextNotification.id);
                     dispatch({ type: 'REMOVE_NOTIFICATION', payload: { id: nextNotification.id } });
                 }, nextNotification.showtime);
             }, state.notifications.length > 0 ? 5500 : 0); // 5.5 seconds delay between notifications, immediate for first
 
             return () => clearTimeout(timer);
+        } else {
+            // console.log(`Not processing queue - isShowing: ${state.isShowing}, queueLength: ${state.queue.length}`);
         }
     }, [state.isShowing, state.queue.length]);
 
@@ -181,6 +222,7 @@ export const NotificationProvider = ({ children }: NotificationProviderProps) =>
 
 export const useNotification = () => {
     const context = useContext(NotificationContext);
+    // console.log('useNotification called, context:', context ? 'exists' : 'null');
     if (!context) throw new Error('useNotification must be used within a NotificationProvider');
     return context;
 };

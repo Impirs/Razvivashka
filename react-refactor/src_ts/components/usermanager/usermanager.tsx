@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { useCurrentUser, useUserManagement, useTranslationFunction } from '@/hooks/useSelectiveContext';
+import { useCurrentUser, useUserManagement, useTranslationFunction, useUsersList } from '../../hooks/useSelectiveContext';
 import Button from '@/components/button/button';
 import Icon from '../icon/icon';
 
@@ -33,6 +33,7 @@ UserItem.displayName = 'UserItem';
 
 const UserManager = React.memo<UserManagerProps>(({ className }) => {
     const currentUser = useCurrentUser();
+    const usersList = useUsersList();
     const { listUsers, switchUser, createUser, deleteUser, renameCurrentUser } = useUserManagement();
     const t = useTranslationFunction(); // Only translation function, not full language context
     
@@ -103,8 +104,7 @@ const UserManager = React.memo<UserManagerProps>(({ className }) => {
     }, [newUserName, createUser]);
 
     // useMemo for derived values prevents unnecessary recalculations
-    const users = useMemo(() => listUsers(), [listUsers]);
-    const canDeleteCurrentUser = useMemo(() => users.length > 1, [users.length]);
+    const canDeleteCurrentUser = useMemo(() => (usersList || []).length > 1, [usersList]);
 
     // All event handlers are memoized to prevent child re-renders
     const handleUsernameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,7 +196,7 @@ const UserManager = React.memo<UserManagerProps>(({ className }) => {
             {isDropdownOpen && (
                 <div className="user-dropdown" ref={dropdownRef}>
                     <div className="user-list">
-                        {users.map((user) => (
+                        {(usersList || []).map((user: string) => (
                             <UserItem
                                 key={user}
                                 user={user}
