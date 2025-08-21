@@ -3,9 +3,37 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { within } from '@testing-library/dom';
 import { MemoryRouter } from 'react-router-dom';
 import AchievementsPage from './AchievementsPage';
-import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
 import achievementsData from '@/data/achievements.json';
+
+// Mock the useSelectiveContext hooks
+jest.mock('@/hooks/useSelectiveContext', () => ({
+    useTranslationFunction: () => {
+        const mockT = (key: string) => {
+            const mockTranslations: Record<string, string> = {
+                'routes.achievements': 'Достижения',
+                'buttons.back': 'Назад',
+                'buttons.filter': 'Выберите...',
+                'achievements.filter': 'Фильтр достижений',
+                'achievements.all': 'Все игры',
+                'games.all': 'Все игры',
+                'games.digit': 'Состав числа',
+                'games.shulte': 'Таблица Шульте',
+                'games.queens': 'Ферзи'
+            };
+            return mockTranslations[key] || key;
+        };
+        return mockT;
+    },
+    useAllAchievements: () => achievementsData,
+    useFilteredAchievements: () => achievementsData
+}));
+
+// Mock the i18n context
+jest.mock('@/contexts/i18n');
+
+// Mock gameController to avoid sound file imports
+jest.mock('@/contexts/gameController');
 
 // Settings shim for tests
 (() => {
@@ -28,11 +56,9 @@ import achievementsData from '@/data/achievements.json';
 test('filters achievements by game', () => {
     render(
         <SettingsProvider>
-            <LanguageProvider>
-                <MemoryRouter>
-                    <AchievementsPage />
-                </MemoryRouter>
-            </LanguageProvider>
+            <MemoryRouter>
+                <AchievementsPage />
+            </MemoryRouter>
         </SettingsProvider>
     );
 
@@ -57,11 +83,9 @@ test('filters achievements by game', () => {
 test('renders 3 medals (gold, silver, bronze) for 3-tier achievements and all are locked without user data', () => {
     render(
         <SettingsProvider>
-            <LanguageProvider>
-                <MemoryRouter>
-                    <AchievementsPage />
-                </MemoryRouter>
-            </LanguageProvider>
+            <MemoryRouter>
+                <AchievementsPage />
+            </MemoryRouter>
         </SettingsProvider>
     );
 
@@ -82,11 +106,9 @@ test('renders 3 medals (gold, silver, bronze) for 3-tier achievements and all ar
 test('renders 1 medal (gold) for 1-tier achievements', () => {
     render(
         <SettingsProvider>
-            <LanguageProvider>
-                <MemoryRouter>
-                    <AchievementsPage />
-                </MemoryRouter>
-            </LanguageProvider>
+            <MemoryRouter>
+                <AchievementsPage />
+            </MemoryRouter>
         </SettingsProvider>
     );
 
