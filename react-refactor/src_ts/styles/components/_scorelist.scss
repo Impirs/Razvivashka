@@ -29,9 +29,9 @@
 }
 
 .record-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     position: relative;
-    flex-direction: row;
     width: 212px;
     height: 70px;
     background-color: colors.$fourth;
@@ -40,7 +40,7 @@
     box-shadow: 0 2px 15px colors.$shadow;
     padding-inline: 12px 20px;
     margin-bottom: 6px;
-    align-content: center;
+    align-items: center;
     overflow: hidden;
     z-index: 0;
     max-width: 100%;
@@ -84,8 +84,11 @@
         height: 32px;
         font-family: "Playball";
         font-size: 28px;
-        justify-self: center;
-        text-align: center;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
 
         // &.perfect {
         //     color: colors.$gold;
@@ -185,6 +188,10 @@
             width: 56px;
             height: 28px;
             font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .record-details {
@@ -215,6 +222,10 @@
             width: 56px;
             height: 28px;
             font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .record-details {
@@ -245,6 +256,10 @@
             width: 50px;
             height: 24px;
             font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .record-details {
@@ -276,12 +291,15 @@
         width: calc(100% - 8px);
         height: 46px;
         padding-inline: 4px 8px;
-        grid-template-columns: 40px 1fr;
 
         .score {
             width: 36px;
             height: 18px;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .record-details {

@@ -164,7 +164,7 @@ autoUpdater.on('checking-for-update', () => {
 autoUpdater.on('update-available', (info) => {
     log.info('Update available:', info);
 
-    const releaseUrl = 'https://github.com/Impirs/Summ_solver/releases';
+    const releaseUrl = 'https://impirs.github.io/Razvivashka/update';
 
     const cleanReleaseNotes = (notes) => {
         if (Array.isArray(notes)) {

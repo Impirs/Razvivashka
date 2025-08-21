@@ -1,6 +1,6 @@
 {
   "name": "play_and_learn",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "An educational application with games for kids",
   "main": "./electron/main.js",
   "scripts": {

@@ -160,7 +160,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         
         // Set game modifications
         const mods: string[] = [];
-        if (hideCorrectNumbers === true) {
+        if (hideCorrectNumbers === false) {
             mods.push('view_modification');
         }
         // Use setTimeout to avoid setState during render

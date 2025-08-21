@@ -40,9 +40,9 @@ const SettingsPage = React.memo(() => {
     const createGameSettingHandler = useCallback((gameType: 'digit' | 'shulte' | 'queens') => {
         return (checked: boolean) => {
             const defaultGames = { 
-                digit: { view_modification: false }, 
-                shulte: { view_modification: false },
-                queens: { view_modification: false }
+                digit: { view_modification: true }, 
+                shulte: { view_modification: true },
+                queens: { view_modification: true }
             };
             const g = games ?? defaultGames;
             set('games', {

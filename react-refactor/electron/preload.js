@@ -20,6 +20,7 @@ const defaultSettings = {
     games: {
         digit: { view_modification: true },
         shulte: { view_modification: true },
+        queens: { view_modification: true },
     },
 };
 
@@ -43,7 +44,10 @@ function writeJson(file, data) {
     writeFileSync(file, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+//                             [ Data Initialization ]
+
 let settings = readJson(settingsPath, defaultSettings);
+
 // Merge with defaults to avoid missing nested keys from older files
 function mergeSettings(current) {
     const merged = {
@@ -63,6 +67,10 @@ function mergeSettings(current) {
             shulte: {
                 ...defaultSettings.games.shulte,
                 ...((current && current.games && current.games.shulte) ? current.games.shulte : {}),
+            },
+            queens: {
+                ...defaultSettings.games.queens,
+                ...((current && current.games && current.games.queens) ? current.games.queens : {}),
             },
         },
     };
