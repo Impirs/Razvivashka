@@ -6,6 +6,8 @@ import remarkSlug from 'remark-slug'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useTheme } from '../contexts/ThemeContext'
+import { useLanguage } from '../contexts/LanguageContext'
+import Modal from '../components/Modal'
 
 interface TableOfContentsProps {
     content: string
@@ -369,11 +371,13 @@ const DocsMarkdownRenderer = ({ content, className = '' }: DocsMarkdownRendererP
 }
 
 const Docs = () => {
+    const { t } = useLanguage()
     const [content, setContent] = useState<string>('')
     const [loading, setLoading] = useState(true)
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
     const [activeHeading, setActiveHeading] = useState<string>('')
     const [mounted, setMounted] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         const loadContent = async () => {
@@ -402,7 +406,18 @@ const Docs = () => {
     // Ensure portal target exists on client
     useEffect(() => {
         setMounted(true)
+        
+        // Show modal on first visit (check localStorage)
+        const hasSeenDocsModal = localStorage.getItem('hasSeenDocsModal')
+        if (!hasSeenDocsModal) {
+            setShowModal(true)
+        }
     }, [])
+
+    const handleCloseModal = () => {
+        setShowModal(false)
+        localStorage.setItem('hasSeenDocsModal', 'true')
+    }
 
     // no client-only gating here; CSS controls visibility
 
@@ -587,6 +602,38 @@ const Docs = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Developer Documentation Modal */}
+            <Modal
+                isOpen={showModal}
+                onClose={handleCloseModal}
+                title={t('docs.modal.title')}
+            >
+                <div className="space-y-4">
+                    <div className="flex items-start space-x-3">
+                        <div className="text-2xl">👨‍💻</div>
+                        <p>{t('docs.modal.content')}</p>
+                    </div>
+                    
+                    <div className="flex items-start space-x-3">
+                        <div className="text-2xl">🌍</div>
+                        <p>{t('docs.modal.language.note')}</p>
+                    </div>
+                    
+                    <div className="pt-4 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                        <button
+                            onClick={handleCloseModal}
+                            className="w-full px-4 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                            style={{ 
+                                backgroundColor: 'var(--accent)',
+                                color: 'white'
+                            }}
+                        >
+                            {t('docs.modal.button')}
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }

@@ -29,7 +29,6 @@ export const useGitHubRelease = () => {
   const [error, setError] = useState<string | null>(null)
 
   const parseReleaseNotes = (body: string): ParsedReleaseNotes => {
-    // Парсинг формата: "en: описание... ru: описание..."
     const enMatch = body.match(/en:\s*(.*?)(?=\s*ru:|$)/s)
     const ruMatch = body.match(/ru:\s*(.*?)(?=\s*en:|$)/s)
     
@@ -66,7 +65,6 @@ export const useGitHubRelease = () => {
       setError(null)
 
       try {
-        // Сначала пытаемся получить данные с GitHub API
         const response = await fetch(
           'https://api.github.com/repos/Impirs/Razvivashka/releases/latest'
         )
@@ -79,15 +77,15 @@ export const useGitHubRelease = () => {
         setRelease(releaseData)
       } catch (err) {
         console.warn('GitHub API failed, trying fallback:', err)
-        
-        // Fallback: пытаемся загрузить локальный файл с данными
+
+        // Fallback: get local release info
         try {
           const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
           const fallbackResponse = await fetch(`${baseUrl}release-info.json`)
           
           if (fallbackResponse.ok) {
             const fallbackData = await fallbackResponse.json()
-            // Преобразуем локальные данные в формат GitHub API
+            // Transform local data to GitHub API format
             const githubFormatData: GitHubRelease = {
               tag_name: fallbackData.version,
               name: fallbackData.name,

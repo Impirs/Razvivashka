@@ -5,6 +5,7 @@ import { LanguageProvider } from './contexts/LanguageContext'
 import Layout from './components/Layout'
 import Welcome from './pages/Welcome'
 import Install from './pages/Install'
+import Preview from './pages/Preview'
 import Docs from './pages/Docs'
 import Update from './pages/Update'
 
@@ -17,6 +18,7 @@ function App() {
                         <Route path="/" element={<Navigate to="/welcome" replace />} />
                         <Route path="/welcome" element={<Welcome />} />
                         <Route path="/install" element={<Install />} />
+                        <Route path="/preview" element={<Preview />} />
                         <Route path="/docs" element={<Docs />} />
                         <Route path="/update" element={<Update />} />
                     </Routes>

@@ -6,19 +6,15 @@ import { useNavigate } from 'react-router-dom'
 
 const Welcome = () => {
     const { content, loading, error } = useMarkdownContent('welcome')
-    const { language, t } = useLanguage()
+    const { t } = useLanguage()
     const navigate = useNavigate()
 
-    const handleDownloadClick = () => {
-        window.open('https://github.com/Impirs/Razvivashka/releases', '_blank')
+    const handlePreviewClick = () => {
+        navigate('/preview')
     }
 
     const handleContactFormClick = () => {
         window.open('https://forms.gle/hQ3Fo3BozxDgZqeM6', '_blank')
-    }
-
-    const handleDocsClick = () => {
-        navigate('/docs')
     }
 
     const handleUpdateClick = () => {
@@ -27,12 +23,18 @@ const Welcome = () => {
 
     if (loading) {
         return (
-            <div className="rounded-xl shadow-lg p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
-                <div className="animate-pulse">
-                    <div className="h-8 rounded mb-4" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
-                    <div className="h-4 rounded mb-2" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
-                    <div className="h-4 rounded mb-2" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
-                    <div className="h-4 rounded" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
+            <div 
+                className="rounded-2xl shadow-xl border p-8"
+                style={{ 
+                    backgroundColor: 'var(--bg-primary)',
+                    borderColor: 'var(--border-color)'
+                }}
+            >
+                <div className="space-y-4">
+                    <div className="skeleton h-12 rounded-xl"></div>
+                    <div className="skeleton h-6 rounded-lg"></div>
+                    <div className="skeleton h-6 rounded-lg w-3/4"></div>
+                    <div className="skeleton h-6 rounded-lg w-1/2"></div>
                 </div>
             </div>
         )
@@ -40,76 +42,123 @@ const Welcome = () => {
 
     if (error) {
         return (
-            <div className="rounded-xl shadow-lg p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
-                <div className="text-center" style={{ color: 'var(--text-secondary)' }}>
-                    <p>Error loading content: {error}</p>
-                </div>
+            <div 
+                className="rounded-2xl shadow-xl border p-8 text-center"
+                style={{ 
+                    backgroundColor: 'var(--bg-primary)',
+                    borderColor: 'var(--border-color)'
+                }}
+            >
+                <div className="text-6xl mb-4">😕</div>
+                <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+                    Oops! Something went wrong
+                </h2>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    Error loading content: {error}
+                </p>
             </div>
         )
     }
 
-    const startTrainingText = language === 'ru' ? '🎯 Начать тренировку' : '🎯 Start Training'
-    const startTrainingDesc = language === 'ru' ? 'Скачайте приложение и начните развивать свой мозг.' :
-        'Download the app and start developing your brain.'
-    const downloadText = language === 'ru' ? 'Скачать приложение' : 'Download App'
-
-    const contactFormText = language === 'ru' ? '✍️ Связаться с нами' : '✍️ Contact Us'
-    const contactFormDesc = language === 'ru' ? 'Если вы столкнулись с ошибкой или у вас есть вопросы, напишите нам.' :
-        'If you encounter any issues or have questions, contact us.'
-    const contactFormButton = language === 'ru' ? 'Открыть форму' : 'Open Form'
-
-    const studyDocsText = language === 'ru' ? '📚 Изучить документацию' : '📚 Study Documentation'
-    const studyDocsDesc = language === 'ru' ? 'Узнайте больше о структуре, возможностях и настройках.' :
-        'Learn more about technology features and settings.'
-    const docsText = language === 'ru' ? 'Открыть документацию' : 'Open Documentation'
-
     return (
-        <div className="rounded-xl shadow-lg p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
-            <MarkdownRenderer content={content} />
-            
-            <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="text-white p-6 rounded-lg" 
-                    style={{ background: 'linear-gradient(to right, #10b981, #059669)' }}>
-                    <h3 className="text-xl font-bold mb-3">{startTrainingText}</h3>
-                    <p className="mb-4">{startTrainingDesc}</p>
-                    <button className="bg-white px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors" 
-                            style={{ color: '#059669' }}
-                            onClick={handleDownloadClick}>
-                        {downloadText}
-                    </button>
+        <div 
+            className="rounded-2xl shadow-xl border"
+            style={{ 
+                backgroundColor: 'var(--bg-primary)',
+                borderColor: 'var(--border-color)',
+                boxShadow: '0 20px 40px var(--shadow-light)'
+            }}
+        >
+            {/* Hero Section */}
+            <div className="welcome-hero px-8 pt-12 pb-8 rounded-t-2xl relative">
+                <div 
+                    className="absolute inset-0 rounded-t-2xl"
+                    style={{
+                        background: `linear-gradient(135deg, var(--bg-gradient-from) 0%, var(--bg-gradient-to) 100%)`
+                    }}
+                ></div>
+                
+                <div className="relative text-center fade-in-up">
+                    <h1 
+                        className="text-4xl lg:text-6xl font-bold mb-6"
+                        style={{ color: 'var(--text-primary)' }}
+                    >
+                        {t('welcome.hero.title')}
+                    </h1>
+                    
+                    <div className="flex items-center justify-center space-x-4 mb-6">
+                        <div 
+                            className="w-16 h-1 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-16 h-1 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                    </div>
+                    
+                    <p 
+                        className="text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed"
+                        style={{ color: 'var(--text-secondary)' }}
+                    >
+                        {t('welcome.hero.subtitle')}
+                    </p>
                 </div>
+            </div>
 
-                <div className="text-white p-6 rounded-lg"
-                    style={{ background: 'linear-gradient(to right, #8b5cf6, #7c3aed)' }}>
-                    <h3 className="text-xl font-bold mb-3">{t('welcome.updateApp')}</h3>
-                    <p className="mb-4">{t('welcome.updateAppDesc')}</p>
-                    <button className="bg-white px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                            style={{ color: '#7c3aed' }}
-                            onClick={handleUpdateClick}>
-                        {t('welcome.checkUpdates')}
-                    </button>
-                </div>
-
-                <div className="text-white p-6 rounded-lg"
-                    style={{ background: 'linear-gradient(to right, #ef4444, #dc2626)' }}>
-                    <h3 className="text-xl font-bold mb-3">{contactFormText}</h3>
-                    <p className="mb-4">{contactFormDesc}</p>
-                    <button className="bg-white px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                            style={{ color: '#dc2626' }}
-                            onClick={handleContactFormClick}>
-                        {contactFormButton}
-                    </button>
+            {/* Content Section */}
+            <div className="px-8 py-8">
+                <div className="fade-in-up delay-200">
+                    <MarkdownRenderer content={content} />
                 </div>
                 
-                <div className="text-white p-6 rounded-lg" 
-                    style={{ background: 'linear-gradient(to right, #3b82f6, #6366f1)' }}>
-                    <h3 className="text-xl font-bold mb-3">{studyDocsText}</h3>
-                    <p className="mb-4">{studyDocsDesc}</p>
-                    <button className="bg-white px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors" 
-                            style={{ color: '#6366f1' }}
-                            onClick={handleDocsClick}>
-                        {docsText}
-                    </button>
+                {/* Action Cards */}
+                <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Preview Card */}
+                    <div 
+                        className="welcome-action-card fade-in-up delay-300 text-white p-8 rounded-2xl cursor-pointer"
+                        style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                        onClick={handlePreviewClick}
+                    >
+                        <div className="text-4xl mb-4">🎯</div>
+                        <h3 className="text-xl font-bold mb-3">{t('welcome.preview.title')}</h3>
+                        <p className="mb-6 opacity-90">{t('welcome.preview.description')}</p>
+                        <button className="welcome-action-button enhanced-button bg-white text-green-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
+                            {t('welcome.preview.button')}
+                        </button>
+                    </div>
+
+                    {/* Updates Card */}
+                    <div 
+                        className="welcome-action-card fade-in-up delay-400 text-white p-8 rounded-2xl cursor-pointer"
+                        style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' }}
+                        onClick={handleUpdateClick}
+                    >
+                        <div className="text-4xl mb-4">🔄</div>
+                        <h3 className="text-xl font-bold mb-3">{t('welcome.updates.title')}</h3>
+                        <p className="mb-6 opacity-90">{t('welcome.updates.description')}</p>
+                        <button className="welcome-action-button enhanced-button bg-white text-red-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
+                            {t('welcome.updates.button')}
+                        </button>
+                    </div>
+
+                    {/* Contact Card */}
+                    <div 
+                        className="welcome-action-card fade-in-up delay-500 text-white p-8 rounded-2xl cursor-pointer md:col-span-2 lg:col-span-1"
+                        style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)' }}
+                        onClick={handleContactFormClick}
+                    >
+                        <div className="text-4xl mb-4">✍️</div>
+                        <h3 className="text-xl font-bold mb-3">{t('welcome.contact.title')}</h3>
+                        <p className="mb-6 opacity-90">{t('welcome.contact.description')}</p>
+                        <button className="welcome-action-button enhanced-button bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
+                            {t('welcome.contact.button')}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

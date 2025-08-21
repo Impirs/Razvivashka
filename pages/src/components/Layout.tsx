@@ -17,9 +17,10 @@ const Layout = ({ children }: LayoutProps) => {
     const [isClientMobile, setIsClientMobile] = useState(false)
 
     const navItems = [
-        { path: '/welcome', label: t('nav.welcome'), icon: '🎯' },
+        { path: '/welcome', label: t('nav.welcome'), icon: '🏠' },
         { path: '/install', label: t('nav.install'), icon: '📦' },
-        { path: '/docs', label: t('nav.docs'), icon: '📚' }
+        { path: '/preview', label: t('nav.preview'), icon: '🎯' },
+        { path: '/docs', label: t('nav.docs'), icon: '📄' }
     ]
 
     const toggleLanguage = () => {
