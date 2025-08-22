@@ -9,3 +9,6 @@
 @import './components/header.css';
 @import './components/docs.css';
 @import './components/footer.css';
+@import './components/preview.css';
+@import './components/pages.css';
+@import './components/modal.css';

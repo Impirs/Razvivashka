@@ -50,7 +50,7 @@ body {
 }
 
 .main-content-inner {
-    max-width: 1152px; /* 6xl equivalent */
+    max-width: 1280px; /* 6xl equivalent */
     margin: 0 auto;
     padding: 1rem 1rem;
     min-height: calc(100vh - 80px); /* Full height minus header */

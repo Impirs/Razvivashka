@@ -5,15 +5,26 @@ import { useLanguage } from '../contexts/LanguageContext'
 
 const Install = () => {
     const { content, loading, error } = useMarkdownContent('install')
-    const { language } = useLanguage()
+    const { t } = useLanguage()
 
     if (loading) {
         return (
-            <div className="rounded-xl shadow-lg p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
-                <div className="animate-pulse">
-                    <div className="h-8 rounded mb-4" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
-                    <div className="h-4 rounded mb-2" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
-                    <div className="h-4 rounded mb-2" style={{ backgroundColor: 'var(--bg-secondary)' }}></div>
+            <div 
+                className="rounded-2xl shadow-xl border p-8"
+                style={{ 
+                    backgroundColor: 'var(--bg-primary)',
+                    borderColor: 'var(--border-color)'
+                }}
+            >
+                <div className="space-y-4">
+                    <div className="skeleton h-12 rounded-xl"></div>
+                    <div className="skeleton h-6 rounded-lg"></div>
+                    <div className="skeleton h-32 rounded-xl"></div>
+                    <div className="grid md:grid-cols-3 gap-4">
+                        <div className="skeleton h-24 rounded-xl"></div>
+                        <div className="skeleton h-24 rounded-xl"></div>
+                        <div className="skeleton h-24 rounded-xl"></div>
+                    </div>
                 </div>
             </div>
         )
@@ -21,111 +32,295 @@ const Install = () => {
 
     if (error) {
         return (
-            <div className="rounded-xl shadow-lg p-8" style={{ backgroundColor: 'var(--bg-primary)' }}>
-                <div className="text-center" style={{ color: 'var(--text-secondary)' }}>
-                    <p>Error loading content: {error}</p>
-                </div>
+            <div 
+                className="rounded-2xl shadow-xl border p-8 text-center"
+                style={{ 
+                    backgroundColor: 'var(--bg-primary)',
+                    borderColor: 'var(--border-color)'
+                }}
+            >
+                <div className="text-6xl mb-4">📱</div>
+                <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+                    Installation Guide Unavailable
+                </h2>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    Error loading content: {error}
+                </p>
             </div>
         )
     }
 
-    const desktopText = language === 'ru' ?
-        '💻 Десктопное приложение' :
-        '💻 Desktop Application'
-
-    const installText = language === 'ru' ?
-        '📦 Установка Play and Learn' : 
-        '📦 Installing Play and Learn'
-    
-    const windowsText = language === 'ru' ? 
-        'Скачать v2.0.0' : 
-        'Download v2.0.0'
-    const winZIPtext = language === 'ru' ? 
-        'Скачать v2.0.0' : 
-        'Download v2.0.0'
-
-    const macText = language === 'ru' ?
-        'Скачать v2.0.0' :
-        'Download v2.0.0'
-
-    const soonAvailable = language === 'ru' ?
-        'Скоро будет доступно' :
-        'Coming Soon'
-
     return (
-        <div className="rounded-xl shadow-lg p-8" 
-            style={{ backgroundColor: 'var(--bg-primary)' }}
+        <div 
+            className="rounded-2xl shadow-xl border"
+            style={{ 
+                backgroundColor: 'var(--bg-primary)',
+                borderColor: 'var(--border-color)',
+                boxShadow: '0 20px 40px var(--shadow-light)'
+            }}
         >
-            <h1 className="text-xl font-semibold mb-4" 
-                style={{ 
-                    color: 'var(--text-primary)',
-                    fontSize: '2.25rem',
-                    fontWeight: 800,
-                    marginBottom: '1rem',
-                    lineHeight: 1.1
-                }}
-            >
-                {installText}
-            </h1>
-            <hr />
-            <h2 className="text-3xl font-semibold text-gray-700 mt-8 mb-4"
-                style={{
-                        fontSize: '1.875rem',
-                        fontWeight: 700,
-                        color: 'var(--text-primary)',
-                        marginTop: '2rem',
-                        marginBottom: '1rem',
-                        lineHeight: '1.2',
-                    }}
-            >
-                {desktopText}
-            </h2>
-            <div className="mt-8 p-6 rounded-lg" 
-                style={{ 
-                    backgroundColor: 'var(--bg-secondary)', 
-                    border: '1px solid var(--border-color)' 
-                }}
-            >
-                <div className="grid md:grid-cols-4 gap-4">
-                    <a 
-                        href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
+            {/* Hero Section */}
+            <div className="install-hero px-8 pt-12 pb-8 rounded-t-2xl relative">
+                <div className="relative text-center fade-in-up">
+                    <h1 
+                        className="text-4xl lg:text-5xl font-bold mb-6"
+                        style={{ color: 'var(--text-primary)' }}
                     >
-                        <div className="text-3xl mb-2">💠</div>
-                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .exe</h4>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{windowsText}</p>
-                    </a>
+                        {t('install.hero.title')}
+                    </h1>
                     
-                    <a 
-                        href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
+                    <div className="flex items-center justify-center space-x-4 mb-6">
+                        <div 
+                            className="w-16 h-1 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-16 h-1 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                    </div>
+                    
+                    <p 
+                        className="text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed"
+                        style={{ color: 'var(--text-secondary)' }}
                     >
-                        <div className="text-3xl mb-2">💠</div>
-                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>Windows .zip</h4>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{winZIPtext}</p>
-                    </a>
-
-                    <a 
-                        // href="https://github.com/Impirs/Razvivashka/releases" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-                        style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid var(--border-color)' }}
-                    >
-                        <div className="text-3xl mb-2">🍎</div>
-                        <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>macOS .dmg</h4>
-                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}> {soonAvailable}</p>
-                        {/* <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{macText}</p> */}
-                    </a>
+                        {t('install.hero.subtitle')}
+                    </p>
                 </div>
             </div>
-            <MarkdownRenderer content={content} />
+
+            {/* Content Section */}
+            <div className="px-8 py-8">
+                {/* Desktop Apps Section */}
+                <div className="fade-in-up delay-200 mb-12">
+                    <h2 
+                        className="text-3xl font-bold mb-8 text-center"
+                        style={{ color: 'var(--text-primary)' }}
+                    >
+                        {t('install.desktop.title')}
+                    </h2>
+                    
+                    {/* Desktop version - full cards */}
+                    <div className="hidden md:grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        {/* Windows EXE */}
+                        <a 
+                            href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="download-card fade-in-up delay-300 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
+                            style={{ 
+                                backgroundColor: 'var(--bg-secondary)', 
+                                border: '1px solid var(--border-color)',
+                                textDecoration: 'none'
+                            }}
+                        >
+                            <div className="platform-icon mb-4">💠</div>
+                            <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                {t('install.windows.exe')}
+                            </h4>
+                            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                {t('install.download')}
+                            </p>
+                            <div 
+                                className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                                style={{ 
+                                    backgroundColor: 'var(--accent)',
+                                    color: 'white'
+                                }}
+                            >
+                                Download
+                            </div>
+                        </a>
+                        
+                        {/* Windows ZIP */}
+                        <a 
+                            href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
+                            style={{ 
+                                backgroundColor: 'var(--bg-secondary)', 
+                                border: '1px solid var(--border-color)',
+                                textDecoration: 'none'
+                            }}
+                        >
+                            <div className="platform-icon mb-4">📦</div>
+                            <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                {t('install.windows.zip')}
+                            </h4>
+                            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                {t('install.download')}
+                            </p>
+                            <div 
+                                className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                                style={{ 
+                                    backgroundColor: 'var(--accent)',
+                                    color: 'white'
+                                }}
+                            >
+                                Download
+                            </div>
+                        </a>
+
+                        {/* macOS - Coming Soon */}
+                        <div 
+                            className="download-card fade-in-up delay-500 p-6 rounded-2xl shadow-lg text-center opacity-60"
+                            style={{ 
+                                backgroundColor: 'var(--bg-secondary)', 
+                                border: '1px solid var(--border-color)',
+                                cursor: 'not-allowed'
+                            }}
+                        >
+                            <div className="platform-icon mb-4">🍎</div>
+                            <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                {t('install.macos')}
+                            </h4>
+                            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                {t('install.coming.soon')}
+                            </p>
+                            <div 
+                                className="inline-block px-4 py-2 rounded-lg text-sm font-semibold"
+                                style={{ 
+                                    backgroundColor: 'var(--bg-tertiary)',
+                                    color: 'var(--text-muted)'
+                                }}
+                            >
+                                Soon
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile version - compact layout */}
+                    <div className="md:hidden">
+                        {/* Mobile info note */}
+                        <div 
+                            className="mb-4 p-3 rounded-lg text-center text-sm"
+                            style={{ 
+                                backgroundColor: 'var(--bg-tertiary)',
+                                border: '1px solid var(--border-color)',
+                                color: 'var(--text-secondary)'
+                            }}
+                        >
+                            📱 {t('install.mobile.note')}
+                        </div>
+                        
+                        <div className="download-grid-mobile">
+                            {/* Mobile version - Windows EXE */}
+                            <a 
+                                href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="download-card fade-in-up delay-300 rounded-xl shadow-md transition-all duration-300 text-center"
+                                style={{ 
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                <div className="platform-icon">💠</div>
+                                <h4 className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                                    Windows
+                                </h4>
+                                <p style={{ color: 'var(--text-secondary)' }}>
+                                    Installer
+                                </p>
+                                <div 
+                                    className="download-button inline-block rounded font-semibold"
+                                    style={{ 
+                                        backgroundColor: 'var(--accent)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    .exe
+                                </div>
+                            </a>
+                            
+                            {/* Mobile version - Windows ZIP */}
+                            <a 
+                                href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="download-card fade-in-up delay-400 rounded-xl shadow-md transition-all duration-300 text-center"
+                                style={{ 
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                <div className="platform-icon">📦</div>
+                                <h4 className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                                    Windows
+                                </h4>
+                                <p style={{ color: 'var(--text-secondary)' }}>
+                                    Portable
+                                </p>
+                                <div 
+                                    className="download-button inline-block rounded font-semibold"
+                                    style={{ 
+                                        backgroundColor: 'var(--accent)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    .zip
+                                </div>
+                            </a>
+
+                            {/* Mobile version - macOS - Coming Soon (compact) */}
+                            <div 
+                                className="download-card coming-soon fade-in-up delay-500 rounded-xl shadow-md"
+                                style={{ 
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    cursor: 'not-allowed'
+                                }}
+                            >
+                                <div className="platform-icon">🍎</div>
+                                <h4 className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                                    macOS
+                                </h4>
+                                <p style={{ color: 'var(--text-secondary)' }}>
+                                    {t('install.coming.soon')}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Installation Instructions */}
+                <div className="fade-in-up delay-600">
+                    <MarkdownRenderer content={content} />
+                </div>
+
+                {/* Bottom decoration */}
+                <div className="text-center mt-12 pt-8 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                    <div className="flex items-center justify-center space-x-3 opacity-60">
+                        <div 
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-8 h-px"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-8 h-px"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                        <div 
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: 'var(--accent)' }}
+                        ></div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

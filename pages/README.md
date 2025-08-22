@@ -18,48 +18,21 @@
 - **React Markdown** - Рендеринг Markdown контента
 - **GitHub Pages** - Хостинг
 
-## 🚀 Разработка
-
-### Установка зависимостей
-```bash
-npm install
-```
-
-### Запуск dev сервера
-```bash
-npm run dev
-```
-
-### Сборка для продакшена
-```bash
-npm run build
-```
-
-### Предварительный просмотр сборки
-```bash
-npm run preview
-```
-
-### Деплой на GitHub Pages
-```bash
-npm run deploy
-```
-
 ## 📁 Структура проекта
 
 ```bash
 src/
-├── components/          # React компоненты
-│   ├── Layout.tsx      # Основной layout с навигацией
-│   └── MarkdownRenderer.tsx # Компонент для рендеринга Markdown
-├── pages/              # Страницы сайта
-│   ├── Welcome.tsx     # Главная страница
-│   ├── Install.tsx     # Страница установки
-│   └── Docs.tsx        # Документация
-├── styles/             # CSS файлы
-│   └── index.css       # Основные стили + Tailwind
-├── App.tsx             # Основной компонент приложения
-└── main.tsx            # Точка входа
+├── components/                 # React компоненты
+│   ├── Layout.tsx              # Основной layout с навигацией
+│   └── MarkdownRenderer.tsx    # Компонент для рендеринга Markdown
+├── pages/                      # Страницы сайта
+│   ├── Welcome.tsx             # Главная страница
+│   ├── Install.tsx             # Страница установки
+│   └── Docs.tsx                # Документация
+├── styles/                     # CSS файлы
+│   └── index.css               # Основные стили + Tailwind
+├── App.tsx                     # Основной компонент приложения
+└── main.tsx                    # Точка входа
 ```
 
 ## 🎨 Стилизация

@@ -1,0 +1,14 @@
+{
+  "version": "v2.0.0",
+  "name": "Version 2.0.0",
+  "publishedAt": "2025-01-01T00:00:00Z",
+  "releaseNotes": {
+    "en": "## What's New\n\n- Improved performance\n- Bug fixes\n- Enhanced user interface\n- New training modes",
+    "ru": "## Что нового\n\n- Улучшенная производительность\n- Исправления ошибок\n- Обновленный интерфейс\n- Новые режимы тренировки"
+  },
+  "downloads": {
+    "exe": "https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe",
+    "zip": "https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip"
+  },
+  "lastUpdated": "2025-01-01T00:00:00Z"
+}
