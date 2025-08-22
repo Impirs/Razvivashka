@@ -114,24 +114,27 @@ const VideoContainer = ({ videoSrc, title, description, isReversed = false, inde
 const Preview = () => {
     const { t } = useLanguage()
 
+    // Build absolute URLs using the configured BASE_URL so paths match
+    const baseUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
+
     const gamePreviewData = [
         {
-            videoSrc: '/preview/digit_preview.mp4',
+            videoSrc: `${baseUrl}preview/digit_preview.mp4`,
             titleKey: 'preview.digit.title',
             descriptionKey: 'preview.digit.description',
         },
         {
-            videoSrc: '/preview/queens_preview.mp4',
+            videoSrc: `${baseUrl}preview/queens_preview.mp4`,
             titleKey: 'preview.queens.title',
             descriptionKey: 'preview.queens.description',
         },
         {
-            videoSrc: '/preview/shulte_preview.mp4',
+            videoSrc: `${baseUrl}preview/shulte_preview.mp4`,
             titleKey: 'preview.shulte.title',
             descriptionKey: 'preview.shulte.description',
         },
         {
-            videoSrc: '/preview/achievements_preview.mp4',
+            videoSrc: `${baseUrl}preview/achievements_preview.mp4`,
             titleKey: 'preview.achievements.title',
             descriptionKey: 'preview.achievements.description',
         },
