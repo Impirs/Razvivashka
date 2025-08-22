@@ -124,8 +124,10 @@ const Welcome = () => {
                         style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
                         onClick={handlePreviewClick}
                     >
-                        <div className="text-4xl mb-4">🎯</div>
-                        <h3 className="text-xl font-bold mb-3">{t('welcome.preview.title')}</h3>
+                        <div className="welcome-header-flex">
+                            <div className="text-4xl">🎯</div>
+                            <h3 className="text-xl font-bold">{t('welcome.preview.title')}</h3>
+                        </div>
                         <p className="mb-6 opacity-90">{t('welcome.preview.description')}</p>
                         <button className="welcome-action-button enhanced-button bg-white text-green-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
                             {t('welcome.preview.button')}
@@ -138,8 +140,10 @@ const Welcome = () => {
                         style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' }}
                         onClick={handleUpdateClick}
                     >
-                        <div className="text-4xl mb-4">🔄</div>
-                        <h3 className="text-xl font-bold mb-3">{t('welcome.updates.title')}</h3>
+                        <div className="welcome-header-flex">
+                            <div className="text-4xl">🔄</div>
+                            <h3 className="text-xl font-bold">{t('welcome.updates.title')}</h3>
+                        </div>
                         <p className="mb-6 opacity-90">{t('welcome.updates.description')}</p>
                         <button className="welcome-action-button enhanced-button bg-white text-red-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
                             {t('welcome.updates.button')}
@@ -152,8 +156,10 @@ const Welcome = () => {
                         style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)' }}
                         onClick={handleContactFormClick}
                     >
-                        <div className="text-4xl mb-4">✍️</div>
-                        <h3 className="text-xl font-bold mb-3">{t('welcome.contact.title')}</h3>
+                        <div className="welcome-header-flex">
+                            <div className="text-4xl">✍️</div>
+                            <h3 className="text-xl font-bold">{t('welcome.contact.title')}</h3>
+                        </div>
                         <p className="mb-6 opacity-90">{t('welcome.contact.description')}</p>
                         <button className="welcome-action-button enhanced-button bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
                             {t('welcome.contact.button')}
