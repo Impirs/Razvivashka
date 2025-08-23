@@ -105,7 +105,6 @@
                 border: 2px solid colors.$primary;
                 border-radius: 12px;
                 padding: 12px 32px;
-                cursor: pointer;
                 transition: background 0.2s, color 0.2s;
    
                 &:hover {
@@ -138,7 +137,6 @@
     color: colors.$text;
     font-size: 22px;
     margin: 15px 0 5px 0;
-    cursor: default;
 }
 
 .game-menu {

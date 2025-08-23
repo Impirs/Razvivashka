@@ -29,6 +29,11 @@
 		display: grid;
 		gap: 2px;
 		max-width: 620px;
+		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
+
+		&.long-press-active {
+			cursor: url('../assets/cursor/hand_3.svg') 8 8, auto !important;
+		}
 
 		&.size-4 { grid-template-columns: repeat(4, calc(520px / 4)); }
 		&.size-5 { grid-template-columns: repeat(5, calc(520px / 5)); }
@@ -46,7 +51,7 @@
 		justify-content: center;
 		aspect-ratio: 1 / 1;
 		transition: box-shadow 0.12s ease, transform 0.06s ease;
-		cursor: pointer;
+		cursor: inherit; // Наследуем курсор от родительского элемента
 
 		&.has-queen { box-shadow: 0 0 0 4px rgba(154, 163, 255, 0.4) inset; }
 		&.row-bad { box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.7) inset; }
@@ -54,7 +59,9 @@
 		&.region-bad { box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.7) inset; }
 		&.adj-bad { box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.85) inset; }
 
-		&:active { transform: scale(0.98); }
+		&:active { 
+			transform: scale(0.98);
+		}
 
 		.q-piece {
 				width: 26px;

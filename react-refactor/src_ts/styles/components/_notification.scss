@@ -12,7 +12,6 @@
     display: flex;
     align-items: flex-start;
     padding: 16px;
-    cursor: pointer;
     z-index: 9999;
     animation: slideIn 0.3s ease-out;
 
@@ -20,7 +19,6 @@
         display: flex;
         align-items: flex-start;
         flex: 1;
-        cursor: pointer;
         gap: 12px;
     }
 
@@ -66,7 +64,6 @@
         border: none;
         font-size: 16px;
         color: colors.$text-secondary;
-        cursor: pointer;
         padding: 4px;
         margin-left: 8px;
         flex-shrink: 0;

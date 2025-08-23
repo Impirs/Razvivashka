@@ -6,6 +6,7 @@
 		display: grid;
 		gap: 10px;
 		max-width: 620px;
+		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
 
 		&.size-3 { grid-template-columns: repeat(3, calc(480px / 3)); }
 		&.size-4 { grid-template-columns: repeat(4, calc(480px / 4)); }
@@ -24,10 +25,10 @@
 		justify-content: center;
 		aspect-ratio: 1 / 1;
 		background: white;
-		cursor: pointer;
 		user-select: none;
 		font-size: 22px;
 		transition: background 0.15s ease, box-shadow 0.15s ease;
+		cursor: inherit;
 
 		&.found {
 			background: #f4f6ff;

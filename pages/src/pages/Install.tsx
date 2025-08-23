@@ -118,7 +118,9 @@ const Install = () => {
                                 textDecoration: 'none'
                             }}
                         >
-                            <div className="platform-icon mb-4">💠</div>
+                            <img className=" inline-block platform-icon mb-4" 
+                                src={`${import.meta.env.BASE_URL}windows-applications-svgrepo-com.svg`}
+                                alt="web_icon" />
                             <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
                                 {t('install.windows.exe')}
                             </h4>
@@ -148,7 +150,9 @@ const Install = () => {
                                 textDecoration: 'none'
                             }}
                         >
-                            <div className="platform-icon mb-4">📦</div>
+                            <img className=" inline-block platform-icon mb-4" 
+                                src={`${import.meta.env.BASE_URL}zip-document-svgrepo-com.svg`}
+                                alt="web_icon" />
                             <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
                                 {t('install.windows.zip')}
                             </h4>
@@ -175,7 +179,9 @@ const Install = () => {
                                 cursor: 'not-allowed'
                             }}
                         >
-                            <div className="platform-icon mb-4">🍎</div>
+                            <img className=" inline-block platform-icon mb-4" 
+                                src={`${import.meta.env.BASE_URL}apple-svgrepo-com.svg`}
+                                alt="web_icon" />
                             <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
                                 {t('install.macos')}
                             </h4>
@@ -221,7 +227,9 @@ const Install = () => {
                                     textDecoration: 'none'
                                 }}
                             >
-                                <div className="platform-icon">💠</div>
+                                <img className=" inline-block platform-icon" 
+                                    src={`${import.meta.env.BASE_URL}windows-applications-svgrepo-com.svg`}
+                                    alt="web_icon" />
                                 <h4 className="font-bold" style={{ color: 'var(--text-primary)' }}>
                                     Windows
                                 </h4>
@@ -251,7 +259,9 @@ const Install = () => {
                                     textDecoration: 'none'
                                 }}
                             >
-                                <div className="platform-icon">📦</div>
+                                <img className=" inline-block platform-icon" 
+                                    src={`${import.meta.env.BASE_URL}zip-document-svgrepo-com.svg`}
+                                    alt="web_icon" />
                                 <h4 className="font-bold" style={{ color: 'var(--text-primary)' }}>
                                     Windows
                                 </h4>
@@ -278,7 +288,9 @@ const Install = () => {
                                     cursor: 'not-allowed'
                                 }}
                             >
-                                <div className="platform-icon">🍎</div>
+                                <img className=" inline-block platform-icon" 
+                                    src={`${import.meta.env.BASE_URL}apple-svgrepo-com.svg`}
+                                    alt="web_icon" />
                                 <h4 className="font-bold" style={{ color: 'var(--text-primary)' }}>
                                     macOS
                                 </h4>

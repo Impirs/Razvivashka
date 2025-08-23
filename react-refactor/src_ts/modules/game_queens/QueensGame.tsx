@@ -5,6 +5,7 @@ import { useGameController } from '@/contexts/gameController';
 import { useSettings } from '@/contexts/pref';
 import { useTranslationFunction } from '@/hooks/useSelectiveContext';
 import { useGameTimer } from '@/hooks/useGameTimer';
+import { useCursor } from '@/hooks/useCursor';
 import { generateRecordProps } from '@/utils/pt';
 import { formatTime } from '@/utils/ft';
 
@@ -122,6 +123,10 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
     const lastStartRef = React.useRef<number | null>(null);
     const isInitializingRef = React.useRef(false);
 
+    // Cursor hook: enable long press for queen drag
+    const { cursorClass, onMouseDown: hookMouseDown, onMouseUp: hookMouseUp, onMouseLeave: hookMouseLeave } 
+        = useCursor({ enableLongPress: true, longPressDelay: 100 });
+
     // Optimized timer hook manages timer state automatically
     const { seconds, resetTimer } = useGameTimer({ 
         isPlaying: status === 'playing',
@@ -212,6 +217,9 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
         }
     }, [board, boardReady, boardReadyRunId, startedAt, status, seconds, endGame]);
 
+    // Очистка таймера при размонтировании
+    // cleanup handled in hook
+
     // Мемоизированные обработчики взаимодействий
     const onCellDoubleClick = React.useCallback((row: number, col: number) => {
         if (status !== 'playing') return;
@@ -227,11 +235,15 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
 
     const onMouseDown = React.useCallback((row: number, col: number) => {
         if (status !== 'playing') return;
+        // trigger hook handler
+        hookMouseDown();
         if (board[row][col].hasQueen) setDragFrom({ row, col });
-    }, [status, board]);
+    }, [status, board, hookMouseDown]);
 
     const onMouseUp = React.useCallback((row: number, col: number) => {
         if (status !== 'playing') return;
+        // trigger hook handler
+        hookMouseUp();
         if (dragFrom) {
             const from = dragFrom; 
             setDragFrom(null);
@@ -241,22 +253,26 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                 setBoard(prev => moveQueen(prev, from, { row, col }));
             }
         }
-    }, [status, dragFrom, board]);
+    }, [status, dragFrom, board, hookMouseUp]);
 
     const handleMouseLeave = React.useCallback(() => {
+        // trigger hook cleanup
+        hookMouseLeave();
         setDragFrom(null);
-    }, []);
+    }, [hookMouseLeave]);
 
     // Мемоизированная игровая доска
     const gameBoard = React.useMemo(() => {
         if (status !== 'playing') return null;
 
+    const boardClassName = `queens-board size-${settings.size} ${cursorClass}`;
+
         return (
-            <div
-                key={`${settings.size}-${startedAt ?? 'na'}`}
-                className={`queens-board size-${settings.size}`}
-                onMouseLeave={handleMouseLeave}
-            >
+                <div
+                    key={`${settings.size}-${startedAt ?? 'na'}`}
+                    className={boardClassName}
+                    onMouseLeave={handleMouseLeave}
+                >
                 {board.map((rowArr, r) =>
                     rowArr.map((cell, c) => (
                         <QueensCell
@@ -275,7 +291,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                 )}
             </div>
         );
-    }, [status, board, conflicts, blocked, assistHighlight, settings.size, startedAt, handleMouseLeave, onCellDoubleClick, onMouseDown, onMouseUp]);
+    }, [status, board, conflicts, blocked, assistHighlight, settings.size, startedAt, handleMouseLeave, onCellDoubleClick, onMouseDown, onMouseUp, cursorClass]);
 
     // Мемоизированные стили
     const centerStyle = React.useMemo(() => ({ 

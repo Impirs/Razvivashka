@@ -9,6 +9,7 @@ import { useSettings } from "../../contexts/pref";
 import { useTranslationFunction } from "@/hooks/useSelectiveContext";
 
 import Icon from "@/components/icon/icon";
+import { useCursor } from '@/hooks/useCursor';
 
 import fireworksGif from "@/assets/animations/fireworks.gif";
 import unluckyGif from "@/assets/animations/unlucky.gif";
@@ -102,6 +103,9 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
         isPlaying: status === 'playing',
         startedAt: startedAt 
     });
+
+    // Cursor hook for consistent pointer/long-press behavior (no long press needed here)
+    const { cursorClass, onMouseDown, onMouseUp, onMouseLeave } = useCursor({ enableLongPress: false });
 
     // Optimized game reset function - timer resets automatically via useGameTimer
     const resetGame = React.useCallback(() => {
@@ -203,7 +207,10 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
         return (
             <div
                 key={`${settings.size}-${startedAt ?? 'na'}`}
-                className={`shulte-board size-${settings.size}`}
+                className={`shulte-board size-${settings.size} ${cursorClass}`}
+                onMouseDown={onMouseDown}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseLeave}
             >
                 {board.map((row, rowIndex) =>
                     row.map((cell, colIndex) => (

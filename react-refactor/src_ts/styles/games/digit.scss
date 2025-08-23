@@ -7,6 +7,7 @@
 		display: grid;
 		gap: 10px;
 		max-width: 620px;
+		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
 
 		&.size-7 { grid-template-columns: repeat(7, calc(480px / 7)); }
 		&.size-9 { grid-template-columns: repeat(9, calc(480px / 9)); }
@@ -22,16 +23,16 @@
 		justify-content: center;
 		aspect-ratio: 1 / 1;
 		background: white;
-		cursor: pointer;
 		user-select: none;
 		font-size: 22px;
 		font-weight: 500;
 		transition: background 0.15s ease, box-shadow 0.15s ease;
+		cursor: inherit; // inherit from board so board-level class controls it
 
 		&.empty {
 			background: #f4f6ff;
-			cursor: default;
-			
+			cursor: url('../assets/cursor/hand_2.svg') 8 8, auto !important;
+            
 			.cell-number {
 				color: #9aa3ff;
 			}

@@ -10,6 +10,7 @@ import { useSettings } from "../../contexts/pref";
 import { useTranslationFunction } from "@/hooks/useSelectiveContext";
 
 import Icon from "@/components/icon/icon";
+import { useCursor } from '@/hooks/useCursor';
 
 import fireworksGif from "@/assets/animations/fireworks.gif";
 import unluckyGif from "@/assets/animations/unlucky.gif";
@@ -102,6 +103,9 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         isPlaying: status === 'playing',
         startedAt: startedAt 
     });
+
+    // Use cursor hook; long press not required for digit game (enableLongPress false)
+    const { cursorClass, onMouseDown, onMouseUp, onMouseLeave } = useCursor({ enableLongPress: false });
 
     // Function to check if a cell is available for selection (adjacent to empty cells)
     const getAvailableCells = React.useCallback((currentBoard: (number | null)[], foundSet: Set<number>) => {
@@ -275,7 +279,10 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         return (
             <div 
                 key={`${settings.size}-${settings.target}-${startedAt ?? 'na'}`}
-                className={`digit-board size-${settings.size}`}
+                className={`digit-board size-${settings.size} ${cursorClass}`}
+                onMouseDown={onMouseDown}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseLeave}
             >
                 {board.map((digit, index) => {
                     // Handle center cell (null)

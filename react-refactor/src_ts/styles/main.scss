@@ -61,9 +61,9 @@ body {
 .menu-card {
   	background-color: colors.$background;
   	border: 1px solid colors.$primary;
-  	border-radius: 16px;
+  	border-radius: 2rem;
   	box-shadow: 0 4px 30px colors.$shadow;
-  	padding: 28px 40px;
+  	padding: 2rem 1rem;
   	display: flex;
   	flex-direction: column;
   	align-items: center;
@@ -72,8 +72,8 @@ body {
 ::-webkit-scrollbar { width: 16px; }
 ::-webkit-scrollbar-thumb {
   	background-color: #eb92be;
-  	border-radius: 8px;
-  	border: 4px solid transparent;
+  	border-radius: 1rem;
+  	border: 0.25rem solid transparent;
   	background-clip: padding-box;
 }
 ::-webkit-scrollbar-track { background-color: transparent; }
@@ -124,63 +124,31 @@ body {
 //     visibility: visible;
 // }
 
-/* Адаптивные стили для различных разрешений экрана */
 * {
 	box-sizing: border-box;
 }
 
-/* Большие экраны (от 1920px) */
-@media screen and (min-width: 1920px) {
-	html {
-		font-size: 110%;
-	}
+/* custom default cursors */
+* {
+	cursor: url('../assets/cursor/hand_2.svg') 8 8, auto;
 }
 
-/* Средние экраны (1366px - 1919px) */
-@media screen and (max-width: 1919px) and (min-width: 1366px) {
-	html {
-		font-size: 100%;
-	}
+/* children selectors — apply to element */
+a, button, label, input[type="button"], input[type="submit"], 
+input[type="reset"], input[type="checkbox"], input[type="radio"],
+select, [role="button"], .clickable, [data-clickable],
+[onclick], [data-onclick], .ui-button, .ui-selectbox__button, 
+.ui-selectbox__option, .user-manager, .user-manager .user-item, 
+.user-manager .dropdown-toggle, .delete-button, .ui-slider__input,
+/* and also its children so inner text/icons inherit */
+a *, button *, label *, input[type="button"] *, input[type="submit"] *,
+input[type="reset"] *, input[type="checkbox"] *, input[type="radio"] *,
+select *, [role="button"] *, .clickable *, [data-clickable] *, .notification *,
+[onclick] *, [data-onclick] *, .ui-button *, .ui-selectbox__button *,
+.ui-selectbox__option *, .user-manager *, .user-manager .user-item *, 
+.user-manager .dropdown-toggle *, .delete-button *, .ui-slider__input * {
+	cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
+	transition: cursor 0.15s ease;
 }
 
-/* Малые экраны (1280px - 1365px) */
-@media screen and (max-width: 1365px) and (min-width: 1280px) {
-	html {
-		font-size: 90%;
-	}
-}
-
-/* Очень малые экраны (1024px - 1279px) */
-@media screen and (max-width: 1279px) and (min-width: 1024px) {
-	html {
-		font-size: 80%;
-	}
-	
-	body {
-		padding: 5px;
-	}
-}
-
-/* Планшеты (768px - 1023px) */
-@media screen and (max-width: 1023px) and (min-width: 768px) {
-	html {
-		font-size: 70%;
-	}
-	
-	body {
-		padding: 2px;
-	}
-}
-
-/* Мобильные устройства (до 767px) */
-@media screen and (max-width: 767px) {
-	html {
-		font-size: 60%;
-	}
-	
-	body {
-		padding: 1px;
-		min-height: 100vh;
-		align-items: flex-start;
-	}
-}
+/* Remove animation-based cursor hacks — long-press handled in JS hook */
