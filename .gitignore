@@ -3,6 +3,8 @@ node_modules
 vanilla-app/dist/*
 react-refactor/dist/*
 
+refactoring_todo.md
+
 local_data/
 *.log
 test/

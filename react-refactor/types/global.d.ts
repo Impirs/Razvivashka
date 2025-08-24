@@ -33,3 +33,13 @@ declare global {
 }
 
 export {};
+
+// Image module declarations
+declare module '*.png' {
+  const src: string;
+  export default src;
+}
+declare module '*.gif' {
+  const src: string;
+  export default src;
+}

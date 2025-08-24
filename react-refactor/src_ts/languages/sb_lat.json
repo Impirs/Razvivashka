@@ -5,7 +5,8 @@
         "shulte": "Tabela Šulte",
         "syllable": "Po slo-govima",
         "sum": "Zbir brojeva",
-        "queens": "Kraljice"
+        "queens": "Kraljice",
+        "tango": "Tango"
     },
 
     "types": {
@@ -55,6 +56,16 @@
         },
         "queens": {
             "size": "Veličina igrališta:"
+        },
+        "tango": {
+            "complexity": "Nivo složenosti:"
+        },
+        "difficulty": {
+            "1": "Veoma lako",
+            "2": "Lako",
+            "3": "Srednje",
+            "4": "Teško",
+            "5": "Veoma teško"
         }
     },
 
@@ -68,6 +79,8 @@
         "mistakes_rules": "Broj grešaka ne sme da prekorači 3.",
         "double_click": "Kliknite dvaput ",
         "drag": "Pritisnite ",
+        "left_click": "Levi klik miša",
+        "right_click": "Desni klik miša",
         "digit": {
             "instruction": "Očistite polje, birajući u parovima ćelije koje u zbiru daju izabrani broj.",
             "empty": "Prazna ćelija",
@@ -82,6 +95,16 @@
             "instruction_place": "za postavljanje/uklanjanje kraljice.",
             "instruction_drag": "za pomeranje.",
             "tutorial": "Veličina polja 4 je obučavajući nivo. Preporučuje se igrati ga samo nekoliko puta."
+        },
+        "tango": {
+            "rules": {
+                "1": "Popunite polje tako da u svakoj vrsti i koloni bude po 3 meseca i 3 sunca.",
+                "2": "Ne dozvolite da više od dva ista simbola stoje uzastopno."
+            },
+            "controls": {
+                "1": " - dodaj/ukloni sunce",
+                "2": " - dodaj/ukloni mesec"
+            }
         }
     },
 
@@ -177,6 +200,28 @@
             "8x8": {
                 "title": "Kraljičin velemajstor",
                 "description": "Završiti igru na polju 8x8 za kraljice za "
+            }
+        },
+        "tango": {
+            "6x1": {
+                "title": "Prvi koraci u tangu",
+                "description": "Završiti tango igru na lakom nivou za "
+            },
+            "6x2": {
+                "title": "Ritam tanga",
+                "description": "Završiti tango igru na srednjem nivou za "
+            },
+            "6x3": {
+                "title": "Majstor tanga",
+                "description": "Završiti tango igru na teškom nivou za "
+            },
+            "6x4": {
+                "title": "Tango virtuoz",
+                "description": "Završiti tango igru на veoma teškom nivou za "
+            },
+            "6x5": {
+                "title": "Kralj tanga",
+                "description": "Završiti tango igru na ekspertskom nivou za "
             }
         }
     },

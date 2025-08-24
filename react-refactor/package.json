@@ -1,12 +1,15 @@
 {
   "name": "play_and_learn",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "An educational application with games for kids",
   "main": "./electron/main.js",
   "scripts": {
     "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && npm run start\"",
     "build:react": "vite build",
     "build": "npm run build:react && electron-builder",
+    "build:win": "npm run build:react && electron-builder --win",
+    "build:mac": "npm run build:react && electron-builder --mac",
+    "build:all": "npm run build:react && electron-builder -mwl",
     "start": "electron .",
     "test": "jest --config ./jest.config.js --passWithNoTests --silent"
   },
@@ -26,11 +29,26 @@
           "arch": "x64"
         }
       ],
-      "artifactName": "playandlearn_setup_${arch}.${ext}",
-      "icon": "./src_ts/assets/icon.ico",
+      "artifactName": "playandlearn_win_${arch}.${ext}",
+      "icon": "./icon.ico",
       "forceCodeSigning": false,
       "signAndEditExecutable": false,
       "requestedExecutionLevel": "asInvoker"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "artifactName": "playandlearn_mac_${arch}.${ext}",
+      "category": "public.app-category.education",
+      "icon": "./icon.icns"
     },
     "files": [
       "dist/**/*",

@@ -4,8 +4,27 @@ const path = require('path');
 const os = require('os');
 const { migrateIfNeeded } = require('./migration');
 
-// Storage locations
-const appDir = path.join(os.homedir(), 'AppData/Roaming/play_and_learn', 'data');
+// -------------------------------------------------------------
+// Cross‑platform application data directory resolution
+// Windows: %USERPROFILE%/AppData/Roaming/play_and_learn/data
+// macOS:   ~/Library/Application Support/play_and_learn/data
+// Linux:   ~/.config/play_and_learn/data
+// (Avoid using electron.app.getPath in preload to keep preload lean)
+// -------------------------------------------------------------
+function resolveAppDataDir() {
+    const home = os.homedir();
+    const platform = process.platform;
+    if (platform === 'win32') {
+        return path.join(home, 'AppData', 'Roaming', 'play_and_learn', 'data');
+    } else if (platform === 'darwin') {
+        return path.join(home, 'Library', 'Application Support', 'play_and_learn', 'data');
+    } else { // linux & others
+        return path.join(home, '.config', 'play_and_learn', 'data');
+    }
+}
+
+// Storage locations (platform aware)
+const appDir = resolveAppDataDir();
 const settingsPath = path.join(appDir, 'settings.json');
 const gameStoragePath = path.join(appDir, 'gamestorage.json');
 

@@ -12,10 +12,13 @@ import ShulteGame from '@/modules/game_shulte/ShulteGame';
 import ShulteMenu from '@/modules/game_shulte/ShulteMenu';
 import QueensGame from '@/modules/game_queens/QueensGame';
 import QueensMenu from '@/modules/game_queens/QueensMenu';
+import TangoGame from '@/modules/game_tango/TangoGame';
+import TangoMenu from '@/modules/game_tango/TangoMenu';
 
 import type { ShulteSettings } from '@/modules/game_shulte/types/game_shulte';
 import type { QueensSettings } from '@/modules/game_queens/types/game_queens';
 import type { DigitGameSettings } from '@/modules/game_digit/types/game_digit';
+import type { TangoSettings } from '@/modules/game_tango/types/game_tango';
 import { generateRecordProps } from '@/utils/pt';
 
 interface GameLayoutProps {
@@ -26,6 +29,7 @@ type GameSettings = {
     digit: { pending: DigitGameSettings; active: DigitGameSettings };
     shulte: { pending: ShulteSettings; active: ShulteSettings };
     queens: { pending: QueensSettings; active: QueensSettings };
+    tango: { pending: TangoSettings; active: TangoSettings };
 };
 
 type GameSettingsAction = 
@@ -34,7 +38,9 @@ type GameSettingsAction =
     | { type: 'SET_PENDING_SHULTE'; payload: ShulteSettings }
     | { type: 'SET_ACTIVE_SHULTE'; payload: ShulteSettings }
     | { type: 'SET_PENDING_QUEENS'; payload: QueensSettings }
-    | { type: 'SET_ACTIVE_QUEENS'; payload: QueensSettings };
+    | { type: 'SET_ACTIVE_QUEENS'; payload: QueensSettings }
+    | { type: 'SET_PENDING_TANGO'; payload: TangoSettings }
+    | { type: 'SET_ACTIVE_TANGO'; payload: TangoSettings };
 
 // useReducer is used here instead of multiple useState because:
 // - Complex state with interdependent values (pending vs active settings)
@@ -54,6 +60,10 @@ const initialGameSettings: GameSettings = {
     queens: { 
         pending: { size: 4 }, 
         active: { size: 4 } 
+    },
+    tango: {
+        pending: { complexity: 1 },
+        active: { complexity: 1 }
     }
 };
 
@@ -91,6 +101,16 @@ const gameSettingsReducer = (state: GameSettings, action: GameSettingsAction): G
             return {
                 ...state,
                 queens: { ...state.queens, active: action.payload }
+            };
+        case 'SET_PENDING_TANGO':
+            return {
+                ...state,
+                tango: { ...state.tango, pending: action.payload }
+            };
+        case 'SET_ACTIVE_TANGO':
+            return {
+                ...state,
+                tango: { ...state.tango, active: action.payload }
             };
         default:
             return state;
@@ -170,6 +190,12 @@ const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
         }
     }, [gameSettings.queens.pending.size]);
 
+    const handleTangoSettingsChange = useCallback((s: TangoSettings) => {
+        if (gameSettings.tango.pending.complexity !== s.complexity) {
+            dispatch({ type: 'SET_PENDING_TANGO', payload: s });
+        }
+    }, [gameSettings.tango.pending.complexity]);
+
     // Memoized handlers for game start
     const handleStartDigit = useCallback((settings: DigitGameSettings) => {
         dispatch({ type: 'SET_ACTIVE_DIGIT', payload: settings });
@@ -186,6 +212,12 @@ const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
     const handleStartQueens = useCallback((settings: QueensSettings) => {
         dispatch({ type: 'SET_ACTIVE_QUEENS', payload: settings });
         setGameContext('queens', generateRecordProps('queens', settings), false);
+        startGame();
+    }, [setGameContext, startGame]);
+
+    const handleStartTango = useCallback((settings: TangoSettings) => {
+        dispatch({ type: 'SET_ACTIVE_TANGO', payload: settings });
+        setGameContext('tango', generateRecordProps('tango', settings), false);
         startGame();
     }, [setGameContext, startGame]);
 
@@ -214,10 +246,18 @@ const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
                         onChangeSettings={handleQueensSettingsChange}
                     />
                 );
+            case 'tango':
+                return (
+                    <TangoMenu
+                        onStart={handleStartTango}
+                        initialSettings={gameSettings.tango.pending}
+                        onChangeSettings={handleTangoSettingsChange}
+                    />
+                );
             default:
                 return null;
         }
-    }, [gameId, gameSettings.digit.pending, gameSettings.queens.pending, handleStartDigit, handleStartShulte, handleStartQueens, handleDigitSettingsChange, handleShulteSettingsChange, handleQueensSettingsChange]);
+    }, [gameId, gameSettings.digit.pending, gameSettings.queens.pending, gameSettings.tango.pending, handleStartDigit, handleStartShulte, handleStartQueens, handleStartTango, handleDigitSettingsChange, handleShulteSettingsChange, handleQueensSettingsChange, handleTangoSettingsChange]);
 
     const gameComponent = useMemo(() => {
         switch (gameId) {
@@ -227,10 +267,12 @@ const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
                 return <ShulteGame settings={gameSettings.shulte.active} />;
             case 'queens':
                 return <QueensGame settings={gameSettings.queens.active} />;
+            case 'tango':
+                return <TangoGame settings={gameSettings.tango.active} />;
             default:
                 return null;
         }
-    }, [gameId, gameSettings.digit.active, gameSettings.shulte.active, gameSettings.queens.active]);
+    }, [gameId, gameSettings.digit.active, gameSettings.shulte.active, gameSettings.queens.active, gameSettings.tango.active]);
 
     const scoreSection = useMemo(() => {
         switch (gameId) {
@@ -255,10 +297,17 @@ const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
                         gameProps={generateRecordProps('queens', gameSettings.queens.pending)} 
                     />
                 );
+            case 'tango':
+                return (
+                    <ScoreList 
+                        gameId={gameId} 
+                        gameProps={generateRecordProps('tango', gameSettings.tango.pending)} 
+                    />
+                );
             default:
                 return null;
         }
-    }, [gameId, gameSettings.digit.pending, gameSettings.shulte.pending, gameSettings.queens.pending]);
+    }, [gameId, gameSettings.digit.pending, gameSettings.shulte.pending, gameSettings.queens.pending, gameSettings.tango.pending]);
 
     const gameTitle = useMemo(() => 
         t(`games.${gameId}` as any), [t, gameId]

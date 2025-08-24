@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/i18n';
+
+// Import preview images directly so bundler resolves paths reliably
+import digitPreview from '@/assets/images/digit_preview.png';
+import shultePreview from '@/assets/images/shulte_preview.png';
+import queensPreview from '@/assets/images/queens_preview.png';
+import tangoPreview from '@/assets/images/tango_preview.png';
 
 type GameMeta = {
 	id: string;
@@ -18,6 +24,16 @@ function GameBadge({ game, className }: GameBadgeProps) {
 	const { t } = useLanguage();
 	const title = t(`games.${game.id}` as any);
 
+	const previewSrc = useMemo(() => {
+		const map: Record<string, string> = {
+			digit: digitPreview,
+			shulte: shultePreview,
+			queens: queensPreview,
+			tango: tangoPreview,
+		};
+		return map[game.id];
+	}, [game.id]);
+
 	return (
 		<Link
 			to={`/catalog/${game.id}`}
@@ -25,7 +41,11 @@ function GameBadge({ game, className }: GameBadgeProps) {
 			aria-label={title}
 			style={{ cursor: 'pointer', textDecoration: 'none' }}
 		>
-			<div className="game-badge-img" id={`${game.id}_preview`} />
+			<div
+				className="game-badge-img"
+				id={`${game.id}_preview`}
+				style={previewSrc ? { backgroundImage: `url(${previewSrc})`} : undefined}
+			/>
 			<div className="game-types">
 				{game.type.map((typeKey) => (
 					<div key={`${game.id}-type-${typeKey}`} className={`game-type ${typeKey}`}>
