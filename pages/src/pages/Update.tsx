@@ -156,7 +156,9 @@ const Update = () => {
                                     textDecoration: 'none'
                                 }}
                             >
-                                <div className="platform-icon mb-4">💠</div>
+                                <img className=" inline-block platform-icon mb-4" 
+                                    src={`${import.meta.env.BASE_URL}windows-applications-svgrepo-com.svg`}
+                                    alt="web_icon" />
                                 <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
                                     {t('install.windows.exe')}
                                 </h4>
@@ -187,7 +189,9 @@ const Update = () => {
                                     textDecoration: 'none'
                                 }}
                             >
-                                <div className="platform-icon mb-4">📦</div>
+                                <img className=" inline-block platform-icon mb-4" 
+                                    src={`${import.meta.env.BASE_URL}zip-document-svgrepo-com.svg`}
+                                    alt="web_icon" />
                                 <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
                                     {t('install.windows.zip')}
                                 </h4>
