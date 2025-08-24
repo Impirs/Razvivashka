@@ -93,8 +93,40 @@ const Update = () => {
         )
     }
 
-    const downloadUrls = getDownloadUrls()
-    const releaseNotes = getLocalizedReleaseNotes(release.body)
+        const downloadUrls = getDownloadUrls()
+        const releaseNotes = getLocalizedReleaseNotes(release.body)
+
+        // Формируем массив карточек для скачивания
+            const downloadCards = [
+                downloadUrls.exe ? {
+                    href: downloadUrls.exe,
+                    icon: "windows-applications-svgrepo-com.svg",
+                    title: t('install.windows.exe'),
+                    desc: t('update.downloadExe'),
+                    button: t('install.download')
+                } : null,
+                downloadUrls.zip ? {
+                    href: downloadUrls.zip,
+                    icon: "zip-document-svgrepo-com.svg",
+                    title: t('install.windows.zip'),
+                    desc: t('update.downloadZip'),
+                    button: t('install.download')
+                } : null,
+                downloadUrls.dmg ? {
+                    href: downloadUrls.dmg,
+                    icon: "apple-document-svgrepo-com.svg",
+                    title: t('install.macos.dmg'),
+                    desc: t('install.download'),
+                    button: "Download"
+                } : null
+            ].filter((card): card is {
+                href: string;
+                icon: string;
+                title: string;
+                desc: string;
+                button: string;
+            } => Boolean(card));
+        const cardCount = downloadCards.length;
 
     return (
         <div 
@@ -143,72 +175,40 @@ const Update = () => {
                         {t('update.downloadLatest')}
                     </h2>
                     
-                    <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                        {downloadUrls.exe && (
-                            <a 
-                                href={downloadUrls.exe}
-                                target="_blank" 
+                    <div className={`grid grid-cols-1 sm:grid-cols-${cardCount} gap-6 max-w-2xl mx-auto`}>
+                        {downloadCards.map((card, idx) => (
+                            <a
+                                key={idx}
+                                href={card.href}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="download-card fade-in-up delay-300 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
-                                style={{ 
-                                    backgroundColor: 'var(--bg-secondary)', 
+                                style={{
+                                    backgroundColor: 'var(--bg-secondary)',
                                     border: '1px solid var(--border-color)',
                                     textDecoration: 'none'
                                 }}
                             >
-                                <img className=" inline-block platform-icon mb-4" 
-                                    src={`${import.meta.env.BASE_URL}windows-applications-svgrepo-com.svg`}
+                                <img className="inline-block platform-icon mb-4"
+                                    src={`${import.meta.env.BASE_URL}${card.icon}`}
                                     alt="web_icon" />
                                 <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
-                                    {t('install.windows.exe')}
+                                    {card.title}
                                 </h4>
                                 <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-                                    {t('update.downloadExe')}
+                                    {card.desc}
                                 </p>
-                                <div 
+                                <div
                                     className="inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
-                                    style={{ 
+                                    style={{
                                         backgroundColor: 'var(--accent)',
                                         color: 'white'
                                     }}
                                 >
-                                    {t('install.download')}
+                                    {card.button}
                                 </div>
                             </a>
-                        )}
-                        
-                        {downloadUrls.zip && (
-                            <a 
-                                href={downloadUrls.zip}
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
-                                style={{ 
-                                    backgroundColor: 'var(--bg-secondary)', 
-                                    border: '1px solid var(--border-color)',
-                                    textDecoration: 'none'
-                                }}
-                            >
-                                <img className=" inline-block platform-icon mb-4" 
-                                    src={`${import.meta.env.BASE_URL}zip-document-svgrepo-com.svg`}
-                                    alt="web_icon" />
-                                <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
-                                    {t('install.windows.zip')}
-                                </h4>
-                                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-                                    {t('update.downloadZip')}
-                                </p>
-                                <div 
-                                    className="inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
-                                    style={{ 
-                                        backgroundColor: 'var(--accent)',
-                                        color: 'white'
-                                    }}
-                                >
-                                    {t('install.download')}
-                                </div>
-                            </a>
-                        )}
+                        ))}
                     </div>
                 </div>
                 

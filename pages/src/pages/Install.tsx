@@ -2,10 +2,12 @@ import React from 'react'
 import MarkdownRenderer from '../components/MarkdownRenderer'
 import { useMarkdownContent } from '../hooks/useMarkdownContent'
 import { useLanguage } from '../contexts/LanguageContext'
+import { useGitHubRelease } from '../hooks/useGitHubRelease'
 
 const Install = () => {
     const { content, loading, error } = useMarkdownContent('install')
     const { t } = useLanguage()
+    const { getDownloadUrls } = useGitHubRelease()
 
     if (loading) {
         return (
@@ -49,6 +51,8 @@ const Install = () => {
             </div>
         )
     }
+
+    const downloadUrls = getDownloadUrls()
 
     return (
         <div 
@@ -107,97 +111,134 @@ const Install = () => {
                     {/* Desktop version - full cards */}
                     <div className="hidden md:grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                         {/* Windows EXE */}
-                        <a 
-                            href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="download-card fade-in-up delay-300 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
-                            style={{ 
-                                backgroundColor: 'var(--bg-secondary)', 
-                                border: '1px solid var(--border-color)',
-                                textDecoration: 'none'
-                            }}
-                        >
-                            <img className=" inline-block platform-icon mb-4" 
-                                src={`${import.meta.env.BASE_URL}windows-applications-svgrepo-com.svg`}
-                                alt="web_icon" />
-                            <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
-                                {t('install.windows.exe')}
-                            </h4>
-                            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-                                {t('install.download')}
-                            </p>
-                            <div 
-                                className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                        {downloadUrls.exe && (
+                            <a 
+                                href={downloadUrls.exe}
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="download-card fade-in-up delay-300 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
                                 style={{ 
-                                    backgroundColor: 'var(--accent)',
-                                    color: 'white'
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    textDecoration: 'none'
                                 }}
                             >
-                                Download
-                            </div>
-                        </a>
+                                <img className=" inline-block platform-icon mb-4" 
+                                    src={`${import.meta.env.BASE_URL}windows-applications-svgrepo-com.svg`}
+                                    alt="web_icon" />
+                                <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                    {t('install.windows.exe')}
+                                </h4>
+                                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                    {t('install.download')}
+                                </p>
+                                <div 
+                                    className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                                    style={{ 
+                                        backgroundColor: 'var(--accent)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    Download
+                                </div>
+                            </a>
+                        )}
                         
                         {/* Windows ZIP */}
-                        <a 
-                            href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
-                            style={{ 
-                                backgroundColor: 'var(--bg-secondary)', 
-                                border: '1px solid var(--border-color)',
-                                textDecoration: 'none'
-                            }}
-                        >
-                            <img className=" inline-block platform-icon mb-4" 
-                                src={`${import.meta.env.BASE_URL}zip-document-svgrepo-com.svg`}
-                                alt="web_icon" />
-                            <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
-                                {t('install.windows.zip')}
-                            </h4>
-                            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-                                {t('install.download')}
-                            </p>
-                            <div 
-                                className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                        {downloadUrls.zip && (
+                            <a 
+                                href={downloadUrls.zip}
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
                                 style={{ 
-                                    backgroundColor: 'var(--accent)',
-                                    color: 'white'
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    textDecoration: 'none'
                                 }}
                             >
-                                Download
-                            </div>
-                        </a>
+                                <img className=" inline-block platform-icon mb-4" 
+                                    src={`${import.meta.env.BASE_URL}zip-document-svgrepo-com.svg`}
+                                    alt="web_icon" />
+                                <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                    {t('install.windows.zip')}
+                                </h4>
+                                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                    {t('install.download')}
+                                </p>
+                                <div 
+                                    className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                                    style={{ 
+                                        backgroundColor: 'var(--accent)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    Download
+                                </div>
+                            </a>
+                        )}
 
                         {/* macOS - Coming Soon */}
-                        <div 
-                            className="download-card fade-in-up delay-500 p-6 rounded-2xl shadow-lg text-center opacity-60"
-                            style={{ 
-                                backgroundColor: 'var(--bg-secondary)', 
-                                border: '1px solid var(--border-color)',
-                                cursor: 'not-allowed'
-                            }}
-                        >
-                            <img className=" inline-block platform-icon mb-4" 
-                                src={`${import.meta.env.BASE_URL}apple-svgrepo-com.svg`}
-                                alt="web_icon" />
-                            <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
-                                {t('install.macos')}
-                            </h4>
-                            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
-                                {t('install.coming.soon')}
-                            </p>
-                            <div 
-                                className="inline-block px-4 py-2 rounded-lg text-sm font-semibold"
+                        { downloadUrls.dmg ? (
+                            <a 
+                                href={downloadUrls.dmg}
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
                                 style={{ 
-                                    backgroundColor: 'var(--bg-tertiary)',
-                                    color: 'var(--text-muted)'
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    textDecoration: 'none'
                                 }}
                             >
-                                Soon
+                                <img className=" inline-block platform-icon mb-4" 
+                                    src={`${import.meta.env.BASE_URL}apple-document-svgrepo-com.svg`}
+                                    alt="web_icon" />
+                                <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                    {t('install.macos.dmg')}
+                                </h4>
+                                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                    {t('install.download')}
+                                </p>
+                                <div 
+                                    className="download-button inline-block px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                                    style={{ 
+                                        backgroundColor: 'var(--accent)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    Download
+                                </div>
+                            </a>
+                        ) : (
+                            <div 
+                                className="download-card fade-in-up delay-500 p-6 rounded-2xl shadow-lg text-center opacity-60"
+                                style={{ 
+                                    backgroundColor: 'var(--bg-secondary)', 
+                                    border: '1px solid var(--border-color)',
+                                    cursor: 'not-allowed'
+                                }}
+                            >
+                                <img className=" inline-block platform-icon mb-4" 
+                                    src={`${import.meta.env.BASE_URL}apple-svgrepo-com.svg`}
+                                    alt="web_icon" />
+                                <h4 className="font-bold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                                    {t('install.macos.dmg')}
+                                </h4>
+                                <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                                    {t('install.coming.soon')}
+                                </p>
+                                <div 
+                                    className="inline-block px-4 py-2 rounded-lg text-sm font-semibold"
+                                    style={{ 
+                                        backgroundColor: 'var(--bg-tertiary)',
+                                        color: 'var(--text-muted)'
+                                    }}
+                                >
+                                    Soon
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Mobile version - compact layout */}

@@ -70,7 +70,7 @@ const translations = {
     'install.desktop.title': 'Desktop Application',
     'install.windows.exe': 'Windows Installer',
     'install.windows.zip': 'Windows Portable',
-    'install.macos': 'macOS Package',
+    'install.macos.dmg': 'macOS Package',
     'install.coming.soon': 'Coming Soon',
     'install.download': 'Download latest version',
     'install.mobile.note': 'For desktop installation only - preview available on mobile',
