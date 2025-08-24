@@ -1,18 +1,20 @@
-import { useState, useEffect, useRef } from "react";
-import { ShulteSettings, ShulteBoard } from "./types/game_shulte";
+import React from "react";
+import { ShulteSettings, ShulteBoard, ShulteBoardCell } from "./types/game_shulte";
 import { generateRecordProps } from '@/utils/pt';
 import { formatTime } from "@/utils/ft";
 
 import { useGameController } from "../../contexts/gameController";
+import { useGameTimer } from "@/hooks/useGameTimer";
 import { useSettings } from "../../contexts/pref";
-import { useLanguage } from "@/contexts/i18n";
+import { useTranslationFunction } from "@/hooks/useSelectiveContext";
 
 import Icon from "@/components/icon/icon";
+import { useCursor } from '@/hooks/useCursor';
 
 import fireworksGif from "@/assets/animations/fireworks.gif";
 import unluckyGif from "@/assets/animations/unlucky.gif";
 
-function generateShulteBoard(size: number): ShulteBoard {
+const generateShulteBoard = (size: number): ShulteBoard => {
     const arr = Array.from({ length: size * size }, (_, i) => i + 1);
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -21,124 +23,217 @@ function generateShulteBoard(size: number): ShulteBoard {
     return Array.from({ length: size }, (_, row) =>
         arr.slice(row * size, (row + 1) * size).map(value => ({ value, isFound: false }))
     );
-}
+};
 
-function ShulteGame({ settings }: { settings: ShulteSettings }) {
+const MistakesCounter = React.memo<{ mistakes: number }>(({ mistakes }) => {
+    const mistakeIcons = React.useMemo(() => 
+        Array.from({ length: 3 }).map((_, i) => (
+            <Icon 
+                key={i} 
+                name={i < mistakes ? 'heart-broken' : 'heart'} 
+                color={i < mistakes ? '#eb92be' : '#232323'}
+            />
+        )), [mistakes]
+    );
+
+    return (
+        <div className="mistakes-counter" aria-label="mistakes">
+            {mistakeIcons}
+        </div>
+    );
+});
+
+MistakesCounter.displayName = 'MistakesCounter';
+
+const GameTimer = React.memo<{ seconds: number }>(({ seconds }) => (
+    <div className="game-timer">
+        <div aria-label="timer">{formatTime(seconds)}</div>
+    </div>
+));
+
+GameTimer.displayName = 'GameTimer';
+
+// Simple board cell without memoization for immediate updates
+const ShulteCell: React.FC<{
+    cell: ShulteBoardCell;
+    row: number;
+    col: number;
+    hideFound: boolean;
+    onClick: (row: number, col: number) => void;
+}> = ({ cell, row, col, hideFound, onClick }) => {
+    const handleClick = () => {
+        onClick(row, col);
+    };
+
+    let className = 'shulte-cell';
+    if (cell.isFound) className += ' found';
+    if (hideFound && cell.isFound) className += ' hidden';
+
+    return (
+        <div
+            onClick={handleClick}
+            className={className}
+        >
+            <span className="cell-number">
+                {cell.value}
+            </span>
+        </div>
+    );
+};
+
+ShulteCell.displayName = 'ShulteCell';
+
+const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
     const { status, startGame, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
-    const { t } = useLanguage();
+    const t = useTranslationFunction();
+    
     const [gamesSettings] = useSetting('games');
     const hideFoundNumber = gamesSettings?.shulte?.view_modification ?? false;
 
-    const [board, setBoard] = useState<ShulteBoard>([]);
-    const [current, setCurrent] = useState(1);
-    const [mistakes, setMistakes] = useState(0);
-    const [seconds, setSeconds] = useState(0);
-    const timerRef = useRef<number | null>(null);
-    const lastStartRef = useRef<number | null>(null);
-    const [boardReady, setBoardReady] = useState(false);
+    // Memoized board initialization
+    const initialBoard = React.useMemo(() => generateShulteBoard(settings.size), [settings.size]);
+    
+    const [board, setBoard] = React.useState<ShulteBoard>(() => initialBoard);
+    const [current, setCurrent] = React.useState(1);
+    const [mistakes, setMistakes] = React.useState(0);
+    const lastStartRef = React.useRef<number | null>(null);
 
-    // Start/reset when controller enters playing; re-init on every Start via startedAt
-    useEffect(() => {
-        if (status === 'playing' && startedAt) {
-            if (lastStartRef.current !== startedAt) {
-                lastStartRef.current = startedAt;
-                setBoard([]);
-                setBoardReady(false);
-                setBoard(generateShulteBoard(settings.size));
-                setCurrent(1);
-                setMistakes(0);
-                setSeconds(0);
-                // Assume perfect at the start of a run
-                setGameContext('shulte', generateRecordProps('shulte', settings), true);
-                // Set modifications for the run
-                const mods: string[] = [];
-                if (hideFoundNumber === false) {
-                    // when assistance (hiding found numbers) is OFF, we record the modifier
-                    mods.push('view_modification');
-                }
-                setModifications(mods);
-                if (timerRef.current) window.clearInterval(timerRef.current);
-                timerRef.current = window.setInterval(() => setSeconds(s => s + 1), 1000);
-            }
-        } else {
-            if (timerRef.current) {
-                window.clearInterval(timerRef.current);
-                timerRef.current = null;
-            }
-            if (status === 'idle') {
-                lastStartRef.current = null;
-                setBoardReady(false);
-                setSeconds(0);
-            }
+    const { seconds, resetTimer } = useGameTimer({ 
+        isPlaying: status === 'playing',
+        startedAt: startedAt 
+    });
+
+    // Cursor hook for consistent pointer/long-press behavior (no long press needed here)
+    const { cursorClass, onMouseDown, onMouseUp, onMouseLeave } = useCursor({ enableLongPress: false });
+
+    // Optimized game reset function - timer resets automatically via useGameTimer
+    const resetGame = React.useCallback(() => {
+        const newBoard = generateShulteBoard(settings.size);
+        setBoard(newBoard);
+        setCurrent(1);
+        setMistakes(0);
+        // Don't call resetTimer() - useGameTimer handles it automatically
+        
+        // Start with perfect assumption
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => {
+            setGameContext('shulte', generateRecordProps('shulte', settings), true);
+        }, 0);
+        
+        // Set game modifications
+        const mods: string[] = [];
+        if (hideFoundNumber === false) {
+            mods.push('view_modification');
         }
-        return () => {
-            if (timerRef.current) {
-                window.clearInterval(timerRef.current);
-                timerRef.current = null;
-            }
-        };
-    }, [status, settings.size]);
+        // Use setTimeout to avoid setState during render
+        setTimeout(() => {
+            setModifications(mods);
+        }, 0);
+    }, [settings.size, setGameContext, setModifications, hideFoundNumber]);
 
-    useEffect(() => {
-        if (status === 'playing' && board.length > 0) setBoardReady(true);
-    }, [board, status]);
+    React.useEffect(() => {
+        if (status === 'playing' && startedAt && lastStartRef.current !== startedAt) {
+            lastStartRef.current = startedAt;
+            resetGame();
+        } else if (status === 'idle') {
+            lastStartRef.current = null;
+        }
+    }, [status, startedAt, resetGame]);
 
-    const handleCellClick = (row: number, col: number) => {
-    if (status !== 'playing') return;
+    const handleCellClick = React.useCallback((row: number, col: number) => {
+        if (status !== 'playing') return;
 
         const cell = board[row][col];
+        
         if (cell.value === current) {
-            setBoard(prev => {
-                const newBoard = prev.map(r => r.map(c => ({ ...c })));
-                newBoard[row][col].isFound = true;
+            // Correct cell clicked - update board immediately with minimal operations
+            setBoard(prevBoard => {
+                const newBoard = [...prevBoard];
+                newBoard[row] = [...newBoard[row]];
+                newBoard[row][col] = { ...newBoard[row][col], isFound: true };
                 return newBoard;
             });
-            setCurrent(c => c + 1);
-
-            if (current === settings.size * settings.size) {
-                if (timerRef.current) {
-                    window.clearInterval(timerRef.current);
-                    timerRef.current = null;
+            
+            setCurrent(c => {
+                const newCurrent = c + 1;
+                const totalCells = settings.size * settings.size;
+                // console.log('ShulteGame current updated:', { 
+                //     previous: c, 
+                //     new: newCurrent, 
+                //     total: totalCells,
+                //     isLastCell: c === totalCells
+                // });
+                
+                // Check win condition: if we just found the last cell
+                if (c === totalCells) {
+                    // console.log('ShulteGame WIN! Last cell found:', { 
+                    //     foundCell: c,
+                    //     total: totalCells, 
+                    //     seconds 
+                    // });
+                    setTimeout(() => endGame('win', seconds), 0);
                 }
-                endGame('win', seconds);
-            }
+                
+                return newCurrent;
+            });
+
         } else {
-            // On first mistake, mark run as not perfect
+            // Wrong cell clicked - handle mistake
             if (mistakes === 0 && gameId === 'shulte' && gameProps) {
-                setGameContext('shulte', generateRecordProps('shulte', settings), false);
+                // Use setTimeout to avoid setState during render
+                setTimeout(() => {
+                    setGameContext('shulte', generateRecordProps('shulte', settings), false);
+                }, 0);
             }
             setMistakes(m => m + 1);
         }
+    }, [status, board, current, settings.size, mistakes, gameId, gameProps, endGame, seconds, setGameContext]);
+
+    // 3 mistakes = lose
+    React.useEffect(() => {
+        if (status === 'playing' && mistakes >= 3) {
+            // Use setTimeout to avoid setState during render
+            setTimeout(() => {
+                endGame('lose', seconds);
+            }, 0);
+        }
+    }, [mistakes, status, seconds, endGame]);
+
+    // Render game board directly without memoization for immediate updates
+    const renderGameBoard = () => {
+        if (status !== 'playing') return null;
+
+        return (
+            <div
+                key={`${settings.size}-${startedAt ?? 'na'}`}
+                className={`shulte-board size-${settings.size} ${cursorClass}`}
+                onMouseDown={onMouseDown}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseLeave}
+            >
+                {board.map((row, rowIndex) =>
+                    row.map((cell, colIndex) => (
+                        <ShulteCell
+                            key={`${rowIndex}-${colIndex}`}
+                            cell={cell}
+                            row={rowIndex}
+                            col={colIndex}
+                            hideFound={hideFoundNumber}
+                            onClick={handleCellClick}
+                        />
+                    ))
+                )}
+            </div>
+        );
     };
 
-    // lose on 3 mistakes
-    useEffect(() => {
-        if (status === 'playing' && mistakes >= 3) {
-            if (timerRef.current) {
-                window.clearInterval(timerRef.current);
-                timerRef.current = null;
-            }
-            endGame('lose', seconds);
-        }
-    }, [mistakes, status, seconds]);
-
     return (
-        <section className="game-main-panel">
+        <section className="game-main-panel shulte-panel">
             <header className="game-utils-panel">
-                <div className="mistakes-counter" aria-label="mistakes">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                        <Icon key={i} 
-                            name={i < mistakes ? 'heart-broken' : 'heart'} 
-                            color={ i < mistakes ? '#eb92be' : '#232323' }
-                            size={32}
-                        />
-                    ))}
-                </div>
+                <MistakesCounter mistakes={mistakes} />
                 <div/>
-                <div className="game-timer">
-                    <div aria-label="timer">{formatTime(seconds)}</div>
-                </div>
+                <GameTimer seconds={seconds} />
             </header>
             <div className="game-space">
                 {status === 'idle' && (
@@ -150,64 +245,25 @@ function ShulteGame({ settings }: { settings: ShulteSettings }) {
                 )}
                 {status === 'win' && (
                     <div style={{ textAlign: 'center', width: '60%' }}>
-                        <img src={fireworksGif} 
-                            alt="fireworks-animation" />
+                        <img src={fireworksGif} alt="fireworks-animation" />
                         <h3>{t('game-info.win')}</h3>
                         <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
                     </div>
                 )}
                 {status === 'lose' && (
                     <div style={{ textAlign: 'center', width: '60%' }}>
-                        <img src={unluckyGif} 
-                            alt="unlucky-animation" />
+                        <img src={unluckyGif} alt="unlucky-animation" />
                         <h3>{t('game-info.lose')}</h3>
                         <h3>{t('game-info.your_mistakes')} {mistakes}</h3>
                         <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
                     </div>
                 )}
-        {status === 'playing' && (
-                    <div
-            key={`${settings.size}-${startedAt ?? 'na'}`}
-            className="shulte-board"
-                        style={{
-                            display: "grid",
-                            gap: 10,
-                            gridTemplateColumns: `repeat(${settings.size}, minmax(40px, 1fr))`,
-                            // width: '100%',
-                            maxWidth: 620
-                        }}
-                    >
-                        {board.map((row, rowIndex) =>
-                            row.map((cell, colIndex) => (
-                                <div
-                                    key={`${rowIndex}-${colIndex}`}
-                                    onClick={() => handleCellClick(rowIndex, colIndex)}
-                                    style={{
-                                        fontSize: '22px',
-                                        height: `calc(480px / ${settings.size})`,
-                                        width: `calc(480px / ${settings.size})`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        borderRadius: 8,
-                                        border: '1px solid #9aa3ff',
-                                        background: hideFoundNumber ? 'white' 
-                                                    : (cell.isFound ? "#d6f8d63f" : "white"),
-                                        cursor: "pointer",
-                                        userSelect: "none"
-                                    }}
-                                >
-                                    <span style={{ visibility: (hideFoundNumber && cell.isFound) ? 'hidden' : 'visible' }}>
-                                        {cell.value}
-                                    </span>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                )}
+                {renderGameBoard()}
             </div>
         </section>
     );
-};
+});
+
+ShulteGame.displayName = 'ShulteGame';
 
 export default ShulteGame;

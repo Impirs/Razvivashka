@@ -33,6 +33,7 @@ export type User = {
 export type GameStoreState = {
     currentUser: User | null;
     allAchievements: Record<string, GameAchievement[]>; // { gameId: Achievement[] }
+    usersList: string[]; // List of all available users
     loading: boolean;
     error: string | null;
 };

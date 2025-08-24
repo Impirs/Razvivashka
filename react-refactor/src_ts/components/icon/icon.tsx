@@ -4,19 +4,22 @@ import { iconComponents, iconUrls } from './iconMap';
 export type IconProps = React.SVGProps<SVGSVGElement> & {
 	// Icon file name without extension, e.g., "home", "play"
 	name: string;
-	// Width/height convenience prop. Accepts number (px) or any CSS size string.
-	size?: number | string;
 	// Sets CSS `color`; works with icons using currentColor for fill/stroke.
 	color?: string;
 	// When true, render a span with id=name so mask styles from icons.scss apply
 	masked?: boolean;
 };
 
-function Icon({ name, size = 24, color = '#111111', className, style, masked = false, ...rest }: IconProps) {
+const Icon = React.memo<IconProps>(({ name, color = '#111111', className, style, masked = false, ...rest }) => {
 	const Svg = iconComponents[name];
 	const url = iconUrls[name];
 
-	const sizeStyle = typeof size === 'number' ? `${size}px` : size;
+	// Мемоизируем стиль для предотвращения создания нового объекта на каждом рендере
+	const baseStyle = React.useMemo(() => ({ 
+		display: 'inline-block' as const, 
+		verticalAlign: 'middle' as const, 
+		...style 
+	}), [style]);
 
 	// Masked variant: rely on `#<name>` mask rules from styles/_icons.scss
 	if (masked) {
@@ -24,12 +27,7 @@ function Icon({ name, size = 24, color = '#111111', className, style, masked = f
 			<span
 				id={name}
 				className={className}
-				style={{ width: sizeStyle, 
-						height: sizeStyle, 
-						// backgroundColor: color,
-						display: 'inline-block', 
-						verticalAlign: 'middle', 
-						...style }}
+				style={baseStyle}
 				aria-hidden={true}
 			/>
 		);
@@ -40,12 +38,7 @@ function Icon({ name, size = 24, color = '#111111', className, style, masked = f
 		return (
 			<Svg
 				className={className}
-				style={{ width: sizeStyle, 
-						height: sizeStyle, 
-						backgroundColor: color, 
-						display: 'inline-block', 
-						verticalAlign: 'middle', 
-						...style }}
+				style={baseStyle}
 				fill={color as any}
 				stroke={color as any}
 				focusable={rest.focusable ?? false}
@@ -62,11 +55,7 @@ function Icon({ name, size = 24, color = '#111111', className, style, masked = f
 				src={url}
 				alt=""
 				className={className}
-				style={{ width: sizeStyle, 
-						height: sizeStyle, 
-						display: 'inline-block', 
-						verticalAlign: 'middle', 
-						...style }}
+				style={baseStyle}
 				aria-hidden={rest['aria-label'] ? undefined : true}
 			/>
 		);
@@ -81,10 +70,15 @@ function Icon({ name, size = 24, color = '#111111', className, style, masked = f
 	}
 
 	return null;
-}
+});
+
+Icon.displayName = 'Icon';
 
 export default Icon;
 
 // Export the list of available icon names at runtime
 export const availableIcons = Object.keys(iconComponents);
+
+// Type for available icon names (useful for TypeScript users)
+export type AvailableIconName = keyof typeof iconComponents;
 

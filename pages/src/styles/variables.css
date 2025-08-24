@@ -1,0 +1,52 @@
+/* CSS Variables for theming */
+:root {
+  /* Light theme variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #e2e8f0;
+  --bg-tertiary: #e2e8f0;
+  --bg-gradient-from: #e0f7fa;
+  --bg-gradient-to: #b3e5fc;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --border-light: #cbd5e1;
+  --accent: #3b82f6;
+  --accent-primary: #3b82f6;
+  --accent-hover: #1d4ed8;
+  --shadow: rgba(0, 0, 0, 0.15);
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --overlay: rgba(0, 0, 0, 0.5);
+
+  color-scheme: light;
+}
+
+/* Dark theme variables */
+:root.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-gradient-from: #1e293b;
+  --bg-gradient-to: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --border-light: #475569;
+  --accent: #60a5fa;
+  --accent-primary: #60a5fa;
+  --accent-hover: #93c5fd;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-light: rgba(0, 0, 0, 0.2);
+  --overlay: rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
+}
+
+/* Breakpoints */
+:root {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}

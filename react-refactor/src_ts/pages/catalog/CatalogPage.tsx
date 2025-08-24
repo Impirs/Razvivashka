@@ -71,7 +71,7 @@ function CatalogPage() {
                                 />
                     </div>
                 </div>
-                <div className='container-content'>
+                <div className='container-content' style={{ padding: '35px' }}>
                     <div className="games-container">
                         {gamesMeta.map(game => (
                             <GameBadge key={game.id} game={game} />

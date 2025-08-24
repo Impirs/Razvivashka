@@ -3,30 +3,32 @@
 .games-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px 24px;
+    gap: 2rem 1.5rem; // 32px 24px
     width: 100%;
     justify-items: center;
     align-items: start;
+    padding: 0 0.625rem; // 10px
+    box-sizing: border-box;
 }
 
 .game-badge {
-    width: 280px;
-    height: 220px;
+    width: 100%; // 340px
+    height: 250%; // 260px
+    max-height: 260px;
     background: colors.$fourth;
-    border: 2px solid colors.$primary;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px colors.$shadow;
+    border: 0.125rem solid colors.$primary; // 2px
+    border-radius: 1rem; // 16px
+    box-shadow: 0 0.25rem 1.25rem colors.$shadow; // 4px 20px
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 12px 24px;
+    padding: 0.75rem 1.5rem; // 12px 24px
     transition: background 0.2s, border 0.2s, color 0.2s;
-    gap: 6px;
+    gap: 0.375rem; // 6px
 
     &:hover {
         background: colors.$background;
         border: 2px solid colors.$third;
-        cursor: pointer;
 
         h3 {
             color: colors.$third;
@@ -34,7 +36,7 @@
     }
 
     h3 {
-        font-size: 28px;
+        font-size: 1.75rem; // 28px
         color: colors.$text;
         margin: 0;
         text-align: center;
@@ -46,25 +48,25 @@
 
 .game-badge-img {
     width: 85%;
-    height: 180px;
+    height: 11.25rem; // 180px
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    border-radius: 10px;
+    border-radius: 0.625rem; // 10px
 }
 
 .game-types {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 0.625rem; // 10px
     width: 100%;
     justify-content: center;
 }
 
 .game-type {
-    padding: 4px 12px;
-    border-radius: 8px;
-    font-size: 15px;
+    padding: 0.25em 0.75em; // 4px 12px (use em so padding scales with font-size)
+    border-radius: 0.5rem; // 8px
+    font-size: 0.9375rem; // 15px
     font-weight: 500;
     color: colors.$text_rev;
     background: colors.$primary;
@@ -74,9 +76,4 @@
     &.count { background: colors.$count; color: colors.$text_rev; }
     &.reading { background: colors.$reading; color: colors.$text_rev; }
     &.attention { background: colors.$attention; color: colors.$text_rev; }
-}
-
-@media (max-width: 1400px) {
-    .games-container { grid-template-columns: repeat(2, 1fr); }
-    .game-badge { width: 75%; }
 }

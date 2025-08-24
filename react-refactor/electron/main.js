@@ -13,6 +13,19 @@ log.info('App starting...');
 
 autoUpdater.allowPrerelease = true;
 
+// Ensure AppUserModelID is set on Windows so the taskbar uses the app's icon
+try {
+    if (process.platform === 'win32') {
+        // Use a stable, unique app ID that matches your installer/build config.
+        // This is required on Windows for the taskbar and Start Menu to show the
+        // correct icon and for shortcuts to be associated with your app.
+        app.setAppUserModelId('com.impirs.razvivashka');
+        log.info('AppUserModelId set to com.impirs.razvivashka');
+    }
+} catch (e) {
+    log.warn('setAppUserModelId failed', e);
+}
+
 // Function to check for updates in development mode using GitHub API
 async function checkForUpdatesDev(win) {
     try {
@@ -35,7 +48,7 @@ async function checkForUpdatesDev(win) {
             const updateInfo = {
                 version: latestVersion,
                 releaseNotes: latestRelease.body || 'Изменения не указаны.',
-                releaseUrl: 'https://github.com/Impirs/Summ_solver/releases'
+                releaseUrl: 'https://impirs.github.io/Razvivashka/update'
             };
             
             // Send update info to renderer process
@@ -66,14 +79,12 @@ function isNewerVersion(latest, current) {
 }
 
 // TODO:
-// Write a script witch will automativaly send a bug report to the developer via mail.
+// Write a script witch will automativaly send a bug report to the developer.
 
 function createWindow() {
     const win = new BrowserWindow({
         show: false,
-        icon: isDev 
-            ? path.join(__dirname, '../src_ts/assets/icon.ico')
-            : path.join(__dirname, '../shared/assets/icon.ico'),
+        icon: path.join(process.resourcesPath || path.join(__dirname, '..'), 'icon.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -86,6 +97,15 @@ function createWindow() {
 
     win.setMenuBarVisibility(false);
     win.maximize();
+    
+    // Icon setting for windows (to be sure)
+    if (process.platform === 'win32') {
+        if (!isDev) {
+            const productionIconPath = path.join(process.resourcesPath || path.join(__dirname, '..'), 'icon.ico');
+            win.setIcon(productionIconPath);
+            win.setOverlayIcon(productionIconPath, 'Развивашка');
+        }
+    }
 
     if (isDev) {
         win.loadURL('http://localhost:5173');
@@ -144,7 +164,7 @@ autoUpdater.on('checking-for-update', () => {
 autoUpdater.on('update-available', (info) => {
     log.info('Update available:', info);
 
-    const releaseUrl = 'https://github.com/Impirs/Summ_solver/releases';
+    const releaseUrl = 'https://impirs.github.io/Razvivashka/update';
 
     const cleanReleaseNotes = (notes) => {
         if (Array.isArray(notes)) {

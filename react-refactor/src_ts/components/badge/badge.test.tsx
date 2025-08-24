@@ -4,8 +4,28 @@ import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 
 import GameBadge from './badge';
-import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
+
+// Mock the i18n context
+jest.mock('@/contexts/i18n', () => ({
+    LanguageProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    useLanguage: () => ({
+        language: 'ru',
+        setLanguage: jest.fn(),
+        t: (key: string) => {
+            const mockTranslations: any = {
+                'games.digit': 'Состав числа',
+                'games.shulte': 'Таблица Шульте',
+                'types.math': 'Счет',
+                'types.attention': 'Внимательность',
+                'types.reading': 'Чтение',
+                'types.logic': 'Логика'
+            };
+            return mockTranslations[key] || key;
+        },
+        translations: {}
+    })
+}));
 
 // Settings shim for tests
 (() => {
@@ -28,9 +48,7 @@ import { SettingsProvider } from '@/contexts/pref';
 const renderWithProviders = (ui: React.ReactElement) => {
     return render(
         <SettingsProvider>
-            <LanguageProvider>
-                <MemoryRouter>{ui}</MemoryRouter>
-            </LanguageProvider>
+            <MemoryRouter>{ui}</MemoryRouter>
         </SettingsProvider>
     );
 };

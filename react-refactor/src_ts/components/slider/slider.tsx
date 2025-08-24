@@ -6,12 +6,12 @@ export type SliderProps = {
 	max?: number;
 	step?: number;
 	disabled?: boolean;
-	ariaLabel?: string;
+	ariaLabel: string; // Made required for better accessibility
 	className?: string;
 	onChange: (value: number) => void;
 };
 
-export const Slider = ({
+export const Slider = React.memo<SliderProps>(({
 	value,
 	min = 0,
 	max = 100,
@@ -20,14 +20,18 @@ export const Slider = ({
 	ariaLabel,
 	className = '',
 	onChange,
-} : SliderProps) => {
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+}) => {
+	const handleChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		const next = Number(e.target.value);
 		if (!Number.isNaN(next)) onChange(next);
-	};
+	}, [onChange]);
+
+	const composedClassName = React.useMemo(() => 
+		`ui-slider ${className}`.trim(), [className]
+	);
 
 	return (
-		<div className={`ui-slider ${className}`.trim()}>
+		<div className={composedClassName}>
 			<input
 				className="ui-slider__input"
 				type="range"
@@ -45,6 +49,8 @@ export const Slider = ({
 			/>
 		</div>
 	);
-};
+});
+
+Slider.displayName = 'Slider';
 
 export default Slider;

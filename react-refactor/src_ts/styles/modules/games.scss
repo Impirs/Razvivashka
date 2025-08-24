@@ -1,35 +1,57 @@
 @use '../colors';
 
 .game-layout {
-    width: 1510px;
-    height: 840px;
-    padding: 40px 50px;
+    width: 100%;
+    padding: 2rem 3rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 30px;
+    gap: 1.75rem;
+    max-width: 95vw;
+    max-height: 95vh;
+    box-sizing: border-box;
 
     .game-side {
-        width: 300px;
-        min-width: 220px;
-        // margin-top: 64px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        gap: 16px;
+
+        .game-menu, .score_section {
+            background-color: colors.$background;
+            border: 0.0625rem solid colors.$primary;
+            border-radius: 1rem;
+            box-shadow: 0 4px 30px colors.$shadow;
+            color: colors.$text;
+            width: 18.5rem;
+            height: 30rem; // 460px
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+        }
+        .game-menu {
+            justify-content: space-between;
+        }
+
+        .game-menu h2, .score_section h2 {
+            color: colors.$text;
+            font-size: 1.375rem;
+            margin: 1rem 0 0.25rem 0;
+        }
     }
 
     .game-main {
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 860px;
-        width: 920px;
+        height: 54rem;// 860px
+        width:  57.5rem; // 920px
         background-color: colors.$background;
-        border: 1px solid colors.$primary;
-        border-radius: 16px;
+        border: 0.0625rem solid colors.$primary;
+        border-radius: 1rem;
         box-shadow: 0 4px 30px colors.$shadow;
         color: colors.$text;
 
@@ -38,20 +60,20 @@
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
             justify-content: space-between;
-            height: 80px;
+            height: 4.5rem;
             width: 100%;
 
-            border-top-right-radius: 14px;
-            border-top-left-radius: 14px;
-            border-bottom: 1px solid colors.$primary;
+            border-top-right-radius: 0.875rem;
+            border-top-left-radius: 0.875rem;
+            border-bottom: 0.0625rem solid colors.$primary;
 
             background-color: colors.$header;
 
             h1 {
                 flex: 1 1 auto;
                 text-align: center;
-                font-size: 38px;
-                padding: 0 40px;
+                font-size: 2.25rem;
+                padding: 0 2.25rem;
                 color: colors.$text;
                 margin: 0;
                 font-weight: 700;
@@ -73,11 +95,11 @@
                 grid-template-columns: 1fr 1fr 1fr;
                 align-items: center;
                 top: 0px;
-                width: calc(100% - 44px);
-                height: 60px;
+                width: calc(100% - 4.5rem);
+                height: 4rem;
                 content: '';
-                padding:  12px 22px 0 22px;
-   
+                padding:  0.75rem 1.375rem 0 1.375rem;
+
                 > * {
                     display: flex;
                     align-items: center;
@@ -87,29 +109,28 @@
 
             .game-space {
                 width: 100%;
-                height: calc(100% - 120px);
-                // padding: 20px 35px;
+                height: calc(100%);
+                padding: 1.25rem 2rem;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-            }
 
-            .game-restart-btn {
-                margin-top: 32px;
-                font-size: 22px;
-                background: colors.$primary;
-                color: colors.$text_rev;
-                border: 2px solid colors.$primary;
-                border-radius: 12px;
-                padding: 12px 32px;
-                cursor: pointer;
-                transition: background 0.2s, color 0.2s;
-   
-                &:hover {
-                    background: colors.$fourth;
-                    color: colors.$primary;
-                    border-color: colors.$primary;
+                .game-instructions,
+                .game-win,
+                .game-lose {
+                    justify-items: center;
+                    align-items: center;
+
+                    [fireworks-animation],
+                    [unlucky-animation] {
+                        max-width: 30rem;
+                        max-height: 30rem;
+                    }
+
+                    h3{
+                        margin: 0.75rem 0 0;
+                    }
                 }
             }
         }
@@ -117,67 +138,43 @@
 
 }
 
-.game-menu, .score_section {
-    background-color: colors.$background;
-    border: 1px solid colors.$primary;
-    border-radius: 16px;
-    box-shadow: 0 4px 30px colors.$shadow;
-    color: colors.$text;
-    width: 300px;
-    height: 460px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px 0;
-}
-
-.game-menu h2, .score_section h2 {
-    color: colors.$text;
-    font-size: 22px;
-    margin: 15px 0 5px 0;
-    cursor: default;
-}
-
-.game-icon {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-}
-
 .mistakes-counter {
-    border: 1px solid colors.$primary;
-    border-radius: 12px;
+    border: 0.0625rem solid colors.$primary;
+    border-radius: 0.75rem;
     box-shadow: 0 4px 30px colors.$shadow;
-    width: 160px;
-    height: 48px;
+    width: 10rem;
+    height: 3rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0.625rem;
     background: colors.$fourth;
+
+    > img {
+        width: 2rem;
+        height: 2rem;
+    }
 }
 
 .mistake {
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;
+    height: 2.5rem;
 }
 
 .game-timer {
     font-family: 'PlayBall';
-    border: 1px solid colors.$primary;
-    border-radius: 12px;
+    border: 0.0625rem solid colors.$primary;
+    border-radius: 0.75rem;
     box-shadow: 0 4px 30px colors.$shadow;
-    width: 160px;
-    height: 48px;
+    width: 10rem;
+    height: 3rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 0.3125rem;
     background: colors.$fourth;
-    font-size: 28px;
+    font-size: 1.75rem;
     color: colors.$text_secondary;
 }

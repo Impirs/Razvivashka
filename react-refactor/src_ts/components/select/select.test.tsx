@@ -3,13 +3,34 @@ import { render, screen, fireEvent, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Select from './select';
-import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
+
+// Mock the useSelectiveContext hooks
+jest.mock('@/hooks/useSelectiveContext', () => ({
+    useTranslationFunction: () => {
+        const mockT = (key: string) => {
+            const mockTranslations: Record<string, string> = {
+                'buttons.filter': 'Выберите...',
+                'types.all': 'Все категории',
+                'types.math': 'Счет',
+                'types.logic': 'Логика'
+            };
+            return mockTranslations[key] || key;
+        };
+        return mockT;
+    }
+}));
+
+// Mock the i18n context
+jest.mock('@/contexts/i18n');
+
+// Mock gameController to avoid sound file imports
+jest.mock('@/contexts/gameController');
 
 const renderWithI18n = (ui: React.ReactElement) => {
   return render(
     <SettingsProvider>
-      <LanguageProvider>{ui}</LanguageProvider>
+      {ui}
     </SettingsProvider>
   );
 };

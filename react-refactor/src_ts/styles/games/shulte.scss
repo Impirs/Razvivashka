@@ -1,0 +1,48 @@
+@use '../colors';
+
+.shulte-panel {
+	.shulte-board {
+		user-select: none;
+		display: grid;
+		gap: 0.625rem;
+		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
+
+		&.size-4 { grid-template-columns: repeat(4, calc(30rem / 4)); }
+		&.size-5 { grid-template-columns: repeat(5, calc(34rem / 5)); }
+	}
+
+	.shulte-cell {
+		position: relative;
+		border: 0.0625rem solid #9aa3ff;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1 / 1;
+		background: white;
+		user-select: none;
+		font-size: 1.375rem;
+		transition: background 0.15s ease, box-shadow 0.15s ease;
+		cursor: inherit;
+
+		&.found {
+			background: #f4f6ff;
+		}
+
+		&:hover {
+			background: #f4f6ff;
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+
+		.cell-number {
+			transition: visibility 0.2s ease;
+		}
+
+		&.hidden .cell-number {
+			visibility: hidden;
+		}
+	}
+}

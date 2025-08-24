@@ -1,7 +1,7 @@
 @use '../colors';
 
 .game-setting {
-	width: 272px;
+	width: 90%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -31,8 +31,8 @@
 		border-radius: 12px;
 		background: colors.$fourth;
 		color: colors.$primary;
-		padding: 8px 12px;
-		min-width: 48px; 
+		padding: 0.25rem 0.5rem;
+		min-width: 2rem;
 		min-height: 38px;
 		line-height: 1;
 		font-size: 18px;
@@ -76,5 +76,82 @@
 	// 		font-family: 'Snide hand', sans-serif; /* better for words */
 	// 	}
 	// }
+}
+
+/* Адаптивные стили для GameSetting */
+@media screen and (max-width: 1365px) {
+	.game-setting {
+		width: 240px;
+		gap: 8px;
+		margin: 5px 0;
+
+		&__title {
+			font-size: 18px;
+			margin: 5px 0 3px 0;
+		}
+
+		&__option {
+			min-width: 42px;
+			min-height: 34px;
+			font-size: 16px;
+		}
+	}
+}
+
+@media screen and (max-width: 1279px) {
+	.game-setting {
+		width: 200px;
+		gap: 6px;
+		margin: 4px 0;
+
+		&__title {
+			font-size: 16px;
+			margin: 4px 0 2px 0;
+		}
+
+		&__option {
+			min-width: 38px;
+			min-height: 30px;
+			font-size: 14px;
+		}
+	}
+}
+
+@media screen and (max-width: 1023px) {
+	.game-setting {
+		width: 180px;
+		gap: 5px;
+		margin: 3px 0;
+
+		&__title {
+			font-size: 14px;
+			margin: 3px 0 2px 0;
+		}
+
+		&__option {
+			min-width: 34px;
+			min-height: 26px;
+			font-size: 12px;
+		}
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.game-setting {
+		width: 150px;
+		gap: 4px;
+		margin: 2px 0;
+
+		&__title {
+			font-size: 12px;
+			margin: 2px 0 1px 0;
+		}
+
+		&__option {
+			min-width: 30px;
+			min-height: 22px;
+			font-size: 10px;
+		}
+	}
 }
 

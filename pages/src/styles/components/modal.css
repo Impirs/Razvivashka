@@ -1,0 +1,70 @@
+/* Modal component styles */
+
+.modal-content {
+    animation: modalSlideIn 0.3s ease-out forwards;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Modal backdrop animation */
+.modal-backdrop {
+    animation: modalBackdropFadeIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes modalBackdropFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Smooth scrollbar for modal content */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+}
+
+/* Close button hover effects */
+.modal-close-btn {
+    transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--bg-tertiary) !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+}

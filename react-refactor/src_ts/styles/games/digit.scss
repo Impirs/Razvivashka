@@ -1,0 +1,66 @@
+@use '../colors';
+
+.digit-panel {
+
+	.digit-board {
+		user-select: none;
+		display: grid;
+		gap: 0.6rem;
+		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
+
+		&.size-7 { grid-template-columns: repeat(7, calc(30rem / 7)); }
+		&.size-9 { grid-template-columns: repeat(9, calc(34rem / 9)); }
+	}
+
+	.digit-cell {
+		font-family: 'Snide hand';
+		position: relative;
+		border: 0.0625rem solid #9aa3ff;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1 / 1;
+		background: white;
+		user-select: none;
+		font-size: 1.25rem;
+		font-weight: 500;
+		transition: background 0.15s ease, box-shadow 0.15s ease;
+		cursor: inherit; // inherit from board so board-level class controls it
+
+		&.empty {
+			background: #f4f6ff;
+			cursor: url('../assets/cursor/hand_2.svg') 8 8, auto !important;
+            
+			.cell-number {
+				color: #9aa3ff;
+			}
+		}
+
+		&.selected {
+			background: #e8f2ff;
+			font-weight: 700;
+			box-shadow: 0 0 0 4px rgba(154, 163, 255, 0.5) inset;
+		}
+
+		&.selectable {
+			background: white;
+			
+			&:hover {
+				background: #f8faff;
+			}
+		}
+
+		&.unavailable {
+			background: #eef1ff;
+			
+			.cell-number {
+				color: #8b91a8;
+			}
+		}
+
+		&:active {
+			transform: scale(0.98);
+		}
+	}
+}

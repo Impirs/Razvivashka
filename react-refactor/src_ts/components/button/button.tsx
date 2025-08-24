@@ -16,20 +16,27 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     iconOnly?: boolean;
 };
 
-function Button({ children, size = 'large', leftIcon, iconOnly = false, className, ...props }: ButtonProps) {
+const Button = React.memo<ButtonProps>(({ children, size = 'large', leftIcon, iconOnly = false, className, ...props }) => {
      const classes = cn('ui-button', size, className);
      const showLabel = !iconOnly && children != null;
+     
+     // Ensure iconOnly buttons have accessible labels
+     const accessibilityProps = iconOnly && !props['aria-label'] && !props['aria-labelledby']
+         ? { 'aria-label': typeof children === 'string' ? children : 'Button' }
+         : {};
 
     return (
-         <button className={classes} {...props}>
+         <button className={classes} {...accessibilityProps} {...props}>
             {leftIcon && (
                 <span className={cn('nav-btn-icon', 'ui-button__icon')} aria-hidden>
-                    <Icon name={leftIcon} masked size={48} />
+                    <Icon name={leftIcon} masked />
                 </span>
             )}
             {showLabel && <h2 className={cn('ui-button__label')}>{children}</h2>}
         </button>
     );
-}
+});
+
+Button.displayName = 'Button';
 
 export default Button;

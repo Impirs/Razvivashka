@@ -2,8 +2,35 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import CatalogPage from './CatalogPage';
-import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
+
+// Mock the useSelectiveContext hooks
+jest.mock('@/hooks/useSelectiveContext', () => ({
+    useTranslationFunction: () => {
+        const mockT = (key: string) => {
+            const mockTranslations: Record<string, string> = {
+                'routes.catalog': 'Каталог',
+                'buttons.back': 'Назад',
+                'buttons.filter': 'Выберите...',
+                'types.all': 'Все категории',
+                'types.math': 'Счет',
+                'types.attention': 'Внимательность',
+                'types.logic': 'Логика',
+                'types.reading': 'Чтение',
+                'games.digit': 'Состав числа',
+                'games.shulte': 'Таблица Шульте'
+            };
+            return mockTranslations[key] || key;
+        };
+        return mockT;
+    }
+}));
+
+// Mock the i18n context
+jest.mock('@/contexts/i18n');
+
+// Mock gameController to avoid sound file imports
+jest.mock('@/contexts/gameController');
 
 // Minimal settings shim for LanguageProvider
 (() => {
@@ -26,11 +53,9 @@ import { SettingsProvider } from '@/contexts/pref';
 test('renders catalog and filters by type', () => {
     render(
         <SettingsProvider>
-            <LanguageProvider>
-                <MemoryRouter>
-                    <CatalogPage />
-                </MemoryRouter>
-            </LanguageProvider>
+            <MemoryRouter>
+                <CatalogPage />
+            </MemoryRouter>
         </SettingsProvider>
     );
 
@@ -41,8 +66,8 @@ test('renders catalog and filters by type', () => {
             .filter((a) => (a as HTMLAnchorElement).getAttribute('href')?.startsWith('/catalog/'))
             .length;
 
-    // by default shows both games
-    expect(getCount()).toBe(2);
+    // by default shows all games (now 3: digit, shulte, queens)
+    expect(getCount()).toBe(3);
 
     const combo = screen.getByRole('combobox', { name: 'catalog-filter' });
     // open and select Math ("Счет") => only Digit

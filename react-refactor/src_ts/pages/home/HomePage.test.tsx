@@ -2,8 +2,31 @@ import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import HomePage from './HomePage';
-import { LanguageProvider } from '@/contexts/i18n';
 import { SettingsProvider } from '@/contexts/pref';
+
+// Mock the useSelectiveContext hooks
+jest.mock('@/hooks/useSelectiveContext', () => ({
+    useTranslationFunction: () => {
+        const mockT = (key: string) => {
+            const mockTranslations: Record<string, string> = {
+                'routes.home': 'Развивашка',
+                'routes.catalog': 'Каталог',
+                'routes.settings': 'Настройки',
+                'routes.achievements': 'Достижения',
+                'buttons.play': 'Играть',
+                'navigation.exit': 'Выход'
+            };
+            return mockTranslations[key] || key;
+        };
+        return mockT;
+    }
+}));
+
+// Mock the i18n context
+jest.mock('@/contexts/i18n');
+
+// Mock gameController to avoid sound file imports
+jest.mock('@/contexts/gameController');
 
 // Mock electronAPI for tests
 beforeAll(() => {
@@ -28,16 +51,14 @@ beforeAll(() => {
 const renderWithProviders = (initialPath: string = '/') =>
 	render(
 		<SettingsProvider>
-			<LanguageProvider>
-				<MemoryRouter initialEntries={[initialPath]}>
-					<Routes>
-						<Route path="/" element={<HomePage />} />
-						<Route path="/catalog" element={<div>Catalog!</div>} />
-						<Route path="/achievements" element={<div>Achievements!</div>} />
-						<Route path="/settings" element={<div>Settings!</div>} />
-					</Routes>
-				</MemoryRouter>
-			</LanguageProvider>
+			<MemoryRouter initialEntries={[initialPath]}>
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/catalog" element={<div>Catalog!</div>} />
+					<Route path="/achievements" element={<div>Achievements!</div>} />
+					<Route path="/settings" element={<div>Settings!</div>} />
+				</Routes>
+			</MemoryRouter>
 		</SettingsProvider>
 	);
 

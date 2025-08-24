@@ -1,5 +1,5 @@
 // Props translation utility
-import "@/modules/game_digital/types/game_digit";
+import "@/modules/game_digit/types/game_digit";
 import "@/modules/game_shulte/types/game_shulte";
 import "@/modules/game_queens/types/game_queens";
 

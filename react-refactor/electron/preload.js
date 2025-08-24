@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 const { readFileSync, writeFileSync, existsSync, mkdirSync } = require('fs');
 const path = require('path');
 const os = require('os');
+const { migrateIfNeeded } = require('./migration');
 
 // Storage locations
 const appDir = path.join(os.homedir(), 'AppData/Roaming/play_and_learn', 'data');
@@ -19,6 +20,7 @@ const defaultSettings = {
     games: {
         digit: { view_modification: true },
         shulte: { view_modification: true },
+        queens: { view_modification: true },
     },
 };
 
@@ -42,7 +44,10 @@ function writeJson(file, data) {
     writeFileSync(file, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+//                             [ Data Initialization ]
+
 let settings = readJson(settingsPath, defaultSettings);
+
 // Merge with defaults to avoid missing nested keys from older files
 function mergeSettings(current) {
     const merged = {
@@ -62,6 +67,10 @@ function mergeSettings(current) {
             shulte: {
                 ...defaultSettings.games.shulte,
                 ...((current && current.games && current.games.shulte) ? current.games.shulte : {}),
+            },
+            queens: {
+                ...defaultSettings.games.queens,
+                ...((current && current.games && current.games.queens) ? current.games.queens : {}),
             },
         },
     };
@@ -89,6 +98,18 @@ function ensureDefaultUser() {
     writeJson(gameStoragePath, gameStorage);
 }
 ensureDefaultUser();
+
+// Run migration once on startup (before exposing APIs)
+try {
+    migrateIfNeeded({
+        appDir,
+        settingsPath,
+        gameStoragePath,
+        settings,
+        gameStorage,
+        writeJson,
+    });
+} catch {}
 
 const listeners = [];
 function notify(key, value) {

@@ -1,0 +1,52 @@
+name: Update Release Information
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  update-release-info:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: main
+        fetch-depth: 0
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: pages/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: pages
+      run: npm ci
+      
+    - name: Update release information
+      working-directory: pages
+      run: npm run update-release
+      
+    - name: Build pages
+      working-directory: pages
+      run: npm run build
+      
+    - name: Deploy to GitHub Pages
+      working-directory: pages
+      run: npm run deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Commit updated release info
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pages/public/release-info.json
+        git diff --staged --quiet || git commit -m "chore: update release information for ${{ github.event.release.tag_name }}"
+        git push origin main
+      if: github.event_name == 'release'

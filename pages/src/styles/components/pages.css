@@ -1,0 +1,428 @@
+/* Welcome page specific styles */
+
+.welcome-hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.welcome-action-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.welcome-action-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.welcome-action-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.welcome-action-card:hover::before {
+    opacity: 1;
+}
+
+.welcome-action-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.welcome-action-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.welcome-action-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Install page specific styles */
+
+.install-hero {
+    background: linear-gradient(135deg, var(--bg-gradient-from) 0%, var(--bg-gradient-to) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.install-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+.download-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.download-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.download-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.download-card:hover::before {
+    left: 100%;
+}
+
+.platform-icon {
+    width:  3rem;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.download-card:hover .platform-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Mobile optimizations for welcome page */
+@media (max-width: 768px) {
+    .welcome-action-card {
+        padding: 1.5rem;
+    }
+    
+    .welcome-header-flex {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+        width: fit-content;
+        margin-bottom: 0.75rem;
+    }
+    
+    .welcome-action-card .text-4xl {
+        font-size: 1.75rem;
+        margin-bottom: 0;
+    }
+    
+    .welcome-action-card h3 {
+        font-size: 1rem;
+        margin-bottom: 0;
+        white-space: nowrap;
+    }
+    
+    .welcome-action-card p {
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+    
+    .welcome-action-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-action-card {
+        padding: 1rem;
+    }
+    
+    .welcome-header-flex {
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .welcome-action-card .text-4xl {
+        font-size: 1.5rem;
+    }
+    
+    .welcome-action-card h3 {
+        font-size: 0.9rem;
+    }
+    
+    .welcome-action-card p {
+        font-size: 0.8rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .welcome-action-button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Mobile optimizations for install page */
+@media (max-width: 768px) {
+    .install-hero {
+        padding: 2rem 1rem;
+    }
+    
+    .install-hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .install-hero p {
+        font-size: 1rem;
+    }
+    
+    /* Compact download cards for mobile */
+    .download-card {
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .download-card .platform-icon {
+        width: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .download-card h4 {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .download-card p {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .download-card .download-button {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Stack download cards horizontally on mobile for space efficiency */
+    .download-grid-mobile {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* macOS card (coming soon) takes full width on mobile */
+    .download-card.coming-soon {
+        grid-column: 1 / -1;
+        opacity: 0.7;
+        max-height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .download-card.coming-soon .platform-icon {
+        width: 1rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0;
+    }
+    
+    .download-card.coming-soon h4 {
+        margin: 0 0.5rem 0 0;
+        font-size: 0.8rem;
+    }
+    
+    .download-card.coming-soon p {
+        margin: 0;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .install-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .download-card {
+        padding: 0.75rem;
+    }
+    
+    .download-card .platform-icon {
+        width: 1rem;
+    }
+    
+    .download-card h4 {
+        font-size: 0.8rem;
+    }
+    
+    .download-card p {
+        font-size: 0.7rem;
+    }
+    
+    .download-card .download-button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+    }
+}
+
+/* Update page specific styles */
+
+.update-hero {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.update-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.version-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.release-card {
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.release-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-hover) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.release-card:hover::before {
+    transform: scaleX(1);
+}
+
+.release-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Common animations */
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Staggered animation delays */
+.delay-0 { animation-delay: 0s; }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+
+/* Loading states */
+.skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Improved button styles */
+.enhanced-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.enhanced-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.enhanced-button:hover::before {
+    left: 100%;
+}
+
+.enhanced-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
