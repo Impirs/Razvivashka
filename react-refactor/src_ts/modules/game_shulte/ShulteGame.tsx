@@ -237,21 +237,21 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
             </header>
             <div className="game-space">
                 {status === 'idle' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-instructions">
                         <h3>{t('game-info.shulte.instruction')}</h3>
                         <h3>{t('game-info.time_rules')}</h3>
                         <h3>{t('game-info.mistakes_rules')}</h3>
                     </div>
                 )}
                 {status === 'win' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-win">
                         <img src={fireworksGif} alt="fireworks-animation" />
                         <h3>{t('game-info.win')}</h3>
                         <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
                     </div>
                 )}
                 {status === 'lose' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-lose">
                         <img src={unluckyGif} alt="unlucky-animation" />
                         <h3>{t('game-info.lose')}</h3>
                         <h3>{t('game-info.your_mistakes')} {mistakes}</h3>

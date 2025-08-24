@@ -34,11 +34,11 @@
 			cursor: url('../assets/cursor/hand_3.svg') 8 8, auto !important;
 		}
 
-		&.size-4 { grid-template-columns: repeat(4, calc(30rem / 4)); }
-		&.size-5 { grid-template-columns: repeat(5, calc(32rem / 5)); }
-		&.size-6 { grid-template-columns: repeat(6, calc(34rem / 6)); }
-		&.size-7 { grid-template-columns: repeat(7, calc(36rem / 7)); }
-		&.size-8 { grid-template-columns: repeat(8, calc(38rem / 8)); }
+		&.size-4 { grid-template-columns: repeat(4, calc(52vh / 4)); }
+		&.size-5 { grid-template-columns: repeat(5, calc(54vh / 5)); }
+		&.size-6 { grid-template-columns: repeat(6, calc(56vh / 6)); }
+		&.size-7 { grid-template-columns: repeat(7, calc(58vh / 7)); }
+		&.size-8 { grid-template-columns: repeat(8, calc(60vh / 8)); }
 	}
 
 	.q-cell {

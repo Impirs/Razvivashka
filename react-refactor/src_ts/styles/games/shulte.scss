@@ -7,8 +7,8 @@
 		gap: 0.625rem;
 		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
 
-		&.size-4 { grid-template-columns: repeat(4, calc(30rem / 4)); }
-		&.size-5 { grid-template-columns: repeat(5, calc(34rem / 5)); }
+		&.size-4 { grid-template-columns: repeat(4, calc(52vh / 4)); }
+		&.size-5 { grid-template-columns: repeat(5, calc(58vh / 5)); }
 	}
 
 	.shulte-cell {

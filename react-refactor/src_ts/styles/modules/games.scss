@@ -2,9 +2,9 @@
 
 .game-layout {
     width: 100%;
-    padding: 2rem 3rem;
-    display: flex;
-    flex-direction: row;
+    // padding: 2rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
     align-items: center;
     justify-content: center;
     gap: 1.75rem;
@@ -24,22 +24,35 @@
             border-radius: 1rem;
             box-shadow: 0 4px 30px colors.$shadow;
             color: colors.$text;
-            width: 18.5rem;
-            height: 30rem; // 460px
+            width: 18vw;
+            height: 54vh; // 460px
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            text-align: center;
             padding: 1rem 0;
         }
         .game-menu {
             justify-content: space-between;
+
+            .game-button {
+                margin-top: 0.5rem;
+                max-height: 15%;
+                width: 90%;
+                text-align: center;
+                justify-content: center;
+
+                h2 {
+                    margin: 0;
+                }
+            }
         }
 
         .game-menu h2, .score_section h2 {
             color: colors.$text;
             font-size: 1.375rem;
-            margin: 1rem 0 0.25rem 0;
+            margin: 0;
         }
     }
 
@@ -47,8 +60,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 54rem;// 860px
-        width:  57.5rem; // 920px
+        height: 100%;// 860px
+        width:  100%; // 920px
+        min-height: 90vh;
+        min-width: 54vw;
         background-color: colors.$background;
         border: 0.0625rem solid colors.$primary;
         border-radius: 1rem;
@@ -121,17 +136,18 @@
                 .game-lose {
                     justify-items: center;
                     align-items: center;
+                    text-align: center;
 
-                    [fireworks-animation],
-                    [unlucky-animation] {
-                        max-width: 30rem;
-                        max-height: 30rem;
+                    img{
+                        max-height: 50vh;
                     }
 
                     h3{
                         margin: 0.75rem 0 0;
                     }
                 }
+
+                .game-instructions { width: 75%; }
             }
         }
     }

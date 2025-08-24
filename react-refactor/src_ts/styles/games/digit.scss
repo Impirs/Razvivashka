@@ -8,8 +8,8 @@
 		gap: 0.6rem;
 		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
 
-		&.size-7 { grid-template-columns: repeat(7, calc(30rem / 7)); }
-		&.size-9 { grid-template-columns: repeat(9, calc(34rem / 9)); }
+		&.size-7 { grid-template-columns: repeat(7, calc(52vh / 7)); }
+		&.size-9 { grid-template-columns: repeat(9, calc(58vh / 9)); }
 	}
 
 	.digit-cell {
