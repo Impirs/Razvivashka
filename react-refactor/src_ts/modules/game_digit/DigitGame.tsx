@@ -74,7 +74,9 @@ const DigitButton = React.memo<{
 DigitButton.displayName = 'DigitButton';
 
 const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => {
-    const { status, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
+    const autoLoseBlockedRef = React.useRef(false);
+    const { status, endGame, setGameContext, setModifications, 
+            gameId, gameProps, startedAt, startGame } = useGameController();
     const { useSetting } = useSettings();
     const t = useTranslationFunction();
 
@@ -98,7 +100,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
     const lastStartRef = React.useRef<number | null>(null);
     const lastMistakeRef = React.useRef<string | null>(null);
 
-    // Используем наш кастомный хук таймера
+    // useTimer
     const { seconds, resetTimer } = useGameTimer({ 
         isPlaying: status === 'playing',
         startedAt: startedAt 
@@ -143,6 +145,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
 
     // Optimized game reset function - timer resets automatically via useGameTimer
     const resetGame = React.useCallback(() => {
+        autoLoseBlockedRef.current = true;
         // Use existing digitGameLogic function and flatten the result
         const board2D = generateBoard(settings.target, settings.size);
         const newBoard = board2D.flat();
@@ -153,15 +156,13 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         setAvailableCells(new Set());
         lastMistakeRef.current = null; // Reset mistake tracking
         // Don't call resetTimer() - useGameTimer handles it automatically
-        
-        // Start with perfect assumption
+        // Start with perfect assumption и сброс статуса
         const recordProps = generateRecordProps('digit', settings);
         // console.log('DigitGame setGameContext:', { gameId: 'digit', recordProps, isPerfect: true });
         // Use setTimeout to avoid setState during render
         setTimeout(() => {
             setGameContext('digit', recordProps, true);
         }, 0);
-        
         // Set game modifications
         const mods: string[] = [];
         if (hideCorrectNumbers === false) {
@@ -171,14 +172,19 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         setTimeout(() => {
             setModifications(mods);
         }, 0);
-    }, [setGameContext, setModifications, settings, hideCorrectNumbers]);
+    }, [setGameContext, setModifications, settings, hideCorrectNumbers, startGame]);
 
     // Game initialization
     React.useEffect(() => {
-        if (status === 'playing' && startedAt && lastStartRef.current !== startedAt) {
-            lastStartRef.current = startedAt;
+        // Сброс только при переходе из 'lose' (или 'win') в 'playing'
+        if ((status === 'playing' && typeof startedAt === 'number' && lastStartRef.current !== startedAt) ||
+            (status === 'playing' && lastStartRef.current === null)) {
+            lastStartRef.current = typeof startedAt === 'number' ? startedAt : null;
             resetGame();
-        } else if (status === 'idle') {
+            setTimeout(() => {
+                autoLoseBlockedRef.current = false;
+            }, 0);
+        } else if (status === 'idle' || status === 'lose' || status === 'win') {
             lastStartRef.current = null;
         }
     }, [status, startedAt, resetGame]);
@@ -265,13 +271,15 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
 
     // Lose condition effect
     React.useEffect(() => {
-        if (status === 'playing' && mistakes >= 3) {
-            // Use setTimeout to avoid setState during render
+        if (status === 'playing' && mistakes >= 3 && !autoLoseBlockedRef.current) {
             setTimeout(() => {
                 endGame('lose', seconds);
             }, 0);
         }
-    }, [mistakes, status, seconds, endGame]);
+        if (status === 'idle') {
+            autoLoseBlockedRef.current = false;
+        }
+    }, [mistakes, status, seconds, endGame, setGameContext, settings]);
 
     const gameBoard = React.useMemo(() => {
         if (status !== 'playing') return null;

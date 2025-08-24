@@ -84,7 +84,9 @@ const ShulteCell: React.FC<{
 ShulteCell.displayName = 'ShulteCell';
 
 const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
-    const { status, startGame, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
+    const autoLoseBlockedRef = React.useRef(false);
+    const { status, startGame, endGame, setGameContext, 
+            setModifications, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
     const t = useTranslationFunction();
     
@@ -109,6 +111,7 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
 
     // Optimized game reset function - timer resets automatically via useGameTimer
     const resetGame = React.useCallback(() => {
+        autoLoseBlockedRef.current = true;
         const newBoard = generateShulteBoard(settings.size);
         setBoard(newBoard);
         setCurrent(1);
@@ -136,6 +139,9 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
         if (status === 'playing' && startedAt && lastStartRef.current !== startedAt) {
             lastStartRef.current = startedAt;
             resetGame();
+            setTimeout(() => {
+                autoLoseBlockedRef.current = false;
+            }, 0);
         } else if (status === 'idle') {
             lastStartRef.current = null;
         }
@@ -192,13 +198,15 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
 
     // 3 mistakes = lose
     React.useEffect(() => {
-        if (status === 'playing' && mistakes >= 3) {
-            // Use setTimeout to avoid setState during render
+        if (status === 'playing' && mistakes >= 3 && !autoLoseBlockedRef.current) {
             setTimeout(() => {
                 endGame('lose', seconds);
             }, 0);
         }
-    }, [mistakes, status, seconds, endGame]);
+        if (status === 'idle') {
+            autoLoseBlockedRef.current = false;
+        }
+    }, [mistakes, status, seconds, endGame, setGameContext, settings]);
 
     // Render game board directly without memoization for immediate updates
     const renderGameBoard = () => {
