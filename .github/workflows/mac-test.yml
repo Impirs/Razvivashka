@@ -28,6 +28,5 @@ jobs:
         with:
           name: mac-build
           path: |
-            react-refactor/dist
-            react-refactor/dist/mac/**/*
             react-refactor/*.dmg
+            react-refactor/*.zip
