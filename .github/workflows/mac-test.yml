@@ -1,0 +1,32 @@
+name: Mac Test Build (games branch)
+
+on:
+  push:
+    branches:
+      - games
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+        working-directory: react-refactor
+      - name: Build mac artifacts
+        run: npm run build:mac
+        working-directory: react-refactor
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-build
+          path: |
+            react-refactor/dist
+            react-refactor/dist/mac/**/*
+            react-refactor/*.dmg

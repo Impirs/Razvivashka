@@ -5,11 +5,20 @@ const os = require('os');
 const { migrateIfNeeded } = require('./migration');
 
 // -------------------------------------------------------------
-// Cross‑platform application data directory resolution
-// Windows: %USERPROFILE%/AppData/Roaming/play_and_learn/data
-// macOS:   ~/Library/Application Support/play_and_learn/data
-// Linux:   ~/.config/play_and_learn/data
-// (Avoid using electron.app.getPath in preload to keep preload lean)
+// [DATA STORAGE LOCATION] на случай, если полетят тесты на мак -_-
+// 
+// Данные приложения (настройки, прогресс, пользователи) хранятся в платформенно-специфичной папке:
+//   Windows: %USERPROFILE%/AppData/Roaming/play_and_learn/data
+//   macOS:   ~/Library/Application Support/play_and_learn/data
+//   Linux:   ~/.config/play_and_learn/data
+// 
+// Папка создаётся автоматически при первом запуске (см. ensureDirs()).
+// Все файлы (settings.json, gamestorage.json) лежат внутри этой папки.
+// 
+// Если нужно узнать путь вручную:
+//   - macOS: открыть Finder, нажать Cmd+Shift+G и вставить ~/Library/Application Support/play_and_learn/data
+//   - Windows: Win+R → %APPDATA%\play_and_learn\data
+//   - Linux: ~/.config/play_and_learn/data
 // -------------------------------------------------------------
 function resolveAppDataDir() {
     const home = os.homedir();
