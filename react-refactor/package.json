@@ -53,8 +53,6 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
-      "src_ts/**/*",
-      "node_modules/**/*",
       "package.json"
     ],
     "extraResources": [
