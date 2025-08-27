@@ -5,26 +5,25 @@
 	.digit-board {
 		user-select: none;
 		display: grid;
-		gap: 10px;
-		max-width: 620px;
+		gap: 0.6rem;
 		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
 
-		&.size-7 { grid-template-columns: repeat(7, calc(480px / 7)); }
-		&.size-9 { grid-template-columns: repeat(9, calc(480px / 9)); }
+		&.size-7 { grid-template-columns: repeat(7, calc(52vh / 7)); }
+		&.size-9 { grid-template-columns: repeat(9, calc(58vh / 9)); }
 	}
 
 	.digit-cell {
 		font-family: 'Snide hand';
 		position: relative;
-		border: 1px solid #9aa3ff;
-		border-radius: 8px;
+		border: 0.0625rem solid #9aa3ff;
+		border-radius: 0.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		aspect-ratio: 1 / 1;
 		background: white;
 		user-select: none;
-		font-size: 22px;
+		font-size: 1.25rem;
 		font-weight: 500;
 		transition: background 0.15s ease, box-shadow 0.15s ease;
 		cursor: inherit; // inherit from board so board-level class controls it
@@ -62,40 +61,6 @@
 
 		&:active {
 			transform: scale(0.98);
-		}
-	}
-}
-
-@media screen and (max-width: 1599px) {
-	.digit-panel {
-		.digit-board {
-			max-width: 520px;
-			gap: 8px;
-
-		    &.size-7 { grid-template-columns: repeat(7, calc(400px / 7)); }
-		    &.size-9 { grid-template-columns: repeat(9, calc(400px / 9)); }
-		}
-
-		.digit-cell {
-			font-size: 20px;
-			border-radius: 6px;
-		}
-	}
-}
-
-@media screen and (max-width: 1365px) {
-	.digit-panel {
-		.digit-board {
-			max-width: 440px;
-			gap: 6px;
-
-		    &.size-7 { grid-template-columns: repeat(7, calc(400px / 7)); }
-		    &.size-9 { grid-template-columns: repeat(9, calc(400px / 9)); }
-		}
-
-		.digit-cell {
-			font-size: 18px;
-			border-radius: 4px;
 		}
 	}
 }

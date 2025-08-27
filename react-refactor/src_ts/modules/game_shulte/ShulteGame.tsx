@@ -68,7 +68,6 @@ const ShulteCell: React.FC<{
     let className = 'shulte-cell';
     if (cell.isFound) className += ' found';
     if (hideFound && cell.isFound) className += ' hidden';
-
     return (
         <div
             onClick={handleClick}
@@ -84,7 +83,9 @@ const ShulteCell: React.FC<{
 ShulteCell.displayName = 'ShulteCell';
 
 const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
-    const { status, startGame, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
+    const autoLoseBlockedRef = React.useRef(false);
+    const { status, startGame, endGame, setGameContext, 
+            setModifications, gameId, gameProps, startedAt } = useGameController();
     const { useSetting } = useSettings();
     const t = useTranslationFunction();
     
@@ -109,6 +110,7 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
 
     // Optimized game reset function - timer resets automatically via useGameTimer
     const resetGame = React.useCallback(() => {
+        autoLoseBlockedRef.current = true;
         const newBoard = generateShulteBoard(settings.size);
         setBoard(newBoard);
         setCurrent(1);
@@ -136,6 +138,9 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
         if (status === 'playing' && startedAt && lastStartRef.current !== startedAt) {
             lastStartRef.current = startedAt;
             resetGame();
+            setTimeout(() => {
+                autoLoseBlockedRef.current = false;
+            }, 0);
         } else if (status === 'idle') {
             lastStartRef.current = null;
         }
@@ -192,13 +197,15 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
 
     // 3 mistakes = lose
     React.useEffect(() => {
-        if (status === 'playing' && mistakes >= 3) {
-            // Use setTimeout to avoid setState during render
+        if (status === 'playing' && mistakes >= 3 && !autoLoseBlockedRef.current) {
             setTimeout(() => {
                 endGame('lose', seconds);
             }, 0);
         }
-    }, [mistakes, status, seconds, endGame]);
+        if (status === 'idle') {
+            autoLoseBlockedRef.current = false;
+        }
+    }, [mistakes, status, seconds, endGame, setGameContext, settings]);
 
     // Render game board directly without memoization for immediate updates
     const renderGameBoard = () => {
@@ -237,21 +244,21 @@ const ShulteGame = React.memo<{ settings: ShulteSettings }>(({ settings }) => {
             </header>
             <div className="game-space">
                 {status === 'idle' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-instructions">
                         <h3>{t('game-info.shulte.instruction')}</h3>
                         <h3>{t('game-info.time_rules')}</h3>
                         <h3>{t('game-info.mistakes_rules')}</h3>
                     </div>
                 )}
                 {status === 'win' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-win">
                         <img src={fireworksGif} alt="fireworks-animation" />
                         <h3>{t('game-info.win')}</h3>
                         <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
                     </div>
                 )}
                 {status === 'lose' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-lose">
                         <img src={unluckyGif} alt="unlucky-animation" />
                         <h3>{t('game-info.lose')}</h3>
                         <h3>{t('game-info.your_mistakes')} {mistakes}</h3>

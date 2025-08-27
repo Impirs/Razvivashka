@@ -74,7 +74,9 @@ const DigitButton = React.memo<{
 DigitButton.displayName = 'DigitButton';
 
 const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => {
-    const { status, endGame, setGameContext, setModifications, gameId, gameProps, startedAt } = useGameController();
+    const autoLoseBlockedRef = React.useRef(false);
+    const { status, endGame, setGameContext, setModifications, 
+            gameId, gameProps, startedAt, startGame } = useGameController();
     const { useSetting } = useSettings();
     const t = useTranslationFunction();
 
@@ -98,7 +100,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
     const lastStartRef = React.useRef<number | null>(null);
     const lastMistakeRef = React.useRef<string | null>(null);
 
-    // Используем наш кастомный хук таймера
+    // useTimer
     const { seconds, resetTimer } = useGameTimer({ 
         isPlaying: status === 'playing',
         startedAt: startedAt 
@@ -143,6 +145,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
 
     // Optimized game reset function - timer resets automatically via useGameTimer
     const resetGame = React.useCallback(() => {
+        autoLoseBlockedRef.current = true;
         // Use existing digitGameLogic function and flatten the result
         const board2D = generateBoard(settings.target, settings.size);
         const newBoard = board2D.flat();
@@ -153,15 +156,14 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         setAvailableCells(new Set());
         lastMistakeRef.current = null; // Reset mistake tracking
         // Don't call resetTimer() - useGameTimer handles it automatically
-        
-        // Start with perfect assumption
+        // Start with perfect assumption и сброс статуса
         const recordProps = generateRecordProps('digit', settings);
         // console.log('DigitGame setGameContext:', { gameId: 'digit', recordProps, isPerfect: true });
         // Use setTimeout to avoid setState during render
         setTimeout(() => {
             setGameContext('digit', recordProps, true);
         }, 0);
-        
+
         // Set game modifications
         const mods: string[] = [];
         if (hideCorrectNumbers === false) {
@@ -171,14 +173,19 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         setTimeout(() => {
             setModifications(mods);
         }, 0);
-    }, [setGameContext, setModifications, settings, hideCorrectNumbers]);
+    }, [setGameContext, setModifications, settings, hideCorrectNumbers, startGame]);
 
     // Game initialization
     React.useEffect(() => {
-        if (status === 'playing' && startedAt && lastStartRef.current !== startedAt) {
-            lastStartRef.current = startedAt;
+        // Сброс только при переходе из 'lose' (или 'win') в 'playing'
+        if ((status === 'playing' && typeof startedAt === 'number' && lastStartRef.current !== startedAt) ||
+            (status === 'playing' && lastStartRef.current === null)) {
+            lastStartRef.current = typeof startedAt === 'number' ? startedAt : null;
             resetGame();
-        } else if (status === 'idle') {
+            setTimeout(() => {
+                autoLoseBlockedRef.current = false;
+            }, 0);
+        } else if (status === 'idle' || status === 'lose' || status === 'win') {
             lastStartRef.current = null;
         }
     }, [status, startedAt, resetGame]);
@@ -263,15 +270,17 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         });
     }, [status, board, foundCells, availableCells, hideCorrectNumbers, settings.target, mistakes, gameId, gameProps, endGame, seconds, setGameContext]);
 
-    // Проигрыш при 3 ошибках
+    // Lose condition effect
     React.useEffect(() => {
-        if (status === 'playing' && mistakes >= 3) {
-            // Use setTimeout to avoid setState during render
+        if (status === 'playing' && mistakes >= 3 && !autoLoseBlockedRef.current) {
             setTimeout(() => {
                 endGame('lose', seconds);
             }, 0);
         }
-    }, [mistakes, status, seconds, endGame]);
+        if (status === 'idle') {
+            autoLoseBlockedRef.current = false;
+        }
+    }, [mistakes, status, seconds, endGame, setGameContext, settings]);
 
     const gameBoard = React.useMemo(() => {
         if (status !== 'playing') return null;
@@ -327,7 +336,9 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
                 })}
             </div>
         );
-    }, [status, board, foundCells, selectedCells, availableCells, hideCorrectNumbers, settings.size, settings.target, startedAt, handleDigitClick]);
+    }, [status, board, foundCells, selectedCells, 
+        availableCells, hideCorrectNumbers, settings.size, 
+        settings.target, startedAt, handleDigitClick]);
 
     return (
         <section className="game-main-panel digit-panel">
@@ -338,21 +349,21 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
             </header>
             <div className="game-space">
                 {status === 'idle' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-instructions">
                         <h3>{t('game-info.digit.instruction')}</h3>
                         <h3>{t('game-info.time_rules')}</h3>
                         <h3>{t('game-info.mistakes_rules')}</h3>
                     </div>
                 )}
                 {status === 'win' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-win">
                         <img src={fireworksGif} alt="fireworks-animation" />
                         <h3>{t('game-info.win')}</h3>
                         <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>
                     </div>
                 )}
                 {status === 'lose' && (
-                    <div style={{ textAlign: 'center', width: '60%' }}>
+                    <div className="game-lose">
                         <img src={unluckyGif} alt="unlucky-animation" />
                         <h3>{t('game-info.lose')}</h3>
                         <h3>{t('game-info.your_mistakes')} {mistakes}</h3>

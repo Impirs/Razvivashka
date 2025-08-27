@@ -92,7 +92,6 @@ const Update = () => {
             </div>
         )
     }
-
         const downloadUrls = getDownloadUrls()
         const releaseNotes = getLocalizedReleaseNotes(release.body)
 
@@ -174,7 +173,6 @@ const Update = () => {
                     >
                         {t('update.downloadLatest')}
                     </h2>
-                    
                     <div className={`grid grid-cols-1 sm:grid-cols-${cardCount} gap-6 max-w-2xl mx-auto`}>
                         {downloadCards.map((card, idx) => (
                             <a

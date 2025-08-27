@@ -1,0 +1,66 @@
+name: Build and Release (Win + Mac)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+        working-directory: react-refactor
+      - name: Build Windows
+        run: npm run build:win
+        working-directory: react-refactor
+      - name: Upload Win Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-build
+          path: |
+            react-refactor/dist
+            react-refactor/dist/win/**/*
+            react-refactor/*.exe
+            react-refactor/*.zip
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+        working-directory: react-refactor
+      - name: Build macOS
+        run: npm run build:mac
+        working-directory: react-refactor
+      - name: Upload Mac Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-build
+          path: |
+            react-refactor/dist
+            react-refactor/dist/mac/**/*
+            react-refactor/*.dmg
+            react-refactor/*.zip
+      - name: Publish (GitHub Releases)
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx electron-builder -mwl --publish always
+        working-directory: react-refactor

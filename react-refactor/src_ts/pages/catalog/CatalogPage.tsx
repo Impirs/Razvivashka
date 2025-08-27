@@ -16,6 +16,7 @@ const GAMES: GameMeta[] = [
     { id: 'digit', type: ['math', 'attention'] },
     { id: 'shulte', type: ['attention'] },
     { id: 'queens', type: ['logic'] },
+    { id: 'tango', type: ['logic'] },
 ];
 
 const TYPES = ['all', 'math', 'attention', 'logic', 'reading'] as const;

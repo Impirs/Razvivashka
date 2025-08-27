@@ -1,0 +1,81 @@
+@use '../colors';
+
+.tango-panel {
+
+    .rool-accent {
+        color: #eb92bf9f;
+    }
+
+	.tango-board {
+		user-select: none;
+		display: grid;
+		gap: 0.125rem;
+		cursor: url('../assets/cursor/hand_1.svg') 8 8, pointer !important;
+		grid-template-columns: repeat(6, calc(56vh / 6));
+		border: 0.125rem solid colors.$primary;
+		border-radius: 0.5rem;
+		padding: 0.25rem;
+		box-shadow: 0 4px 30px colors.$shadow;
+		background: colors.$fourth;
+
+		&.long-press-active {
+			cursor: url('../assets/cursor/hand_3.svg') 8 8, auto !important;
+		}
+
+        .tango-cell {
+    		position: relative;
+    		border: 0.0625rem solid colors.$primary;
+    		border-radius: 0.25rem;
+    		display: flex;
+    		align-items: center;
+    		justify-content: center;
+    		aspect-ratio: 1 / 1;
+    		transition: box-shadow 0.12s ease, transform 0.06s ease;
+    		cursor: inherit;
+    		background: colors.$background;
+        
+    		&:hover {
+    			transform: scale(1.05);
+    			box-shadow: 0 0 0 2px rgba(154, 163, 255, 0.3) inset;
+    		}
+        
+    		&:active { 
+    			transform: scale(0.98);
+    		}
+        
+    		&.unavailable {
+    			background: colors.$locked;
+    			cursor: not-allowed;
+    			opacity: 0.8;
+            
+    			&:hover {
+    				transform: none;
+    				box-shadow: none;
+    			}
+    		}
+        
+    		&.error {
+    			box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.7) inset;
+    			animation: errorPulse 0.5s ease-in-out;
+    		}
+        
+    		.tango-icon {
+    			width: 2rem;
+    			height: 2rem;
+    			pointer-events: none;
+    			user-select: none;
+    		}
+    	}
+	}
+}
+
+@keyframes errorPulse {
+	0%, 100% { 
+		box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.7) inset;
+		transform: scale(1);
+	}
+	50% { 
+		box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.9) inset;
+		transform: scale(1.05);
+	}
+}

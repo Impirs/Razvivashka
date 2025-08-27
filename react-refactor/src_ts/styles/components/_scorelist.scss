@@ -1,8 +1,8 @@
 @use '../colors';
 
 .scorelist-container {
-    width: 248px;
-    height: 380px;
+    width: 100%;
+    height: 90%;
     justify-items: center;
     overflow-y: auto;
     overflow-x: hidden;
@@ -11,17 +11,22 @@
 
 .score-list {
     height: max-content;
+    width: 100%;
     padding: 0;
     margin: 0;
     overflow-y: auto;
     list-style-type: none;
 
+    li {
+        padding-left: 0.5rem;
+    }
+
     &::-webkit-scrollbar {
-        width: 4px;
+        width: 0.25rem;
     }
     &::-webkit-scrollbar-thumb {
         background-color: colors.$primary;
-        border-radius: 2px;
+        border-radius: 0.125rem;
     }
     &::-webkit-scrollbar-track {
         background-color: colors.$background;
@@ -30,16 +35,16 @@
 
 .record-container {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr 3fr auto;
     position: relative;
-    width: 212px;
-    height: 70px;
+    width: calc(100% - 0.5rem);
+    height: 4.2rem;
     background-color: colors.$fourth;
     border: 1px solid colors.$primary;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     box-shadow: 0 2px 15px colors.$shadow;
-    padding-inline: 12px 20px;
-    margin-bottom: 6px;
+    padding-inline: 0.5rem 1rem;
+    margin-bottom: 0.6rem;
     align-items: center;
     overflow: hidden;
     z-index: 0;
@@ -54,10 +59,10 @@
         content: "";
         position: absolute;
         z-index: -1;
-        width: 400%;
-        height: 400%;
-        top: -150%;
-        left: -150%;
+        width: 600%;
+        height: 600%;
+        top: -250%;
+        left: -250%;
         background: conic-gradient(
             from 0deg,
             colors.$primary,
@@ -71,24 +76,24 @@
         content: "";
         position: absolute;
         z-index: -1;
-        top: 2px;
-        left: 2px;
-        right: 2px;
-        bottom: 2px;
+        top: 0.125rem;
+        left: 0.125rem;
+        right: 0.125rem;
+        bottom: 0.125rem;
         border-radius: inherit;
         background: colors.$fourth;
     }
 
     .score {
-        width: 64px;
-        height: 32px;
+        width: 100%;
+        height: 2rem;
         font-family: "Playball";
-        font-size: 28px;
+        font-size: 1.75rem;
         line-height: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        align-self: center;
+        text-align: center;
 
         // &.perfect {
         //     color: colors.$gold;
@@ -100,7 +105,7 @@
         grid-template-columns: 1fr auto;
         grid-template-rows: auto auto;
         width: 100%;
-        gap: 4px;
+        gap: 0.25rem;
         align-items: center;
 
         .record-datetime {
@@ -120,11 +125,11 @@
             grid-row: 1 / 3;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 0.125rem;
             align-items: center;
             justify-content: center;
-            padding: 4px;
-            font-size: 22px; /* Базовый размер иконок */
+            padding: 0.25rem;
+            font-size: 1.5rem; /* Базовый размер иконок */
 
             > div {
                 display: flex;
@@ -133,7 +138,6 @@
                 flex-shrink: 0;
                 position: relative;
                 overflow: visible;
-
                 .perfect-icon {
                     display: inline-flex;
                     align-items: center;
@@ -171,157 +175,4 @@
 @keyframes spin {
     0% { transform: rotate(0deg);} 
     100% { transform: rotate(360deg);} 
-}
-
-@media screen and (max-width: 1600px) {
-    .scorelist-container {
-        height: 320px;
-        width: 224px;
-    }
-
-    .record-container {
-        width: 192px;
-        height: 58px;
-        padding-inline: 10px 16px;
-
-        .score {
-            width: 56px;
-            height: 28px;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .record-details {
-            .record-datetime {
-                font-size: 12px;
-                padding-inline: 8px;
-            }
-            
-            .record-icons {
-                font-size: 18px;
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 1279px) {
-    .scorelist-container {
-        height: 330px;
-        width: 224px;
-    }
-
-    .record-container {
-        width: 192px;
-        height: 60px;
-        padding-inline: 10px 16px;
-
-        .score {
-            width: 56px;
-            height: 28px;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .record-details {
-            .record-datetime {
-                font-size: 12px;
-                padding-inline: 8px;
-            }
-            
-            .record-icons {
-                font-size: 18px; /* Размер иконок для 1279px */
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 1023px) {
-    .scorelist-container {
-        height: 260px;
-        width: 180px;
-    }
-
-    .record-container {
-        width: calc(100% - 16px);
-        height: 58px;
-        padding-inline: 8px 14px;
-
-        .score {
-            width: 50px;
-            height: 24px;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .record-details {
-            .record-datetime {
-                font-size: 11px;
-                padding-inline: 6px;
-            }
-            
-            .record-icons {
-                gap: 1px;
-                padding: 2px;
-                font-size: 16px; /* Размер иконок для 1023px */
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .scorelist-container {
-        height: 20vh;
-        width: 100%;
-        min-height: 180px;
-        min-width: 120px;
-        max-height: 240px;
-        max-width: 150px;
-    }
-
-    .record-container {
-        width: calc(100% - 8px);
-        height: 46px;
-        padding-inline: 4px 8px;
-
-        .score {
-            width: 36px;
-            height: 18px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .record-details {
-            .record-datetime {
-                font-size: 9px;
-                padding-inline: 2px;
-            }
-            
-            .record-icons {
-                gap: 0px;
-                padding: 0px;
-                font-size: 12px; /* Размер иконок для 767px */
-                
-                > div {
-                    .perfect-icon, .mod-icon {
-                        > span[id] {
-                            width: 0.6em;
-                            height: 0.6em;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
