@@ -68,7 +68,6 @@ const ShulteCell: React.FC<{
     let className = 'shulte-cell';
     if (cell.isFound) className += ' found';
     if (hideFound && cell.isFound) className += ' hidden';
-
     return (
         <div
             onClick={handleClick}

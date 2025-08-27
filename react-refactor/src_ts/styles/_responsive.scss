@@ -1,0 +1,155 @@
+/* Утилитарные адаптивные классы для мелких элементов */
+
+// Скрытие элементов на разных экранах
+.hide-mobile {
+    @media screen and (max-width: 767px) {
+        display: none !important;
+    }
+}
+
+.hide-tablet {
+    @media screen and (max-width: 1023px) and (min-width: 768px) {
+        display: none !important;
+    }
+}
+
+.hide-desktop {
+    @media screen and (min-width: 1024px) {
+        display: none !important;
+    }
+}
+
+// Показ только на определенных экранах
+.show-mobile-only {
+    display: none !important;
+    
+    @media screen and (max-width: 767px) {
+        display: block !important;
+    }
+}
+
+.show-tablet-only {
+    display: none !important;
+    
+    @media screen and (max-width: 1023px) and (min-width: 768px) {
+        display: block !important;
+    }
+}
+
+.show-desktop-only {
+    display: none !important;
+    
+    @media screen and (min-width: 1024px) {
+        display: block !important;
+    }
+}
+
+// Адаптивные отступы
+.responsive-padding {
+    padding: 20px;
+    
+    @media screen and (max-width: 1279px) {
+        padding: 16px;
+    }
+    
+    @media screen and (max-width: 1023px) {
+        padding: 12px;
+    }
+    
+    @media screen and (max-width: 767px) {
+        padding: 8px;
+    }
+}
+
+// Адаптивные размеры текста
+.responsive-text {
+    font-size: 18px;
+    
+    @media screen and (max-width: 1279px) {
+        font-size: 16px;
+    }
+    
+    @media screen and (max-width: 1023px) {
+        font-size: 14px;
+    }
+    
+    @media screen and (max-width: 767px) {
+        font-size: 12px;
+    }
+}
+
+.responsive-text-large {
+    font-size: 24px;
+    
+    @media screen and (max-width: 1279px) {
+        font-size: 20px;
+    }
+    
+    @media screen and (max-width: 1023px) {
+        font-size: 18px;
+    }
+    
+    @media screen and (max-width: 767px) {
+        font-size: 16px;
+    }
+}
+
+// Адаптивная ширина контейнера
+.responsive-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    
+    @media screen and (max-width: 1279px) {
+        max-width: 1000px;
+        padding: 0 16px;
+    }
+    
+    @media screen and (max-width: 1023px) {
+        max-width: 800px;
+        padding: 0 12px;
+    }
+    
+    @media screen and (max-width: 767px) {
+        max-width: 100%;
+        padding: 0 8px;
+    }
+}
+
+// Адаптивный Flexbox
+.responsive-flex {
+    display: flex;
+    gap: 20px;
+    
+    @media screen and (max-width: 1023px) {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    @media screen and (max-width: 767px) {
+        gap: 10px;
+    }
+}
+
+// Адаптивная Grid
+.responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    
+    @media screen and (max-width: 1279px) {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+    }
+    
+    @media screen and (max-width: 1023px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+    }
+    
+    @media screen and (max-width: 767px) {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}

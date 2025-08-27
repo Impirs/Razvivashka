@@ -163,6 +163,7 @@ const DigitGame = React.memo<{ settings: DigitGameSettings }>(({ settings }) => 
         setTimeout(() => {
             setGameContext('digit', recordProps, true);
         }, 0);
+
         // Set game modifications
         const mods: string[] = [];
         if (hideCorrectNumbers === false) {

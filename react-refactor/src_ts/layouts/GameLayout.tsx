@@ -30,6 +30,7 @@ type GameSettings = {
     shulte: { pending: ShulteSettings; active: ShulteSettings };
     queens: { pending: QueensSettings; active: QueensSettings };
     tango: { pending: TangoSettings; active: TangoSettings };
+
 };
 
 type GameSettingsAction = 
@@ -195,7 +196,6 @@ const InnerGameLayout = React.memo<GameLayoutProps>(({ gameId }) => {
             dispatch({ type: 'SET_PENDING_TANGO', payload: s });
         }
     }, [gameSettings.tango.pending.complexity]);
-
     // Memoized handlers for game start
     const handleStartDigit = useCallback((settings: DigitGameSettings) => {
         dispatch({ type: 'SET_ACTIVE_DIGIT', payload: settings });

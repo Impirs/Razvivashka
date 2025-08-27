@@ -52,10 +52,14 @@ export const useGitHubRelease = () => {
     const zipAsset = release.assets.find(asset => 
       asset.name.endsWith('.zip') && asset.name.includes('playandlearn')
     )
+    const dmgAsset = release.assets.find(asset =>
+      asset.name.endsWith('.dmg') && asset.name.includes('playandlearn')
+    )
 
     return {
       exe: exeAsset?.browser_download_url || null,
-      zip: zipAsset?.browser_download_url || null
+      zip: zipAsset?.browser_download_url || null,
+      dmg: dmgAsset?.browser_download_url || null
     }
   }
 

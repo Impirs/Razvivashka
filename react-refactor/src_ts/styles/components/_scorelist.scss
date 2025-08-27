@@ -6,6 +6,7 @@
     justify-items: center;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-left: 8px;
 }
 
 .score-list {
@@ -137,7 +138,6 @@
                 flex-shrink: 0;
                 position: relative;
                 overflow: visible;
-
                 .perfect-icon {
                     display: inline-flex;
                     align-items: center;
