@@ -134,6 +134,11 @@ const Preview = () => {
             descriptionKey: 'preview.shulte.description',
         },
         {
+            videoSrc: `${baseUrl}preview/tango_preview.mp4`,
+            titleKey: 'preview.tango.title',
+            descriptionKey: 'preview.tango.description',
+        },
+        {
             videoSrc: `${baseUrl}preview/achievements_preview.mp4`,
             titleKey: 'preview.achievements.title',
             descriptionKey: 'preview.achievements.description',

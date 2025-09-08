@@ -41,14 +41,22 @@ const translations = {
     'update.downloadLatest': 'Download Latest Version',
 
     'preview.title': 'Games Preview',
+    
     'preview.achievements.title': 'Achievements System',
     'preview.achievements.description': 'Track your progress and unlock achievements as you complete different brain training exercises. Each game has its own set of challenges to keep you motivated.',
+    
     'preview.digit.title': 'Digit Game',
     'preview.digit.description': 'Train your working memory by memorizing and reproducing number structures. This exercise is the basis of mental arithmetic, the foundation for mastering mathematical and later algebraic operations. Develops variability of thinking and flexibility of mind.',
+    
     'preview.queens.title': 'N-Queens Puzzle',
     'preview.queens.description': 'Solve the classic N-Queens problem to develop logical thinking and strategic planning skills. Place queens on a chessboard so none can attack each other.',
+    
+    'preview.tango.title': 'Tango',
+    'preview.tango.description': 'Enhance your logic and attention by placing suns and moons on the grid according to the rules. Fill the grid so that all conditions are met.',
+
     'preview.shulte.title': 'Schulte Tables',
     'preview.shulte.description': 'Improve your concentration, speed of perception and peripheral vision with these numbered grid exercises. Find the numbers in order as quickly as possible.',
+    
     'preview.subtitle': 'Discover our interactive exercises designed to enhance your child\'s cognitive abilities',
     'preview.cta.title': 'Ready to start training?',
     'preview.cta.description': 'Download the app and start developing your cognitive abilities today',
@@ -102,14 +110,22 @@ const translations = {
     'update.downloadLatest': 'Скачать последнюю версию',
 
     'preview.title': 'Игры - упражнения',
+    
     'preview.digit.title': 'Состав числа',
     'preview.digit.description': 'Тренируйте рабочую память, запоминая и воспроизводя составы чисел. Это упражнение - основа устного счета, фундамент для освоения математических, а позднее и алгебраических операций. Развивает вариативность мышления и гибкость ума.',
+    
     'preview.queens.title': 'Головоломка Ферзи',
     'preview.queens.description': 'Решайте классическую задачу N-ферзей для развития логического мышления и навыков стратегического планирования. Расставьте ферзей на доске так, чтобы они не атаковали друг друга.',
+    
     'preview.shulte.title': 'Таблицы Шульте',
     'preview.shulte.description': 'Улучшайте концентрацию внимания, скорость восприятия информации и периферическое зрение с помощью этих упражнений с пронумерованной сеткой. Находите числа по порядку как можно быстрее.',
+    
+    'preview.tango.title': 'Танго',
+    'preview.tango.description': 'Развивайте логику и внимание, расставляя солнышки и луны на поле по правилам. Заполните сетку так, чтобы все условия были выполнены.',
+
     'preview.achievements.title': 'Система достижений',
     'preview.achievements.description': 'Отслеживайте свой прогресс и получайте достижения, выполняя различные упражнения для тренировки мозга. Каждая игра имеет свой набор вызовов для поддержания мотивации.',
+    
     'preview.subtitle': 'Познакомьтесь с нашими интерактивными упражнениями для развития когнитивных способностей',
     'preview.cta.title': 'Готовы начать тренировки?',
     'preview.cta.description': 'Скачайте приложение и начните развивать когнитивные способности уже сегодня',
