@@ -5,7 +5,8 @@
         "shulte": "Schulte Table",
         "syllable": "Syllables",
         "sum": "Sum of Numbers",
-        "queens": "Queens"
+        "queens": "Queens",
+        "tango": "Tango"
     },
 
     "types": {
@@ -55,6 +56,16 @@
         },
         "queens": {
             "size": "Board size:"
+        },
+        "tango": {
+            "complexity": "Difficulty level:"
+        },
+        "difficulty": {
+            "1": "Very Easy",
+            "2": "Easy",
+            "3": "Medium",
+            "4": "Hard",
+            "5": "Very Hard"
         }
     },
 
@@ -68,6 +79,8 @@
         "mistakes_rules": "The number of mistakes must not exceed 3.",
         "double_click": "Double click",
         "drag": "Drag",
+        "left_click": "Left mouse click",
+        "right_click": "Right mouse click",
         "digit": {
             "instruction": "Clear the board by selecting pairs of cells that add up to the number you chose.",
             "empty": "Empty cell",
@@ -82,6 +95,16 @@
             "instruction_place": " to place/remove a queen.",
             "instruction_drag": " to move.",
             "tutorial": "Board size 4 is a tutorial level. It is recommended to play it only a few times."
+        },
+        "tango": {
+            "rules": {
+                "1": "Fill the board so that each row and column has 3 moons and 3 suns.",
+                "2": "Do not allow more than two identical symbols in a row."
+            },
+            "controls": {
+                "1": " - add/remove sun",
+                "2": " - add/remove moon"
+            }
         }
 
     },
@@ -178,6 +201,28 @@
             "8x8": {
                 "title": "Queen Grandmaster",
                 "description": "Finish the game on 8x8 board for queens in "
+            }
+        },
+        "tango": {
+            "6x1": {
+                "title": "One-Two-Three-Go",
+                "description": "Finish the tango game on easy difficulty in "
+            },
+            "6x2": {
+                "title": "Tango Morning",
+                "description": "Finish the tango game on medium difficulty in "
+            },
+            "6x3": {
+                "title": "Tango Rhythm of Life",
+                "description": "Finish the tango game on hard difficulty in "
+            },
+            "6x4": {
+                "title": "Tango Expert",
+                "description": "Finish the tango game on very hard difficulty in "
+            },
+            "6x5": {
+                "title": "Tango Day and Night",
+                "description": "Finish the tango game on expert difficulty in "
             }
         }
 

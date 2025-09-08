@@ -82,9 +82,16 @@ function isNewerVersion(latest, current) {
 // Write a script witch will automativaly send a bug report to the developer.
 
 function createWindow() {
+    const resolveIcon = () => {
+        const base = process.resourcesPath || path.join(__dirname, '..');
+        if (process.platform === 'darwin') return path.join(base, 'icon.icns');
+        if (process.platform === 'linux') return path.join(base, 'icon.png');
+        return path.join(base, 'icon.ico');
+    };
+
     const win = new BrowserWindow({
         show: false,
-        icon: path.join(process.resourcesPath || path.join(__dirname, '..'), 'icon.ico'),
+        icon: resolveIcon(),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -98,12 +105,15 @@ function createWindow() {
     win.setMenuBarVisibility(false);
     win.maximize();
     
-    // Icon setting for windows (to be sure)
-    if (process.platform === 'win32') {
-        if (!isDev) {
+    // Platform-specific post-create adjustments
+    if (!isDev) {
+        if (process.platform === 'win32') {
             const productionIconPath = path.join(process.resourcesPath || path.join(__dirname, '..'), 'icon.ico');
             win.setIcon(productionIconPath);
-            win.setOverlayIcon(productionIconPath, 'Развивашка');
+            try { win.setOverlayIcon(productionIconPath, 'Развивашка'); } catch {}
+        } else if (process.platform === 'darwin') {
+            // On macOS it is common not to force maximize immediately; keep normal window then maximize if desired.
+            // (Current behavior maximizes; we can keep it but note cultural difference.)
         }
     }
 

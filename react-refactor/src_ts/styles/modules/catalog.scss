@@ -3,6 +3,7 @@
 .games-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 2rem 1.5rem; // 32px 24px
     width: 100%;
     justify-items: center;
@@ -13,7 +14,7 @@
 
 .game-badge {
     width: 100%; // 340px
-    height: 250%; // 260px
+    height: 100%; // 260px
     max-height: 260px;
     background: colors.$fourth;
     border: 0.125rem solid colors.$primary; // 2px

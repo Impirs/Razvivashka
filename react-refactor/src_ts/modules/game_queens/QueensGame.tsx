@@ -293,12 +293,6 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
         );
     }, [status, board, conflicts, blocked, assistHighlight, settings.size, startedAt, handleMouseLeave, onCellDoubleClick, onMouseDown, onMouseUp, cursorClass]);
 
-    // Мемоизированные стили
-    const centerStyle = React.useMemo(() => ({ 
-        textAlign: 'center' as const, 
-        width: '60%' 
-    }), []);
-
     return (
         <section className="game-main-panel queens-panel">
             <header className="game-utils-panel">
@@ -308,7 +302,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
             </header>
             <div className="game-space">
                 {status === 'idle' && (
-                    <div style={centerStyle}>
+                    <div className="game-instructions">
                         <h3>{t('game-info.time_rules')}</h3>
                         <h3>
                             <span className="q-accent">{t('game-info.double_click')}</span>
@@ -326,7 +320,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                     </div>
                 )}
                 {status === 'win' && (
-                    <div style={centerStyle}>
+                    <div className="game-win">
                         <img src={fireworksGif} alt="fireworks-animation" />
                         <h3>{t('game-info.win')}</h3>
                         <h3>{t('game-info.your_time')} {formatTime(seconds)}</h3>

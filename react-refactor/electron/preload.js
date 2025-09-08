@@ -4,8 +4,36 @@ const path = require('path');
 const os = require('os');
 const { migrateIfNeeded } = require('./migration');
 
-// Storage locations
-const appDir = path.join(os.homedir(), 'AppData/Roaming/play_and_learn', 'data');
+// -------------------------------------------------------------
+// [DATA STORAGE LOCATION] на случай, если полетят тесты на мак -_-
+// 
+// Данные приложения (настройки, прогресс, пользователи) хранятся в платформенно-специфичной папке:
+//   Windows: %USERPROFILE%/AppData/Roaming/play_and_learn/data
+//   macOS:   ~/Library/Application Support/play_and_learn/data
+//   Linux:   ~/.config/play_and_learn/data
+// 
+// Папка создаётся автоматически при первом запуске (см. ensureDirs()).
+// Все файлы (settings.json, gamestorage.json) лежат внутри этой папки.
+// 
+// Если нужно узнать путь вручную:
+//   - macOS: открыть Finder, нажать Cmd+Shift+G и вставить ~/Library/Application Support/play_and_learn/data
+//   - Windows: Win+R → %APPDATA%\play_and_learn\data
+//   - Linux: ~/.config/play_and_learn/data
+// -------------------------------------------------------------
+function resolveAppDataDir() {
+    const home = os.homedir();
+    const platform = process.platform;
+    if (platform === 'win32') {
+        return path.join(home, 'AppData', 'Roaming', 'play_and_learn', 'data');
+    } else if (platform === 'darwin') {
+        return path.join(home, 'Library', 'Application Support', 'play_and_learn', 'data');
+    } else { // linux & others
+        return path.join(home, '.config', 'play_and_learn', 'data');
+    }
+}
+
+// Storage locations (platform aware)
+const appDir = resolveAppDataDir();
 const settingsPath = path.join(appDir, 'settings.json');
 const gameStoragePath = path.join(appDir, 'gamestorage.json');
 

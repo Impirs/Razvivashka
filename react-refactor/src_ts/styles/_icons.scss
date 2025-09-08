@@ -176,3 +176,24 @@
     mask: url('@/assets/icons/down-arrow.svg') no-repeat center;
     mask-size: contain;
 }
+
+#moon {
+    -webkit-mask: url('@/assets/icons/moon.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/moon.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#sun {
+    -webkit-mask: url('@/assets/icons/sun.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/sun.svg') no-repeat center;
+    mask-size: contain;
+}
+
+#clock {
+    -webkit-mask: url('@/assets/icons/clock.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask: url('@/assets/icons/clock.svg') no-repeat center;
+    mask-size: contain;
+}

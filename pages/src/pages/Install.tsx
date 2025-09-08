@@ -51,9 +51,7 @@ const Install = () => {
             </div>
         )
     }
-
     const downloadUrls = getDownloadUrls()
-
     return (
         <div 
             className="rounded-2xl shadow-xl border"
