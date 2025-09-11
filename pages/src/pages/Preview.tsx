@@ -10,27 +10,21 @@ interface VideoContainerProps {
 }
 
 const VideoContainer = ({ videoSrc, title, description, isReversed = false, index }: VideoContainerProps) => {
-    const animationDelay = `${(index + 1) * 0.1}s`;
-    
     return (
         <div 
-            className={`preview-video-container slide-in-up flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12 items-center mb-16 lg:mb-20`}
-            style={{ animationDelay }}
+            className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12 items-center mb-8 lg:mb-10`}
         >
             {/* Video Container */}
             <div className="w-full lg:w-1/2">
                 <div 
-                    className="group relative rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]" 
+                    className="relative rounded-2xl overflow-hidden shadow-xl transition-transform duration-300 hover:scale-105" 
                     style={{ 
                         backgroundColor: 'var(--bg-secondary)',
                         border: '1px solid var(--border-color)'
                     }}
                 >
-                    {/* Video overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 pointer-events-none z-10"></div>
-                    
                     <video 
-                        className="preview-video w-full h-auto transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-auto"
                         controls
                         preload="metadata"
                         style={{ maxHeight: '400px' }}
@@ -40,14 +34,6 @@ const VideoContainer = ({ videoSrc, title, description, isReversed = false, inde
                             Your browser does not support the video tag.
                         </div>
                     </video>
-                    
-                    {/* Decorative corner accent */}
-                    <div 
-                        className="floating-decoration absolute top-0 right-0 w-20 h-20 opacity-20"
-                        style={{
-                            background: `linear-gradient(-45deg, var(--accent) 0%, transparent 70%)`
-                        }}
-                    ></div>
                 </div>
             </div>
             
@@ -57,10 +43,9 @@ const VideoContainer = ({ videoSrc, title, description, isReversed = false, inde
                     {/* Section number */}
                     <div className="flex items-center mb-4">
                         <div 
-                            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4 pulse-animation"
+                            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm mr-4"
                             style={{ 
-                                backgroundColor: 'var(--accent)',
-                                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                backgroundColor: 'var(--accent)'
                             }}
                         >
                             {index + 1}
@@ -72,7 +57,7 @@ const VideoContainer = ({ videoSrc, title, description, isReversed = false, inde
                     </div>
                     
                     <h2 
-                        className="gradient-text text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 leading-tight"
+                        className="text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 leading-tight"
                         style={{ color: 'var(--text-primary)' }}
                     >
                         {title}
@@ -93,7 +78,7 @@ const VideoContainer = ({ videoSrc, title, description, isReversed = false, inde
                     {/* Decorative elements */}
                     <div className="flex items-center mt-6 lg:mt-8 space-x-2 opacity-60">
                         <div 
-                            className="w-2 h-2 rounded-full pulse-animation"
+                            className="w-2 h-2 rounded-full"
                             style={{ backgroundColor: 'var(--accent)' }}
                         ></div>
                         <div 
@@ -101,7 +86,7 @@ const VideoContainer = ({ videoSrc, title, description, isReversed = false, inde
                             style={{ backgroundColor: 'var(--accent)' }}
                         ></div>
                         <div 
-                            className="w-2 h-2 rounded-full pulse-animation"
+                            className="w-2 h-2 rounded-full"
                             style={{ backgroundColor: 'var(--accent)' }}
                         ></div>
                     </div>
@@ -161,12 +146,6 @@ const Preview = () => {
                     background: `linear-gradient(135deg, var(--bg-gradient-from) 0%, var(--bg-gradient-to) 100%)`
                 }}
             >
-                {/* Background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-white/20 -translate-x-1/2 -translate-y-1/2"></div>
-                    <div className="absolute bottom-0 right-0 w-60 h-60 rounded-full bg-white/20 translate-x-1/3 translate-y-1/3"></div>
-                </div>
-                
                 <div className="relative text-center">
                     <h1 
                         className="text-4xl lg:text-5xl font-bold mb-4 lg:mb-6"
@@ -222,7 +201,7 @@ const Preview = () => {
                 <div className="text-center mt-16 pt-12 border-t" style={{ borderColor: 'var(--border-color)' }}>
                     <div className="max-w-2xl mx-auto">
                         <h3 
-                            className="gradient-text text-2xl lg:text-3xl font-bold mb-4"
+                            className="text-2xl lg:text-3xl font-bold mb-4"
                             style={{ color: 'var(--text-primary)' }}
                         >
                             {t('preview.cta.title')}
@@ -239,17 +218,16 @@ const Preview = () => {
                             {[...Array(5)].map((_, i) => (
                                 <div 
                                     key={i}
-                                    className={`w-2 h-2 rounded-full pulse-animation`}
+                                    className={`w-2 h-2 rounded-full`}
                                     style={{ 
-                                        backgroundColor: 'var(--accent)',
-                                        animationDelay: `${i * 0.2}s`
+                                        backgroundColor: 'var(--accent)'
                                     }}
                                 ></div>
                             ))}
                         </div>
                         
                         {/* Additional visual element */}
-                        <div className="floating-decoration mx-auto w-20 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)' }}></div>
+                        <div className="mx-auto w-20 h-1 rounded-full" style={{ backgroundColor: 'var(--accent)' }}></div>
                     </div>
                 </div>
             </div>

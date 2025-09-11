@@ -4,6 +4,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useTheme } from '../contexts/ThemeContext'
 import { useLanguage } from '../contexts/LanguageContext'
 
+type Language = 'en' | 'sr' | 'ru'
+
 interface LayoutProps {
     children: React.ReactNode
 }
@@ -11,7 +13,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
     const location = useLocation()
     const { theme, toggleTheme } = useTheme()
-    const { language, setLanguage, t } = useLanguage()
+    const { language, setLanguage, t, loading } = useLanguage()
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [isClosing, setIsClosing] = useState(false)
     const [isClientMobile, setIsClientMobile] = useState(false)
@@ -24,7 +26,10 @@ const Layout = ({ children }: LayoutProps) => {
     ]
 
     const toggleLanguage = () => {
-        setLanguage(language === 'en' ? 'ru' : 'en')
+        const languages: Language[] = ['en', 'sr', 'ru']
+        const currentIndex = languages.indexOf(language)
+        const nextIndex = (currentIndex + 1) % languages.length
+        setLanguage(languages[nextIndex])
     }
 
     const toggleMobileMenu = () => {

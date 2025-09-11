@@ -63,7 +63,7 @@ const Install = () => {
         >
             {/* Hero Section */}
             <div className="install-hero px-8 pt-12 pb-8 rounded-t-2xl relative">
-                <div className="relative text-center fade-in-up">
+                <div className="relative text-center">
                     <h1 
                         className="text-4xl lg:text-5xl font-bold mb-6"
                         style={{ color: 'var(--text-primary)' }}
@@ -98,7 +98,7 @@ const Install = () => {
             {/* Content Section */}
             <div className="px-8 py-8">
                 {/* Desktop Apps Section */}
-                <div className="fade-in-up delay-200 mb-12">
+                <div className="mb-12">
                     <h2 
                         className="text-3xl font-bold mb-8 text-center"
                         style={{ color: 'var(--text-primary)' }}
@@ -114,7 +114,7 @@ const Install = () => {
                                 href={downloadUrls.exe}
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-300 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
+                                className="p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center hover:scale-105"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -148,7 +148,7 @@ const Install = () => {
                                 href={downloadUrls.zip}
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
+                                className="p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center hover:scale-105"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -182,7 +182,7 @@ const Install = () => {
                                 href={downloadUrls.dmg}
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-400 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
+                                className="p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center hover:scale-105"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -210,7 +210,7 @@ const Install = () => {
                             </a>
                         ) : (
                             <div 
-                                className="download-card fade-in-up delay-500 p-6 rounded-2xl shadow-lg text-center opacity-60"
+                                className="p-6 rounded-2xl shadow-lg text-center opacity-60"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -259,7 +259,7 @@ const Install = () => {
                                 href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.exe" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-300 rounded-xl shadow-md transition-all duration-300 text-center"
+                                className="rounded-xl shadow-md transition-all duration-300 text-center hover:scale-105"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -291,7 +291,7 @@ const Install = () => {
                                 href="https://github.com/Impirs/Razvivashka/releases/download/v2.0.0/playandlearn_2.0.0_x64.zip" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-400 rounded-xl shadow-md transition-all duration-300 text-center"
+                                className="rounded-xl shadow-md transition-all duration-300 text-center hover:scale-105"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -320,7 +320,7 @@ const Install = () => {
 
                             {/* Mobile version - macOS - Coming Soon (compact) */}
                             <div 
-                                className="download-card coming-soon fade-in-up delay-500 rounded-xl shadow-md"
+                                className="rounded-xl shadow-md"
                                 style={{ 
                                     backgroundColor: 'var(--bg-secondary)', 
                                     border: '1px solid var(--border-color)',
@@ -342,7 +342,7 @@ const Install = () => {
                 </div>
 
                 {/* Installation Instructions */}
-                <div className="fade-in-up delay-600">
+                <div>
                     <MarkdownRenderer content={content} />
                 </div>
 

@@ -1,0 +1,112 @@
+{
+  "nav": {
+    "welcome": "Welcome",
+    "preview": "Preview",
+    "install": "Install",
+    "docs": "Documentation"
+  },
+  "theme": {
+    "toggle": "Toggle theme"
+  },
+  "language": {
+    "toggle": "Srpski"
+  },
+  "footer": {
+    "description": "Brain training games to improve memory, attention and cognitive skills",
+    "copyright": "© 2025 Razvivashka. Made with ❤️ for brain training"
+  },
+  "update": {
+    "title": "Update Play and Learn",
+    "loading": "Loading update information...",
+    "error": "Error loading update information",
+    "noReleases": "No releases available",
+    "downloadExe": "Download .exe",
+    "downloadZip": "Download .zip",
+    "backToHome": "Back to Home",
+    "releaseNotes": "Release Notes",
+    "currentVersion": "Latest Version",
+    "downloadLatest": "Download Latest Version"
+  },
+  "preview": {
+    "title": "Games Preview",
+    "subtitle": "Discover our interactive exercises designed to enhance your child's cognitive abilities",
+    "achievements": {
+      "title": "Achievements System",
+      "description": "Track your progress and unlock achievements as you complete different brain training exercises. Each game has its own set of challenges to keep you motivated."
+    },
+    "digit": {
+      "title": "Digit Game",
+      "description": "Train your working memory by memorizing and reproducing number structures. This exercise is the basis of mental arithmetic, the foundation for mastering mathematical and later algebraic operations. Develops variability of thinking and flexibility of mind."
+    },
+    "queens": {
+      "title": "Queens",
+      "description": "Solve the classic N-Queens problem to develop logical thinking and strategic planning skills. Place queens on a chessboard so none can attack each other."
+    },
+    "tango": {
+      "title": "Tango",
+      "description": "Enhance your logic and attention by placing suns and moons on the grid according to the rules. Fill the grid so that all conditions are met."
+    },
+    "shulte": {
+      "title": "Schulte Tables",
+      "description": "Improve your concentration, speed of perception and peripheral vision with these numbered grid exercises. Find the numbers in order as quickly as possible."
+    },
+    "cta": {
+      "title": "Ready to start training?",
+      "description": "Download the app and start developing your cognitive abilities today"
+    }
+  },
+  "welcome": {
+    "hero": {
+      "title": "Do you want to raise a prodigy?",
+      "subtitle": "Improve your child's memory, attention, and cognitive skills with our scientifically-designed exercises"
+    },
+    "preview": {
+      "title": "Exercises",
+      "description": "Explore our app and games before installation",
+      "button": "Check it out"
+    },
+    "updates": {
+      "title": "About Updates",
+      "description": "Learn what's new in the latest version of the app",
+      "button": "Check for Updates"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "If you encounter any issues or have questions, contact us",
+      "button": "Open Form"
+    }
+  },
+  "install": {
+    "hero": {
+      "title": "Install Play and Learn",
+      "subtitle": "Choose your platform and start training today"
+    },
+    "desktop": {
+      "title": "Desktop Application"
+    },
+    "windows": {
+      "exe": "Windows Installer",
+      "zip": "Windows Portable"
+    },
+    "macos": {
+      "dmg": "macOS Package"
+    },
+    "coming": {
+      "soon": "Coming Soon"
+    },
+    "download": "Download latest version",
+    "mobile": {
+      "note": "For desktop installation only - preview available on mobile"
+    }
+  },
+  "docs": {
+    "modal": {
+      "title": "Developer Documentation",
+      "content": "This section contains technical information about the development of this project. It is intended for developers who are interested in the project or want to contribute to the application development.",
+      "language": {
+        "note": "Documentation is available in English only."
+      },
+      "button": "Got it!"
+    }
+  }
+}

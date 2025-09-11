@@ -111,8 +111,14 @@
 .section-divider {
     position: relative;
     height: 1px;
-    background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
     margin: 3rem 0;
+    background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+}
+.section-divider-card {
+    position: relative;
+    height: 1px;
+    margin: 1rem 0;
+    background: linear-gradient(90deg, transparent 0%, white 50%, transparent 100%);
 }
 
 .section-divider::before {
@@ -124,5 +130,16 @@
     width: 8px;
     height: 8px;
     background: var(--accent);
+    border-radius: 50%;
+}
+.section-divider-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
     border-radius: 50%;
 }

@@ -138,7 +138,7 @@ const Update = () => {
         >
             {/* Hero Section */}
             <div className="update-hero px-8 pt-12 pb-8 rounded-t-2xl relative text-white">
-                <div className="relative fade-in-up">
+                <div className="relative">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
                         <div>
                             <div className="version-badge">
@@ -150,7 +150,7 @@ const Update = () => {
                         </div>
                         <Link 
                             to="/welcome" 
-                            className="enhanced-button inline-flex items-center px-6 py-3 rounded-xl transition-all duration-300 bg-white/20 backdrop-blur-sm hover:bg-white/30"
+                            className="inline-flex items-center px-6 py-3 rounded-xl transition-all duration-300 bg-white/20 backdrop-blur-sm hover:bg-white/30"
                             style={{ 
                                 color: 'white',
                                 textDecoration: 'none',
@@ -166,7 +166,7 @@ const Update = () => {
             {/* Content Section */}
             <div className="px-8 py-8">
                 {/* Download Section */}
-                <div className="fade-in-up delay-200 mb-12">
+                <div className="mb-12">
                     <h2 
                         className="text-2xl font-bold mb-6 text-center"
                         style={{ color: 'var(--text-primary)' }}
@@ -180,7 +180,7 @@ const Update = () => {
                                 href={card.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="download-card fade-in-up delay-300 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group"
+                                className="p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center hover:scale-105"
                                 style={{
                                     backgroundColor: 'var(--bg-secondary)',
                                     border: '1px solid var(--border-color)',
@@ -212,7 +212,7 @@ const Update = () => {
                 
                 {/* Release Notes */}
                 {releaseNotes && (
-                    <div className="fade-in-up delay-500">
+                    <div>
                         <div 
                             className="release-card p-6 rounded-2xl"
                             style={{ 

@@ -5,19 +5,6 @@
     overflow: hidden;
 }
 
-.welcome-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-}
-
 .welcome-action-card {
     position: relative;
     overflow: hidden;
@@ -78,17 +65,6 @@
     background: linear-gradient(135deg, var(--bg-gradient-from) 0%, var(--bg-gradient-to) 100%);
     position: relative;
     overflow: hidden;
-}
-
-.install-hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-    animation: rotate 20s linear infinite;
 }
 
 .download-card {

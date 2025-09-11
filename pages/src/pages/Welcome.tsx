@@ -78,7 +78,7 @@ const Welcome = () => {
                     }}
                 ></div>
                 
-                <div className="relative text-center fade-in-up">
+                <div className="relative text-center">
                     <h1 
                         className="text-4xl lg:text-6xl font-bold mb-6"
                         style={{ color: 'var(--text-primary)' }}
@@ -112,7 +112,7 @@ const Welcome = () => {
 
             {/* Content Section */}
             <div className="px-8 py-8">
-                <div className="fade-in-up delay-200">
+                <div>
                     <MarkdownRenderer content={content} />
                 </div>
                 
@@ -120,50 +120,44 @@ const Welcome = () => {
                 <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Preview Card */}
                     <div 
-                        className="welcome-action-card fade-in-up delay-300 text-white p-8 rounded-2xl cursor-pointer"
+                        className="text-white p-4 rounded-2xl cursor-pointer transition-transform duration-200 hover:scale-105"
                         style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
                         onClick={handlePreviewClick}
                     >
-                        <div className="welcome-header-flex">
-                            <div className="text-4xl">🎯</div>
-                            <h3 className="text-xl font-bold">{t('welcome.preview.title')}</h3>
+                        <div className="flex flex-row items-center justify-center gap-3 mb-2">
+                            {/* <div className="text-3xl">🎯</div> */}
+                            <h2 className="text-2xl font-bold">{t('welcome.preview.title')}</h2>
                         </div>
-                        <p className="mb-6 opacity-90">{t('welcome.preview.description')}</p>
-                        <button className="welcome-action-button enhanced-button bg-white text-green-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
-                            {t('welcome.preview.button')}
-                        </button>
+                        <div className="section-divider-card" />
+                        <p className="mb-3 mt-1 opacity-90 text-center">{t('welcome.preview.description')}</p>
                     </div>
 
                     {/* Updates Card */}
                     <div 
-                        className="welcome-action-card fade-in-up delay-400 text-white p-8 rounded-2xl cursor-pointer"
+                        className="text-white p-4 rounded-2xl cursor-pointer transition-transform duration-200 hover:scale-105"
                         style={{ background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' }}
                         onClick={handleUpdateClick}
                     >
-                        <div className="welcome-header-flex">
-                            <div className="text-4xl">🔄</div>
-                            <h3 className="text-xl font-bold">{t('welcome.updates.title')}</h3>
+                        <div className="flex flex-row items-center justify-center gap-3 mb-2">
+                            {/* <div className="text-3xl">🔄</div> */}
+                            <h2 className="text-2xl font-bold">{t('welcome.updates.title')}</h2>
                         </div>
-                        <p className="mb-6 opacity-90">{t('welcome.updates.description')}</p>
-                        <button className="welcome-action-button enhanced-button bg-white text-red-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
-                            {t('welcome.updates.button')}
-                        </button>
+                        <div className="section-divider-card" />
+                        <p className="mb-3 mt-1 opacity-90 text-center">{t('welcome.updates.description')}</p>
                     </div>
 
                     {/* Contact Card */}
                     <div 
-                        className="welcome-action-card fade-in-up delay-500 text-white p-8 rounded-2xl cursor-pointer md:col-span-2 lg:col-span-1"
+                        className="text-white p-4 rounded-2xl cursor-pointer md:col-span-2 lg:col-span-1 transition-transform duration-200 hover:scale-105"
                         style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)' }}
                         onClick={handleContactFormClick}
                     >
-                        <div className="welcome-header-flex">
-                            <div className="text-4xl">✍️</div>
-                            <h3 className="text-xl font-bold">{t('welcome.contact.title')}</h3>
+                        <div className="flex flex-row items-center justify-center gap-3 mb-2">
+                            {/* <div className="text-3xl">✍️</div> */}
+                            <h2 className="text-2xl font-bold">{t('welcome.contact.title')}</h2>
                         </div>
-                        <p className="mb-6 opacity-90">{t('welcome.contact.description')}</p>
-                        <button className="welcome-action-button enhanced-button bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-50">
-                            {t('welcome.contact.button')}
-                        </button>
+                        <div className="section-divider-card" />
+                        <p className="mb-3 mt-1 opacity-90 text-center">{t('welcome.contact.description')}</p>
                     </div>
                 </div>
             </div>
