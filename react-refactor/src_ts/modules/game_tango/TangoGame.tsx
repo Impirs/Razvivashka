@@ -1,10 +1,10 @@
 import React from 'react';
 import type { TangoSettings, TangoBoard } from './types/game_tango';
-import { 
-    generateCompleteBoard, 
-    applyComplexity, 
-    validateBoard, 
-    isSolved, 
+import {
+    generateCompleteBoard,
+    applyComplexity,
+    validateBoard,
+    isSolved,
     handleCellClick
 } from './tangoGameLogic';
 import { useGameController } from '@/contexts/gameController';
@@ -35,10 +35,11 @@ const TangoCell = React.memo<{
     col: number;
     isOriginal: boolean;
     hasError: boolean;
+    isAnimating: boolean;
     onClick: (row: number, col: number) => void;
     onContextMenu: (e: React.MouseEvent, row: number, col: number) => void;
-}>(({ cell, row, col, isOriginal, hasError, onClick, onContextMenu }) => {
-    
+}>(({ cell, row, col, isOriginal, hasError, isAnimating, onClick, onContextMenu }) => {
+
     const cellClassName = React.useMemo(() => {
         let className = 'tango-cell';
         if (isOriginal && (cell === 1 || cell === 2)) className += ' unavailable';
@@ -60,8 +61,8 @@ const TangoCell = React.memo<{
             onClick={handleClick}
             onContextMenu={handleContextMenu}
         >
-            {cell === 1 && <Icon name="moon" className='tango-icon'/>}
-            {cell === 2 && <Icon name="sun" className='tango-icon'/>}
+            {cell === 1 && <Icon name="moon" className={`tango-icon ${isAnimating ? 'tango-icon-victory-animate' : ''}`}/>}
+            {cell === 2 && <Icon name="sun" className={`tango-icon ${isAnimating ? 'tango-icon-victory-animate' : ''}`}/>}
         </div>
     );
 });
@@ -77,15 +78,19 @@ interface GameBoards {
 const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
     const { status, endGame, setGameContext, startedAt } = useGameController();
     const t = useTranslationFunction();
-    
+
     const [gameBoards, setGameBoards] = React.useState<GameBoards | null>(null);
     const [errorPositions, setErrorPositions] = React.useState<Set<string>>(new Set());
     const [boardReady, setBoardReady] = React.useState(false);
     const [boardReadyRunId, setBoardReadyRunId] = React.useState<number | null>(null);
-    
+
+    // Victory animation state
+    const [isVictoryAnimating, setIsVictoryAnimating] = React.useState(false);
+    const [animatingDiagonal, setAnimatingDiagonal] = React.useState<number>(-1);
+
     const isInitializingRef = React.useRef(false);
     const lastStartRef = React.useRef<number | null>(null);
-    
+
     const { seconds } = useGameTimer({ isPlaying: status === 'playing', startedAt });
     const { cursorClass } = useCursor({ enableLongPress: false });
 
@@ -94,22 +99,24 @@ const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
         if (status === 'playing' && startedAt && startedAt !== lastStartRef.current) {
             lastStartRef.current = startedAt;
             isInitializingRef.current = true;
-            
+
             // Синхронное обновление контекста
             setGameContext('tango', generateRecordProps('tango', settings), true);
-            
+
             // Генерация решения и начальной головоломки
             const solutionBoard = generateCompleteBoard();
             const initialBoard = applyComplexity(solutionBoard, settings); // содержит 0 там где можно редактировать
             // Текущее состояние стартует как копия initial
             const currentBoard = initialBoard.map(row => [...row]);
             setGameBoards({ solution: solutionBoard, initial: initialBoard, current: currentBoard });
-            
+
             // Сброс других состояний
             setErrorPositions(new Set());
             setBoardReady(false);
             setBoardReadyRunId(null);
-            
+            setIsVictoryAnimating(false);
+            setAnimatingDiagonal(-1);
+
             isInitializingRef.current = false;
         }
     }, [status, startedAt, settings, setGameContext]);
@@ -122,6 +129,8 @@ const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
             setErrorPositions(new Set());
             setBoardReady(false);
             setBoardReadyRunId(null);
+            setIsVictoryAnimating(false);
+            setAnimatingDiagonal(-1);
         }
     }, [status]);
 
@@ -139,22 +148,46 @@ const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
 
     const validation = validateBoard(gameBoards.current);
         const newErrorPositions = new Set<string>();
-        
+
         validation.errors.forEach(error => {
             error.positions.forEach(pos => {
                 newErrorPositions.add(`${pos.row},${pos.col}`);
             });
         });
-        
-        setErrorPositions(newErrorPositions);
 
-        // Check win condition
-    if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isSolved(gameBoards.current)) {
+        setErrorPositions(newErrorPositions);
+    }, [gameBoards?.current]);
+
+    // Victory animation sequence
+    const startVictoryAnimation = React.useCallback(async () => {
+        setIsVictoryAnimating(true);
+
+        // Tango board is 6x6, diagonals go from (0,0) to (5,5)
+        // We'll animate by diagonals: diagonal 0 = (0,0), diagonal 1 = (0,1),(1,0), etc.
+        const maxDiagonal = 5 + 5; // from (0,0) to (5,5) = diagonal index 10
+
+        for (let diag = 0; diag <= maxDiagonal; diag++) {
+            setAnimatingDiagonal(diag);
+            // Wait for animation duration (0.6s as defined in CSS)
+            await new Promise(resolve => setTimeout(resolve, 400));
+        }
+
+        // Reset animation state and trigger win screen
+        setAnimatingDiagonal(-1);
+        setIsVictoryAnimating(false);
+        endGame('win', seconds);
+    }, [seconds, endGame]);
+
+    // Check for win condition and start victory animation
+    React.useEffect(() => {
+        if (!gameBoards || gameBoards.current.length === 0) return;
+
+        if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isSolved(gameBoards.current) && !isVictoryAnimating) {
             setTimeout(() => {
-                endGame('win', seconds);
+                startVictoryAnimation();
             }, 0);
         }
-    }, [gameBoards?.current, boardReady, boardReadyRunId, status, startedAt, seconds, endGame]);
+    }, [gameBoards?.current, boardReady, boardReadyRunId, status, startedAt, isVictoryAnimating, startVictoryAnimation]);
 
     // Handle cell click
     const onCellClick = React.useCallback((row: number, col: number) => {
@@ -190,6 +223,8 @@ const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
                     row.map((cell, colIndex) => {
                         const fixed = gameBoards.initial[rowIndex][colIndex] !== 0; // фиксируется по initial
                         const hasError = errorPositions.has(`${rowIndex},${colIndex}`);
+                        const currentDiagonal = rowIndex + colIndex; // diagonal index from (0,0) to (5,5)
+                        const isAnimating = animatingDiagonal === currentDiagonal && (cell === 1 || cell === 2);
                         return (
                             <TangoCell
                                 key={`${startedAt}-${rowIndex}-${colIndex}`}
@@ -198,6 +233,7 @@ const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
                                 col={colIndex}
                                 isOriginal={fixed}
                                 hasError={hasError}
+                                isAnimating={isAnimating}
                                 onClick={onCellClick}
                                 onContextMenu={onContextMenu}
                             />
@@ -206,7 +242,7 @@ const TangoGame = React.memo<TangoGameProps>(({ settings }) => {
                 )}
             </div>
         );
-    }, [status, gameBoards, errorPositions, startedAt, cursorClass, onCellClick, onContextMenu]);
+    }, [status, gameBoards, errorPositions, startedAt, cursorClass, animatingDiagonal, onCellClick, onContextMenu]);
 
     return (
         <section className="game-main-panel tango-panel">

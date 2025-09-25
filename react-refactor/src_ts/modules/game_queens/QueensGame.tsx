@@ -12,14 +12,14 @@ import { formatTime } from '@/utils/ft';
 import Icon from '@/components/icon/icon';
 import fireworksGif from '@/assets/animations/fireworks.gif';
 
-interface QueensGameProps { 
-    settings: QueensSettings; 
+interface QueensGameProps {
+    settings: QueensSettings;
 }
 
 const QueensRemaining = React.memo<{ remaining: number }>(({ remaining }) => {
-    const remainingStyle = React.useMemo(() => ({ 
-        marginLeft: 8, 
-        fontFamily: "PlayBall" 
+    const remainingStyle = React.useMemo(() => ({
+        marginLeft: 8,
+        fontFamily: "PlayBall"
     }), []);
 
     return (
@@ -47,11 +47,12 @@ const QueensCell = React.memo<{
     conflicts: { rows: Set<number>; cols: Set<number>; regions: Set<number>; adjacent: Set<string> };
     isBlocked: boolean;
     assistHighlight: boolean;
+    isAnimatingColumn: boolean;
     onDoubleClick: (row: number, col: number) => void;
     onMouseDown: (row: number, col: number) => void;
     onMouseUp: (row: number, col: number) => void;
-}>(({ cell, row, col, conflicts, isBlocked, assistHighlight, onDoubleClick, onMouseDown, onMouseUp }) => {
-    
+}>(({ cell, row, col, conflicts, isBlocked, assistHighlight, isAnimatingColumn, onDoubleClick, onMouseDown, onMouseUp }) => {
+
     const rowBad = conflicts.rows.has(row);
     const colBad = conflicts.cols.has(col);
     const regionBad = conflicts.regions.has(cell.region);
@@ -80,7 +81,7 @@ const QueensCell = React.memo<{
         onMouseUp(row, col);
     }, [row, col, onMouseUp]);
 
-    const cellTitle = React.useMemo(() => 
+    const cellTitle = React.useMemo(() =>
         `r${row+1},c${col+1} · region ${cell.region+1}`, [row, col, cell.region]
     );
 
@@ -93,9 +94,9 @@ const QueensCell = React.memo<{
             title={cellTitle}
         >
             {cell.hasQueen && (
-                <Icon 
-                    name="queen" 
-                    className="q-piece" 
+                <Icon
+                    name="queen"
+                    className={`q-piece ${isAnimatingColumn ? 'q-piece-victory-animate' : ''}`}
                     color='#1c274c'
                 />
             )}
@@ -112,7 +113,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
     const { status, endGame, setGameContext, setModifications, startedAt } = useGameController();
     const t = useTranslationFunction();
     const { useSetting } = useSettings();
-    
+
     const [gamesSettings] = useSetting('games');
     const assistHighlight = gamesSettings?.queens?.view_modification ?? true;
 
@@ -120,17 +121,22 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
     const [boardReady, setBoardReady] = React.useState(false);
     const [boardReadyRunId, setBoardReadyRunId] = React.useState<number | null>(null);
     const [dragFrom, setDragFrom] = React.useState<{row:number; col:number} | null>(null);
+
+    // Victory animation state
+    const [isVictoryAnimating, setIsVictoryAnimating] = React.useState(false);
+    const [animatingColumn, setAnimatingColumn] = React.useState<number>(-1);
+
     const lastStartRef = React.useRef<number | null>(null);
     const isInitializingRef = React.useRef(false);
 
     // Cursor hook: enable long press for queen drag
-    const { cursorClass, onMouseDown: hookMouseDown, onMouseUp: hookMouseUp, onMouseLeave: hookMouseLeave } 
-        = useCursor({ enableLongPress: true, longPressDelay: 100 });
+    const { cursorClass, onMouseDown: hookMouseDown, onMouseUp: hookMouseUp, onMouseLeave: hookMouseLeave }
+        = useCursor({ enableLongPress: true, longPressDelay: 50 });
 
     // Optimized timer hook manages timer state automatically
-    const { seconds, resetTimer } = useGameTimer({ 
+    const { seconds, resetTimer } = useGameTimer({
         isPlaying: status === 'playing',
-        startedAt: startedAt 
+        startedAt: startedAt
     });
 
     // Game initialization effect - prevent infinite re-renders with initialization flag
@@ -138,25 +144,27 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
         if (status === 'playing' && startedAt && lastStartRef.current !== startedAt && !isInitializingRef.current) {
             isInitializingRef.current = true;
             lastStartRef.current = startedAt;
-            
+
             // Reset game state in batch to prevent multiple renders
             const newBoard = createBoard(settings.size);
             setBoardReady(false);
             setBoardReadyRunId(null);
+            setIsVictoryAnimating(false);
+            setAnimatingColumn(-1);
             // Don't call resetTimer() - useGameTimer handles it automatically
-            
+
             // Use setTimeout to avoid setState during render
             setTimeout(() => {
                 setGameContext('queens', generateRecordProps('queens', settings), true);
             }, 0);
-            
+
             const mods: string[] = [];
             if (!assistHighlight) mods.push('view_modification');
             // Use setTimeout to avoid setState during render
             setTimeout(() => {
                 setModifications(mods);
             }, 0);
-            
+
             // Set board after other state updates to prevent conflicts
             setTimeout(() => {
                 setBoard(newBoard);
@@ -173,6 +181,8 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                 setBoard([]);
                 setBoardReady(false);
                 setBoardReadyRunId(null);
+                setIsVictoryAnimating(false);
+                setAnimatingColumn(-1);
             }, 0);
         }
     }, [status]);
@@ -207,22 +217,52 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
         return s;
     }, [assistHighlight, board]);
 
-    // Check for win condition and end game with timer value
+    // Victory animation sequence
+    const startVictoryAnimation = React.useCallback(async () => {
+        setIsVictoryAnimating(true);
+
+        // Find queens positions for each column
+        const queensByColumn: { [col: number]: number[] } = {};
+        for (let r = 0; r < board.length; r++) {
+            for (let c = 0; c < board[r].length; c++) {
+                if (board[r][c].hasQueen) {
+                    if (!queensByColumn[c]) queensByColumn[c] = [];
+                    queensByColumn[c].push(r);
+                }
+            }
+        }
+
+        // Animate each column sequentially
+        for (let col = 0; col < settings.size; col++) {
+            if (queensByColumn[col]) {
+                setAnimatingColumn(col);
+                // Wait for animation duration (0.8s as defined in CSS)
+                await new Promise(resolve => setTimeout(resolve, 600));
+            }
+        }
+
+        // Reset animation state and trigger win screen
+        setAnimatingColumn(-1);
+        setIsVictoryAnimating(false);
+        endGame('win', seconds);
+    }, [board, settings.size, seconds, endGame]);
+
+    // Check for win condition and start victory animation
     React.useEffect(() => {
-        if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isSolved(board)) {
+        if (status === 'playing' && boardReady && startedAt && boardReadyRunId === startedAt && isSolved(board) && !isVictoryAnimating) {
             // Use setTimeout to avoid setState during render
             setTimeout(() => {
-                endGame('win', seconds);
+                startVictoryAnimation();
             }, 0);
         }
-    }, [board, boardReady, boardReadyRunId, startedAt, status, seconds, endGame]);
+    }, [board, boardReady, boardReadyRunId, startedAt, status, isVictoryAnimating, startVictoryAnimation]);
 
     // Очистка таймера при размонтировании
     // cleanup handled in hook
 
     // Мемоизированные обработчики взаимодействий
     const onCellDoubleClick = React.useCallback((row: number, col: number) => {
-        if (status !== 'playing') return;
+        if (status !== 'playing' || isVictoryAnimating) return;
         const has = board[row][col].hasQueen;
         if (!has) {
             // placing a new queen — forbid if limit reached
@@ -231,21 +271,21 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
         } else {
             setBoard(prev => removeQueen(prev, row, col));
         }
-    }, [status, board, placed, settings.size]);
+    }, [status, isVictoryAnimating, board, placed, settings.size]);
 
     const onMouseDown = React.useCallback((row: number, col: number) => {
-        if (status !== 'playing') return;
+        if (status !== 'playing' || isVictoryAnimating) return;
         // trigger hook handler
         hookMouseDown();
         if (board[row][col].hasQueen) setDragFrom({ row, col });
-    }, [status, board, hookMouseDown]);
+    }, [status, isVictoryAnimating, board, hookMouseDown]);
 
     const onMouseUp = React.useCallback((row: number, col: number) => {
-        if (status !== 'playing') return;
+        if (status !== 'playing' || isVictoryAnimating) return;
         // trigger hook handler
         hookMouseUp();
         if (dragFrom) {
-            const from = dragFrom; 
+            const from = dragFrom;
             setDragFrom(null);
             if (from.row !== row || from.col !== col) {
                 // don't move onto an occupied cell
@@ -253,7 +293,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                 setBoard(prev => moveQueen(prev, from, { row, col }));
             }
         }
-    }, [status, dragFrom, board, hookMouseUp]);
+    }, [status, isVictoryAnimating, dragFrom, board, hookMouseUp]);
 
     const handleMouseLeave = React.useCallback(() => {
         // trigger hook cleanup
@@ -283,6 +323,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                             conflicts={conflicts}
                             isBlocked={blocked.has(`${r},${c}`)}
                             assistHighlight={assistHighlight}
+                            isAnimatingColumn={animatingColumn === c}
                             onDoubleClick={onCellDoubleClick}
                             onMouseDown={onMouseDown}
                             onMouseUp={onMouseUp}
@@ -291,7 +332,7 @@ const QueensGame = React.memo<QueensGameProps>(({ settings }) => {
                 )}
             </div>
         );
-    }, [status, board, conflicts, blocked, assistHighlight, settings.size, startedAt, handleMouseLeave, onCellDoubleClick, onMouseDown, onMouseUp, cursorClass]);
+    }, [status, board, conflicts, blocked, assistHighlight, settings.size, startedAt, handleMouseLeave, onCellDoubleClick, onMouseDown, onMouseUp, cursorClass, animatingColumn]);
 
     return (
         <section className="game-main-panel queens-panel">
